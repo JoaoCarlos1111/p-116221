@@ -3,7 +3,6 @@ import { Toaster } from "@/components/ui/toaster"
 import Sidebar from '@/components/Sidebar'
 import Dashboard from '@/pages/Dashboard'
 import KanbanBoard from '@/pages/KanbanBoard'
-import ApprovalPage from '@/pages/ApprovalPage'
 import Profile from '@/pages/Profile'
 import Settings from '@/pages/Settings'
 
@@ -16,7 +15,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/kanban/:sector" element={<KanbanBoard />} />
-            <Route path="/approvals" element={<ApprovalPage />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
           </Routes>
