@@ -1,45 +1,63 @@
-import { NavLink } from "react-router-dom";
-import { 
-  LayoutDashboard, 
-  Kanban, 
-  CheckSquare, 
-  UserCircle,
-  Settings as SettingsIcon
-} from "lucide-react";
+import { Home, PieChart, Settings, User, CreditCard, Bell } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Link, useLocation } from "react-router-dom";
 
-export default function Sidebar() {
+const menuItems = [
+  { icon: Home, label: "Dashboard", path: "/" },
+  { icon: PieChart, label: "Analytics", path: "/analytics" },
+  { icon: CreditCard, label: "Transactions", path: "/transactions" },
+  { icon: Bell, label: "Notifications", path: "/notifications" },
+  { icon: User, label: "Profile", path: "/profile" },
+  { icon: Settings, label: "Settings", path: "/settings" },
+];
+
+const Sidebar = () => {
+  const location = useLocation();
+
   return (
-    <div className="w-64 border-r bg-card p-4">
-      <div className="mb-8">
-        <h2 className="text-lg font-bold">Total Brand Protection</h2>
+    <div className="fixed left-0 top-0 h-full w-64 glass-card border-r border-white/10">
+      <div className="flex flex-col h-full">
+        <div className="p-6">
+          <h2 className="text-2xl font-bold text-primary">Finance</h2>
+        </div>
+        
+        <nav className="flex-1 px-4">
+          <ul className="space-y-2">
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = location.pathname === item.path;
+              
+              return (
+                <li key={item.path}>
+                  <Link
+                    to={item.path}
+                    className={cn(
+                      "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200",
+                      "hover:bg-white/10",
+                      isActive ? "bg-white/10" : "text-secondary"
+                    )}
+                  >
+                    <Icon className="h-5 w-5" />
+                    <span>{item.label}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+        <div className="p-4 mt-auto">
+          <div className="flex items-center gap-3 px-4 py-3">
+            <User className="h-8 w-8 rounded-full bg-accent p-1" />
+            <div className="flex flex-col">
+              <span className="text-sm font-medium">John Doe</span>
+              <span className="text-xs text-secondary">Premium User</span>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <nav className="space-y-2">
-        <NavLink to="/" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <LayoutDashboard size={20} />
-          <span>Dashboard</span>
-        </NavLink>
-
-        <NavLink to="/kanban/prospeccao" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <Kanban size={20} />
-          <span>Kanban</span>
-        </NavLink>
-
-        <NavLink to="/approvals" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <CheckSquare size={20} />
-          <span>Aprovações</span>
-        </NavLink>
-
-        <NavLink to="/profile" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <UserCircle size={20} />
-          <span>Perfil</span>
-        </NavLink>
-
-        <NavLink to="/settings" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <SettingsIcon size={20} />
-          <span>Configurações</span>
-        </NavLink>
-      </nav>
     </div>
   );
-}
+};
+
+export default Sidebar;
