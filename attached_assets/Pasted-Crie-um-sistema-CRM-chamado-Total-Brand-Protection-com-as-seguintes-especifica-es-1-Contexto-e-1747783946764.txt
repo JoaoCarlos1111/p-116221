@@ -1,0 +1,112 @@
+Crie um sistema CRM chamado “Total Brand Protection” com as seguintes especificações:
+
+1. Contexto e Objetivo Geral
+Nome do sistema: Total Brand Protection
+
+Finalidade: CRM para localizar e gerenciar casos de falsificação online
+
+Metodologia: Pipeline Kanban em 7 setores
+
+2. Usuários e Níveis de Acesso
+Administrador
+
+Visão macro da operação
+
+Configura usuários, marcas, pipelines e relatórios
+
+Analista
+
+Pertence a um dos 7 setores (definido pelo Admin):
+
+Prospecção
+
+Verificação
+
+Auditoria
+
+Logística
+
+IP Tools
+
+Atendimento
+
+Financeiro
+
+Acessa apenas o seu próprio quadro Kanban
+
+Move cards entre colunas e atualiza campos/anexos
+
+Cliente (marca)
+
+Visualiza dashboard da própria marca
+
+Acessa aba de “Aprovações” para autorizar envio de notificações extrajudiciais
+
+Vê gráficos e filtros
+
+3. Fluxo de Trabalho (Kanban)
+Para cada setor/analista haverá um quadro Kanban específico, com as seguintes colunas iniciais:
+
+Recebido
+
+Caso em Análise
+
+Pendente de Informação
+
+Concluído
+
+Cada card de caso, ao ser aberto, deve exibir:
+
+Nome do caso
+
+Links (produtos/sites suspeitos)
+
+CPF/CNPJ
+
+Anexos (documentos, evidências)
+
+Timeline (histórico de status e comentários)
+
+4. Funcionalidades por Perfil
+Admin
+
+CRUD de marcas, usuários, pipelines e relatórios
+
+Analista
+
+Visualiza e move cards apenas no seu quadro Kanban
+
+Atualiza campos e faz upload de documentos/prints
+
+Cliente
+
+Dashboard com:
+
+Mapa de casos por região
+
+Gráficos: anúncios localizados, em análise, notificações enviadas, acordos, valores de indenização
+
+Filtros por data, tipo de produto, status
+
+Botão “Novo Caso”: basta colar o link e o sistema gera automaticamente um card na coluna “Recebido” do quadro de Prospecção
+
+5. Páginas e Componentes
+Login / Recuperação de senha (e-mail + senha; reset por e-mail)
+
+Dashboard geral (versão para cada perfil)
+
+Tela de Kanban (Um quadro por setor para Analistas; visão consolidada para Admin)
+
+Form de criação de caso (Cliente e Analista via “Novo Caso”)
+
+Abas exclusivas para Cliente:
+
+Aprovações
+
+Notificações Extrajudiciais
+
+Acordos Extrajudiciais
+
+Dados Financeiros
+
+Contas de teste pré-configuradas: Admin, Analista e Cliente
