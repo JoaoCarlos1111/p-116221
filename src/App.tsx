@@ -1,42 +1,30 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Sidebar from "@/components/Sidebar";
-import Index from "./pages/Index";
-import Analytics from "./pages/Analytics";
-import Transactions from "./pages/Transactions";
-import Notifications from "./pages/Notifications";
-import Profile from "./pages/Profile";
-import Settings from "./pages/Settings";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { Toaster } from "@/components/ui/toaster"
+import Sidebar from '@/components/Sidebar'
+import Dashboard from '@/pages/Dashboard'
+import KanbanBoard from '@/pages/KanbanBoard'
+import ApprovalPage from '@/pages/ApprovalPage'
+import Profile from '@/pages/Profile'
+import Settings from '@/pages/Settings'
 
-const queryClient = new QueryClient();
-
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
+function App() {
+  return (
+    <Router>
+      <div className="flex h-screen bg-background">
+        <Sidebar />
+        <main className="flex-1 overflow-y-auto p-8">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/kanban/:sector" element={<KanbanBoard />} />
+            <Route path="/approvals" element={<ApprovalPage />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/settings" element={<Settings />} />
+          </Routes>
+        </main>
+      </div>
       <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <div className="flex min-h-screen bg-background">
-          <Sidebar />
-          <main className="flex-1 ml-64 p-8">
-            <div className="max-w-7xl mx-auto">
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/analytics" element={<Analytics />} />
-                <Route path="/transactions" element={<Transactions />} />
-                <Route path="/notifications" element={<Notifications />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/settings" element={<Settings />} />
-              </Routes>
-            </div>
-          </main>
-        </div>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+    </Router>
+  )
+}
 
-export default App;
+export default App
