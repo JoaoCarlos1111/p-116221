@@ -8,7 +8,8 @@ import {
   Settings as SettingsIcon,
   ChevronLeft,
   ChevronRight,
-  LogOut
+  LogOut,
+  GitPullRequest
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -56,6 +57,14 @@ export default function Sidebar() {
             "transition-all duration-300",
             isCollapsed && "hidden"
           )}>Kanban</span>
+        </NavLink>
+
+        <NavLink to="/prospeccao" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+          <GitPullRequest size={20} />
+          <span className={cn(
+            "transition-all duration-300",
+            isCollapsed && "hidden"
+          )}>Workflow</span>
         </NavLink>
 
         <NavLink to="/approvals" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
