@@ -150,7 +150,11 @@ export default function Logistics() {
             <h2 className="font-semibold mb-4">{column.title}</h2>
             <div className="space-y-4">
               {column.cases.map((case_) => (
-                <Card key={case_.id} className="bg-white">
+                <Card 
+                  key={case_.id} 
+                  className="bg-white cursor-pointer hover:shadow-md transition-shadow"
+                  onClick={() => navigate(`/logistica/caso/${case_.id}`)}
+                >
                   <CardContent className="p-4">
                     <div className="text-sm space-y-2">
                       <p className="font-medium">Caso #{case_.id}</p>

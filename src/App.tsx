@@ -27,6 +27,7 @@ function App() {
             <Route path="/auditoria" element={<Auditoria />} />
             <Route path="/auditoria/caso/:id" element={<AuditoriaCaseDetails />} />
             <Route path="/logistica" element={<Logistics />} />
+        <Route path="/logistica/caso/:id" element={<LogisticsCaseView />} />
           </Routes>
         </main>
       </div>
