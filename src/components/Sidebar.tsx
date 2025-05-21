@@ -1,43 +1,84 @@
+
 import { NavLink } from "react-router-dom";
 import { 
   LayoutDashboard, 
   Kanban, 
   CheckSquare, 
   UserCircle,
-  Settings as SettingsIcon
+  Settings as SettingsIcon,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 export default function Sidebar() {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
   return (
-    <div className="w-64 border-r bg-card p-4">
-      <div className="mb-8">
-        <h2 className="text-lg font-bold">Total Brand Protection</h2>
+    <div className={cn(
+      "relative h-screen border-r bg-card transition-all duration-300",
+      isCollapsed ? "w-16" : "w-64"
+    )}>
+      <button
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        className="absolute -right-3 top-6 z-40 flex h-6 w-6 items-center justify-center rounded-full border bg-background shadow-sm"
+      >
+        {isCollapsed ? (
+          <ChevronRight className="h-4 w-4" />
+        ) : (
+          <ChevronLeft className="h-4 w-4" />
+        )}
+      </button>
+
+      <div className="mb-8 p-4">
+        <h2 className={cn(
+          "text-lg font-bold transition-all duration-300",
+          isCollapsed && "opacity-0"
+        )}>
+          Total Brand Protection
+        </h2>
       </div>
 
-      <nav className="space-y-2">
+      <nav className="space-y-2 px-2">
         <NavLink to="/" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
           <LayoutDashboard size={20} />
-          <span>Dashboard</span>
+          <span className={cn(
+            "transition-all duration-300",
+            isCollapsed && "hidden"
+          )}>Dashboard</span>
         </NavLink>
 
         <NavLink to="/kanban/verificacao" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
           <Kanban size={20} />
-          <span>Kanban</span>
+          <span className={cn(
+            "transition-all duration-300",
+            isCollapsed && "hidden"
+          )}>Kanban</span>
         </NavLink>
 
         <NavLink to="/approvals" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
           <CheckSquare size={20} />
-          <span>Aprovações</span>
+          <span className={cn(
+            "transition-all duration-300",
+            isCollapsed && "hidden"
+          )}>Aprovações</span>
         </NavLink>
 
         <NavLink to="/profile" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
           <UserCircle size={20} />
-          <span>Perfil</span>
+          <span className={cn(
+            "transition-all duration-300",
+            isCollapsed && "hidden"
+          )}>Perfil</span>
         </NavLink>
 
         <NavLink to="/settings" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
           <SettingsIcon size={20} />
-          <span>Configurações</span>
+          <span className={cn(
+            "transition-all duration-300",
+            isCollapsed && "hidden"
+          )}>Configurações</span>
         </NavLink>
       </nav>
     </div>
