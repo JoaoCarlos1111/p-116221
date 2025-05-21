@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { Checkbox } from "@/components/ui/checkbox";
+import { Command, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Slider } from "@/components/ui/slider";
 import { Card } from "@/components/ui/card";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { Badge } from "@/components/ui/badge";
@@ -69,6 +72,52 @@ export default function KanbanBoard() {
   const [filterDate, setFilterDate] = useState<Date | undefined>(undefined);
   const [filterPriority, setFilterPriority] = useState<string>('');
   const [filterClient, setFilterClient] = useState<string>('');
+  const [filterProducts, setFilterProducts] = useState<string[]>([]);
+  const [filterStates, setFilterStates] = useState<string[]>([]);
+  const [filterValueRange, setFilterValueRange] = useState<[number, number]>([0, 20000]);
+  const [activeFiltersCount, setActiveFiltersCount] = useState(0);
+
+  const productCategories = [
+    'Eletrônico', 'Vestuário', 'Cosmético', 'Brinquedo', 'Acessório', 'Outro'
+  ];
+
+  const brStates = [
+    { name: 'Acre', abbr: 'AC' },
+    { name: 'Alagoas', abbr: 'AL' },
+    { name: 'Amapá', abbr: 'AP' },
+    { name: 'Amazonas', abbr: 'AM' },
+    { name: 'Bahia', abbr: 'BA' },
+    { name: 'Ceará', abbr: 'CE' },
+    { name: 'Distrito Federal', abbr: 'DF' },
+    { name: 'Espírito Santo', abbr: 'ES' },
+    { name: 'Goiás', abbr: 'GO' },
+    { name: 'Maranhão', abbr: 'MA' },
+    { name: 'Mato Grosso', abbr: 'MT' },
+    { name: 'Mato Grosso do Sul', abbr: 'MS' },
+    { name: 'Minas Gerais', abbr: 'MG' },
+    { name: 'Pará', abbr: 'PA' },
+    { name: 'Paraíba', abbr: 'PB' },
+    { name: 'Paraná', abbr: 'PR' },
+    { name: 'Pernambuco', abbr: 'PE' },
+    { name: 'Piauí', abbr: 'PI' },
+    { name: 'Rio de Janeiro', abbr: 'RJ' },
+    { name: 'Rio Grande do Norte', abbr: 'RN' },
+    { name: 'Rio Grande do Sul', abbr: 'RS' },
+    { name: 'Rondônia', abbr: 'RO' },
+    { name: 'Roraima', abbr: 'RR' },
+    { name: 'Santa Catarina', abbr: 'SC' },
+    { name: 'São Paulo', abbr: 'SP' },
+    { name: 'Sergipe', abbr: 'SE' },
+    { name: 'Tocantins', abbr: 'TO' }
+  ].sort((a, b) => a.name.localeCompare(b.name));
+
+  const valueRanges = [
+    { label: 'Todos', min: 0, max: 20000 },
+    { label: 'R$0 – R$2.000', min: 0, max: 2000 },
+    { label: 'R$2.001 – R$4.000', min: 2001, max: 4000 },
+    { label: 'R$4.001 – R$8.000', min: 4001, max: 8000 },
+    { label: 'Acima de R$8.000', min: 8001, max: 20000 }
+  ];
 
   const filteredCards = cards.filter(card => {
     const matchesSearch = card.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -81,10 +130,26 @@ export default function KanbanBoard() {
     return matchesSearch && matchesDate && matchesPriority && matchesClient;
   });
 
+  useEffect(() => {
+    const count = [
+      filterDate,
+      filterPriority,
+      filterClient,
+      ...filterProducts,
+      ...filterStates,
+      filterValueRange[0] > 0 || filterValueRange[1] < 20000
+    ].filter(Boolean).length;
+    
+    setActiveFiltersCount(count);
+  }, [filterDate, filterPriority, filterClient, filterProducts, filterStates, filterValueRange]);
+
   const handleClearFilters = () => {
     setFilterDate(undefined);
     setFilterPriority('');
     setFilterClient('');
+    setFilterProducts([]);
+    setFilterStates([]);
+    setFilterValueRange([0, 20000]);
     setSearchQuery('');
   };
 
@@ -172,51 +237,161 @@ export default function KanbanBoard() {
               <Button variant="outline">
                 <FilterIcon className="h-4 w-4 mr-2" />
                 Filtros
+                {activeFiltersCount > 0 && (
+                  <Badge variant="secondary" className="ml-2">
+                    {activeFiltersCount}
+                  </Badge>
+                )}
               </Button>
             </SheetTrigger>
             <SheetContent>
               <SheetHeader>
                 <SheetTitle>Filtros Avançados</SheetTitle>
               </SheetHeader>
-              <div className="space-y-4 mt-4">
-                <div>
-                  <label className="text-sm font-medium">Data de Criação</label>
-                  <Calendar
-                    mode="single"
-                    selected={filterDate}
-                    onSelect={setFilterDate}
-                    className="rounded-md border"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Prioridade</label>
-                  <Select value={filterPriority} onValueChange={setFilterPriority}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione a prioridade" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="">Todos</SelectItem>
-                      <SelectItem value="Alta">Alta</SelectItem>
-                      <SelectItem value="Média">Média</SelectItem>
-                      <SelectItem value="Baixa">Baixa</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Cliente</label>
-                  <Select value={filterClient} onValueChange={setFilterClient}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o cliente" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Nike">Nike</SelectItem>
-                      <SelectItem value="Adidas">Adidas</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button variant="secondary" onClick={handleClearFilters}>
+              <div className="space-y-6 mt-4">
+                <Button variant="secondary" onClick={handleClearFilters} className="w-full">
                   Limpar Filtros
                 </Button>
+
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-medium mb-2">Categoria do Caso</h3>
+                    <div className="space-y-2">
+                      {productCategories.map((category) => (
+                        <div key={category} className="flex items-center">
+                          <Checkbox
+                            id={`product-${category}`}
+                            checked={filterProducts.includes(category)}
+                            onCheckedChange={(checked) => {
+                              setFilterProducts(prev => 
+                                checked 
+                                  ? [...prev, category]
+                                  : prev.filter(p => p !== category)
+                              );
+                            }}
+                          />
+                          <label htmlFor={`product-${category}`} className="ml-2 text-sm">
+                            {category}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="font-medium mb-2">Localização</h3>
+                    <Command>
+                      <CommandInput placeholder="Buscar estado..." />
+                      <CommandList>
+                        <CommandGroup>
+                          <CommandItem onSelect={() => setFilterStates([])}>
+                            Todos
+                          </CommandItem>
+                          {brStates.map((state) => (
+                            <CommandItem
+                              key={state.abbr}
+                              onSelect={() => {
+                                setFilterStates(prev => 
+                                  prev.includes(state.abbr)
+                                    ? prev.filter(s => s !== state.abbr)
+                                    : [...prev, state.abbr]
+                                );
+                              }}
+                            >
+                              <Checkbox
+                                checked={filterStates.includes(state.abbr)}
+                                className="mr-2"
+                              />
+                              {state.name} ({state.abbr})
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </div>
+
+                  <div>
+                    <h3 className="font-medium mb-2">Financeiro</h3>
+                    <Select
+                      value={`${filterValueRange[0]}-${filterValueRange[1]}`}
+                      onValueChange={(value) => {
+                        const [min, max] = value.split('-').map(Number);
+                        setFilterValueRange([min, max]);
+                      }}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione a faixa de valor" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {valueRanges.map((range) => (
+                          <SelectItem
+                            key={`${range.min}-${range.max}`}
+                            value={`${range.min}-${range.max}`}
+                          >
+                            {range.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Slider
+                      className="mt-6"
+                      defaultValue={[0, 20000]}
+                      max={20000}
+                      step={1000}
+                      value={filterValueRange}
+                      onValueChange={setFilterValueRange}
+                      marks={[
+                        { value: 0, label: 'R$0' },
+                        { value: 2000, label: 'R$2K' },
+                        { value: 4000, label: 'R$4K' },
+                        { value: 8000, label: 'R$8K' },
+                        { value: 20000, label: 'R$20K' }
+                      ]}
+                    />
+                  </div>
+
+                  <div>
+                    <h3 className="font-medium mb-2">Outros Filtros</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="text-sm font-medium">Data de Criação</label>
+                        <Calendar
+                          mode="single"
+                          selected={filterDate}
+                          onSelect={setFilterDate}
+                          className="rounded-md border"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm">Prioridade</label>
+                        <Select value={filterPriority} onValueChange={setFilterPriority}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione a prioridade" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="todos">Todos</SelectItem>
+                            <SelectItem value="Alta">Alta</SelectItem>
+                            <SelectItem value="Média">Média</SelectItem>
+                            <SelectItem value="Baixa">Baixa</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <label className="text-sm">Cliente</label>
+                        <Select value={filterClient} onValueChange={setFilterClient}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione o cliente" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="todos">Todos</SelectItem>
+                            <SelectItem value="Nike">Nike</SelectItem>
+                            <SelectItem value="Adidas">Adidas</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </SheetContent>
           </Sheet>
