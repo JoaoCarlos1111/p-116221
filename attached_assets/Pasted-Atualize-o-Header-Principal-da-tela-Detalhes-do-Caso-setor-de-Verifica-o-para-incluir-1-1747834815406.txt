@@ -1,0 +1,72 @@
+Atualize o **Header Principal** da tela ‘Detalhes do Caso’ (setor de Verificação) para incluir:
+
+1. **Barra de Fluxo**  
+   - Exiba visualmente as 4 colunas do pipeline atual (“Recebido”, “Caso em Análise”, “Pendente de Informação”, “Concluído”),  
+     com destaque na etapa em que o caso se encontra.  
+   - A barra deve ser um componente horizontal com marcadores ou progress steps.
+
+
+2. **Contador de Tempo na Etapa**  
+   - Ao lado do nome do caso, mostre “🕒 X dias nesta etapa” calculado desde que o caso entrou na coluna atual.  
+   - Atualize em tempo real quando o caso for movido de coluna.
+
+3. **Data da Última Atualização**  
+   - Exiba logo abaixo da barra de fluxo:  
+     “Última atualização: DD/MM/AAAA HH:MM”
+
+4. **Ações Rápidas de Movimentação**  
+   - Botão “Enviar para Próxima Coluna”  
+     • Move o card para a coluna seguinte na mesma etapa/sector.  
+   - Botão “Enviar para Próximo Setor”  
+     • Move o card para a etapa inicial (“Recebido”) do próximo setor no fluxo de Kanban.  
+
+**Requisitos de layout:**  
+- Acrescente esses elementos ao topo, em ordem lógica:  
+  1. Título do Caso + Status Badge  
+  2. Barra de Fluxo com marcador ativo  
+  3. “🕒 X dias nesta etapa” + “Última atualização: …”  
+  4. Botões de movimentação  
+- Mantenha tipografia, cores e responsividade seguindo os padrões de CRMs premium.
+
+2. SEÇÃO A — LINKS SUSPEITOS (prioridade neste setor)
+   • Lista de URLs clicáveis em forma de badge  
+   • Botão “+ Adicionar Link”  
+
+3. SEÇÃO B — INFORMAÇÕES BÁSICAS
+   • Nome do responsável ou empresa  
+   • **Gênero:** Masculino, Feminino, Não especificado  
+   • CPF/CNPJ (formatado)  
+   • Telefone  
+   • E-mail  
+
+4. SEÇÃO C — ENDEREÇO  
+   • Rua, Número  
+   • Bairro  
+   • Cidade — Estado (UF)  
+   • CEP  
+
+5. SEÇÃO D — DETALHES DO CASO  
+   • Tipo de Produto (categoria)  
+   • Potencial Indenizatório: R$ X.XXX,XX  
+   • **Quantidade de Seguidores** (se aplicável)  
+   • **Estimativa de Tamanho da Loja** (em número de anúncios ou área aproximada)  
+
+6. SEÇÃO E — ANEXOS  
+   • Galeria de documentos/imagens com previews  
+   • Botão “Adicionar Anexo”  
+
+7. SEÇÃO F — TIMELINE / HISTÓRICO  
+   • Linha temporal vertical com data/hora e usuário  
+   • Ícone indicando tipo de ação  
+
+8. SEÇÃO G — COMENTÁRIOS  
+   • Campo de texto no rodapé da timeline  
+   • Botão “Enviar”  
+
+**Observações de layout e estilo:**  
+- Esse é o layout exclusivo para analistas do setor de Verificação.  
+- Inspiração em CRMs premium (Pipedrive, Salesforce): containers bem delimitados, hierarquia clara e navegação intuitiva.  
+- Mantenha cores, tipografia e botões conforme design principal.  
+- Responsivo: desktop e modal full-screen no mobile.  
+
+Mantenha todas as configurações de acesso e permissões já definidas.
