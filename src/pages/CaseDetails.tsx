@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { InfoIcon } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -40,6 +42,17 @@ export default function CaseDetails() {
   const [comment, setComment] = useState('');
   const [lastUpdate] = useState(new Date().toLocaleString());
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showHistoryDialog, setShowHistoryDialog] = useState(false);
+  const [selectedBrand, setSelectedBrand] = useState('');
+  const [autofillSource, setAutofillSource] = useState<string | null>(null);
+  const [previousCases, setPreviousCases] = useState([
+    { id: '123', date: '2024-01-15', status: 'Concluído', storeUrl: 'store1.com', phone: '11999999999' },
+    { id: '124', date: '2024-01-10', status: 'Concluído', storeUrl: 'store2.com', phone: '11988888888' }
+  ]);
+  const [brands] = useState([
+    { name: 'Nike', document: '12345678901' },
+    { name: 'Adidas', document: '98765432101' }
+  ]);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -157,6 +170,80 @@ export default function CaseDetails() {
 
   return (
     <div className="space-y-6">
+      <Dialog open={showHistoryDialog} onOpenChange={setShowHistoryDialog}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Histórico de Casos</DialogTitle>
+          </DialogHeader>
+          <div className="max-h-[400px] overflow-y-auto space-y-4">
+            {previousCases.map(caseItem => (
+              <div key={caseItem.id} 
+                className="p-4 border rounded-lg hover:bg-accent cursor-pointer"
+                onClick={() => {
+                  setAutofillSource(caseItem.id);
+                  setShowHistoryDialog(false);
+                }}>
+                <div className="flex justify-between items-center">
+                  <span className="font-medium">Caso #{caseItem.id}</span>
+                  <Badge>{caseItem.status}</Badge>
+                </div>
+                <div className="text-sm text-muted-foreground mt-2">
+                  <p>Data: {caseItem.date}</p>
+                  <p>Loja: {caseItem.storeUrl}</p>
+                  <p>Telefone: {caseItem.phone}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Marca Atendida</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <Select
+                value={selectedBrand}
+                onValueChange={(value) => {
+                  setSelectedBrand(value);
+                  // Auto-fill logic would go here
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione a marca" />
+                </SelectTrigger>
+                <SelectContent>
+                  {brands.map(brand => (
+                    <SelectItem key={brand.document} value={brand.name}>
+                      {brand.name} ({brand.document})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <Button variant="outline" onClick={() => setShowHistoryDialog(true)}>
+              Ver Outros Casos
+            </Button>
+          </div>
+          {autofillSource && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <InfoIcon className="h-4 w-4" />
+              <span>Dados carregados do caso #{autofillSource}</span>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => setAutofillSource(null)}
+              >
+                Remover
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       <div className="flex items-center gap-4">
         <Button variant="ghost" onClick={() => navigate(-1)}>
           <ChevronLeft className="h-4 w-4 mr-2" />
