@@ -466,14 +466,6 @@ export default function KanbanBoard() {
                                     <span>Última Atualização: {new Date(card.updatedAt || card.createdAt).toLocaleDateString('pt-BR')}</span>
                                   </div>
                                 </div>
-                                <div className="text-sm text-[#6F767E]">
-                                  {card.timeline.map((event, i) => (
-                                    <div key={i} className="flex items-center">
-                                      <span className="w-2 h-2 bg-[#6F767E] rounded-full mr-2" />
-                                      {event}
-                                    </div>
-                                  ))}
-                                </div>
                                 <div className="mt-2 text-xs text-[#6F767E] flex items-center">
                                   <Badge variant="outline" className="mr-2">
                                     {card.analyst}
