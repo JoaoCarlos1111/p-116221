@@ -239,7 +239,11 @@ export default function AuditoriaCaseDetails() {
                           ? 'text-green-600 bg-green-100'
                           : ''
                       }`}
-                      onClick={() => handleFieldApproval('urls', url, 'approved')}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleFieldApproval('urls', url, 'approved');
+                      }}
                     >
                       <CheckCircle className="h-4 w-4" />
                     </Button>
@@ -251,7 +255,9 @@ export default function AuditoriaCaseDetails() {
                           ? 'text-red-600 bg-red-100'
                           : ''
                       }`}
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
                         setCurrentField({ section: 'urls', field: url });
                         setShowRejectDialog(true);
                       }}
@@ -267,18 +273,8 @@ export default function AuditoriaCaseDetails() {
 
         {/* Informações Básicas */}
         <Card className="shadow-lg border-0 bg-white">
-          <CardHeader className="flex flex-row items-center justify-between pb-3">
+          <CardHeader className="pb-3">
             <CardTitle className="text-xl font-semibold">Informações Básicas</CardTitle>
-            <div className="flex gap-2">
-              <Button variant="outline" className="text-green-600" onClick={() => handleSectionApproval('basicInfo', true)}>
-                <CheckCircle className="h-4 w-4 mr-2" />
-                Aprovar
-              </Button>
-              <Button variant="outline" className="text-red-600" onClick={() => handleSectionRejection('basicInfo')}>
-                <XCircle className="h-4 w-4 mr-2" />
-                Reprovar
-              </Button>
-            </div>
           </CardHeader>
           <CardContent className={`space-y-4 transition-colors ${
             sectionApprovals.basicInfo?.every(field => field.status === 'approved') 
