@@ -486,40 +486,111 @@ export default function CaseDetails() {
             <CardHeader>
               <CardTitle>Anexos</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-4">
-                <div className="space-y-2">
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {/* Card 1 - Anúncio do Produto */}
+                <div 
+                  className={`relative p-6 border rounded-lg transition-shadow hover:shadow-md cursor-pointer ${
+                    errors.counterfeitAd ? 'border-red-500' bg-red-50' : 'border-[#e2e2e2]'
+                  } ${formData.files.counterfeitAd ? 'bg-green-50' : 'bg-white'}`}
+                  onClick={() => document.getElementById('counterfeitAd')?.click()}
+                >
                   <input
+                    id="counterfeitAd"
                     type="file"
                     accept=".pdf"
                     onChange={(e) => handleFileUpload('counterfeitAd', e.target.files?.[0] ?? null)}
-                    className={`w-full ${errors.counterfeitAd ? 'border-red-500' : ''}`}
+                    className="hidden"
                   />
-                  <p className="text-sm text-muted-foreground">
-                    Anúncio do produto contrafeito (PDF)
-                  </p>
-                  {errors.counterfeitAd && (
-                    <p className="text-sm text-red-500">{errors.counterfeitAd}</p>
-                  )}
+                  <div className="flex flex-col items-center text-center space-y-3">
+                    {formData.files.counterfeitAd ? (
+                      <div className="text-green-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M20 6L9 17l-5-5"/>
+                          <path d="M16 6v4h4"/>
+                        </svg>
+                      </div>
+                    ) : (
+                      <div className="text-muted-foreground hover:text-primary transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+                        </svg>
+                      </div>
+                    )}
+                    <div className="space-y-1">
+                      <p className="font-medium">Anúncio do Produto <span className="text-red-500">*</span></p>
+                      {formData.files.counterfeitAd ? (
+                        <p className="text-sm text-muted-foreground truncate max-w-[200px]">
+                          {formData.files.counterfeitAd.name}
+                        </p>
+                      ) : (
+                        <p className="text-sm text-muted-foreground">
+                          Arraste e solte aqui ou clique para escolher arquivo
+                        </p>
+                      )}
+                      <p className="text-xs text-muted-foreground">(Somente PDF)</p>
+                    </div>
+                    {errors.counterfeitAd && (
+                      <p className="text-sm text-red-500">{errors.counterfeitAd}</p>
+                    )}
+                  </div>
                 </div>
 
-                <div className="space-y-2">
+                {/* Card 2 - Página de Venda */}
+                <div 
+                  className={`relative p-6 border rounded-lg transition-shadow hover:shadow-md cursor-pointer ${
+                    errors.salesPage ? 'border-red-500 bg-red-50' : 'border-[#e2e2e2]'
+                  } ${formData.files.salesPage ? 'bg-green-50' : 'bg-white'}`}
+                  onClick={() => document.getElementById('salesPage')?.click()}
+                >
                   <input
+                    id="salesPage"
                     type="file"
                     accept=".pdf"
                     onChange={(e) => handleFileUpload('salesPage', e.target.files?.[0] ?? null)}
-                    className={`w-full ${errors.salesPage ? 'border-red-500' : ''}`}
+                    className="hidden"
                   />
-                  <p className="text-sm text-muted-foreground">
-                    Página de venda (PDF)
-                  </p>
-                  {errors.salesPage && (
-                    <p className="text-sm text-red-500">{errors.salesPage}</p>
-                  )}
+                  <div className="flex flex-col items-center text-center space-y-3">
+                    {formData.files.salesPage ? (
+                      <div className="text-green-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M20 6L9 17l-5-5"/>
+                          <path d="M16 6v4h4"/>
+                        </svg>
+                      </div>
+                    ) : (
+                      <div className="text-muted-foreground hover:text-primary transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+                        </svg>
+                      </div>
+                    )}
+                    <div className="space-y-1">
+                      <p className="font-medium">Página de Venda <span className="text-red-500">*</span></p>
+                      {formData.files.salesPage ? (
+                        <p className="text-sm text-muted-foreground truncate max-w-[200px]">
+                          {formData.files.salesPage.name}
+                        </p>
+                      ) : (
+                        <p className="text-sm text-muted-foreground">
+                          Arraste e solte aqui ou clique para escolher arquivo
+                        </p>
+                      )}
+                      <p className="text-xs text-muted-foreground">(Somente PDF)</p>
+                    </div>
+                    {errors.salesPage && (
+                      <p className="text-sm text-red-500">{errors.salesPage}</p>
+                    )}
+                  </div>
                 </div>
 
-                <div className="space-y-2">
+                {/* Card 3 - Outros Anexos */}
+                <div 
+                  className="relative p-6 border border-[#e2e2e2] rounded-lg transition-shadow hover:shadow-md cursor-pointer bg-white"
+                  onClick={() => document.getElementById('otherFiles')?.click()}
+                >
                   <input
+                    id="otherFiles"
                     type="file"
                     multiple
                     onChange={(e) => {
@@ -532,11 +603,37 @@ export default function CaseDetails() {
                         }
                       }));
                     }}
-                    className="w-full"
+                    className="hidden"
                   />
-                  <p className="text-sm text-muted-foreground">
-                    Outros anexos (qualquer formato)
-                  </p>
+                  <div className="flex flex-col items-center text-center space-y-3">
+                    {formData.files.others.length > 0 ? (
+                      <div className="text-green-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M20 6L9 17l-5-5"/>
+                          <path d="M16 6v4h4"/>
+                        </svg>
+                      </div>
+                    ) : (
+                      <div className="text-muted-foreground hover:text-primary transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+                        </svg>
+                      </div>
+                    )}
+                    <div className="space-y-1">
+                      <p className="font-medium">Outros Anexos</p>
+                      {formData.files.others.length > 0 ? (
+                        <p className="text-sm text-muted-foreground">
+                          {formData.files.others.length} arquivo(s) selecionado(s)
+                        </p>
+                      ) : (
+                        <p className="text-sm text-muted-foreground">
+                          Arraste e solte aqui ou clique para escolher arquivo
+                        </p>
+                      )}
+                      <p className="text-xs text-muted-foreground">(Qualquer formato)</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </CardContent>
