@@ -1,0 +1,44 @@
+“Atualize a tela ‘Detalhes do Caso’ (setor de Verificação) para incluir e definir a origem da ‘Marca Atendida’, integrando automação por Prospecção e por login de Cliente, além de autocomplete de dados e histórico de casos:
+
+0. SEÇÃO X — MARCA ATENDIDA  
+   • **Origem do dado:**  
+     – Se o card for criado pelo **Analista de Prospecção**, exiba um campo de seleção “Marca (Cliente)” para escolha manual.  
+     – Se o card for criado pelo **Cliente** (login), preencha automaticamente “Marca (Cliente)” com a conta autenticada.  
+   • Campo de seleção com autocomplete de marcas já cadastradas (busca por nome ou CPF/CNPJ).  
+   • Ao selecionar ou autocompletar:  
+     – Busque os casos anteriores do mesmo lojista e autocomplete:  
+       • INFORMAÇÕES BÁSICAS (Nome, Gênero, CPF/CNPJ, Telefone, E-mail)  
+       • ENDEREÇO (Rua, Número, Bairro, Cidade, Estado [dropdown com todas as siglas de UF], CEP)  
+       • DETALHES DO CASO (Tipo de Produto, Potencial Indenizatório, Quantidade de Seguidores, Estimativa de Tamanho da Loja)  
+       • Link da Loja  
+     – Exiba badge “Dados carregados de caso #XXXX” com opção de “Remover/autocompletar manual”.  
+   • Botão “Ver Outros Casos” ao lado do campo de Marca, abrindo pop-up scrollable com:  
+     – Lista de casos anteriores (ID, data, status, link da loja, telefone)  
+     – Busca por ID ou data  
+     – Clique em histórico recarrega dados no formulário  
+
+1. HEADER PRINCIPAL  
+   … (mantenha barra de fluxo clicável, contador de dias na etapa, data da última atualização e botões “← Anterior” e “Concluído” conforme definido)
+
+2. SEÇÃO A — LINKS SUSPEITOS  
+   … (mantém como está)
+
+3. SEÇÃO B — INFORMAÇÕES BÁSICAS  
+   … (autocompleta e mantém campos definidos)
+
+4. SEÇÃO C — ENDEREÇO  
+   … (autocompleta e mantém campos definidos)
+
+5. SEÇÃO D — DETALHES DO CASO  
+   … (autocompleta e mantém campos definidos)
+
+6. SEÇÃO E — ANEXOS  
+   … (mantém grid responsivo, ícone de nuvem, validações e títulos)
+
+7. SEÇÃO F — TIMELINE / HISTÓRICO  
+   … (cria uma movimentação informando que os dados vieram do outro caso - especificar qual) 
+
+8. SEÇÃO G — COMENTÁRIOS  
+   … (mantém como está)
+
+**Mantenha todas as validações, permissões e estilos de tema já definidos.”** 
