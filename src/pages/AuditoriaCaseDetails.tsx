@@ -73,17 +73,6 @@ export default function AuditoriaCaseDetails() {
       properDocumentation: newSectionApprovals.documents?.every((field: any) => field.status === 'approved')
     });
   };
-    const newSectionApprovals = {
-      ...sectionApprovals,
-      [section]: sectionApprovals[section].map((item: any) => 
-        item.field === field 
-          ? { ...item, status, reason: reason || null }
-          : item
-      )
-    };
-    setSectionApprovals(newSectionApprovals);
-    updateRequirements(newSectionApprovals);
-  };
 
   const handleSectionRejection = (section: string) => {
     setShowRejectDialog(true);
