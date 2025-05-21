@@ -1,0 +1,51 @@
+[plugin:vite:react-swc] × o nome `handleFieldApproval` é definido várias vezes
+    ╭─[/home/runner/workspace/src/pages/AuditoriaCaseDetails.tsx:46:1]
+ 43 │ ]
+ 44 │ });
+ 45 │
+ 46 │ const handleFieldApproval = (seção: string, campo: string, status: 'aprovado' | 'rejeitado', motivo?: string) => {
+    · ──────────┬─────────
+    · ╰── definição anterior de `handleFieldApproval` aqui
+ 47 │ setSectionApprovals(prev => ({
+ 48 │ ...anterior,
+ 49 │ [seção]: prev[seção].map(item =>
+ 50 │ item.field === campo
+ 51 │ ? { ...item, status, motivo: motivo || nulo }
+ 52 │ : item
+ 53 │ )
+ 54 │ }));
+ 55 │ };
+ 56 │
+ 57 │ const [requisitos, definirRequisitos] = useState({
+ 58 │ basicInfo: falso,
+ 59 │ anexos: falso,
+ 60 │ validLinks: falso,
+ 61 │ properDocumentation: falso
+ 62 │ });
+ 63 │
+ 64 │ // Atualizar requisitos com base nas aprovações de seção
+ 65 │ const updateRequirements = (newSectionApprovals: qualquer) => {
+ 66 │ definirRequisitos({
+ 67 │ basicInfo: newSectionApprovals.basicInfo?.every((campo: qualquer) => campo.status === 'aprovado') &&
+ 68 │ newSectionApprovals.address?.every((campo: qualquer) => campo.status === 'aprovado'),
+ 69 │ anexos: newSectionApprovals.documents?.every((campo: qualquer) => campo.status === 'aprovado'),
+ 70 │ validLinks: newSectionApprovals.urls?.every((campo: qualquer) => campo.status === 'aprovado'),
+ 71 │ properDocumentation: newSectionApprovals.documents?.every((campo: qualquer) => campo.status === 'aprovado')
+ 72 │ });
+ 73 │ };
+ 74 │
+ 75 │ const handleFieldApproval = (seção: string, campo: string, status: 'aprovado' | 'rejeitado', motivo?: string) => {
+    · ──────────┬─────────
+    · ╰── `handleFieldApproval` redefinido aqui
+ 76 │ const novas Aprovações de Seção = {
+ 77 │ ...seçãoAprovações,
+ 78 │ [seção]: sectionApprovals[seção].map((item: qualquer) =>
+    ╰────
+/home/runner/espaço de trabalho/src/pages/AuditoriaCaseDetails.tsx:46:1
+257| </div>
+258|  
+259| <div data-component-path="src/pages/AuditoriaCaseDetails.tsx" data-component-name="div" data-component-line="259" data-component-file="AuditoriaCaseDetails.tsx" data-component-content="%7B%22className%22%3A%22flex%20items-center%20justify-between%20p-2%20border%20rounded%22%7D" className="flex items-center justify-between p-2 border rounded">
+   | ^
+260| <div caminho do componente de dados="fonte/páginas/AuditoriaCaseDetails.tsx" nome do componente de dados="div" linha do componente de dados="260" arquivo do componente de dados="AuditoriaCaseDetails.tsx" conteúdo do componente de dados="%7B%22className%22%3A%22flex%20items-center%20gap-2%22%7D" nome da classe="flex itens-center lacuna-2">
+261| <FileText caminho-do-componente-de-dados="fonte/páginas/AuditoriaCaseDetails.tsx" nome-do-componente-de-dados="FileText" linha-do-componente-de-dados="261" arquivo-do-componente-de-dados="AuditoriaCaseDetails.tsx" conteúdo-do-componente-de-dados="%7B%22nome-da-classe%22%3A%22h-4%20w-4%22%7D" nome-da-classe="h-4 w-4" />
+Clique fora, pressione Esca tecla ou corrija o código para descartar.
