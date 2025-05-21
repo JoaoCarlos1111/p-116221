@@ -77,18 +77,15 @@ export default function CaseDetails() {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    // Links validation
     if (links.length < 2) {
       newErrors.links = 'Adicione pelo menos 2 links suspeitos';
     }
 
-    // Basic information validation
     if (!formData.responsibleName) newErrors.responsibleName = 'Nome é obrigatório';
     if (!formData.gender) newErrors.gender = 'Selecione o gênero';
     if (!formData.document) newErrors.document = 'CPF/CNPJ é obrigatório';
     if (!formData.phone) newErrors.phone = 'Telefone é obrigatório';
 
-    // Address validation
     if (!formData.street) newErrors.street = 'Rua é obrigatória';
     if (!formData.number) newErrors.number = 'Número é obrigatório';
     if (!formData.neighborhood) newErrors.neighborhood = 'Bairro é obrigatório';
@@ -96,11 +93,9 @@ export default function CaseDetails() {
     if (!formData.state) newErrors.state = 'Estado é obrigatório';
     if (!formData.zipCode) newErrors.zipCode = 'CEP é obrigatório';
 
-    // Case details validation
     if (!formData.productType) newErrors.productType = 'Selecione o tipo de produto';
     if (formData.potentialValue <= 0) newErrors.potentialValue = 'Valor deve ser maior que 0';
 
-    // Files validation
     if (!formData.files.counterfeitAd) newErrors.counterfeitAd = 'Anúncio do produto contrafeito é obrigatório';
     if (!formData.files.salesPage) newErrors.salesPage = 'Página de venda é obrigatória';
 
@@ -110,8 +105,6 @@ export default function CaseDetails() {
 
   const handleStepClick = (stepId: string) => {
     setCurrentStep(stepId);
-    // Update last movement date
-    const now = new Date().toLocaleString();
     toast({
       title: "Status atualizado",
       description: `Caso movido para ${steps.find(s => s.id === stepId)?.title}`,
@@ -131,7 +124,6 @@ export default function CaseDetails() {
         title: "Caso concluído",
         description: "Enviando para o setor de Auditoria...",
       });
-      // Navigate to next sector's received state
       navigate('/kanban/auditoria');
     } else {
       toast({
@@ -337,7 +329,6 @@ export default function CaseDetails() {
               <CardTitle>Endereço</CardTitle>
             </CardHeader>
             <CardContent className="grid md:grid-cols-2 gap-4">
-              {/* Street */}
               <div className="space-y-2">
                 <Input 
                   placeholder="Rua"
@@ -350,7 +341,6 @@ export default function CaseDetails() {
                 )}
               </div>
 
-              {/* Number */}
               <div className="space-y-2">
                 <Input 
                   placeholder="Número"
@@ -363,7 +353,6 @@ export default function CaseDetails() {
                 )}
               </div>
 
-              {/* Neighborhood */}
               <div className="space-y-2">
                 <Input 
                   placeholder="Bairro"
@@ -376,7 +365,6 @@ export default function CaseDetails() {
                 )}
               </div>
 
-              {/* City */}
               <div className="space-y-2">
                 <Input 
                   placeholder="Cidade"
@@ -389,7 +377,6 @@ export default function CaseDetails() {
                 )}
               </div>
 
-              {/* State */}
               <div className="space-y-2">
                 <Select
                   value={formData.state}
@@ -409,7 +396,6 @@ export default function CaseDetails() {
                 )}
               </div>
 
-              {/* ZIP Code */}
               <div className="space-y-2">
                 <Input 
                   placeholder="CEP"
@@ -491,7 +477,7 @@ export default function CaseDetails() {
                 {/* Card 1 - Anúncio do Produto */}
                 <div 
                   className={`relative p-6 border rounded-lg transition-shadow hover:shadow-md cursor-pointer ${
-                    errors.counterfeitAd ? 'border-red-500' bg-red-50' : 'border-[#e2e2e2]'
+                    errors.counterfeitAd ? 'border-red-500 bg-red-50' : 'border-[#e2e2e2]'
                   } ${formData.files.counterfeitAd ? 'bg-green-50' : 'bg-white'}`}
                   onClick={() => document.getElementById('counterfeitAd')?.click()}
                 >
