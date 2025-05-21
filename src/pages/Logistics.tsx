@@ -2,11 +2,10 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { Printer, CircleCheck, Send, RefreshCw } from 'lucide-react';
+import { CircleCheck, Send, RefreshCw, CheckCircle, Printer, MailCheck } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from 'react-router-dom';
-import { CheckCircle, Printer, MailCheck } from 'lucide-react';
 
 interface Case {
   id: string;
