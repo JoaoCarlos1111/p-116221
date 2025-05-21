@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
-import { CheckCircle, XCircle, ChevronLeft, FileText, AlertTriangle } from 'lucide-react';
+import { CheckCircle, XCircle, ChevronLeft, FileText, AlertTriangle, ExternalLink, User, Calendar } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 
 export default function AuditoriaCaseDetails() {
