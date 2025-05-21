@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card } from "@/components/ui/card";
@@ -65,7 +64,7 @@ export default function KanbanBoard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showNewCaseDialog, setShowNewCaseDialog] = useState(false);
   const [newCaseLink, setNewCaseLink] = useState('');
-  
+
   // Filter states
   const [filterDate, setFilterDate] = useState<Date>();
   const [filterPriority, setFilterPriority] = useState('');
@@ -73,13 +72,13 @@ export default function KanbanBoard() {
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
-    
+
     const items = Array.from(cards);
     const [reorderedItem] = items.splice(result.source.index, 1);
-    
+
     // Update analyst based on column
     const newAnalyst = getNextAnalyst(result.destination.droppableId);
-    
+
     items.splice(result.destination.index, 0, {
       ...reorderedItem,
       column: result.destination.droppableId,
@@ -111,7 +110,7 @@ export default function KanbanBoard() {
 
   const handleNewCase = () => {
     if (!newCaseLink) return;
-    
+
     const newCard = {
       id: `case-${Date.now()}`,
       title: `Caso #${Math.floor(Math.random() * 1000)}`,
@@ -133,13 +132,19 @@ export default function KanbanBoard() {
   const filteredCards = cards.filter(card => {
     const matchesSearch = card.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          card.id.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const matchesDate = !filterDate || new Date(card.createdAt).toDateString() === filterDate.toDateString();
     const matchesPriority = !filterPriority || card.priority === filterPriority;
     const matchesClient = !filterClient || card.client === filterClient;
 
     return matchesSearch && matchesDate && matchesPriority && matchesClient;
   });
+
+  const handleClearFilters = () => {
+    setFilterDate(undefined);
+    setFilterPriority('');
+    setFilterClient('');
+  };
 
   return (
     <div className="space-y-8">
@@ -181,13 +186,14 @@ export default function KanbanBoard() {
                     className="rounded-md border"
                   />
                 </div>
-                <div>
+                <div className="space-y-2">
                   <label className="text-sm font-medium">Prioridade</label>
                   <Select value={filterPriority} onValueChange={setFilterPriority}>
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione a prioridade" />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="">Todos</SelectItem>
                       <SelectItem value="Alta">Alta</SelectItem>
                       <SelectItem value="Média">Média</SelectItem>
                       <SelectItem value="Baixa">Baixa</SelectItem>
@@ -206,6 +212,9 @@ export default function KanbanBoard() {
                     </SelectContent>
                   </Select>
                 </div>
+                <Button variant="secondary" onClick={handleClearFilters}>
+                  Limpar Filtros
+                </Button>
               </div>
             </SheetContent>
           </Sheet>
@@ -233,7 +242,7 @@ export default function KanbanBoard() {
           </Dialog>
         </div>
       </header>
-      
+
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="flex gap-4 overflow-x-auto pb-4">
           {columns.map((column) => (
