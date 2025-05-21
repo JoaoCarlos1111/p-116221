@@ -69,7 +69,17 @@
 }
 
 .glass-card {
-  @apply bg-white bg-opacity-100 shadow-lg rounded-lg border-0;
+  @apply bg-white rounded-lg border-0;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease-in-out;
+}
+
+.glass-card:hover {
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.icon-container {
+  @apply p-2.5 rounded-full bg-muted/10 flex items-center justify-center;
 }
 
 .hover-scale {

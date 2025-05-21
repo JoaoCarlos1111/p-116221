@@ -61,8 +61,8 @@ export default function Prospeccao() {
     console.log('Submitting cases:', linkSets);
   };
 
-  const cardStyle = "shadow-md rounded-lg bg-white";
-  const headerStyle = "text-lg font-semibold";
+  const cardStyle = "glass-card hover-scale";
+  const headerStyle = "text-xl font-semibold";
   const subHeaderStyle = "text-sm text-muted-foreground";
   const valueStyle = "text-2xl font-bold";
 
@@ -74,10 +74,11 @@ export default function Prospeccao() {
       </header>
 
       <Card className="shadow-lg">
-        <CardHeader>
+        <CardHeader className="p-6 pb-3">
           <h2 className="text-xl font-semibold">Adicionar Novo Caso</h2>
+          <p className="text-sm text-muted-foreground">Cadastre novos casos para análise</p>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="p-6 pt-3 space-y-6">
           {linkSets.map((set) => (
             <div key={set.id} className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
