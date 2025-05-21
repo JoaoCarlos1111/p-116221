@@ -196,7 +196,25 @@ export default function AuditoriaCaseDetails() {
                   <span>Anúncio do Produto</span>
                   <Badge variant="secondary">Obrigatório</Badge>
                 </div>
-                <Button variant="ghost" size="sm">Visualizar</Button>
+                <div className="flex items-center gap-2">
+                  <Button variant="ghost" size="sm">Visualizar</Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className={`h-8 w-8`}
+                    onClick={() => handleFieldApproval('documents', 'anuncio', 'approved')}
+                  >
+                    <CheckCircle className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className={`h-8 w-8`}
+                    onClick={() => handleFieldApproval('documents', 'anuncio', 'rejected')}
+                  >
+                    <XCircle className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
 
               <div className="flex items-center justify-between p-2 border rounded">
@@ -205,7 +223,25 @@ export default function AuditoriaCaseDetails() {
                   <span>Página de Venda</span>
                   <Badge variant="secondary">Obrigatório</Badge>
                 </div>
-                <Button variant="ghost" size="sm">Visualizar</Button>
+                <div className="flex items-center gap-2">
+                  <Button variant="ghost" size="sm">Visualizar</Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className={`h-8 w-8`}
+                    onClick={() => handleFieldApproval('documents', 'venda', 'approved')}
+                  >
+                    <CheckCircle className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className={`h-8 w-8`}
+                    onClick={() => handleFieldApproval('documents', 'venda', 'rejected')}
+                  >
+                    <XCircle className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             </div>
           </CardContent>
