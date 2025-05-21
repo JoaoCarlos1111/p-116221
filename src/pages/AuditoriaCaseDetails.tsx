@@ -230,17 +230,14 @@ export default function AuditoriaCaseDetails() {
                     variant="ghost"
                     size="icon"
                     className={`h-8 w-8 ${
-                    sectionApprovals.documents?.find(f => f.field === 'anuncio')?.status === 'rejected'
-                      ? 'text-red-600 bg-red-100'
-                      : ''
-                  }`}
-                    onClick={() => {
-                      setCurrentField({ section: 'documents', field: 'anuncio' });
-                      setShowRejectDialog(true);
-                    }}
-                  >
-                    <XCircle className="h-4 w-4" />
-                  </Button>
+                        sectionApprovals.documents?.find(f => f.field === 'anuncio')?.status === 'rejected'
+                          ? 'text-red-600 bg-red-100'
+                          : ''
+                      }`}
+                      onClick={() => handleFieldApproval('documents', 'anuncio', 'rejected')}
+                    >
+                      <XCircle className="h-4 w-4" />
+                    </Button>
                 </div>
               </div>
 
@@ -272,10 +269,7 @@ export default function AuditoriaCaseDetails() {
                       ? 'text-red-600 bg-red-100'
                       : ''
                   }`}
-                  onClick={() => {
-                    setCurrentField({ section: 'documents', field: 'venda' });
-                    setShowRejectDialog(true);
-                  }}
+                  onClick={() => handleFieldApproval('documents', 'venda', 'rejected')}
                 >
                   <XCircle className="h-4 w-4" />
                 </Button>
@@ -477,7 +471,7 @@ export default function AuditoriaCaseDetails() {
         </Card>
       </div>
 
-      
+
     </div>
   );
 }
