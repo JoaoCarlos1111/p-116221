@@ -229,7 +229,7 @@ export default function KanbanBoard() {
     <div className="space-y-8">
       <header className="flex justify-between items-center">
         <div>
-          <h1 className="text-4xl font-bold text-[#2B2B2B]">Pipeline</h1>
+          <h1 className="text-4xl font-bold text-[#2B2B2B]">Fluxo de Análise</h1>
           <p className="text-[#6F767E]">{selectedSector}</p>
         </div>
 
