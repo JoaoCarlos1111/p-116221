@@ -58,11 +58,11 @@ export default function LogisticsCaseView() {
       </div>
 
       <div className="grid gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Informações Básicas</CardTitle>
+        <Card className="shadow-lg bg-white">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xl font-semibold">Informações Básicas</CardTitle>
           </CardHeader>
-          <CardContent className="grid md:grid-cols-2 gap-4">
+          <CardContent className="grid md:grid-cols-2 gap-6 p-6">
             <div>
               <p className="text-sm text-muted-foreground">Marca</p>
               <p className="font-medium">{caseData.brand}</p>
@@ -90,9 +90,9 @@ export default function LogisticsCaseView() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Endereço Completo</CardTitle>
+        <Card className="shadow-lg bg-white">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xl font-semibold">Endereço Completo</CardTitle>
           </CardHeader>
           <CardContent className="grid md:grid-cols-2 gap-4">
             <div>
@@ -157,11 +157,11 @@ export default function LogisticsCaseView() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Documentos do Caso</CardTitle>
+        <Card className="shadow-lg bg-white">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xl font-semibold">Documentos do Caso</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6 p-6">
             <div>
               <h3 className="text-sm font-semibold mb-2">Provas Anexadas</h3>
               <div className="space-y-2">

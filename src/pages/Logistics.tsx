@@ -156,10 +156,10 @@ export default function Logistics() {
               {column.cases.map((case_) => (
                 <Card 
                   key={case_.id} 
-                  className="bg-white cursor-pointer hover:shadow-md transition-shadow"
+                  className="bg-white cursor-pointer shadow-lg hover:shadow-xl transition-all duration-200"
                   onClick={() => navigate(`/logistica/caso/${case_.id}`)}
                 >
-                  <CardContent className="p-4">
+                  <CardContent className="p-6">
                     <div className="text-sm space-y-2">
                       <p className="font-medium">Caso #{case_.id}</p>
                       <p>{case_.storeName}</p>
