@@ -8,9 +8,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { ChevronLeft, CheckCircle, XCircle, ExternalLink, AlertTriangle, User, Calendar } from 'lucide-react';
+import { ChevronLeft, CheckCircle, XCircle, ExternalLink, AlertTriangle, User, Calendar, FileText } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 import { format } from 'date-fns';
+
+// Tratamento de erro para dados não carregados
+const handleError = (error: any) => {
+  console.error('Erro ao carregar dados:', error);
+  return null;
+};
 
 interface SectionStatus {
   approved: boolean;

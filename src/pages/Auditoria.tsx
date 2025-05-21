@@ -131,7 +131,18 @@ export default function Auditoria() {
                   <TableRow 
                     key={caso.id}
                     className="cursor-pointer hover:bg-muted/50"
-                    onClick={() => navigate(`/auditoria/caso/${caso.id}`, { replace: false })}
+                    onClick={() => {
+  try {
+    navigate(`/auditoria/caso/${caso.id}`);
+  } catch (error) {
+    console.error('Erro na navegação:', error);
+    toast({
+      title: "Erro",
+      description: "Não foi possível abrir os detalhes do caso.",
+      variant: "destructive"
+    });
+  }
+}}
                   >
                     <TableCell>#{caso.id}</TableCell>
                     <TableCell>{format(new Date(caso.receivedDate), 'dd/MM/yyyy')}</TableCell>
