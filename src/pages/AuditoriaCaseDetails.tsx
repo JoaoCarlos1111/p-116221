@@ -209,11 +209,7 @@ export default function AuditoriaCaseDetails() {
                     variant="ghost"
                     size="icon"
                     className={`h-8 w-8`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleFieldApproval('documents', 'anuncio', 'approved');
-                    }}
+                    onClick={() => handleFieldApproval('documents', 'anuncio', 'approved')}
                   >
                     <CheckCircle className="h-4 w-4" />
                   </Button>
@@ -221,10 +217,9 @@ export default function AuditoriaCaseDetails() {
                     variant="ghost"
                     size="icon"
                     className={`h-8 w-8`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleFieldApproval('documents', 'anuncio', 'rejected');
+                    onClick={() => {
+                      setCurrentField({ section: 'documents', field: 'anuncio' });
+                      setShowRejectDialog(true);
                     }}
                   >
                     <XCircle className="h-4 w-4" />
@@ -298,11 +293,7 @@ export default function AuditoriaCaseDetails() {
                           ? 'text-green-600 bg-green-100'
                           : ''
                       }`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleFieldApproval('urls', url, 'approved');
-                      }}
+                      onClick={() => handleFieldApproval('urls', url, 'approved')}
                     >
                       <CheckCircle className="h-4 w-4" />
                     </Button>
@@ -314,9 +305,7 @@ export default function AuditoriaCaseDetails() {
                           ? 'text-red-600 bg-red-100'
                           : ''
                       }`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
+                      onClick={() => {
                         setCurrentField({ section: 'urls', field: url });
                         setShowRejectDialog(true);
                       }}
