@@ -101,14 +101,12 @@ export default function AuditoriaCaseDetails() {
   };
 
   const handleReject = async () => {
-    if (!rejectionReason) return;
     try {
       // API call would go here
       toast({
         title: "Caso Rejeitado",
         description: "O caso foi devolvido para verificação.",
       });
-      setShowRejectDialog(false);
       navigate('/auditoria');
     } catch (error) {
       toast({
@@ -139,7 +137,8 @@ export default function AuditoriaCaseDetails() {
         <div className="flex gap-2">
           <Button
             variant="destructive"
-            onClick={() => setShowRejectDialog(true)}
+            onClick={handleReject}
+            className="hover:bg-red-100"
           >
             <XCircle className="h-4 w-4 mr-2" />
             Rejeitar
@@ -478,28 +477,7 @@ export default function AuditoriaCaseDetails() {
         </Card>
       </div>
 
-      <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Rejeitar Caso</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 mt-4">
-            <Textarea
-              placeholder="Descreva o motivo da rejeição..."
-              value={rejectionReason}
-              onChange={(e) => setRejectionReason(e.target.value)}
-            />
-            <Button
-              variant="destructive"
-              onClick={handleReject}
-              disabled={!rejectionReason}
-              className="w-full"
-            >
-              Confirmar Rejeição
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      
     </div>
   );
 }
