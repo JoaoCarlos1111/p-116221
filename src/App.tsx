@@ -6,7 +6,9 @@ import KanbanBoard from '@/pages/KanbanBoard'
 import Profile from '@/pages/Profile'
 import Settings from '@/pages/Settings'
 import CaseDetails from '@/pages/CaseDetails'
-import Prospeccao from '@/pages/Prospeccao'
+import Prospeccao from '@/pages/Prospeccao';
+import Auditoria from './pages/Auditoria';
+import AuditoriaCaseDetails from './pages/AuditoriaCaseDetails';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
             <Route path="/settings" element={<Settings />} />
             <Route path="/case/:id" element={<CaseDetails />} />
             <Route path="/prospeccao" element={<Prospeccao />} />
+            <Route path="/auditoria" element={<Auditoria />} />
+            <Route path="/auditoria/caso/:id" element={<AuditoriaCaseDetails />} />
           </Routes>
         </main>
       </div>
