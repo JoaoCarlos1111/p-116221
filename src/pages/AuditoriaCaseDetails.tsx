@@ -202,7 +202,11 @@ export default function AuditoriaCaseDetails() {
                     variant="ghost"
                     size="icon"
                     className={`h-8 w-8`}
-                    onClick={() => handleFieldApproval('documents', 'anuncio', 'approved')}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleFieldApproval('documents', 'anuncio', 'approved');
+                    }}
                   >
                     <CheckCircle className="h-4 w-4" />
                   </Button>
@@ -210,7 +214,11 @@ export default function AuditoriaCaseDetails() {
                     variant="ghost"
                     size="icon"
                     className={`h-8 w-8`}
-                    onClick={() => handleFieldApproval('documents', 'anuncio', 'rejected')}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleFieldApproval('documents', 'anuncio', 'rejected');
+                    }}
                   >
                     <XCircle className="h-4 w-4" />
                   </Button>
@@ -229,7 +237,11 @@ export default function AuditoriaCaseDetails() {
                     variant="ghost"
                     size="icon"
                     className={`h-8 w-8`}
-                    onClick={() => handleFieldApproval('documents', 'venda', 'approved')}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleFieldApproval('documents', 'venda', 'approved');
+                    }}
                   >
                     <CheckCircle className="h-4 w-4" />
                   </Button>
@@ -237,7 +249,11 @@ export default function AuditoriaCaseDetails() {
                     variant="ghost"
                     size="icon"
                     className={`h-8 w-8`}
-                    onClick={() => handleFieldApproval('documents', 'venda', 'rejected')}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleFieldApproval('documents', 'venda', 'rejected');
+                    }}
                   >
                     <XCircle className="h-4 w-4" />
                   </Button>
