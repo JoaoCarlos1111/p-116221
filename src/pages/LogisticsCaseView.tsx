@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ChevronLeft, ExternalLink } from 'lucide-react';
+import { ChevronLeft, ExternalLink, FileText, Download } from 'lucide-react';
 
 export default function LogisticsCaseView() {
   const { id } = useParams();
@@ -26,6 +26,14 @@ export default function LogisticsCaseView() {
       "https://lojaexemplo.com/produto1",
       "https://marketplace.com/anuncio123"
     ],
+    documents: {
+      evidence: [
+        { name: "Print do Anúncio 1.pdf", url: "#" },
+        { name: "Evidência de Venda.pdf", url: "#" }
+      ],
+      powerOfAttorney: { name: "Procuração.pdf", url: "#" },
+      notification: { name: "Notificação Extrajudicial.pdf", url: "#" }
+    },
     trackingCode: "BR789456123",
     fullAddress: {
       street: "Rua Augusta",
@@ -146,6 +154,56 @@ export default function LogisticsCaseView() {
                 <p className="font-medium">{caseData.trackingCode}</p>
               </div>
             )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Documentos do Caso</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <h3 className="text-sm font-semibold mb-2">Provas Anexadas</h3>
+              <div className="space-y-2">
+                {caseData.documents.evidence.map((doc, index) => (
+                  <div key={index} className="flex items-center justify-between p-2 bg-muted rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <FileText className="h-4 w-4 text-muted-foreground" />
+                      <span>{doc.name}</span>
+                    </div>
+                    <Button variant="ghost" size="icon">
+                      <Download className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold mb-2">Procuração</h3>
+              <div className="flex items-center justify-between p-2 bg-muted rounded-lg">
+                <div className="flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-muted-foreground" />
+                  <span>{caseData.documents.powerOfAttorney.name}</span>
+                </div>
+                <Button variant="ghost" size="icon">
+                  <Download className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold mb-2">Notificação Extrajudicial</h3>
+              <div className="flex items-center justify-between p-2 bg-muted rounded-lg">
+                <div className="flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-muted-foreground" />
+                  <span>{caseData.documents.notification.name}</span>
+                </div>
+                <Button variant="ghost" size="icon">
+                  <Download className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>

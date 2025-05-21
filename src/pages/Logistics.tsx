@@ -76,16 +76,19 @@ export default function Logistics() {
   const columns = [
     {
       title: "Aprovado",
+      icon: <CheckCircle className="h-5 w-5 text-green-600" />,
       cases: cases.filter(c => !c.printDate && !c.trackingCode),
       color: "bg-green-50"
     },
     {
       title: "Fila de Impressão",
+      icon: <Printer className="h-5 w-5 text-gray-600" />,
       cases: cases.filter(c => c.printDate && !c.trackingCode),
       color: "bg-gray-50"
     },
     {
       title: "Postado",
+      icon: <MailCheck className="h-5 w-5 text-blue-600" />,
       cases: cases.filter(c => c.trackingCode),
       color: "bg-blue-50"
     }
