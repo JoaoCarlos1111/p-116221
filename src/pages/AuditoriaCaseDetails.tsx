@@ -63,18 +63,18 @@ export default function AuditoriaCaseDetails() {
   };
 
   return (
-    <div className="space-y-6">
-      <header className="flex justify-between items-center">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => navigate('/auditoria')}>
-            <ChevronLeft className="h-4 w-4 mr-2" />
+    <div className="space-y-8">
+      <header className="flex justify-between items-center mb-2">
+        <div className="flex items-center gap-6">
+          <Button variant="ghost" size="lg" onClick={() => navigate('/auditoria')}>
+            <ChevronLeft className="h-5 w-5 mr-2" />
             Voltar
           </Button>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">
+            <h1 className="text-3xl font-bold tracking-tight mb-1">
               Auditoria do Caso #{id}
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-lg">
               Verificação de conformidade e aprovação final
             </p>
           </div>

@@ -79,7 +79,20 @@
 }
 
 .icon-container {
-  @apply p-2.5 rounded-full bg-muted/10 flex items-center justify-center;
+  @apply p-3 rounded-full bg-muted/10 flex items-center justify-center transition-colors hover:bg-muted/20;
+}
+
+.icon-button {
+  @apply p-2 rounded-full transition-colors hover:bg-muted/10 flex items-center justify-center;
+}
+
+.data-card {
+  @apply p-6 rounded-lg bg-white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.data-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
 }
 
 .hover-scale {
