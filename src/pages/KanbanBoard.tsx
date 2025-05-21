@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Checkbox } from "@/components/ui/checkbox";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Command, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Slider } from "@/components/ui/slider";
 import { Card } from "@/components/ui/card";
@@ -542,7 +543,7 @@ export default function KanbanBoard() {
                             <SelectValue placeholder="Selecione a prioridade" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="todos">Todos</SelectItem>
+                            <SelectItem value="">Todos</SelectItem>
                             <SelectItem value="Alta">Alta</SelectItem>
                             <SelectItem value="Média">Média</SelectItem>
                             <SelectItem value="Baixa">Baixa</SelectItem>
@@ -556,7 +557,7 @@ export default function KanbanBoard() {
                             <SelectValue placeholder="Selecione o cliente" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="todos">Todos</SelectItem>
+                            <SelectItem value="">Todos</SelectItem>
                             <SelectItem value="Nike">Nike</SelectItem>
                             <SelectItem value="Adidas">Adidas</SelectItem>
                           </SelectContent>
