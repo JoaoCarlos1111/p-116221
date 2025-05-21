@@ -23,6 +23,10 @@ export default function AuditoriaCaseDetails() {
       { field: 'https://lojaexemplo.com', status: null, reason: null },
       { field: 'https://marketplace.com/anuncio/123', status: null, reason: null }
     ],
+    documents: [
+      { field: 'anuncio', status: null, reason: null },
+      { field: 'venda', status: null, reason: null }
+    ],
     basicInfo: [
       { field: 'name', status: null, reason: null },
       { field: 'document', status: null, reason: null },
@@ -289,7 +293,7 @@ export default function AuditoriaCaseDetails() {
                       variant="ghost"
                       size="icon"
                       className={`h-8 w-8 ${
-                        sectionApprovals.urls?.find(f => f.url === url)?.status === 'approved'
+                        sectionApprovals.urls?.find(f => f.field === urlItem.field)?.status === 'approved'
                           ? 'text-green-600 bg-green-100'
                           : ''
                       }`}
