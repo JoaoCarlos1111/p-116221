@@ -19,7 +19,10 @@ export default function AuditoriaCaseDetails() {
   const [showRejectDialog, setShowRejectDialog] = useState(false);
   const [currentField, setCurrentField] = useState<{ section: string; field: string } | null>(null);
   const [sectionApprovals, setSectionApprovals] = useState({
-    urls: null,
+    urls: [
+      { url: 'https://lojaexemplo.com', status: null, reason: null },
+      { url: 'https://marketplace.com/anuncio/123', status: null, reason: null }
+    ],
     basicInfo: [
       { field: 'name', status: null, reason: null },
       { field: 'document', status: null, reason: null },
@@ -30,6 +33,10 @@ export default function AuditoriaCaseDetails() {
       { field: 'neighborhood', status: null, reason: null },
       { field: 'city', status: null, reason: null },
       { field: 'cep', status: null, reason: null }
+    ],
+    documents: [
+      { field: 'anuncio', status: null, reason: null },
+      { field: 'venda', status: null, reason: null }
     ]
   });
 
