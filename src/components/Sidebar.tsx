@@ -7,7 +7,8 @@ import {
   UserCircle,
   Settings as SettingsIcon,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  LogOut
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -80,6 +81,23 @@ export default function Sidebar() {
             isCollapsed && "hidden"
           )}>Configurações</span>
         </NavLink>
+
+        <div className="absolute bottom-4 left-0 right-0 px-2">
+          <button
+            onClick={() => {
+              localStorage.removeItem('isAuthenticated');
+              localStorage.removeItem('userRole');
+              window.location.href = '/login/internal';
+            }}
+            className="flex w-full items-center gap-2 p-2 rounded-lg hover:bg-accent text-red-600"
+          >
+            <LogOut size={20} />
+            <span className={cn(
+              "transition-all duration-300",
+              isCollapsed && "hidden"
+            )}>Sair</span>
+          </button>
+        </div>
       </nav>
     </div>
   );
