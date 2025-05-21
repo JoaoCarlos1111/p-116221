@@ -1,4 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import ClientLogin from './pages/ClientLogin';
+import InternalLogin from './pages/InternalLogin';
 import { Toaster } from "@/components/ui/toaster"
 import Sidebar from '@/components/Sidebar'
 import Dashboard from '@/pages/Dashboard'
@@ -14,6 +16,9 @@ function App() {
         <Sidebar />
         <main className="flex-1 overflow-y-auto p-8">
           <Routes>
+            <Route path="/" element={<Navigate to="/login/internal" replace />} />
+            <Route path="/login/cliente" element={<ClientLogin />} />
+            <Route path="/login/internal" element={<InternalLogin />} />
             <Route path="/" element={<Dashboard />} />
             <Route path="/kanban/:sector" element={<KanbanBoard />} />
             <Route path="/profile" element={<Profile />} />
