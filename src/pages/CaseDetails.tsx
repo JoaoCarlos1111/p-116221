@@ -198,51 +198,7 @@ export default function CaseDetails() {
         </DialogContent>
       </Dialog>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Marca Atendida</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex gap-4">
-            <div className="flex-1">
-              <Select
-                value={selectedBrand}
-                onValueChange={(value) => {
-                  setSelectedBrand(value);
-                  // Auto-fill logic would go here
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione a marca" />
-                </SelectTrigger>
-                <SelectContent>
-                  {brands.map(brand => (
-                    <SelectItem key={brand.document} value={brand.name}>
-                      {brand.name} ({brand.document})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <Button variant="outline" onClick={() => setShowHistoryDialog(true)}>
-              Ver Outros Casos
-            </Button>
-          </div>
-          {autofillSource && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <InfoIcon className="h-4 w-4" />
-              <span>Dados carregados do caso #{autofillSource}</span>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => setAutofillSource(null)}
-              >
-                Remover
-              </Button>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      
 
       <div className="flex items-center gap-4">
         <Button variant="ghost" onClick={() => navigate(-1)}>
