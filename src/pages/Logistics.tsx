@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,6 +5,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Printer, CircleCheck, Send, RefreshCw } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from 'react-router-dom';
 
 interface Case {
   id: string;
@@ -71,20 +71,21 @@ export default function Logistics() {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
+  const navigate = useNavigate();
 
   const columns = [
     {
-      title: "✅ Aprovado",
+      title: "Aprovado",
       cases: cases.filter(c => !c.printDate && !c.trackingCode),
       color: "bg-green-50"
     },
     {
-      title: "🖨️ Fila de Impressão",
+      title: "Fila de Impressão",
       cases: cases.filter(c => c.printDate && !c.trackingCode),
       color: "bg-gray-50"
     },
     {
-      title: "📬 Postado",
+      title: "Postado",
       cases: cases.filter(c => c.trackingCode),
       color: "bg-blue-50"
     }
@@ -115,7 +116,7 @@ export default function Logistics() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Kanban de Notificações - Logística</h1>
-      
+
       <div className="flex gap-4 mb-6">
         <Input
           type="date"
