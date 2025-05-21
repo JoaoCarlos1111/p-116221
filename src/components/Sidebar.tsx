@@ -67,6 +67,14 @@ export default function Sidebar() {
           )}>Workflow</span>
         </NavLink>
 
+        <NavLink to="/auditoria" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+          <CheckSquare size={20} />
+          <span className={cn(
+            "transition-all duration-300",
+            isCollapsed && "hidden"
+          )}>Auditoria</span>
+        </NavLink>
+
         <NavLink to="/approvals" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
           <CheckSquare size={20} />
           <span className={cn(
