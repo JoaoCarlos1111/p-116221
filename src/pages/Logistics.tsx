@@ -20,7 +20,53 @@ interface Case {
 }
 
 export default function Logistics() {
-  const [cases, setCases] = useState<Case[]>([]);
+  const [cases, setCases] = useState<Case[]>([
+    {
+      id: "NOT001",
+      storeName: "Loja Esportiva SP",
+      address: "Rua Augusta, 1500 - São Paulo, SP",
+      brand: "Nike",
+      approvalDate: "2024-03-20",
+      status: "Aprovado"
+    },
+    {
+      id: "NOT002",
+      storeName: "Shopping Center RJ",
+      address: "Av. das Américas, 4666 - Rio de Janeiro, RJ",
+      brand: "Adidas",
+      approvalDate: "2024-03-20",
+      printDate: "2024-03-21",
+      status: "Impresso"
+    },
+    {
+      id: "NOT003",
+      storeName: "Galeria BH",
+      address: "Av. Afonso Pena, 2700 - Belo Horizonte, MG",
+      brand: "Puma",
+      approvalDate: "2024-03-19",
+      printDate: "2024-03-20",
+      trackingCode: "BR789456123",
+      status: "Em trânsito",
+      deliveryStatus: "Em rota de entrega"
+    },
+    {
+      id: "NOT004",
+      storeName: "Centro Comercial RS",
+      address: "Rua dos Andradas, 1234 - Porto Alegre, RS",
+      brand: "Nike",
+      approvalDate: "2024-03-20",
+      status: "Aprovado"
+    },
+    {
+      id: "NOT005",
+      storeName: "Shopping Recife",
+      address: "Rua da Aurora, 1000 - Recife, PE",
+      brand: "Adidas",
+      approvalDate: "2024-03-19",
+      printDate: "2024-03-20",
+      status: "Impresso"
+    }
+  ]);
   const { toast } = useToast();
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
