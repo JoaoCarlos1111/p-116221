@@ -1,0 +1,53 @@
+“Adicione a ação de clicar em um card no ‘Pipeline’ para abrir a página de detalhes do caso e inclua as seguintes seções e campos:
+
+1. Comportamento de abertura:
+   - Ao clicar em qualquer card no Pipeline, abrir a tela ‘Detalhes do Caso’ em modal ou rota dedicada (/case/:id).
+   - Permitir botão “Voltar” para retornar ao Pipeline.
+
+2. Header da tela:
+   - Título: Nome do caso (ex.: “Caso #1234 – Falsificação de Produto X”).
+   - Status atual: badge colorido (“Recebido”, “Caso em Análise”, “Pendente de Informação”, “Concluído”).
+   - Linha com “Criado em: DD/MM/AAAA” e “Última atualização: DD/MM/AAAA HH:MM”.
+
+3. Seção de Metadados (atualizada):
+   - Links suspeitos:
+     - Permitir adicionar múltiplos links via botão “+ Adicionar Link”.
+     - Cada link aparece como item clicável, com opção de “Remover”.
+   - Endereço completo:
+     - Campo longo para rua, número, bairro, cidade, estado e CEP.
+     - Auto-complete de endereço via API (se disponível).
+   - CPF/CNPJ (formatado).
+   - Tipo de Produto (categoria).
+   - Estado (UF).
+   - Potencial indenizatório (renomeado de “Valor Potencial”):
+     - Exibe valor estimado em Reais (R$).
+     - Mantém o slider ou campo de valor conforme definido.
+
+4. Seção de Anexos:
+   - Galeria de documentos e imagens (upload/download).
+   - Botão “Adicionar Anexo” para seleção de arquivos.
+
+5. Timeline / Histórico de Ações:
+   - Lista cronológica com data, horário, usuário e ícone de tipo de ação (“movido de coluna”, “anexo adicionado”, “campo editado”).
+
+6. Área de Comentários / Notas Internas:
+   - Campo de texto e botão “Enviar” para postar no timeline.
+
+7. Ações Rápidas (botões):
+   - “Mover para Próximo Setor” (dropdown com setores seguintes).
+   - “Solicitar Informação ao Cliente” (modal de mensagem).
+   - “Aprovar Notificação Extrajudicial” (visível apenas para cliente).
+   - “Gerar Relatório PDF”.
+
+8. Layout e usabilidade:
+   - Cards/seções com fundo #F2F2F2 e bordas arredondadas.
+   - Tipografia #2B2B2B para títulos e #6F767E para legendas.
+   - Botões principais em #3E64FF e de confirmação em #3ECF8E.
+   - Responsivo: modal full-screen no mobile, tela dedicada no desktop.
+
+9. Controle de acesso:
+   - Admin: todas as ações e edição de qualquer campo.
+   - Analista: apenas ações permitidas para seu setor.
+   - Cliente: apenas visualização, comentários e “Aprovar Notificação Extrajudicial”.
+
+Mantenha tudo o mais já definido para o Pipeline e execute a atualização.
