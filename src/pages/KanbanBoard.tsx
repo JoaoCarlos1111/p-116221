@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Checkbox } from "@/components/ui/checkbox";
 import { Command, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Slider } from "@/components/ui/slider";
@@ -451,6 +451,7 @@ export default function KanbanBoard() {
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
                                 className="p-3 bg-[#F8F9FA] cursor-move hover:shadow-md transition-shadow"
+                                onClick={() => navigate(`/case/${card.id}`)}
                               >
                                 <div className="flex justify-between items-start mb-2">
                                   <h4 className="font-medium">{card.title}</h4>
