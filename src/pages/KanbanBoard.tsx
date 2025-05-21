@@ -44,7 +44,8 @@ const initialCards = [
     column: 'received',
     analyst: 'João Silva',
     client: 'Nike',
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   },
   {
     id: '2',
@@ -166,7 +167,8 @@ export default function KanbanBoard() {
     items.splice(result.destination.index, 0, {
       ...reorderedItem,
       column: result.destination.droppableId,
-      analyst: newAnalyst
+      analyst: newAnalyst,
+      updatedAt: new Date().toISOString()
     });
 
     setCards(items);
@@ -460,6 +462,16 @@ export default function KanbanBoard() {
                                   </Badge>
                                 </div>
                                 <p className="text-sm text-[#6F767E] mb-2">{card.description}</p>
+                                <div className="text-xs text-[#6F767E] mb-2 space-y-1">
+                                  <div className="flex items-center">
+                                    <CalendarIcon className="w-3 h-3 mr-1" />
+                                    <span>Criado em: {new Date(card.createdAt).toLocaleDateString('pt-BR')}</span>
+                                  </div>
+                                  <div className="flex items-center">
+                                    <CalendarIcon className="w-3 h-3 mr-1" />
+                                    <span>Última Atualização: {new Date(card.updatedAt || card.createdAt).toLocaleDateString('pt-BR')}</span>
+                                  </div>
+                                </div>
                                 <div className="text-sm text-[#6F767E]">
                                   {card.timeline.map((event, i) => (
                                     <div key={i} className="flex items-center">
