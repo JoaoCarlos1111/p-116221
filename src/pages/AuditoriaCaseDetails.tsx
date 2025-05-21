@@ -139,12 +139,12 @@ export default function AuditoriaCaseDetails() {
         </div>
       </header>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Requisitos de Aprovação</CardTitle>
+      <div className="grid gap-8 md:grid-cols-2">
+        <Card className="shadow-lg border-0 bg-white">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-xl font-semibold">Requisitos de Aprovação</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6 pt-3">
             <div className="space-y-4">
               {Object.entries(requirements).map(([key, checked]) => (
                 <div key={key} className="flex items-start space-x-2">
@@ -184,11 +184,11 @@ export default function AuditoriaCaseDetails() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Documentos Anexados</CardTitle>
+        <Card className="shadow-lg border-0 bg-white">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-xl font-semibold">Documentos Anexados</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6 pt-3">
             <div className="space-y-4">
               <div className="flex items-center justify-between p-2 border rounded">
                 <div className="flex items-center gap-2">
@@ -212,9 +212,9 @@ export default function AuditoriaCaseDetails() {
         </Card>
 
         {/* URLs Suspeitas */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>URLs Suspeitas</CardTitle>
+        <Card className="shadow-lg border-0 bg-white">
+          <CardHeader className="flex flex-row items-center justify-between pb-3">
+            <CardTitle className="text-xl font-semibold">URLs Suspeitas</CardTitle>
             <div className="flex gap-2">
               <Button variant="outline" className="text-green-600" onClick={() => handleSectionApproval('urls', true)}>
                 <CheckCircle className="h-4 w-4 mr-2" />
@@ -241,9 +241,9 @@ export default function AuditoriaCaseDetails() {
         </Card>
 
         {/* Informações Básicas */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Informações Básicas</CardTitle>
+        <Card className="shadow-lg border-0 bg-white">
+          <CardHeader className="flex flex-row items-center justify-between pb-3">
+            <CardTitle className="text-xl font-semibold">Informações Básicas</CardTitle>
             <div className="flex gap-2">
               <Button variant="outline" className="text-green-600" onClick={() => handleSectionApproval('basicInfo', true)}>
                 <CheckCircle className="h-4 w-4 mr-2" />
@@ -309,9 +309,9 @@ export default function AuditoriaCaseDetails() {
         </Card>
 
         {/* Endereço */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Endereço</CardTitle>
+        <Card className="shadow-lg border-0 bg-white">
+          <CardHeader className="flex flex-row items-center justify-between pb-3">
+            <CardTitle className="text-xl font-semibold">Endereço</CardTitle>
             <div className="flex gap-2">
               <Button variant="outline" className="text-green-600" onClick={() => handleSectionApproval('address', true)}>
                 <CheckCircle className="h-4 w-4 mr-2" />
@@ -346,11 +346,11 @@ export default function AuditoriaCaseDetails() {
         </Card>
 
         {/* Case Info */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Informações do Caso</CardTitle>
+        <Card className="shadow-lg border-0 bg-white">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-xl font-semibold">Informações do Caso</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6 pt-3">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4" />
