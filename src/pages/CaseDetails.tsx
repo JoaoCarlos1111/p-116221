@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CalendarIcon, ChevronLeft, Link, Paperclip, Plus, Send, Trash2, ArrowLeft, Check } from 'lucide-react';
+import { CalendarIcon, ChevronLeft, Link, Paperclip, Plus, Send, Trash2, ArrowLeft, Check, X } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 const steps = [
@@ -274,27 +274,10 @@ export default function CaseDetails() {
               <CardTitle>Marca Atendida</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex gap-4">
-                <div className="flex-1">
-                  <Select
-                    value={selectedBrand}
-                    onValueChange={(value) => {
-                      setSelectedBrand(value);
-                      // Auto-fill logic would go here
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione a marca" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {brands.map(brand => (
-                        <SelectItem key={brand.document} value={brand.name}>
-                          {brand.name} ({brand.document})
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div className="flex gap-4 items-center">
+                <Badge variant="default" className="px-3 py-1 text-base">
+                  {selectedBrand || "Nike"} {/* Replace with actual brand from Prospecção */}
+                </Badge>
                 <Button variant="outline" onClick={() => setShowHistoryDialog(true)}>
                   Ver Outros Casos
                 </Button>
@@ -314,6 +297,57 @@ export default function CaseDetails() {
               )}
             </CardContent>
           </Card>
+
+          <Dialog open={showHistoryDialog} onOpenChange={setShowHistoryDialog}>
+            <DialogContent className="sm:max-w-[600px]">
+              <DialogHeader>
+                <DialogTitle>Histórico de Casos</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="flex gap-2">
+                  <Input 
+                    placeholder="Buscar por ID ou data..." 
+                    onChange={(e) => {
+                      // Implement search logic
+                    }}
+                  />
+                </div>
+                <div className="max-h-[400px] overflow-y-auto space-y-3">
+                  {previousCases.map(caseItem => (
+                    <div 
+                      key={caseItem.id} 
+                      className="p-4 border rounded-lg hover:bg-accent cursor-pointer"
+                      onClick={() => {
+                        setAutofillSource(caseItem.id);
+                        setShowHistoryDialog(false);
+                      }}
+                    >
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <div className="font-medium">Caso #{caseItem.id}</div>
+                          <div className="text-sm text-muted-foreground">
+                            Data: {new Date(caseItem.date).toLocaleDateString('pt-BR')}
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-end gap-1">
+                          <Badge>{caseItem.status}</Badge>
+                          {Math.random() > 0.5 ? (
+                            <div className="text-green-600">
+                              <Check className="h-4 w-4" />
+                            </div>
+                          ) : (
+                            <div className="text-red-600">
+                              <X className="h-4 w-4" />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
 
           {/* SEÇÃO A - Links Suspeitos */}
           <Card>
