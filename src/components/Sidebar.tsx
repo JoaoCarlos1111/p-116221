@@ -22,7 +22,7 @@ export default function Sidebar() {
 
         <NavLink to="/kanban/prospeccao" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
           <Kanban size={20} />
-          <span>Kanban</span>
+          <span>Verificação</span>
         </NavLink>
 
         <NavLink to="/approvals" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
