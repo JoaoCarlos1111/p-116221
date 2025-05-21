@@ -52,19 +52,19 @@ export default function Auditoria() {
   const pendingCount = cases.filter(c => c.status === 'Pendente').length;
 
   return (
-    <div className="space-y-6">
-      <header className="flex justify-between items-start">
+    <div className="space-y-8">
+      <header className="flex justify-between items-start mb-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Casos para Auditoria</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-2xl font-semibold tracking-tight">Casos para Auditoria</h1>
+          <p className="text-muted-foreground mt-2">
             {pendingCount} casos pendentes de auditoria
           </p>
         </div>
       </header>
 
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex gap-4 mb-6">
+      <Card className="shadow-lg border-0 bg-white">
+        <CardContent className="p-8">
+          <div className="flex gap-6 mb-8">
             <div className="flex-1 relative">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
@@ -114,7 +114,7 @@ export default function Auditoria() {
             </Select>
           </div>
 
-          <div className="rounded-md border">
+          <div className="rounded-lg bg-white">
             <Table>
               <TableHeader>
                 <TableRow>
