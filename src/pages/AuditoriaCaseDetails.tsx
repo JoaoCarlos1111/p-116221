@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -195,7 +194,13 @@ export default function AuditoriaCaseDetails() {
           </CardContent>
         </Card>
 
-        <Card className="shadow-lg border-0 bg-white">
+        <Card className={`shadow-lg border-0 bg-white transition-colors ${
+          sectionApprovals.documents?.every(field => field.status === 'approved') 
+            ? 'bg-green-50' 
+            : sectionApprovals.documents?.some(field => field.status === 'rejected')
+              ? 'bg-red-50'
+              : ''
+        }`}>
           <CardHeader className="pb-3">
             <CardTitle className="text-xl font-semibold">Documentos Anexados</CardTitle>
           </CardHeader>
@@ -212,7 +217,11 @@ export default function AuditoriaCaseDetails() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className={`h-8 w-8`}
+                    className={`h-8 w-8 ${
+                    sectionApprovals.documents?.find(f => f.field === 'anuncio')?.status === 'approved'
+                      ? 'text-green-600 bg-green-100'
+                      : ''
+                  }`}
                     onClick={() => handleFieldApproval('documents', 'anuncio', 'approved')}
                   >
                     <CheckCircle className="h-4 w-4" />
@@ -220,7 +229,11 @@ export default function AuditoriaCaseDetails() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className={`h-8 w-8`}
+                    className={`h-8 w-8 ${
+                    sectionApprovals.documents?.find(f => f.field === 'anuncio')?.status === 'rejected'
+                      ? 'text-red-600 bg-red-100'
+                      : ''
+                  }`}
                     onClick={() => {
                       setCurrentField({ section: 'documents', field: 'anuncio' });
                       setShowRejectDialog(true);
@@ -242,27 +255,30 @@ export default function AuditoriaCaseDetails() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className={`h-8 w-8`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleFieldApproval('documents', 'venda', 'approved');
-                    }}
-                  >
-                    <CheckCircle className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className={`h-8 w-8`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleFieldApproval('documents', 'venda', 'rejected');
-                    }}
-                  >
-                    <XCircle className="h-4 w-4" />
-                  </Button>
+                    className={`h-8 w-8 ${
+                    sectionApprovals.documents?.find(f => f.field === 'venda')?.status === 'approved'
+                      ? 'text-green-600 bg-green-100'
+                      : ''
+                  }`}
+                  onClick={() => handleFieldApproval('documents', 'venda', 'approved')}
+                >
+                  <CheckCircle className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={`h-8 w-8 ${
+                    sectionApprovals.documents?.find(f => f.field === 'venda')?.status === 'rejected'
+                      ? 'text-red-600 bg-red-100'
+                      : ''
+                  }`}
+                  onClick={() => {
+                    setCurrentField({ section: 'documents', field: 'venda' });
+                    setShowRejectDialog(true);
+                  }}
+                >
+                  <XCircle className="h-4 w-4" />
+                </Button>
                 </div>
               </div>
             </div>
