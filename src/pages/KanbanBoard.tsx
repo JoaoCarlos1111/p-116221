@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
-
 import { CalendarIcon, FilterIcon, PlusIcon, Search } from 'lucide-react';
 import { Calendar } from "@/components/ui/calendar";
 
@@ -133,13 +132,13 @@ export default function KanbanBoard() {
     const matchesDate = !filterDate || new Date(card.createdAt).toDateString() === filterDate.toDateString();
     const matchesPriority = !filterPriority || filterPriority === '' || card.priority === filterPriority;
     const matchesClient = !filterClient || filterClient === '' || card.client === filterClient;
-    
+
     // Product type filter
     const matchesProduct = filterProducts.length === 0 || filterProducts.includes(card.productType || '');
-    
+
     // State filter
     const matchesState = filterStates.length === 0 || filterStates.includes(card.state || '');
-    
+
     // Value range filter
     const cardValue = card.potentialValue || 0;
     const matchesValue = cardValue >= filterValueRange[0] && cardValue <= filterValueRange[1];
@@ -162,7 +161,7 @@ export default function KanbanBoard() {
       ...filterStates,
       filterValueRange[0] > 0 || filterValueRange[1] < 20000
     ].filter(Boolean).length;
-    
+
     setActiveFiltersCount(count);
   }, [filterDate, filterPriority, filterClient, filterProducts, filterStates, filterValueRange]);
 
@@ -235,13 +234,12 @@ export default function KanbanBoard() {
     setShowNewCaseDialog(false);
   };
 
-
   return (
     <div className="flex h-full">
       {/* Filter Sidebar */}
       <div className="w-80 border-r p-6 space-y-6 bg-card">
         <h2 className="font-semibold text-lg">Filtros</h2>
-        
+
         <Button variant="secondary" onClick={handleClearFilters} className="w-full">
           Limpar Filtros
         </Button>
@@ -396,270 +394,271 @@ export default function KanbanBoard() {
           </div>
 
           <div className="flex gap-4">
-          <div className="relative">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Buscar por caso..."
-              className="pl-8"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
+            <div className="relative">
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Buscar por caso..."
+                className="pl-8"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
 
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline">
-                <FilterIcon className="h-4 w-4 mr-2" />
-                Filtros
-                {activeFiltersCount > 0 && (
-                  <Badge variant="secondary" className="ml-2">
-                    {activeFiltersCount}
-                  </Badge>
-                )}
-              </Button>
-            </SheetTrigger>
-            <SheetContent>
-              <SheetHeader>
-                <SheetTitle>Filtros Avançados</SheetTitle>
-              </SheetHeader>
-              <div className="space-y-6 mt-4">
-                <Button variant="secondary" onClick={handleClearFilters} className="w-full">
-                  Limpar Filtros
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline">
+                  <FilterIcon className="h-4 w-4 mr-2" />
+                  Filtros
+                  {activeFiltersCount > 0 && (
+                    <Badge variant="secondary" className="ml-2">
+                      {activeFiltersCount}
+                    </Badge>
+                  )}
                 </Button>
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Filtros Avançados</SheetTitle>
+                </SheetHeader>
+                <div className="space-y-6 mt-4">
+                  <Button variant="secondary" onClick={handleClearFilters} className="w-full">
+                    Limpar Filtros
+                  </Button>
 
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="font-medium mb-2">Categoria do Caso</h3>
-                    <div className="space-y-2">
-                      {productCategories.map((category) => (
-                        <div key={category} className="flex items-center">
-                          <Checkbox
-                            id={`product-${category}`}
-                            checked={filterProducts.includes(category)}
-                            onCheckedChange={(checked) => {
-                              setFilterProducts(prev => 
-                                checked 
-                                  ? [...prev, category]
-                                  : prev.filter(p => p !== category)
-                              );
-                            }}
-                          />
-                          <label htmlFor={`product-${category}`} className="ml-2 text-sm">
-                            {category}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="font-medium mb-2">Localização</h3>
-                    <Command>
-                      <CommandInput placeholder="Buscar estado..." />
-                      <CommandList>
-                        <CommandGroup>
-                          <CommandItem onSelect={() => setFilterStates([])}>
-                            Todos
-                          </CommandItem>
-                          {brStates.map((state) => (
-                            <CommandItem
-                              key={state.abbr}
-                              onSelect={() => {
-                                setFilterStates(prev => 
-                                  prev.includes(state.abbr)
-                                    ? prev.filter(s => s !== state.abbr)
-                                    : [...prev, state.abbr]
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className="font-medium mb-2">Categoria do Caso</h3>
+                      <div className="space-y-2">
+                        {productCategories.map((category) => (
+                          <div key={category} className="flex items-center">
+                            <Checkbox
+                              id={`product-${category}`}
+                              checked={filterProducts.includes(category)}
+                              onCheckedChange={(checked) => {
+                                setFilterProducts(prev => 
+                                  checked 
+                                    ? [...prev, category]
+                                    : prev.filter(p => p !== category)
                                 );
                               }}
-                            >
-                              <Checkbox
-                                checked={filterStates.includes(state.abbr)}
-                                className="mr-2"
-                              />
-                              {state.name} ({state.abbr})
+                            />
+                            <label htmlFor={`product-${category}`} className="ml-2 text-sm">
+                              {category}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="font-medium mb-2">Localização</h3>
+                      <Command>
+                        <CommandInput placeholder="Buscar estado..." />
+                        <CommandList>
+                          <CommandGroup>
+                            <CommandItem onSelect={() => setFilterStates([])}>
+                              Todos
                             </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </CommandList>
-                    </Command>
-                  </div>
-
-                  <div>
-                    <h3 className="font-medium mb-2">Financeiro</h3>
-                    <Select
-                      value={`${filterValueRange[0]}-${filterValueRange[1]}`}
-                      onValueChange={(value) => {
-                        const [min, max] = value.split('-').map(Number);
-                        setFilterValueRange([min, max]);
-                      }}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione a faixa de valor" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {valueRanges.map((range) => (
-                          <SelectItem
-                            key={`${range.min}-${range.max}`}
-                            value={`${range.min}-${range.max}`}
-                          >
-                            {range.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Slider
-                      className="mt-6"
-                      defaultValue={[0, 20000]}
-                      max={20000}
-                      step={1000}
-                      value={filterValueRange}
-                      onValueChange={setFilterValueRange}
-                      marks={[
-                        { value: 0, label: 'R$0' },
-                        { value: 2000, label: 'R$2K' },
-                        { value: 4000, label: 'R$4K' },
-                        { value: 8000, label: 'R$8K' },
-                        { value: 20000, label: 'R$20K' }
-                      ]}
-                    />
-                  </div>
-
-                  <div>
-                    <h3 className="font-medium mb-2">Outros Filtros</h3>
-                    <div className="space-y-4">
-                      <div>
-                        <label className="text-sm font-medium">Data de Criação</label>
-                        <Calendar
-                          mode="single"
-                          selected={filterDate}
-                          onSelect={setFilterDate}
-                          className="rounded-md border"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-sm">Prioridade</label>
-                        <Select value={filterPriority} onValueChange={setFilterPriority}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione a prioridade" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="">Todos</SelectItem>
-                            <SelectItem value="Alta">Alta</SelectItem>
-                            <SelectItem value="Média">Média</SelectItem>
-                            <SelectItem value="Baixa">Baixa</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <label className="text-sm">Cliente</label>
-                        <Select value={filterClient} onValueChange={setFilterClient}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione o cliente" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="">Todos</SelectItem>
-                            <SelectItem value="Nike">Nike</SelectItem>
-                            <SelectItem value="Adidas">Adidas</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
-
-          <Dialog open={showNewCaseDialog} onOpenChange={setShowNewCaseDialog}>
-            <DialogTrigger asChild>
-              <Button>
-                <PlusIcon className="h-4 w-4 mr-2" />
-                Novo Caso
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Criar Novo Caso</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4 mt-4">
-                <Input
-                  placeholder="Cole o link suspeito aqui"
-                  value={newCaseLink}
-                  onChange={(e) => setNewCaseLink(e.target.value)}
-                />
-                <Button onClick={handleNewCase}>Criar Caso</Button>
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
-      </header>
-
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <div className="flex gap-4 overflow-x-auto pb-4">
-          {columns.map((column) => (
-            <Droppable key={column.id} droppableId={column.id}>
-              {(provided) => (
-                <div 
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  className="min-w-[300px]"
-                >
-                  <Card className="p-4 bg-white">
-                    <div className="flex justify-between items-center mb-4">
-                      <h3 className="font-semibold text-[#2B2B2B]">{column.title}</h3>
-                      <Badge variant="secondary">
-                        {filteredCards.filter(c => c.column === column.id).length}
-                      </Badge>
-                    </div>
-                    <div className="space-y-2 min-h-[200px]">
-                      {filteredCards
-                        .filter(card => card.column === column.id)
-                        .map((card, index) => (
-                          <Draggable key={card.id} draggableId={card.id} index={index}>
-                            {(provided) => (
-                              <Card
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                className="p-3 bg-[#F8F9FA] cursor-move hover:shadow-md transition-shadow"
+                            {brStates.map((state) => (
+                              <CommandItem
+                                key={state.abbr}
+                                onSelect={() => {
+                                  setFilterStates(prev => 
+                                    prev.includes(state.abbr)
+                                      ? prev.filter(s => s !== state.abbr)
+                                      : [...prev, state.abbr]
+                                  );
+                                }}
                               >
-                                <div className="flex justify-between items-start mb-2">
-                                  <h4 className="font-medium">{card.title}</h4>
-                                  <Badge 
-                                    style={{ backgroundColor: column.color }}
-                                    className="text-white"
-                                  >
-                                    {card.status}
-                                  </Badge>
-                                </div>
-                                <p className="text-sm text-[#6F767E] mb-2">{card.description}</p>
-                                <div className="text-sm text-[#6F767E]">
-                                  {card.timeline.map((event, i) => (
-                                    <div key={i} className="flex items-center">
-                                      <span className="w-2 h-2 bg-[#6F767E] rounded-full mr-2" />
-                                      {event}
-                                    </div>
-                                  ))}
-                                </div>
-                                <div className="mt-2 text-xs text-[#6F767E] flex items-center">
-                                  <Badge variant="outline" className="mr-2">
-                                    {card.analyst}
-                                  </Badge>
-                                  <Badge variant="outline">{card.priority}</Badge>
-                                </div>
-                              </Card>
-                            )}
-                          </Draggable>
-                        ))}
-                      {provided.placeholder}
+                                <Checkbox
+                                  checked={filterStates.includes(state.abbr)}
+                                  className="mr-2"
+                                />
+                                {state.name} ({state.abbr})
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
                     </div>
-                  </Card>
+
+                    <div>
+                      <h3 className="font-medium mb-2">Financeiro</h3>
+                      <Select
+                        value={`${filterValueRange[0]}-${filterValueRange[1]}`}
+                        onValueChange={(value) => {
+                          const [min, max] = value.split('-').map(Number);
+                          setFilterValueRange([min, max]);
+                        }}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione a faixa de valor" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {valueRanges.map((range) => (
+                            <SelectItem
+                              key={`${range.min}-${range.max}`}
+                              value={`${range.min}-${range.max}`}
+                            >
+                              {range.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Slider
+                        className="mt-6"
+                        defaultValue={[0, 20000]}
+                        max={20000}
+                        step={1000}
+                        value={filterValueRange}
+                        onValueChange={setFilterValueRange}
+                        marks={[
+                          { value: 0, label: 'R$0' },
+                          { value: 2000, label: 'R$2K' },
+                          { value: 4000, label: 'R$4K' },
+                          { value: 8000, label: 'R$8K' },
+                          { value: 20000, label: 'R$20K' }
+                        ]}
+                      />
+                    </div>
+
+                    <div>
+                      <h3 className="font-medium mb-2">Outros Filtros</h3>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="text-sm font-medium">Data de Criação</label>
+                          <Calendar
+                            mode="single"
+                            selected={filterDate}
+                            onSelect={setFilterDate}
+                            className="rounded-md border"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm">Prioridade</label>
+                          <Select value={filterPriority} onValueChange={setFilterPriority}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione a prioridade" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="">Todos</SelectItem>
+                              <SelectItem value="Alta">Alta</SelectItem>
+                              <SelectItem value="Média">Média</SelectItem>
+                              <SelectItem value="Baixa">Baixa</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <label className="text-sm">Cliente</label>
+                          <Select value={filterClient} onValueChange={setFilterClient}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione o cliente" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="">Todos</SelectItem>
+                              <SelectItem value="Nike">Nike</SelectItem>
+                              <SelectItem value="Adidas">Adidas</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              )}
-            </Droppable>
-          ))}
-        </div>
-      </DragDropContext>
+              </SheetContent>
+            </Sheet>
+
+            <Dialog open={showNewCaseDialog} onOpenChange={setShowNewCaseDialog}>
+              <DialogTrigger asChild>
+                <Button>
+                  <PlusIcon className="h-4 w-4 mr-2" />
+                  Novo Caso
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Criar Novo Caso</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4 mt-4">
+                  <Input
+                    placeholder="Cole o link suspeito aqui"
+                    value={newCaseLink}
+                    onChange={(e) => setNewCaseLink(e.target.value)}
+                  />
+                  <Button onClick={handleNewCase}>Criar Caso</Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </header>
+
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <div className="flex gap-4 overflow-x-auto pb-4">
+            {columns.map((column) => (
+              <Droppable key={column.id} droppableId={column.id}>
+                {(provided) => (
+                  <div 
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className="min-w-[300px]"
+                  >
+                    <Card className="p-4 bg-white">
+                      <div className="flex justify-between items-center mb-4">
+                        <h3 className="font-semibold text-[#2B2B2B]">{column.title}</h3>
+                        <Badge variant="secondary">
+                          {filteredCards.filter(c => c.column === column.id).length}
+                        </Badge>
+                      </div>
+                      <div className="space-y-2 min-h-[200px]">
+                        {filteredCards
+                          .filter(card => card.column === column.id)
+                          .map((card, index) => (
+                            <Draggable key={card.id} draggableId={card.id} index={index}>
+                              {(provided) => (
+                                <Card
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  className="p-3 bg-[#F8F9FA] cursor-move hover:shadow-md transition-shadow"
+                                >
+                                  <div className="flex justify-between items-start mb-2">
+                                    <h4 className="font-medium">{card.title}</h4>
+                                    <Badge 
+                                      style={{ backgroundColor: column.color }}
+                                      className="text-white"
+                                    >
+                                      {card.status}
+                                    </Badge>
+                                  </div>
+                                  <p className="text-sm text-[#6F767E] mb-2">{card.description}</p>
+                                  <div className="text-sm text-[#6F767E]">
+                                    {card.timeline.map((event, i) => (
+                                      <div key={i} className="flex items-center">
+                                        <span className="w-2 h-2 bg-[#6F767E] rounded-full mr-2" />
+                                        {event}
+                                      </div>
+                                    ))}
+                                  </div>
+                                  <div className="mt-2 text-xs text-[#6F767E] flex items-center">
+                                    <Badge variant="outline" className="mr-2">
+                                      {card.analyst}
+                                    </Badge>
+                                    <Badge variant="outline">{card.priority}</Badge>
+                                  </div>
+                                </Card>
+                              )}
+                            </Draggable>
+                          ))}
+                        {provided.placeholder}
+                      </div>
+                    </Card>
+                  </div>
+                )}
+              </Droppable>
+            ))}
+          </div>
+        </DragDropContext>
+      </div>
     </div>
   );
 }
