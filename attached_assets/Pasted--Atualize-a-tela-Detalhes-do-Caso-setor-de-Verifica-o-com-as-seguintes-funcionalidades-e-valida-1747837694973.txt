@@ -1,0 +1,47 @@
+“Atualize a tela ‘Detalhes do Caso’ (setor de Verificação) com as seguintes funcionalidades e validações:
+
+1. **Barra de Fluxo clicável**  
+   - A barra de etapas (Recebido → Caso em Análise → Pendente de Informação → Concluído) deve permitir clicar em qualquer etapa para mover o caso diretamente para aquela coluna.  
+   - Ao mover, atualize o status e registre a data da movimentação.
+
+2. **Botões de Navegação de Coluna**  
+   - Botão “← Anterior” para mover o caso para a coluna anterior.  
+   - Botão “Concluído” (verde com ícone de ✓) substitui “Enviar para Próximo Setor”.  
+     • Ao clicar em “Concluído”, o sistema verifica validações mínimas.  
+     • Se passar, o caso é encaminhado para a etapa “Recebido” do próximo setor (Auditoria).
+
+3. **Validações antes de “Concluído”**  
+   - **Links Suspeitos:** mínimo de 2 links adicionados.  
+   - **Informações Básicas:**  
+     • Nome do responsável ou empresa (não vazio)  
+     • Gênero (selecionado)  
+     • CPF/CNPJ (válido)  
+     • Telefone (não vazio)  
+   - **Endereço:**  
+     • Rua, Número, Bairro, Cidade  
+     • Estado (UF) — dropdown com todas as siglas de estado: AC, AL, AP, AM, BA, CE, DF, ES, GO, MA, MT, MS, MG, PA, PB, PR, PE, PI, RJ, RN, RS, RO, RR, SC, SP, SE, TO  
+     • CEP (não vazio)  
+   - **Detalhes do Caso:**  
+     • Tipo de Produto (selecionado)  
+     • Potencial indenizatório (valor > 0)  
+     • Quantidade de Seguidores (campo numérico)  
+     • Estimativa de Tamanho da Loja (dropdown com: Micro, Pequeno, Médio, Grande) — preenchido automaticamente conforme regra:  
+       - Micro: até 1.000 seguidores  
+       - Pequeno: 1.001 a 4.000 seguidores  
+       - Médio: 4.001 a 15.000 seguidores  
+       - Grande: acima de 15.001 seguidores  
+   - **Anexos (Seção E):**  
+     • Campo 1 – Anúncio do produto contrafeito (PDF obrigatório)  
+     • Campo 2 – Página de venda (PDF obrigatório)  
+     • Campo 3 – Outros anexos (qualquer formato)  
+     • Deve haver pelo menos 2 anexos válidos nos campos 1 e 2.
+
+4. **Feedback de Validação**  
+   - Caso falhe alguma validação, exibir mensagem de erro inline e impedir o envio.
+
+5. **Manter layout e estilo**  
+   - Hierarquia e espaçamentos conforme CRMs premium.  
+   - Botões verdes para ações confirmatórias, ícones de navegação claros.  
+   - Responsivo: desktop e modal full-screen no mobile.
+
+Mantenha todas as outras funcionalidades e permissões já definidas.”  
