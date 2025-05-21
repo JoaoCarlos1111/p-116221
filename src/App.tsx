@@ -9,6 +9,7 @@ import CaseDetails from '@/pages/CaseDetails'
 import Prospeccao from '@/pages/Prospeccao';
 import Auditoria from './pages/Auditoria';
 import AuditoriaCaseDetails from './pages/AuditoriaCaseDetails';
+import Logistics from './pages/Logistics';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/prospeccao" element={<Prospeccao />} />
             <Route path="/auditoria" element={<Auditoria />} />
             <Route path="/auditoria/caso/:id" element={<AuditoriaCaseDetails />} />
+            <Route path="/logistica" element={<Logistics />} />
           </Routes>
         </main>
       </div>
