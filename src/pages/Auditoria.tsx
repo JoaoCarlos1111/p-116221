@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
@@ -44,31 +45,31 @@ export default function Auditoria() {
       'Aprovado': 'success',
       'Rejeitado': 'destructive'
     } as const;
-
+    
     return <Badge variant={variants[status as keyof typeof variants]}>{status}</Badge>;
   };
 
   const pendingCount = cases.filter(c => c.status === 'Pendente').length;
 
   return (
-    <div className="space-y-8">
-      <header className="flex justify-between items-start mb-2">
+    <div className="space-y-6">
+      <header className="flex justify-between items-start">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Casos para Auditoria</h1>
-          <p className="text-muted-foreground mt-2 text-lg">
+          <p className="text-muted-foreground mt-1">
             {pendingCount} casos pendentes de auditoria
           </p>
         </div>
       </header>
 
-      <Card className="glass-card">
-        <CardContent className="p-8">
-          <div className="flex gap-4 mb-8">
+      <Card>
+        <CardContent className="p-6">
+          <div className="flex gap-4 mb-6">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Buscar por número, marca ou analista..."
-                className="pl-10 h-12 text-base"
+                className="pl-8"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -113,10 +114,10 @@ export default function Auditoria() {
             </Select>
           </div>
 
-          <div className="rounded-lg border shadow-sm">
+          <div className="rounded-md border">
             <Table>
-              <TableHeader className="bg-muted/50">
-                <TableRow className="hover:bg-transparent">
+              <TableHeader>
+                <TableRow>
                   <TableHead>Número do Caso</TableHead>
                   <TableHead>Data de Recebimento</TableHead>
                   <TableHead>Analista de Verificação</TableHead>
