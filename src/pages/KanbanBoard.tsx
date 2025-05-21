@@ -69,6 +69,7 @@ export default function KanbanBoard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showNewCaseDialog, setShowNewCaseDialog] = useState(false);
   const [newCaseLink, setNewCaseLink] = useState('');
+  const navigate = useNavigate();
 
   // Filter states
   const [filterDate, setFilterDate] = useState<Date | undefined>(undefined);
@@ -141,7 +142,7 @@ export default function KanbanBoard() {
       ...filterStates,
       filterValueRange[0] > 0 || filterValueRange[1] < 20000
     ].filter(Boolean).length;
-    
+
     setActiveFiltersCount(count);
   }, [filterDate, filterPriority, filterClient, filterProducts, filterStates, filterValueRange]);
 
@@ -450,7 +451,7 @@ export default function KanbanBoard() {
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
-                                className="p-3 bg-[#F8F9FA] cursor-move hover:shadow-md transition-shadow"
+                                className="p-3 bg-[#F8F9FA] cursor-pointer hover:shadow-md transition-shadow"
                                 onClick={() => navigate(`/case/${card.id}`)}
                               >
                                 <div className="flex justify-between items-start mb-2">
