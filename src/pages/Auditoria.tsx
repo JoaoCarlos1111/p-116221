@@ -131,7 +131,7 @@ export default function Auditoria() {
                   <TableRow 
                     key={caso.id}
                     className="cursor-pointer hover:bg-muted/50"
-                    onClick={() => navigate(`/auditoria/caso/${caso.id}`)}
+                    onClick={() => navigate(`/auditoria/caso/${caso.id}`, { replace: false })}
                   >
                     <TableCell>#{caso.id}</TableCell>
                     <TableCell>{format(new Date(caso.receivedDate), 'dd/MM/yyyy')}</TableCell>
