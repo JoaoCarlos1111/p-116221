@@ -66,9 +66,27 @@ export default function KanbanBoard() {
   const [newCaseLink, setNewCaseLink] = useState('');
 
   // Filter states
-  const [filterDate, setFilterDate] = useState<Date>();
-  const [filterPriority, setFilterPriority] = useState('');
-  const [filterClient, setFilterClient] = useState('');
+  const [filterDate, setFilterDate] = useState<Date | undefined>(undefined);
+  const [filterPriority, setFilterPriority] = useState<string>('');
+  const [filterClient, setFilterClient] = useState<string>('');
+
+  const filteredCards = cards.filter(card => {
+    const matchesSearch = card.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         card.id.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesDate = !filterDate || new Date(card.createdAt).toDateString() === filterDate.toDateString();
+    const matchesPriority = !filterPriority || filterPriority === '' || card.priority === filterPriority;
+    const matchesClient = !filterClient || filterClient === '' || card.client === filterClient;
+
+    return matchesSearch && matchesDate && matchesPriority && matchesClient;
+  });
+
+  const handleClearFilters = () => {
+    setFilterDate(undefined);
+    setFilterPriority('');
+    setFilterClient('');
+    setSearchQuery('');
+  };
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -129,22 +147,6 @@ export default function KanbanBoard() {
     setShowNewCaseDialog(false);
   };
 
-  const filteredCards = cards.filter(card => {
-    const matchesSearch = card.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         card.id.toLowerCase().includes(searchQuery.toLowerCase());
-
-    const matchesDate = !filterDate || new Date(card.createdAt).toDateString() === filterDate.toDateString();
-    const matchesPriority = !filterPriority || card.priority === filterPriority;
-    const matchesClient = !filterClient || card.client === filterClient;
-
-    return matchesSearch && matchesDate && matchesPriority && matchesClient;
-  });
-
-  const handleClearFilters = () => {
-    setFilterDate(undefined);
-    setFilterPriority('');
-    setFilterClient('');
-  };
 
   return (
     <div className="space-y-8">
