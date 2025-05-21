@@ -10,6 +10,7 @@ import Prospeccao from '@/pages/Prospeccao';
 import Auditoria from './pages/Auditoria';
 import AuditoriaCaseDetails from './pages/AuditoriaCaseDetails';
 import Logistics from './pages/Logistics';
+import LogisticsCaseView from './pages/LogisticsCaseView';
 
 function App() {
   return (
