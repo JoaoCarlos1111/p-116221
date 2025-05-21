@@ -19,7 +19,7 @@ function App() {
             <Route path="/" element={<Navigate to="/login/internal" replace />} />
             <Route path="/login/cliente" element={<ClientLogin />} />
             <Route path="/login/internal" element={<InternalLogin />} />
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/kanban/:sector" element={<KanbanBoard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
