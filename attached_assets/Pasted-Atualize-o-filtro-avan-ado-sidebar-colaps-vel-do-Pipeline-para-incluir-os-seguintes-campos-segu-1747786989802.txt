@@ -1,0 +1,127 @@
+Atualize o filtro avançado (sidebar colapsável) do ‘Pipeline’ para incluir os seguintes campos, seguindo estas diretrizes de usabilidade:
+
+Tipo de Produto
+
+Dropdown multi-seleção com categorias pré-definidas:
+
+Eletrônico
+
+Vestuário
+
+Cosmético
+
+Brinquedo
+
+Acessório
+
+Outro
+
+Opção “Todos” para não filtrar
+
+Campo de busca dentro do dropdown para facilitar localizar categorias
+
+Estado (UF)
+
+Dropdown multi-seleção com todos os estados brasileiros, em ordem alfabética, mais opção “Todos” no topo:
+
+Todos
+
+Acre (AC)
+
+Alagoas (AL)
+
+Amapá (AP)
+
+Amazonas (AM)
+
+Bahia (BA)
+
+Ceará (CE)
+
+Distrito Federal (DF)
+
+Espírito Santo (ES)
+
+Goiás (GO)
+
+Maranhão (MA)
+
+Mato Grosso (MT)
+
+Mato Grosso do Sul (MS)
+
+Minas Gerais (MG)
+
+Pará (PA)
+
+Paraíba (PB)
+
+Paraná (PR)
+
+Pernambuco (PE)
+
+Piauí (PI)
+
+Rio de Janeiro (RJ)
+
+Rio Grande do Norte (RN)
+
+Rio Grande do Sul (RS)
+
+Rondônia (RO)
+
+Roraima (RR)
+
+Santa Catarina (SC)
+
+São Paulo (SP)
+
+Sergipe (SE)
+
+Tocantins (TO)
+
+Campo de auto-complete para busca rápida por nome ou sigla do estado
+
+Faixa de Valor Potencial
+
+Slider de intervalo para valores em Reais (R$), com marcas em: R$0, R$2.000, R$4.000, R$8.000, R$20.000
+
+Dropdown de faixas pré-definidas:
+
+Todos
+
+R$0 – R$2.000
+
+R$2.001 – R$4.000
+
+R$4.001 – R$8.000
+
+Acima de R$8.000
+
+Opção “Todos” para não filtrar
+
+Botão ‘Limpar Filtros’
+
+Sempre visível no topo do sidebar
+
+Reseta todos os filtros de uma vez
+
+Detalhes de comportamento e layout:
+
+Agrupe filtros em seções com títulos claros:
+
+“Categoria do Caso” (Tipo de Produto)
+
+“Localização” (Estado)
+
+“Financeiro” (Faixa de Valor Potencial)
+
+Use checkboxes para multi-seleção (Tipo de Produto, Estado)
+
+Use input slider para faixa de valor, com dropdown como fallback em dispositivos móveis
+
+Ao aplicar qualquer filtro, o quadro deve atualizar em tempo real sem recarregar a página
+
+Exiba um badge com o número de filtros ativos ao lado do botão de abertura do sidebar
+
+Mantenha todos os outros filtros já existentes (data de criação, prioridade, cliente) e o botão “Novo Caso” conforme definido.”
