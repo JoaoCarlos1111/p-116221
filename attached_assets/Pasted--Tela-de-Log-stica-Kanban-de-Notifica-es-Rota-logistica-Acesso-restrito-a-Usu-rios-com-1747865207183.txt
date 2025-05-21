@@ -1,0 +1,74 @@
+✅ Tela de Logística – Kanban de Notificações
+📍 Rota:
+/logistica
+
+👥 Acesso restrito a:
+Usuários com papel “Analista de Logística”
+
+📌 Objetivo da Tela:
+Gerenciar os casos aprovados para impressão e envio físico das notificações extrajudiciais, organizando-os visualmente em um Kanban com 3 colunas.
+
+📊 Estrutura Kanban:
+1. ✅ Aprovado
+Casos com notificação aprovada pelo cliente e prontos para impressão.
+
+Informações exibidas no card:
+• Número do Caso
+• Nome da Loja ou Responsável
+• Endereço completo
+• Marca
+• Data de aprovação
+• Botão: “Imprimir Notificação”
+
+Ação: Ao clicar em “Imprimir”, o caso avança para a próxima coluna automaticamente.
+
+2. 🖨️ Fila de Impressão
+Casos em processo de impressão ou aguardando postagem.
+
+Informações no card:
+• Número do Caso
+• Data da Impressão
+• Status (ex: “Impresso”, “Aguardando envio”)
+• Botão: “Marcar como Postado”
+
+Ação: Ao clicar em “Marcar como Postado”, o sistema dispara a API de integração com os Correios, gera a etiqueta e move para a próxima coluna.
+
+3. 📬 Postado
+Casos enviados fisicamente.
+
+Informações no card:
+• Número do Caso
+• Código de Rastreamento (automático via API dos Correios)
+• Data de postagem
+• Status de entrega (via atualização contínua da API)
+• Botão opcional: “Atualizar Rastreamento” (caso seja necessário reprocessar)
+
+🔌 Integração com Correios:
+Ao clicar em “Marcar como Postado”:
+
+Dispara chamada na API dos Correios com os dados do destinatário e gera etiqueta de envio.
+
+O código de rastreio é salvo automaticamente e vinculado ao caso.
+
+A coluna "Postado" mostra o status de entrega com atualizações automáticas da API (ex: em trânsito, entregue, etc.).
+
+🎨 Design e UX:
+Visual coerente com o sistema atual (sombra projetada, tipografia, botões com boa hierarquia visual).
+
+Cards com status visual (cores suaves: verde claro, cinza, azul).
+
+Filtros no topo da tela:
+– Data
+– Marca
+– Status (coluna)
+
+Cards arrastáveis entre colunas com confirmação visual (opcional).
+
+Layout 100% responsivo, adaptado para desktop e tablets.
+
+📁 Outros requisitos funcionais:
+Apenas casos aprovados pelo cliente aparecem aqui.
+
+O sistema registra logs de movimentações (quem imprimiu, quem postou, quando).
+
+O botão de "Imprimir Notificação" pode gerar PDF direto ou integrar com sistema de etiquetas.
