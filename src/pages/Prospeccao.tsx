@@ -1,6 +1,5 @@
-
 import { useState } from 'react';
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -62,6 +61,11 @@ export default function Prospeccao() {
     console.log('Submitting cases:', linkSets);
   };
 
+  const cardStyle = "shadow-md rounded-lg bg-white";
+  const headerStyle = "text-lg font-semibold";
+  const subHeaderStyle = "text-sm text-muted-foreground";
+  const valueStyle = "text-2xl font-bold";
+
   return (
     <div className="space-y-8 max-w-7xl mx-auto p-6">
       <header className="space-y-2">
@@ -94,7 +98,7 @@ export default function Prospeccao() {
                   </Alert>
                 )}
               </div>
-              
+
               <div className="flex items-center space-x-2">
                 <Link2 className="h-4 w-4 text-muted-foreground" />
                 <Input
@@ -103,7 +107,7 @@ export default function Prospeccao() {
                   onChange={(e) => handleUrlChange(set.id, 'adUrl', e.target.value)}
                 />
               </div>
-              
+
               <div className="flex items-center space-x-2">
                 <BoxSelect className="h-4 w-4 text-muted-foreground" />
                 <Select 
@@ -126,7 +130,7 @@ export default function Prospeccao() {
               </div>
             </div>
           ))}
-          
+
           <div className="flex flex-col space-y-4">
             <Button variant="outline" onClick={handleAddLinkSet} className="w-full">
               <PlusCircle className="h-4 w-4 mr-2" />
@@ -175,21 +179,22 @@ export default function Prospeccao() {
           </CardContent>
         </Card>
 
-        <Card className="shadow-lg">
-          <CardHeader>
-            <h2 className="text-xl font-semibold">Casos Recentes</h2>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Loja</TableHead>
-                  <TableHead>Marca</TableHead>
-                  <TableHead>Data</TableHead>
-                  <TableHead>Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
+        <Card className={`${cardStyle} mb-8`}>
+        <CardHeader className="p-6 pb-3">
+          <CardTitle className={headerStyle}>Casos Recentes</CardTitle>
+          <p className={subHeaderStyle}>Lista dos últimos casos cadastrados no sistema</p>
+        </CardHeader>
+        <CardContent className="p-6 pt-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="font-semibold">Loja</TableHead>
+                <TableHead className="font-semibold">Marca</TableHead>
+                <TableHead className="font-semibold">Data</TableHead>
+                <TableHead className="font-semibold">Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
                 {[1, 2, 3].map((_, i) => (
                   <TableRow key={i}>
                     <TableCell className="font-medium">store{i+1}.example.com</TableCell>
