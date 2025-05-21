@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -8,7 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { PlusCircle, AlertCircle } from 'lucide-react';
+import { PlusCircle, AlertCircle, Store, Link2, BoxSelect, ChevronRight } from 'lucide-react';
 
 interface LinkSet {
   id: string;
@@ -47,7 +47,6 @@ export default function Prospeccao() {
   const handleUrlChange = (id: string, field: 'storeUrl' | 'adUrl', value: string) => {
     setLinkSets(linkSets.map(set => {
       if (set.id === id) {
-        // Simulate store check
         if (field === 'storeUrl' && value.includes('store.example.com')) {
           setExistingStore('Nike');
         } else if (field === 'storeUrl') {
@@ -60,29 +59,34 @@ export default function Prospeccao() {
   };
 
   const handleSubmit = () => {
-    // Implementation for case submission
     console.log('Submitting cases:', linkSets);
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-7xl mx-auto p-6">
       <header className="space-y-2">
-        <h1 className="text-4xl font-bold text-primary">Workflow de Prospecção</h1>
-        <p className="text-muted-foreground">Adicione lojas e anúncios suspeitos para análise de verificação</p>
+        <h1 className="text-4xl font-semibold text-primary">Workflow de Prospecção</h1>
+        <p className="text-base text-muted-foreground">Adicione lojas e anúncios suspeitos para análise de verificação</p>
       </header>
 
-      <Card className="p-6">
-        <div className="space-y-4">
+      <Card className="shadow-lg">
+        <CardHeader>
+          <h2 className="text-xl font-semibold">Adicionar Novo Caso</h2>
+        </CardHeader>
+        <CardContent className="space-y-6">
           {linkSets.map((set) => (
-            <div key={set.id} className="grid grid-cols-3 gap-4">
+            <div key={set.id} className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
-                <Input
-                  placeholder="Link da Loja"
-                  value={set.storeUrl}
-                  onChange={(e) => handleUrlChange(set.id, 'storeUrl', e.target.value)}
-                />
+                <div className="flex items-center space-x-2">
+                  <Store className="h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Link da Loja"
+                    value={set.storeUrl}
+                    onChange={(e) => handleUrlChange(set.id, 'storeUrl', e.target.value)}
+                  />
+                </div>
                 {existingStore && (
-                  <Alert variant="warning" className="mt-2">
+                  <Alert variant="destructive" className="mt-2">
                     <AlertCircle className="h-4 w-4" />
                     <AlertDescription>
                       Essa loja já foi adicionada anteriormente por {existingStore}
@@ -91,97 +95,114 @@ export default function Prospeccao() {
                 )}
               </div>
               
-              <Input
-                placeholder="Link do Anúncio"
-                value={set.adUrl}
-                onChange={(e) => handleUrlChange(set.id, 'adUrl', e.target.value)}
-              />
+              <div className="flex items-center space-x-2">
+                <Link2 className="h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Link do Anúncio"
+                  value={set.adUrl}
+                  onChange={(e) => handleUrlChange(set.id, 'adUrl', e.target.value)}
+                />
+              </div>
               
-              <Select 
-                value={set.brand}
-                onValueChange={(value) => {
-                  setLinkSets(linkSets.map(s => 
-                    s.id === set.id ? { ...s, brand: value } : s
-                  ));
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione a marca" />
-                </SelectTrigger>
-                <SelectContent>
-                  {mockBrands.map((brand) => (
-                    <SelectItem key={brand} value={brand}>{brand}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="flex items-center space-x-2">
+                <BoxSelect className="h-4 w-4 text-muted-foreground" />
+                <Select 
+                  value={set.brand}
+                  onValueChange={(value) => {
+                    setLinkSets(linkSets.map(s => 
+                      s.id === set.id ? { ...s, brand: value } : s
+                    ));
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione a marca" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {mockBrands.map((brand) => (
+                      <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           ))}
           
-          <Button variant="outline" onClick={handleAddLinkSet} className="w-full">
-            <PlusCircle className="h-4 w-4 mr-2" />
-            Adicionar novo link
-          </Button>
+          <div className="flex flex-col space-y-4">
+            <Button variant="outline" onClick={handleAddLinkSet} className="w-full">
+              <PlusCircle className="h-4 w-4 mr-2" />
+              Adicionar novo link
+            </Button>
 
-          <Button onClick={handleSubmit} className="w-full">
-            Adicionar Caso
-          </Button>
-        </div>
+            <Button onClick={handleSubmit} className="w-full">
+              <ChevronRight className="h-4 w-4 mr-2" />
+              Adicionar Caso
+            </Button>
+          </div>
+        </CardContent>
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4">Meta Diária</h2>
-          <div className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={mockData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="day" />
-                <YAxis />
-                <Tooltip />
-                <Line type="monotone" dataKey="cases" stroke="#3B82F6" />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="mt-4 grid grid-cols-3 gap-4">
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground">Hoje</p>
-              <p className="text-2xl font-bold">12</p>
+        <Card className="shadow-lg">
+          <CardHeader>
+            <h2 className="text-xl font-semibold">Meta Diária</h2>
+          </CardHeader>
+          <CardContent>
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={mockData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="day" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="cases" stroke="hsl(var(--primary))" strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground">Semana</p>
-              <p className="text-2xl font-bold">74</p>
+            <div className="mt-6 grid grid-cols-3 gap-4">
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground">Hoje</p>
+                <p className="text-2xl font-bold">12</p>
+              </div>
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground">Semana</p>
+                <p className="text-2xl font-bold">74</p>
+              </div>
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground">Mês</p>
+                <p className="text-2xl font-bold">286</p>
+              </div>
             </div>
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground">Mês</p>
-              <p className="text-2xl font-bold">286</p>
-            </div>
-          </div>
+          </CardContent>
         </Card>
 
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4">Casos Recentes</h2>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Loja</TableHead>
-                <TableHead>Marca</TableHead>
-                <TableHead>Data</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {[1, 2, 3].map((_, i) => (
-                <TableRow key={i}>
-                  <TableCell className="font-medium">store{i+1}.example.com</TableCell>
-                  <TableCell>{mockBrands[i]}</TableCell>
-                  <TableCell>{new Date().toLocaleDateString()}</TableCell>
-                  <TableCell>
-                    <Badge>Recebido</Badge>
-                  </TableCell>
+        <Card className="shadow-lg">
+          <CardHeader>
+            <h2 className="text-xl font-semibold">Casos Recentes</h2>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Loja</TableHead>
+                  <TableHead>Marca</TableHead>
+                  <TableHead>Data</TableHead>
+                  <TableHead>Status</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {[1, 2, 3].map((_, i) => (
+                  <TableRow key={i}>
+                    <TableCell className="font-medium">store{i+1}.example.com</TableCell>
+                    <TableCell>{mockBrands[i]}</TableCell>
+                    <TableCell>{new Date().toLocaleDateString()}</TableCell>
+                    <TableCell>
+                      <Badge variant="secondary">Recebido</Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
         </Card>
       </div>
     </div>
