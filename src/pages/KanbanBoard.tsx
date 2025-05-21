@@ -452,8 +452,14 @@ export default function KanbanBoard() {
                                 {...provided.dragHandleProps}
                                 className="p-3 bg-[#F8F9FA] cursor-move hover:shadow-md transition-shadow"
                               >
-                                <div className="mb-2">
+                                <div className="flex justify-between items-start mb-2">
                                   <h4 className="font-medium">{card.title}</h4>
+                                  <Badge 
+                                    style={{ backgroundColor: column.color }}
+                                    className="text-white"
+                                  >
+                                    {card.status}
+                                  </Badge>
                                 </div>
                                 <p className="text-sm text-[#6F767E] mb-2">{card.description}</p>
                                 <div className="text-xs text-[#6F767E] mb-2 space-y-1">
