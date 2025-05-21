@@ -61,11 +61,28 @@ export default function AuditoriaCaseDetails() {
     properDocumentation: false
   });
 
-  const handleSectionApproval = (section: string, approved: boolean) => {
-    setSectionApprovals(prev => ({
-      ...prev,
-      [section]: approved
-    }));
+  // Update requirements based on section approvals
+  const updateRequirements = (newSectionApprovals: any) => {
+    setRequirements({
+      basicInfo: newSectionApprovals.basicInfo?.every((field: any) => field.status === 'approved') && 
+                newSectionApprovals.address?.every((field: any) => field.status === 'approved'),
+      attachments: newSectionApprovals.documents?.every((field: any) => field.status === 'approved'),
+      validLinks: newSectionApprovals.urls?.every((field: any) => field.status === 'approved'),
+      properDocumentation: newSectionApprovals.documents?.every((field: any) => field.status === 'approved')
+    });
+  };
+
+  const handleFieldApproval = (section: string, field: string, status: 'approved' | 'rejected', reason?: string) => {
+    const newSectionApprovals = {
+      ...sectionApprovals,
+      [section]: sectionApprovals[section].map((item: any) => 
+        item.field === field 
+          ? { ...item, status, reason: reason || null }
+          : item
+      )
+    };
+    setSectionApprovals(newSectionApprovals);
+    updateRequirements(newSectionApprovals);
   };
 
   const handleSectionRejection = (section: string) => {
@@ -161,12 +178,7 @@ export default function AuditoriaCaseDetails() {
                   <Checkbox
                     id={key}
                     checked={checked}
-                    onCheckedChange={(checked) =>
-                      setRequirements(prev => ({
-                        ...prev,
-                        [key]: checked === true
-                      }))
-                    }
+                    disabled={true}
                   />
                   <div className="grid gap-1.5 leading-none">
                     <label
