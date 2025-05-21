@@ -319,10 +319,7 @@ export default function AuditoriaCaseDetails() {
                           ? 'text-red-600 bg-red-100'
                           : ''
                       }`}
-                      onClick={() => {
-                        setCurrentField({ section: 'urls', field: urlItem.field });
-                        setShowRejectDialog(true);
-                      }}
+                      onClick={() => handleFieldApproval('urls', urlItem.field, 'rejected')}
                     >
                       <XCircle className="h-4 w-4" />
                     </Button>
@@ -377,10 +374,7 @@ export default function AuditoriaCaseDetails() {
                           ? 'text-red-600 bg-red-100'
                           : ''
                       }`}
-                      onClick={() => {
-                        setCurrentField({ section: 'basicInfo', field: item.field });
-                        setShowRejectDialog(true);
-                      }}
+                      onClick={() => handleFieldApproval('basicInfo', item.field, 'rejected')}
                     >
                       <XCircle className="h-4 w-4" />
                     </Button>
@@ -436,10 +430,7 @@ export default function AuditoriaCaseDetails() {
                           ? 'text-red-600 bg-red-100'
                           : ''
                       }`}
-                      onClick={() => {
-                        setCurrentField({ section: 'address', field: item.field });
-                        setShowRejectDialog(true);
-                      }}
+                      onClick={() => handleFieldApproval('address', item.field, 'rejected')}
                     >
                       <XCircle className="h-4 w-4" />
                     </Button>
