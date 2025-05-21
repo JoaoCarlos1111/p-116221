@@ -443,6 +443,15 @@ export default function CaseDetails() {
                   <p className="text-sm text-red-500">{errors.phone}</p>
                 )}
               </div>
+
+              <div className="space-y-2">
+                <Input 
+                  placeholder="E-mail"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                />
+              </div>
             </CardContent>
           </Card>
 
@@ -561,7 +570,7 @@ export default function CaseDetails() {
               <div className="space-y-2">
                 <Input 
                   type="number"
-                  placeholder="Potencial Indenizatório (R$)"
+                  placeholder="Valor de Indenização (R$)"
                   value={formData.potentialValue}
                   onChange={(e) => handleInputChange('potentialValue', Number(e.target.value))}
                   className={errors.potentialValue ? 'border-red-500' : ''}
