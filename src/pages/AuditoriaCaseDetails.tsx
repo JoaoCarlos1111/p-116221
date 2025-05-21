@@ -17,12 +17,32 @@ export default function AuditoriaCaseDetails() {
   const { toast } = useToast();
   const [rejectionReason, setRejectionReason] = useState('');
   const [showRejectDialog, setShowRejectDialog] = useState(false);
+  const [sectionApprovals, setSectionApprovals] = useState({
+    urls: null,
+    basicInfo: null,
+    address: null
+  });
+
   const [requirements, setRequirements] = useState({
     basicInfo: false,
     attachments: false,
     validLinks: false,
     properDocumentation: false
   });
+
+  const handleSectionApproval = (section: string, approved: boolean) => {
+    setSectionApprovals(prev => ({
+      ...prev,
+      [section]: approved
+    }));
+  };
+
+  const handleSectionRejection = (section: string) => {
+    setShowRejectDialog(true);
+    // Store the section being rejected for when the dialog is confirmed
+  };
+
+  const allSectionsApproved = Object.values(sectionApprovals).every(value => value === true);
 
   const allRequirementsMet = Object.values(requirements).every(Boolean);
 
@@ -167,6 +187,125 @@ export default function AuditoriaCaseDetails() {
                 <Button variant="ghost" size="sm">Visualizar</Button>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* URLs Suspeitas */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>URLs Suspeitas</CardTitle>
+            <div className="flex gap-2">
+              <Button variant="outline" className="text-green-600" onClick={() => handleSectionApproval('urls', true)}>
+                <CheckCircle className="h-4 w-4 mr-2" />
+                Aprovar
+              </Button>
+              <Button variant="outline" className="text-red-600" onClick={() => handleSectionRejection('urls')}>
+                <XCircle className="h-4 w-4 mr-2" />
+                Reprovar
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <div className="space-y-1">
+              {['https://lojaexemplo.com', 'https://marketplace.com/anuncio/123'].map((url, index) => (
+                <div key={index} className="flex items-center">
+                  <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center">
+                    <ExternalLink className="h-4 w-4 mr-2" />
+                    {url}
+                  </a>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Informações Básicas */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Informações Básicas</CardTitle>
+            <div className="flex gap-2">
+              <Button variant="outline" className="text-green-600" onClick={() => handleSectionApproval('basicInfo', true)}>
+                <CheckCircle className="h-4 w-4 mr-2" />
+                Aprovar
+              </Button>
+              <Button variant="outline" className="text-red-600" onClick={() => handleSectionRejection('basicInfo')}>
+                <XCircle className="h-4 w-4 mr-2" />
+                Reprovar
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Nome do responsável ou empresa</label>
+                <p className="text-sm">Empresa Exemplo LTDA</p>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">CPF/CNPJ</label>
+                <p className="text-sm">12.345.678/0001-90</p>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Telefone</label>
+                <p className="text-sm">(11) 99999-9999</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Endereço */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Endereço</CardTitle>
+            <div className="flex gap-2">
+              <Button variant="outline" className="text-green-600" onClick={() => handleSectionApproval('address', true)}>
+                <CheckCircle className="h-4 w-4 mr-2" />
+                Aprovar
+              </Button>
+              <Button variant="outline" className="text-red-600" onClick={() => handleSectionRejection('address')}>
+                <XCircle className="h-4 w-4 mr-2" />
+                Reprovar
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Rua, Número</label>
+                <p className="text-sm">Rua Exemplo, 123</p>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Bairro</label>
+                <p className="text-sm">Centro</p>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Cidade - Estado (UF)</label>
+                <p className="text-sm">São Paulo - SP</p>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">CEP</label>
+                <p className="text-sm">01234-567</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Case Info */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Informações do Caso</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <User className="h-4 w-4" />
+                <span className="text-sm">Analista: João Silva</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                <span className="text-sm">Enviado em: {new Date().toLocaleDateString()}</span>
+              </div>
+            </div>
+            <Badge variant="secondary">Status: Pendente de Auditoria</Badge>
           </CardContent>
         </Card>
       </div>
