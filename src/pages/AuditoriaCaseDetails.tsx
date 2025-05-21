@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -99,11 +98,11 @@ export default function AuditoriaCaseDetails() {
       </header>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
+        <Card className="glass-card">
+          <CardHeader className="p-6 pb-3">
             <CardTitle>Requisitos de Aprovação</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="p-6 pt-3 space-y-6">
             <div className="space-y-4">
               {Object.entries(requirements).map(([key, checked]) => (
                 <div key={key} className="flex items-start space-x-2">

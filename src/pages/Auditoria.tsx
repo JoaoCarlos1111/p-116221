@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
@@ -45,7 +44,7 @@ export default function Auditoria() {
       'Aprovado': 'success',
       'Rejeitado': 'destructive'
     } as const;
-    
+
     return <Badge variant={variants[status as keyof typeof variants]}>{status}</Badge>;
   };
 
@@ -64,12 +63,12 @@ export default function Auditoria() {
 
       <Card className="glass-card">
         <CardContent className="p-8">
-          <div className="flex gap-4 mb-6">
+          <div className="flex gap-4 mb-8">
             <div className="flex-1 relative">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
               <Input
                 placeholder="Buscar por número, marca ou analista..."
-                className="pl-8"
+                className="pl-10 h-12 text-base"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -114,10 +113,10 @@ export default function Auditoria() {
             </Select>
           </div>
 
-          <div className="rounded-md border">
+          <div className="rounded-lg border shadow-sm">
             <Table>
-              <TableHeader>
-                <TableRow>
+              <TableHeader className="bg-muted/50">
+                <TableRow className="hover:bg-transparent">
                   <TableHead>Número do Caso</TableHead>
                   <TableHead>Data de Recebimento</TableHead>
                   <TableHead>Analista de Verificação</TableHead>
