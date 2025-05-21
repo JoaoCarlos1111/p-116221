@@ -1,27 +1,20 @@
-
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
 import { ChevronLeft, CheckCircle, XCircle, ExternalLink, AlertTriangle, User, Calendar, FileText } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 import { format } from 'date-fns';
 
-// Tratamento de erro para dados não carregados
-const handleError = (error: any) => {
-  console.error('Erro ao carregar dados:', error);
-  return null;
-};
-
 interface SectionStatus {
   approved: boolean;
   rejected: boolean;
-  reason?: string;
+  rejectionReason?: string;
 }
 
 export default function AuditoriaCaseDetails() {
@@ -41,18 +34,18 @@ export default function AuditoriaCaseDetails() {
     basicInfo: {
       name: "Empresa Exemplo LTDA",
       document: "12.345.678/0001-90",
-      phone: "(11) 99999-9999"
+      phone: "(11) 98765-4321"
     },
     address: {
       street: "Rua das Flores, 123",
-      district: "Centro",
+      neighborhood: "Centro",
       city: "São Paulo",
       state: "SP",
       zipCode: "01234-567"
     }
   };
 
-  const [rejectionDialog, setRejectionDialog] = useState<{ show: boolean; section: string } | null>(null);
+  const [showRejectDialog, setShowRejectDialog] = useState(false);
   const [sections, setSections] = useState({
     urls: { approved: false, rejected: false } as SectionStatus,
     basicInfo: { approved: false, rejected: false } as SectionStatus,
@@ -64,55 +57,89 @@ export default function AuditoriaCaseDetails() {
     setSections(prev => ({
       ...prev,
       [section]: {
-        approved: approved,
-        rejected: !approved,
-        reason: approved ? undefined : prev[section].reason
+        approved,
+        rejected: false,
+        rejectionReason: undefined
       }
     }));
   };
 
-  const handleReject = (section: string, reason: string) => {
+  const handleSectionRejection = (section: keyof typeof sections, reason: string) => {
     setSections(prev => ({
       ...prev,
       [section]: {
         approved: false,
         rejected: true,
-        reason
+        rejectionReason: reason
       }
     }));
-    setRejectionDialog(null);
-    toast({
-      title: "Seção Reprovada",
-      description: "A seção foi marcada para revisão.",
-    });
   };
 
-  const allSectionsReviewed = Object.values(sections).every(section => section.approved || section.rejected);
-  const hasRejectedSections = Object.values(sections).some(section => section.rejected);
+  const allSectionsReviewed = Object.values(sections).every(
+    section => section.approved || section.rejected
+  );
 
-  const RejectionDialogContent = ({ section, onConfirm, onCancel }: {
+  const hasRejectedSections = Object.values(sections).some(
+    section => section.rejected
+  );
+
+  const handleCaseApproval = async () => {
+    try {
+      // API call would go here
+      toast({
+        title: "Caso Aprovado",
+        description: "O caso foi aprovado com sucesso.",
+      });
+      navigate('/auditoria');
+    } catch (error) {
+      toast({
+        title: "Erro ao aprovar",
+        description: "Ocorreu um erro ao aprovar o caso.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleCaseRejection = async () => {
+    try {
+      // API call would go here
+      toast({
+        title: "Caso Rejeitado",
+        description: "O caso foi devolvido para verificação.",
+      });
+      navigate('/auditoria');
+    } catch (error) {
+      toast({
+        title: "Erro ao rejeitar",
+        description: "Ocorreu um erro ao rejeitar o caso.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const RejectDialog = ({ section, onConfirm, onCancel }: { 
     section: string;
     onConfirm: (reason: string) => void;
     onCancel: () => void;
   }) => {
     const [reason, setReason] = useState('');
-    
+
     return (
       <Dialog open={true} onOpenChange={onCancel}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Justificativa da Reprovação</DialogTitle>
+            <DialogTitle>Reprovar Seção</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <Textarea
-              placeholder="Digite o motivo da reprovação..."
+              placeholder="Descreva o motivo da reprovação..."
               value={reason}
               onChange={(e) => setReason(e.target.value)}
             />
             <Button
               variant="destructive"
               onClick={() => onConfirm(reason)}
-              disabled={!reason.trim()}
+              disabled={!reason}
               className="w-full"
             >
               Confirmar Reprovação
@@ -122,6 +149,11 @@ export default function AuditoriaCaseDetails() {
       </Dialog>
     );
   };
+
+  const [rejectionDialog, setRejectionDialog] = useState<{
+    show: boolean;
+    section: keyof typeof sections;
+  } | null>(null);
 
   return (
     <div className="space-y-8">
@@ -136,13 +168,13 @@ export default function AuditoriaCaseDetails() {
               Auditoria do Caso #{id}
             </h1>
             <div className="flex items-center gap-4 text-muted-foreground">
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-2">
                 <User className="h-4 w-4" />
-                {caseData.analyst}
+                <span>Analista: {caseData.analyst}</span>
               </div>
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                {format(caseData.submissionDate, 'dd/MM/yyyy HH:mm')}
+                <span>Enviado em: {format(caseData.submissionDate, 'dd/MM/yyyy')}</span>
               </div>
               <Badge variant="secondary">{caseData.status}</Badge>
             </div>
@@ -151,20 +183,14 @@ export default function AuditoriaCaseDetails() {
         <div className="flex gap-2">
           <Button
             variant="destructive"
-            onClick={() => setRejectionDialog({ show: true, section: 'case' })}
+            onClick={handleCaseRejection}
             disabled={!allSectionsReviewed || !hasRejectedSections}
           >
             <XCircle className="h-4 w-4 mr-2" />
             Reprovar Caso
           </Button>
           <Button
-            onClick={() => {
-              toast({
-                title: "Caso Aprovado",
-                description: "O caso foi aprovado com sucesso.",
-              });
-              navigate('/auditoria');
-            }}
+            onClick={handleCaseApproval}
             disabled={!allSectionsReviewed || hasRejectedSections}
             className="bg-green-600 hover:bg-green-700"
           >
@@ -176,158 +202,159 @@ export default function AuditoriaCaseDetails() {
 
       <div className="grid gap-6">
         <Card className="glass-card">
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>URLs Suspeitas</CardTitle>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                className="bg-red-50 hover:bg-red-100"
+                onClick={() => setRejectionDialog({ show: true, section: 'urls' })}
+                disabled={sections.urls.approved}
+              >
+                <XCircle className="h-4 w-4 mr-2" />
+                Reprovar
+              </Button>
+              <Button
+                variant="outline"
+                className="bg-green-50 hover:bg-green-100"
+                onClick={() => handleSectionApproval('urls', true)}
+                disabled={sections.urls.rejected}
+              >
+                <CheckCircle className="h-4 w-4 mr-2" />
+                Aprovar
+              </Button>
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2 mb-4">
+            <div className="space-y-2">
               {caseData.urls.map((url, index) => (
                 <div key={index} className="flex items-center gap-2">
                   <ExternalLink className="h-4 w-4" />
-                  <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                  <a href={url} target="_blank" rel="noopener noreferrer" 
+                     className="text-blue-600 hover:underline">
                     {url}
                   </a>
                 </div>
               ))}
             </div>
-            <div className="flex items-center gap-2 mt-4">
-              <Button 
-                variant="outline"
-                size="sm"
-                className="text-green-600 hover:text-green-700"
-                onClick={() => handleSectionApproval('urls', true)}
-                disabled={sections.urls.approved}
-              >
-                <CheckCircle className="h-4 w-4 mr-1" />
-                Aprovar
-              </Button>
-              <Button 
-                variant="outline"
-                size="sm"
-                className="text-red-600 hover:text-red-700"
-                onClick={() => setRejectionDialog({ show: true, section: 'urls' })}
-                disabled={sections.urls.rejected}
-              >
-                <XCircle className="h-4 w-4 mr-1" />
-                Reprovar
-              </Button>
-            </div>
-            {sections.urls.reason && (
-              <Alert className="mt-2">
+            {sections.urls.rejected && (
+              <Alert className="mt-4">
                 <AlertTriangle className="h-4 w-4" />
-                <AlertDescription>{sections.urls.reason}</AlertDescription>
+                <AlertDescription>
+                  {sections.urls.rejectionReason}
+                </AlertDescription>
               </Alert>
             )}
           </CardContent>
         </Card>
 
         <Card className="glass-card">
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Informações Básicas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4">
-              <div>
-                <div className="text-sm font-medium">Nome do responsável ou empresa</div>
-                <div>{caseData.basicInfo.name}</div>
-              </div>
-              <div>
-                <div className="text-sm font-medium">CPF/CNPJ</div>
-                <div>{caseData.basicInfo.document}</div>
-              </div>
-              <div>
-                <div className="text-sm font-medium">Telefone</div>
-                <div>{caseData.basicInfo.phone}</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 mt-4">
-              <Button 
+            <div className="flex gap-2">
+              <Button
                 variant="outline"
-                size="sm"
-                className="text-green-600 hover:text-green-700"
-                onClick={() => handleSectionApproval('basicInfo', true)}
+                className="bg-red-50 hover:bg-red-100"
+                onClick={() => setRejectionDialog({ show: true, section: 'basicInfo' })}
                 disabled={sections.basicInfo.approved}
               >
-                <CheckCircle className="h-4 w-4 mr-1" />
-                Aprovar
+                <XCircle className="h-4 w-4 mr-2" />
+                Reprovar
               </Button>
-              <Button 
+              <Button
                 variant="outline"
-                size="sm"
-                className="text-red-600 hover:text-red-700"
-                onClick={() => setRejectionDialog({ show: true, section: 'basicInfo' })}
+                className="bg-green-50 hover:bg-green-100"
+                onClick={() => handleSectionApproval('basicInfo', true)}
                 disabled={sections.basicInfo.rejected}
               >
-                <XCircle className="h-4 w-4 mr-1" />
-                Reprovar
-              </Button>
-            </div>
-            {sections.basicInfo.reason && (
-              <Alert className="mt-2">
-                <AlertTriangle className="h-4 w-4" />
-                <AlertDescription>{sections.basicInfo.reason}</AlertDescription>
-              </Alert>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card className="glass-card">
-          <CardHeader>
-            <CardTitle>Endereço</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4">
-              <div>
-                <div className="text-sm font-medium">Endereço</div>
-                <div>{caseData.address.street}</div>
-              </div>
-              <div>
-                <div className="text-sm font-medium">Bairro</div>
-                <div>{caseData.address.district}</div>
-              </div>
-              <div>
-                <div className="text-sm font-medium">Cidade - Estado</div>
-                <div>{caseData.address.city} - {caseData.address.state}</div>
-              </div>
-              <div>
-                <div className="text-sm font-medium">CEP</div>
-                <div>{caseData.address.zipCode}</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 mt-4">
-              <Button 
-                variant="outline"
-                size="sm"
-                className="text-green-600 hover:text-green-700"
-                onClick={() => handleSectionApproval('address', true)}
-                disabled={sections.address.approved}
-              >
-                <CheckCircle className="h-4 w-4 mr-1" />
+                <CheckCircle className="h-4 w-4 mr-2" />
                 Aprovar
               </Button>
-              <Button 
-                variant="outline"
-                size="sm"
-                className="text-red-600 hover:text-red-700"
-                onClick={() => setRejectionDialog({ show: true, section: 'address' })}
-                disabled={sections.address.rejected}
-              >
-                <XCircle className="h-4 w-4 mr-1" />
-                Reprovar
-              </Button>
             </div>
-            {sections.address.reason && (
-              <Alert className="mt-2">
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Nome do responsável ou empresa</label>
+                <p className="text-lg">{caseData.basicInfo.name}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">CPF/CNPJ</label>
+                <p className="text-lg">{caseData.basicInfo.document}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Telefone</label>
+                <p className="text-lg">{caseData.basicInfo.phone}</p>
+              </div>
+            </div>
+            {sections.basicInfo.rejected && (
+              <Alert className="mt-4">
                 <AlertTriangle className="h-4 w-4" />
-                <AlertDescription>{sections.address.reason}</AlertDescription>
+                <AlertDescription>
+                  {sections.basicInfo.rejectionReason}
+                </AlertDescription>
               </Alert>
             )}
           </CardContent>
         </Card>
 
         <Card className="glass-card">
-          <CardHeader>
-            <CardTitle>Documentos Anexados</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Endereço</CardTitle>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                className="bg-red-50 hover:bg-red-100"
+                onClick={() => setRejectionDialog({ show: true, section: 'address' })}
+                disabled={sections.address.approved}
+              >
+                <XCircle className="h-4 w-4 mr-2" />
+                Reprovar
+              </Button>
+              <Button
+                variant="outline"
+                className="bg-green-50 hover:bg-green-100"
+                onClick={() => handleSectionApproval('address', true)}
+                disabled={sections.address.rejected}
+              >
+                <CheckCircle className="h-4 w-4 mr-2" />
+                Aprovar
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Rua e Número</label>
+                <p className="text-lg">{caseData.address.street}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Bairro</label>
+                <p className="text-lg">{caseData.address.neighborhood}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Cidade - Estado</label>
+                <p className="text-lg">{caseData.address.city} - {caseData.address.state}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">CEP</label>
+                <p className="text-lg">{caseData.address.zipCode}</p>
+              </div>
+            </div>
+            {sections.address.rejected && (
+              <Alert className="mt-4">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertDescription>
+                  {sections.address.rejectionReason}
+                </AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card className="glass-card">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Documentos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -336,7 +363,29 @@ export default function AuditoriaCaseDetails() {
                   <FileText className="h-4 w-4" />
                   <span>Anúncio do Produto</span>
                 </div>
-                <Button variant="ghost" size="sm">Visualizar</Button>
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    className="text-green-600 hover:text-green-700"
+                    onClick={() => handleSectionApproval('docs', true)}
+                    disabled={sections.docs?.approved}
+                  >
+                    <CheckCircle className="h-4 w-4 mr-1" />
+                    Aprovar
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    className="text-red-600 hover:text-red-700"
+                    onClick={() => setRejectionDialog({ show: true, section: 'docs' })}
+                    disabled={sections.docs?.rejected}
+                  >
+                    <XCircle className="h-4 w-4 mr-1" />
+                    Reprovar
+                  </Button>
+                  <Button variant="ghost" size="sm">Visualizar</Button>
+                </div>
               </div>
 
               <div className="flex items-center justify-between p-3 border rounded-lg bg-white shadow-sm hover:bg-muted/50 transition-colors">
@@ -344,45 +393,42 @@ export default function AuditoriaCaseDetails() {
                   <FileText className="h-4 w-4" />
                   <span>Página de Venda</span>
                 </div>
-                <Button variant="ghost" size="sm">Visualizar</Button>
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    className="text-green-600 hover:text-green-700"
+                    onClick={() => handleSectionApproval('docs', true)}
+                    disabled={sections.docs?.approved}
+                  >
+                    <CheckCircle className="h-4 w-4 mr-1" />
+                    Aprovar
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    className="text-red-600 hover:text-red-700"
+                    onClick={() => setRejectionDialog({ show: true, section: 'docs' })}
+                    disabled={sections.docs?.rejected}
+                  >
+                    <XCircle className="h-4 w-4 mr-1" />
+                    Reprovar
+                  </Button>
+                  <Button variant="ghost" size="sm">Visualizar</Button>
+                </div>
               </div>
             </div>
-            <div className="flex items-center gap-2 mt-4">
-              <Button 
-                variant="outline"
-                size="sm"
-                className="text-green-600 hover:text-green-700"
-                onClick={() => handleSectionApproval('docs', true)}
-                disabled={sections.docs.approved}
-              >
-                <CheckCircle className="h-4 w-4 mr-1" />
-                Aprovar
-              </Button>
-              <Button 
-                variant="outline"
-                size="sm"
-                className="text-red-600 hover:text-red-700"
-                onClick={() => setRejectionDialog({ show: true, section: 'docs' })}
-                disabled={sections.docs.rejected}
-              >
-                <XCircle className="h-4 w-4 mr-1" />
-                Reprovar
-              </Button>
-            </div>
-            {sections.docs.reason && (
-              <Alert className="mt-2">
-                <AlertTriangle className="h-4 w-4" />
-                <AlertDescription>{sections.docs.reason}</AlertDescription>
-              </Alert>
-            )}
           </CardContent>
         </Card>
       </div>
 
       {rejectionDialog && (
-        <RejectionDialogContent
+        <RejectDialog
           section={rejectionDialog.section}
-          onConfirm={(reason) => handleReject(rejectionDialog.section, reason)}
+          onConfirm={(reason) => {
+            handleSectionRejection(rejectionDialog.section, reason);
+            setRejectionDialog(null);
+          }}
           onCancel={() => setRejectionDialog(null)}
         />
       )}
