@@ -44,14 +44,16 @@ export default function AuditoriaCaseDetails() {
   });
 
   const handleFieldApproval = (section: string, field: string, status: 'approved' | 'rejected', reason?: string) => {
-    setSectionApprovals(prev => ({
-      ...prev,
-      [section]: prev[section].map(item => 
+    const newSectionApprovals = {
+      ...sectionApprovals,
+      [section]: sectionApprovals[section].map((item: any) => 
         item.field === field 
           ? { ...item, status, reason: reason || null }
           : item
       )
-    }));
+    };
+    setSectionApprovals(newSectionApprovals);
+    updateRequirements(newSectionApprovals);
   };
 
   const [requirements, setRequirements] = useState({
@@ -71,8 +73,6 @@ export default function AuditoriaCaseDetails() {
       properDocumentation: newSectionApprovals.documents?.every((field: any) => field.status === 'approved')
     });
   };
-
-  const handleFieldApproval = (section: string, field: string, status: 'approved' | 'rejected', reason?: string) => {
     const newSectionApprovals = {
       ...sectionApprovals,
       [section]: sectionApprovals[section].map((item: any) => 
