@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
-import { ChevronLeft, CheckCircle, XCircle, ExternalLink, AlertTriangle, User, Calendar } from 'lucide-react';
+import { ChevronLeft, CheckCircle, XCircle, ExternalLink, AlertTriangle, User, Calendar, FileText } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 import { format } from 'date-fns';
 
@@ -22,7 +21,7 @@ export default function AuditoriaCaseDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  
+
   // Mock data - replace with API call
   const caseData = {
     analyst: "João Silva",
@@ -50,7 +49,8 @@ export default function AuditoriaCaseDetails() {
   const [sections, setSections] = useState({
     urls: { approved: false, rejected: false } as SectionStatus,
     basicInfo: { approved: false, rejected: false } as SectionStatus,
-    address: { approved: false, rejected: false } as SectionStatus
+    address: { approved: false, rejected: false } as SectionStatus,
+    docs: { approved: false, rejected: false } as SectionStatus
   });
 
   const handleSectionApproval = (section: keyof typeof sections, approved: boolean) => {
@@ -123,7 +123,7 @@ export default function AuditoriaCaseDetails() {
     onCancel: () => void;
   }) => {
     const [reason, setReason] = useState('');
-    
+
     return (
       <Dialog open={true} onOpenChange={onCancel}>
         <DialogContent>
@@ -349,6 +349,75 @@ export default function AuditoriaCaseDetails() {
                 </AlertDescription>
               </Alert>
             )}
+          </CardContent>
+        </Card>
+
+        <Card className="glass-card">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Documentos</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-3 border rounded-lg bg-white shadow-sm hover:bg-muted/50 transition-colors">
+                <div className="flex items-center gap-2">
+                  <FileText className="h-4 w-4" />
+                  <span>Anúncio do Produto</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    className="text-green-600 hover:text-green-700"
+                    onClick={() => handleSectionApproval('docs', true)}
+                    disabled={sections.docs?.approved}
+                  >
+                    <CheckCircle className="h-4 w-4 mr-1" />
+                    Aprovar
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    className="text-red-600 hover:text-red-700"
+                    onClick={() => setRejectionDialog({ show: true, section: 'docs' })}
+                    disabled={sections.docs?.rejected}
+                  >
+                    <XCircle className="h-4 w-4 mr-1" />
+                    Reprovar
+                  </Button>
+                  <Button variant="ghost" size="sm">Visualizar</Button>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between p-3 border rounded-lg bg-white shadow-sm hover:bg-muted/50 transition-colors">
+                <div className="flex items-center gap-2">
+                  <FileText className="h-4 w-4" />
+                  <span>Página de Venda</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    className="text-green-600 hover:text-green-700"
+                    onClick={() => handleSectionApproval('docs', true)}
+                    disabled={sections.docs?.approved}
+                  >
+                    <CheckCircle className="h-4 w-4 mr-1" />
+                    Aprovar
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    className="text-red-600 hover:text-red-700"
+                    onClick={() => setRejectionDialog({ show: true, section: 'docs' })}
+                    disabled={sections.docs?.rejected}
+                  >
+                    <XCircle className="h-4 w-4 mr-1" />
+                    Reprovar
+                  </Button>
+                  <Button variant="ghost" size="sm">Visualizar</Button>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
