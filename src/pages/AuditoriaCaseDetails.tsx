@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -6,57 +7,95 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Checkbox } from "@/components/ui/checkbox";
-import { CheckCircle, XCircle, ChevronLeft, FileText, AlertTriangle } from 'lucide-react';
+import { ChevronLeft, CheckCircle, XCircle, ExternalLink, User, Calendar, AlertTriangle } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
+import { format } from 'date-fns';
+
+interface SectionStatus {
+  approved: boolean;
+  rejected: boolean;
+  reason?: string;
+}
 
 export default function AuditoriaCaseDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [rejectionReason, setRejectionReason] = useState('');
   const [showRejectDialog, setShowRejectDialog] = useState(false);
-  const [requirements, setRequirements] = useState({
-    basicInfo: false,
-    attachments: false,
-    validLinks: false,
-    properDocumentation: false
+  const [selectedSection, setSelectedSection] = useState<string>('');
+  const [rejectionReason, setRejectionReason] = useState('');
+
+  // Mock data - replace with API data
+  const [caseData] = useState({
+    analyst: 'João Silva',
+    submissionDate: '2024-03-21T10:30:00',
+    status: 'Pendente de Auditoria',
+    suspectUrls: [
+      'https://lojaexemplo.com',
+      'https://marketplace.com/anuncio/123'
+    ],
+    responsibleParty: 'Empresa ABC Ltda',
+    document: '12.345.678/0001-90',
+    phone: '(11) 99999-9999',
+    address: {
+      street: 'Rua das Flores, 123',
+      neighborhood: 'Centro',
+      city: 'São Paulo',
+      state: 'SP',
+      zipCode: '01234-567'
+    }
   });
 
-  const allRequirementsMet = Object.values(requirements).every(Boolean);
+  const [sectionStatus, setSectionStatus] = useState<Record<string, SectionStatus>>({
+    urls: { approved: false, rejected: false },
+    basicInfo: { approved: false, rejected: false },
+    address: { approved: false, rejected: false }
+  });
 
-  const handleApprove = async () => {
+  const handleApproveSection = (section: string) => {
+    setSectionStatus(prev => ({
+      ...prev,
+      [section]: { approved: true, rejected: false }
+    }));
+  };
+
+  const handleOpenRejectDialog = (section: string) => {
+    setSelectedSection(section);
+    setShowRejectDialog(true);
+  };
+
+  const handleRejectSection = () => {
+    if (!rejectionReason) return;
+    
+    setSectionStatus(prev => ({
+      ...prev,
+      [selectedSection]: { approved: false, rejected: true, reason: rejectionReason }
+    }));
+    setShowRejectDialog(false);
+    setRejectionReason('');
+  };
+
+  const allSectionsReviewed = Object.values(sectionStatus).every(
+    status => status.approved || status.rejected
+  );
+
+  const allSectionsApproved = Object.values(sectionStatus).every(
+    status => status.approved
+  );
+
+  const handleApproveCaseComplete = async () => {
     try {
       // API call would go here
       toast({
         title: "Caso Aprovado",
-        description: "O caso foi aprovado e seguirá para notificação.",
+        description: "O caso foi aprovado com sucesso.",
       });
       navigate('/auditoria');
     } catch (error) {
       toast({
-        title: "Erro ao aprovar",
-        description: "Ocorreu um erro ao aprovar o caso.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handleReject = async () => {
-    if (!rejectionReason) return;
-    try {
-      // API call would go here
-      toast({
-        title: "Caso Rejeitado",
-        description: "O caso foi devolvido para verificação.",
-      });
-      setShowRejectDialog(false);
-      navigate('/auditoria');
-    } catch (error) {
-      toast({
-        title: "Erro ao rejeitar",
-        description: "Ocorreu um erro ao rejeitar o caso.",
-        variant: "destructive",
+        title: "Erro",
+        description: "Erro ao aprovar o caso.",
+        variant: "destructive"
       });
     }
   };
@@ -73,121 +112,174 @@ export default function AuditoriaCaseDetails() {
             <h1 className="text-3xl font-bold tracking-tight mb-1">
               Auditoria do Caso #{id}
             </h1>
-            <p className="text-muted-foreground text-lg">
-              Verificação de conformidade e aprovação final
-            </p>
+            <div className="flex items-center gap-4 text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <User className="h-4 w-4" />
+                <span>Analista: {caseData.analyst}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Calendar className="h-4 w-4" />
+                <span>Enviado em: {format(new Date(caseData.submissionDate), 'dd/MM/yyyy HH:mm')}</span>
+              </div>
+              <Badge variant="secondary">{caseData.status}</Badge>
+            </div>
           </div>
-        </div>
-        <div className="flex gap-2">
-          <Button
-            variant="destructive"
-            onClick={() => setShowRejectDialog(true)}
-          >
-            <XCircle className="h-4 w-4 mr-2" />
-            Rejeitar
-          </Button>
-          <Button
-            onClick={handleApprove}
-            disabled={!allRequirementsMet}
-            className="bg-green-600 hover:bg-green-700"
-          >
-            <CheckCircle className="h-4 w-4 mr-2" />
-            Aprovar
-          </Button>
         </div>
       </header>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card className="glass-card">
-          <CardHeader className="p-6 pb-3">
-            <CardTitle>Requisitos de Aprovação</CardTitle>
+      <div className="grid gap-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>URLs Suspeitas</CardTitle>
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-green-600"
+                onClick={() => handleApproveSection('urls')}
+                disabled={sectionStatus.urls.approved || sectionStatus.urls.rejected}
+              >
+                <CheckCircle className="h-4 w-4 mr-2" />
+                Aprovar
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-red-600"
+                onClick={() => handleOpenRejectDialog('urls')}
+                disabled={sectionStatus.urls.approved || sectionStatus.urls.rejected}
+              >
+                <XCircle className="h-4 w-4 mr-2" />
+                Reprovar
+              </Button>
+            </div>
           </CardHeader>
-          <CardContent className="p-6 pt-3 space-y-6">
-            <div className="space-y-4">
-              {Object.entries(requirements).map(([key, checked]) => (
-                <div key={key} className="flex items-start space-x-2">
-                  <Checkbox
-                    id={key}
-                    checked={checked}
-                    onCheckedChange={(checked) =>
-                      setRequirements(prev => ({
-                        ...prev,
-                        [key]: checked === true
-                      }))
-                    }
-                  />
-                  <div className="grid gap-1.5 leading-none">
-                    <label
-                      htmlFor={key}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {key === 'basicInfo' && 'Informações básicas completas'}
-                      {key === 'attachments' && 'Anexos obrigatórios presentes'}
-                      {key === 'validLinks' && 'Links verificados e válidos'}
-                      {key === 'properDocumentation' && 'Documentação adequada'}
-                    </label>
-                  </div>
+          <CardContent>
+            <div className="space-y-2">
+              {caseData.suspectUrls.map((url, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <ExternalLink className="h-4 w-4" />
+                  <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                    {url}
+                  </a>
                 </div>
               ))}
             </div>
-
-            {!allRequirementsMet && (
-              <Alert>
-                <AlertTriangle className="h-4 w-4" />
-                <AlertDescription>
-                  Todos os requisitos precisam ser verificados para aprovar o caso.
-                </AlertDescription>
-              </Alert>
-            )}
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle>Documentos Anexados</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Informações Básicas</CardTitle>
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-green-600"
+                onClick={() => handleApproveSection('basicInfo')}
+                disabled={sectionStatus.basicInfo.approved || sectionStatus.basicInfo.rejected}
+              >
+                <CheckCircle className="h-4 w-4 mr-2" />
+                Aprovar
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-red-600"
+                onClick={() => handleOpenRejectDialog('basicInfo')}
+                disabled={sectionStatus.basicInfo.approved || sectionStatus.basicInfo.rejected}
+              >
+                <XCircle className="h-4 w-4 mr-2" />
+                Reprovar
+              </Button>
+            </div>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-3 border rounded-lg bg-white shadow-sm hover:bg-muted/50 transition-colors">
-                <div className="flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
-                  <span>Anúncio do Produto</span>
-                  <Badge variant="secondary">Obrigatório</Badge>
-                </div>
-                <Button variant="ghost" size="sm">Visualizar</Button>
-              </div>
-
-              <div className="flex items-center justify-between p-3 border rounded-lg bg-white shadow-sm hover:bg-muted/50 transition-colors">
-                <div className="flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
-                  <span>Página de Venda</span>
-                  <Badge variant="secondary">Obrigatório</Badge>
-                </div>
-                <Button variant="ghost" size="sm">Visualizar</Button>
-              </div>
+            <div className="grid gap-2">
+              <p><strong>Nome:</strong> {caseData.responsibleParty}</p>
+              <p><strong>CPF/CNPJ:</strong> {caseData.document}</p>
+              <p><strong>Telefone:</strong> {caseData.phone}</p>
             </div>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Endereço</CardTitle>
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-green-600"
+                onClick={() => handleApproveSection('address')}
+                disabled={sectionStatus.address.approved || sectionStatus.address.rejected}
+              >
+                <CheckCircle className="h-4 w-4 mr-2" />
+                Aprovar
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-red-600"
+                onClick={() => handleOpenRejectDialog('address')}
+                disabled={sectionStatus.address.approved || sectionStatus.address.rejected}
+              >
+                <XCircle className="h-4 w-4 mr-2" />
+                Reprovar
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid gap-2">
+              <p><strong>Rua:</strong> {caseData.address.street}</p>
+              <p><strong>Bairro:</strong> {caseData.address.neighborhood}</p>
+              <p><strong>Cidade:</strong> {caseData.address.city} - {caseData.address.state}</p>
+              <p><strong>CEP:</strong> {caseData.address.zipCode}</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {allSectionsReviewed && (
+          <div className="flex justify-end gap-4">
+            {allSectionsApproved ? (
+              <Button
+                onClick={handleApproveCaseComplete}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                <CheckCircle className="h-4 w-4 mr-2" />
+                Aprovar Caso Completo
+              </Button>
+            ) : (
+              <Button
+                variant="destructive"
+                onClick={() => navigate('/auditoria')}
+              >
+                <XCircle className="h-4 w-4 mr-2" />
+                Reprovar Caso
+              </Button>
+            )}
+          </div>
+        )}
       </div>
 
       <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Rejeitar Caso</DialogTitle>
+            <DialogTitle>Justificativa da Reprovação</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <Textarea
-              placeholder="Descreva o motivo da rejeição..."
+              placeholder="Descreva o motivo da reprovação..."
               value={rejectionReason}
               onChange={(e) => setRejectionReason(e.target.value)}
             />
             <Button
               variant="destructive"
-              onClick={handleReject}
+              onClick={handleRejectSection}
               disabled={!rejectionReason}
               className="w-full"
             >
-              Confirmar Rejeição
+              Confirmar Reprovação
             </Button>
           </div>
         </DialogContent>
