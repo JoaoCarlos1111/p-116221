@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -428,16 +429,16 @@ export default function KanbanBoard() {
                 <div 
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className="min-w-[300px]"
+                  className="min-w-[300px] h-[calc(100vh-12rem)]"
                 >
-                  <Card className="p-4 bg-white">
-                    <div className="flex justify-between items-center mb-4">
+                  <Card className="p-4 bg-white h-full flex flex-col">
+                    <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
                       <h3 className="font-semibold text-[#2B2B2B]">{column.title}</h3>
                       <Badge variant="secondary">
                         {filteredCards.filter(c => c.column === column.id).length}
                       </Badge>
                     </div>
-                    <div className="space-y-2 min-h-[200px]">
+                    <div className="space-y-2 overflow-y-auto flex-1 pr-2">
                       {filteredCards
                         .filter(card => card.column === column.id)
                         .map((card, index) => (
