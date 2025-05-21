@@ -43,10 +43,7 @@ const initialCards = [
     column: 'received',
     analyst: 'João Silva',
     client: 'Nike',
-    createdAt: new Date().toISOString(),
-    productType: 'Vestuário',
-    state: 'SP',
-    potentialValue: 5000
+    createdAt: new Date().toISOString()
   },
   {
     id: '2',
@@ -58,10 +55,7 @@ const initialCards = [
     column: 'analysis',
     analyst: 'Maria Santos',
     client: 'Adidas',
-    createdAt: new Date().toISOString(),
-    productType: 'Eletrônico',
-    state: 'RJ',
-    potentialValue: 3000
+    createdAt: new Date().toISOString()
   }
 ];
 
@@ -132,24 +126,8 @@ export default function KanbanBoard() {
     const matchesDate = !filterDate || new Date(card.createdAt).toDateString() === filterDate.toDateString();
     const matchesPriority = !filterPriority || filterPriority === '' || card.priority === filterPriority;
     const matchesClient = !filterClient || filterClient === '' || card.client === filterClient;
-    
-    // Product type filter
-    const matchesProduct = filterProducts.length === 0 || filterProducts.includes(card.productType || '');
-    
-    // State filter
-    const matchesState = filterStates.length === 0 || filterStates.includes(card.state || '');
-    
-    // Value range filter
-    const cardValue = card.potentialValue || 0;
-    const matchesValue = cardValue >= filterValueRange[0] && cardValue <= filterValueRange[1];
 
-    return matchesSearch && 
-           matchesDate && 
-           matchesPriority && 
-           matchesClient && 
-           matchesProduct && 
-           matchesState && 
-           matchesValue;
+    return matchesSearch && matchesDate && matchesPriority && matchesClient;
   });
 
   useEffect(() => {
