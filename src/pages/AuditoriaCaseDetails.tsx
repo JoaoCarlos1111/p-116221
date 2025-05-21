@@ -148,7 +148,7 @@ export default function AuditoriaCaseDetails() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-2 border rounded">
+              <div className="flex items-center justify-between p-3 border rounded-lg bg-white shadow-sm hover:bg-muted/50 transition-colors">
                 <div className="flex items-center gap-2">
                   <FileText className="h-4 w-4" />
                   <span>Anúncio do Produto</span>
@@ -157,7 +157,7 @@ export default function AuditoriaCaseDetails() {
                 <Button variant="ghost" size="sm">Visualizar</Button>
               </div>
 
-              <div className="flex items-center justify-between p-2 border rounded">
+              <div className="flex items-center justify-between p-3 border rounded-lg bg-white shadow-sm hover:bg-muted/50 transition-colors">
                 <div className="flex items-center gap-2">
                   <FileText className="h-4 w-4" />
                   <span>Página de Venda</span>
