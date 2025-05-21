@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+
 import { CalendarIcon, FilterIcon, PlusIcon, Search } from 'lucide-react';
 import { Calendar } from "@/components/ui/calendar";
 
@@ -236,14 +236,165 @@ export default function KanbanBoard() {
 
 
   return (
-    <div className="space-y-8">
-      <header className="flex justify-between items-center">
-        <div>
-          <h1 className="text-4xl font-bold text-[#2B2B2B]">Pipeline</h1>
-          <p className="text-[#6F767E]">{selectedSector}</p>
-        </div>
+    <div className="flex h-full">
+      {/* Filter Sidebar */}
+      <div className="w-80 border-r p-6 space-y-6 bg-card">
+        <h2 className="font-semibold text-lg">Filtros</h2>
+        
+        <Button variant="secondary" onClick={handleClearFilters} className="w-full">
+          Limpar Filtros
+        </Button>
 
-        <div className="flex gap-4">
+        <div className="space-y-6">
+          <div>
+            <h3 className="font-medium mb-2">Categoria do Caso</h3>
+            <div className="space-y-2">
+              {productCategories.map((category) => (
+                <div key={category} className="flex items-center">
+                  <Checkbox
+                    id={`product-${category}`}
+                    checked={filterProducts.includes(category)}
+                    onCheckedChange={(checked) => {
+                      setFilterProducts(prev => 
+                        checked 
+                          ? [...prev, category]
+                          : prev.filter(p => p !== category)
+                      );
+                    }}
+                  />
+                  <label htmlFor={`product-${category}`} className="ml-2 text-sm">
+                    {category}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h3 className="font-medium mb-2">Localização</h3>
+            <Command>
+              <CommandInput placeholder="Buscar estado..." />
+              <CommandList className="max-h-48">
+                <CommandGroup>
+                  <CommandItem onSelect={() => setFilterStates([])}>
+                    Todos
+                  </CommandItem>
+                  {brStates.map((state) => (
+                    <CommandItem
+                      key={state.abbr}
+                      onSelect={() => {
+                        setFilterStates(prev => 
+                          prev.includes(state.abbr)
+                            ? prev.filter(s => s !== state.abbr)
+                            : [...prev, state.abbr]
+                        );
+                      }}
+                    >
+                      <Checkbox
+                        checked={filterStates.includes(state.abbr)}
+                        className="mr-2"
+                      />
+                      {state.name} ({state.abbr})
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </div>
+
+          <div>
+            <h3 className="font-medium mb-2">Financeiro</h3>
+            <Select
+              value={`${filterValueRange[0]}-${filterValueRange[1]}`}
+              onValueChange={(value) => {
+                const [min, max] = value.split('-').map(Number);
+                setFilterValueRange([min, max]);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione a faixa de valor" />
+              </SelectTrigger>
+              <SelectContent>
+                {valueRanges.map((range) => (
+                  <SelectItem
+                    key={`${range.min}-${range.max}`}
+                    value={`${range.min}-${range.max}`}
+                  >
+                    {range.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Slider
+              className="mt-6"
+              defaultValue={[0, 20000]}
+              max={20000}
+              step={1000}
+              value={filterValueRange}
+              onValueChange={setFilterValueRange}
+              marks={[
+                { value: 0, label: 'R$0' },
+                { value: 2000, label: 'R$2K' },
+                { value: 4000, label: 'R$4K' },
+                { value: 8000, label: 'R$8K' },
+                { value: 20000, label: 'R$20K' }
+              ]}
+            />
+          </div>
+
+          <div>
+            <h3 className="font-medium mb-2">Outros Filtros</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium">Data de Criação</label>
+                <Calendar
+                  mode="single"
+                  selected={filterDate}
+                  onSelect={setFilterDate}
+                  className="rounded-md border"
+                />
+              </div>
+              <div>
+                <label className="text-sm">Prioridade</label>
+                <Select value={filterPriority} onValueChange={setFilterPriority}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione a prioridade" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Todos</SelectItem>
+                    <SelectItem value="Alta">Alta</SelectItem>
+                    <SelectItem value="Média">Média</SelectItem>
+                    <SelectItem value="Baixa">Baixa</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="text-sm">Cliente</label>
+                <Select value={filterClient} onValueChange={setFilterClient}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o cliente" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Todos</SelectItem>
+                    <SelectItem value="Nike">Nike</SelectItem>
+                    <SelectItem value="Adidas">Adidas</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 p-8 space-y-8">
+        <header className="flex justify-between items-center">
+          <div>
+            <h1 className="text-4xl font-bold text-[#2B2B2B]">Pipeline</h1>
+            <p className="text-[#6F767E]">{selectedSector}</p>
+          </div>
+
+          <div className="flex gap-4">
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
