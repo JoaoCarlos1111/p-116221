@@ -212,28 +212,53 @@ export default function AuditoriaCaseDetails() {
         </Card>
 
         {/* URLs Suspeitas */}
-        <Card className="shadow-lg border-0 bg-white">
-          <CardHeader className="flex flex-row items-center justify-between pb-3">
+        <Card className={`shadow-lg border-0 bg-white transition-colors ${
+          sectionApprovals.urls?.every(field => field.status === 'approved') 
+            ? 'bg-green-50' 
+            : sectionApprovals.urls?.some(field => field.status === 'rejected')
+              ? 'bg-red-50'
+              : ''
+        }`}>
+          <CardHeader className="pb-3">
             <CardTitle className="text-xl font-semibold">URLs Suspeitas</CardTitle>
-            <div className="flex gap-2">
-              <Button variant="outline" className="text-green-600" onClick={() => handleSectionApproval('urls', true)}>
-                <CheckCircle className="h-4 w-4 mr-2" />
-                Aprovar
-              </Button>
-              <Button variant="outline" className="text-red-600" onClick={() => handleSectionRejection('urls')}>
-                <XCircle className="h-4 w-4 mr-2" />
-                Reprovar
-              </Button>
-            </div>
           </CardHeader>
           <CardContent className="space-y-2">
-            <div className="space-y-1">
+            <div className="space-y-2">
               {['https://lojaexemplo.com', 'https://marketplace.com/anuncio/123'].map((url, index) => (
-                <div key={index} className="flex items-center">
+                <div key={index} className="flex items-center justify-between p-2 rounded hover:bg-black/5">
                   <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center">
                     <ExternalLink className="h-4 w-4 mr-2" />
                     {url}
                   </a>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={`h-8 w-8 ${
+                        sectionApprovals.urls?.find(f => f.url === url)?.status === 'approved'
+                          ? 'text-green-600 bg-green-100'
+                          : ''
+                      }`}
+                      onClick={() => handleFieldApproval('urls', url, 'approved')}
+                    >
+                      <CheckCircle className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={`h-8 w-8 ${
+                        sectionApprovals.urls?.find(f => f.url === url)?.status === 'rejected'
+                          ? 'text-red-600 bg-red-100'
+                          : ''
+                      }`}
+                      onClick={() => {
+                        setCurrentField({ section: 'urls', field: url });
+                        setShowRejectDialog(true);
+                      }}
+                    >
+                      <XCircle className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -309,38 +334,60 @@ export default function AuditoriaCaseDetails() {
         </Card>
 
         {/* Endereço */}
-        <Card className="shadow-lg border-0 bg-white">
-          <CardHeader className="flex flex-row items-center justify-between pb-3">
+        <Card className={`shadow-lg border-0 bg-white transition-colors ${
+          sectionApprovals.address?.every(field => field.status === 'approved') 
+            ? 'bg-green-50' 
+            : sectionApprovals.address?.some(field => field.status === 'rejected')
+              ? 'bg-red-50'
+              : ''
+        }`}>
+          <CardHeader className="pb-3">
             <CardTitle className="text-xl font-semibold">Endereço</CardTitle>
-            <div className="flex gap-2">
-              <Button variant="outline" className="text-green-600" onClick={() => handleSectionApproval('address', true)}>
-                <CheckCircle className="h-4 w-4 mr-2" />
-                Aprovar
-              </Button>
-              <Button variant="outline" className="text-red-600" onClick={() => handleSectionRejection('address')}>
-                <XCircle className="h-4 w-4 mr-2" />
-                Reprovar
-              </Button>
-            </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Rua, Número</label>
-                <p className="text-sm">Rua Exemplo, 123</p>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Bairro</label>
-                <p className="text-sm">Centro</p>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Cidade - Estado (UF)</label>
-                <p className="text-sm">São Paulo - SP</p>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">CEP</label>
-                <p className="text-sm">01234-567</p>
-              </div>
+              {[
+                { label: 'Rua, Número', value: 'Rua Exemplo, 123', field: 'street' },
+                { label: 'Bairro', value: 'Centro', field: 'neighborhood' },
+                { label: 'Cidade - Estado (UF)', value: 'São Paulo - SP', field: 'city' },
+                { label: 'CEP', value: '01234-567', field: 'cep' }
+              ].map((item) => (
+                <div key={item.field} className="flex items-start justify-between gap-4 p-2 rounded hover:bg-black/5">
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium">{item.label}</label>
+                    <p className="text-sm">{item.value}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={`h-8 w-8 ${
+                        sectionApprovals.address?.find(f => f.field === item.field)?.status === 'approved'
+                          ? 'text-green-600 bg-green-100'
+                          : ''
+                      }`}
+                      onClick={() => handleFieldApproval('address', item.field, 'approved')}
+                    >
+                      <CheckCircle className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={`h-8 w-8 ${
+                        sectionApprovals.address?.find(f => f.field === item.field)?.status === 'rejected'
+                          ? 'text-red-600 bg-red-100'
+                          : ''
+                      }`}
+                      onClick={() => {
+                        setCurrentField({ section: 'address', field: item.field });
+                        setShowRejectDialog(true);
+                      }}
+                    >
+                      <XCircle className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
