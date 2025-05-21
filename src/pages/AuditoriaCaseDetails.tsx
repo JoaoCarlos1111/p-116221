@@ -20,8 +20,8 @@ export default function AuditoriaCaseDetails() {
   const [currentField, setCurrentField] = useState<{ section: string; field: string } | null>(null);
   const [sectionApprovals, setSectionApprovals] = useState({
     urls: [
-      { url: 'https://lojaexemplo.com', status: null, reason: null },
-      { url: 'https://marketplace.com/anuncio/123', status: null, reason: null }
+      { field: 'https://lojaexemplo.com', status: null, reason: null },
+      { field: 'https://marketplace.com/anuncio/123', status: null, reason: null }
     ],
     basicInfo: [
       { field: 'name', status: null, reason: null },
@@ -278,11 +278,11 @@ export default function AuditoriaCaseDetails() {
           </CardHeader>
           <CardContent className="space-y-2">
             <div className="space-y-2">
-              {['https://lojaexemplo.com', 'https://marketplace.com/anuncio/123'].map((url, index) => (
+              {sectionApprovals.urls.map((urlItem, index) => (
                 <div key={index} className="flex items-center justify-between p-2 rounded hover:bg-black/5">
-                  <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center">
+                  <a href={urlItem.field} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center">
                     <ExternalLink className="h-4 w-4 mr-2" />
-                    {url}
+                    {urlItem.field}
                   </a>
                   <div className="flex gap-2">
                     <Button
@@ -293,7 +293,7 @@ export default function AuditoriaCaseDetails() {
                           ? 'text-green-600 bg-green-100'
                           : ''
                       }`}
-                      onClick={() => handleFieldApproval('urls', url, 'approved')}
+                      onClick={() => handleFieldApproval('urls', urlItem.field, 'approved')}
                     >
                       <CheckCircle className="h-4 w-4" />
                     </Button>
@@ -301,12 +301,12 @@ export default function AuditoriaCaseDetails() {
                       variant="ghost"
                       size="icon"
                       className={`h-8 w-8 ${
-                        sectionApprovals.urls?.find(f => f.url === url)?.status === 'rejected'
+                        sectionApprovals.urls?.find(f => f.field === urlItem.field)?.status === 'rejected'
                           ? 'text-red-600 bg-red-100'
                           : ''
                       }`}
                       onClick={() => {
-                        setCurrentField({ section: 'urls', field: url });
+                        setCurrentField({ section: 'urls', field: urlItem.field });
                         setShowRejectDialog(true);
                       }}
                     >
