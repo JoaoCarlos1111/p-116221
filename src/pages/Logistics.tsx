@@ -1,10 +1,12 @@
+
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { CircleCheck, Send, RefreshCw, CheckCircle, Printer, MailCheck } from 'lucide-react';
+import { CircleCheck, Send, RefreshCw, Printer, MailCheck, Search, CheckSquare } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useNavigate } from 'react-router-dom';
 
 interface Case {
@@ -17,6 +19,8 @@ interface Case {
   status: string;
   trackingCode?: string;
   deliveryStatus?: string;
+  document?: string;
+  selected?: boolean;
 }
 
 export default function Logistics() {
@@ -27,7 +31,8 @@ export default function Logistics() {
       address: "Rua Augusta, 1500 - São Paulo, SP",
       brand: "Nike",
       approvalDate: "2024-03-20",
-      status: "Aprovado"
+      status: "Aprovado",
+      document: "12345678901"
     },
     {
       id: "NOT002",
@@ -36,7 +41,8 @@ export default function Logistics() {
       brand: "Adidas",
       approvalDate: "2024-03-20",
       printDate: "2024-03-21",
-      status: "Impresso"
+      status: "Impresso",
+      document: "98765432101"
     },
     {
       id: "NOT003",
@@ -47,86 +53,94 @@ export default function Logistics() {
       printDate: "2024-03-20",
       trackingCode: "BR789456123",
       status: "Em trânsito",
-      deliveryStatus: "Em rota de entrega"
-    },
-    {
-      id: "NOT004",
-      storeName: "Centro Comercial RS",
-      address: "Rua dos Andradas, 1234 - Porto Alegre, RS",
-      brand: "Nike",
-      approvalDate: "2024-03-20",
-      status: "Aprovado"
-    },
-    {
-      id: "NOT005",
-      storeName: "Shopping Recife",
-      address: "Rua da Aurora, 1000 - Recife, PE",
-      brand: "Adidas",
-      approvalDate: "2024-03-19",
-      printDate: "2024-03-20",
-      status: "Impresso"
+      deliveryStatus: "Em rota de entrega",
+      document: "45678912301"
     }
   ]);
+  
   const { toast } = useToast();
-  const [selectedDate, setSelectedDate] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const navigate = useNavigate();
 
+  const handleSelectAll = () => {
+    setCases(cases.map(c => ({
+      ...c,
+      selected: !c.printDate ? true : c.selected
+    })));
+  };
+
+  const handleSelect = (caseId: string) => {
+    setCases(cases.map(c => ({
+      ...c,
+      selected: c.id === caseId ? !c.selected : c.selected
+    })));
+  };
+
+  const handleMoveSelectedToPrint = () => {
+    setCases(cases.map(c => {
+      if (c.selected && !c.printDate) {
+        return {
+          ...c,
+          printDate: new Date().toISOString(),
+          status: 'Impresso',
+          selected: false
+        };
+      }
+      return c;
+    }));
+    toast({ description: "Casos selecionados movidos para impressão" });
+  };
+
+  const filteredCases = cases.filter(c => {
+    const searchLower = searchQuery.toLowerCase();
+    return (
+      !searchQuery ||
+      c.id.toLowerCase().includes(searchLower) ||
+      c.document?.toLowerCase().includes(searchLower) ||
+      c.storeName.toLowerCase().includes(searchLower) ||
+      c.trackingCode?.toLowerCase().includes(searchLower)
+    );
+  });
+
+  const selectedCount = cases.filter(c => c.selected).length;
+
   const columns = [
     {
       title: "Aprovado",
-      icon: <CheckCircle className="h-5 w-5 text-green-600" />,
-      cases: cases.filter(c => !c.printDate && !c.trackingCode),
+      icon: <CircleCheck className="h-5 w-5 text-green-600" />,
+      cases: filteredCases.filter(c => !c.printDate && !c.trackingCode),
       color: "bg-green-50"
     },
     {
       title: "Fila de Impressão",
       icon: <Printer className="h-5 w-5 text-gray-600" />,
-      cases: cases.filter(c => c.printDate && !c.trackingCode),
+      cases: filteredCases.filter(c => c.printDate && !c.trackingCode),
       color: "bg-gray-50"
     },
     {
       title: "Postado",
       icon: <MailCheck className="h-5 w-5 text-blue-600" />,
-      cases: cases.filter(c => c.trackingCode),
+      cases: filteredCases.filter(c => c.trackingCode),
       color: "bg-blue-50"
     }
   ];
-
-  const handlePrint = (caseId: string) => {
-    setCases(cases.map(c => {
-      if (c.id === caseId) {
-        return { ...c, printDate: new Date().toISOString(), status: 'Impresso' };
-      }
-      return c;
-    }));
-    toast({ description: "Notificação enviada para impressão" });
-  };
-
-  const handlePost = async (caseId: string) => {
-    // Simulating API call to Correios
-    const trackingCode = `BR${Math.random().toString(36).substring(7).toUpperCase()}`;
-    setCases(cases.map(c => {
-      if (c.id === caseId) {
-        return { ...c, trackingCode, status: 'Em trânsito' };
-      }
-      return c;
-    }));
-    toast({ description: "Notificação postada com sucesso" });
-  };
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Kanban de Notificações - Logística</h1>
 
       <div className="flex gap-4 mb-6">
-        <Input
-          type="date"
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-          className="w-40"
-        />
+        <div className="relative flex-1">
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Buscar por número do caso, CPF/CNPJ, nome ou código de rastreio..."
+            className="pl-8"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
         <Select value={selectedBrand} onValueChange={setSelectedBrand}>
           <SelectTrigger className="w-40">
             <SelectValue placeholder="Marca" />
@@ -136,61 +150,64 @@ export default function Logistics() {
             <SelectItem value="marca2">Marca 2</SelectItem>
           </SelectContent>
         </Select>
-        <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-          <SelectTrigger className="w-40">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="aprovado">Aprovado</SelectItem>
-            <SelectItem value="impressao">Fila de Impressão</SelectItem>
-            <SelectItem value="postado">Postado</SelectItem>
-          </SelectContent>
-        </Select>
       </div>
+
+      {selectedCount > 0 && (
+        <div className="fixed top-4 right-4 bg-white shadow-lg rounded-lg p-4 z-50 flex items-center gap-4">
+          <span className="text-sm text-muted-foreground">{selectedCount} casos selecionados</span>
+          <Button onClick={handleMoveSelectedToPrint}>
+            <Printer className="w-4 h-4 mr-2" />
+            Mover para Impressão
+          </Button>
+        </div>
+      )}
 
       <div className="grid grid-cols-3 gap-4">
         {columns.map((column) => (
           <div key={column.title} className={`${column.color} p-4 rounded-lg`}>
-            <h2 className="font-semibold mb-4">{column.title}</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-semibold flex items-center gap-2">
+                {column.icon}
+                {column.title}
+              </h2>
+              {column.title === "Aprovado" && (
+                <Button variant="outline" size="sm" onClick={handleSelectAll}>
+                  <CheckSquare className="w-4 h-4 mr-2" />
+                  Selecionar Todos
+                </Button>
+              )}
+            </div>
             <div className="space-y-4">
               {column.cases.map((case_) => (
                 <Card 
                   key={case_.id} 
                   className="bg-white cursor-pointer shadow-lg hover:shadow-xl transition-all duration-200"
-                  onClick={() => navigate(`/logistica/caso/${case_.id}`)}
                 >
                   <CardContent className="p-6">
-                    <div className="text-sm space-y-2">
-                      <p className="font-medium">Caso #{case_.id}</p>
-                      <p>{case_.storeName}</p>
-                      <p className="text-gray-600">{case_.address}</p>
-                      <p>Marca: {case_.brand}</p>
-                      {case_.printDate && <p>Impresso em: {new Date(case_.printDate).toLocaleDateString()}</p>}
-                      {case_.trackingCode && (
-                        <>
-                          <p>Rastreio: {case_.trackingCode}</p>
-                          <p>Status: {case_.deliveryStatus}</p>
-                        </>
+                    <div className="flex items-start gap-2">
+                      {!case_.printDate && (
+                        <Checkbox
+                          checked={case_.selected}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSelect(case_.id);
+                          }}
+                        />
                       )}
-                      <div className="mt-4">
-                        {!case_.printDate && (
-                          <Button onClick={() => handlePrint(case_.id)} className="w-full">
-                            <Printer className="w-4 h-4 mr-2" />
-                            Imprimir Notificação
-                          </Button>
-                        )}
-                        {case_.printDate && !case_.trackingCode && (
-                          <Button onClick={() => handlePost(case_.id)} className="w-full">
-                            <Send className="w-4 h-4 mr-2" />
-                            Marcar como Postado
-                          </Button>
-                        )}
-                        {case_.trackingCode && (
-                          <Button variant="outline" className="w-full">
-                            <RefreshCw className="w-4 h-4 mr-2" />
-                            Atualizar Rastreamento
-                          </Button>
-                        )}
+                      <div className="flex-1" onClick={() => navigate(`/logistica/caso/${case_.id}`)}>
+                        <div className="text-sm space-y-2">
+                          <p className="font-medium">Caso #{case_.id}</p>
+                          <p>{case_.storeName}</p>
+                          <p className="text-gray-600">{case_.address}</p>
+                          <p>Marca: {case_.brand}</p>
+                          {case_.printDate && <p>Impresso em: {new Date(case_.printDate).toLocaleDateString()}</p>}
+                          {case_.trackingCode && (
+                            <>
+                              <p>Rastreio: {case_.trackingCode}</p>
+                              <p>Status: {case_.deliveryStatus}</p>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </CardContent>
