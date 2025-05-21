@@ -83,6 +83,14 @@ export default function Sidebar() {
           )}>Aprovações</span>
         </NavLink>
 
+        <NavLink to="/logistica" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+          <Kanban size={20} />
+          <span className={cn(
+            "transition-all duration-300",
+            isCollapsed && "hidden"
+          )}>Logística</span>
+        </NavLink>
+
         <NavLink to="/profile" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
           <UserCircle size={20} />
           <span className={cn(
