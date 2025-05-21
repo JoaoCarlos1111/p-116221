@@ -16,15 +16,23 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { CalendarIcon, FilterIcon, PlusIcon, Search } from 'lucide-react';
 import { Calendar } from "@/components/ui/calendar";
 
-const sectors = [
-  'Prospecção',
-  'Verificação',
-  'Auditoria',
-  'Logística',
-  'IP Tools',
-  'Atendimento',
-  'Financeiro'
-];
+import { roleConfig } from '@/config/roles';
+
+// This should be fetched from your auth system
+const userRole = 'verification_analyst';
+const visibleSectors = roleConfig[userRole].visibleSectors;
+
+const sectors = visibleSectors[0] === '*' 
+  ? [
+      'Prospecção',
+      'Verificação',
+      'Auditoria',
+      'Logística',
+      'IP Tools',
+      'Atendimento',
+      'Financeiro'
+    ]
+  : visibleSectors;
 
 const columns = [
   { id: 'received', title: 'Recebido', color: '#3E64FF' },
