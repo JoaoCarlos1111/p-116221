@@ -233,7 +233,7 @@ export default function Atendimento() {
                                   </p>
                                   <p className="text-xs text-gray-500 flex justify-between items-center">
                                     <span>Resp: {case_.responsible}</span>
-                                    <span className="text-muted-foreground">
+                                    <span className="text-muted-foreground font-bold">
                                       {Math.floor((new Date().getTime() - new Date(case_.statusEntryDate).getTime()) / (1000 * 60 * 60 * 24))}d
                                     </span>
                                   </p>
