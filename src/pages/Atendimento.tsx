@@ -182,7 +182,20 @@ export default function Atendimento() {
                   {...provided.droppableProps}
                   className={`${column.color} p-4 rounded-lg`}
                 >
-                  <h2 className="font-semibold mb-4">{column.title}</h2>
+                  <div className="flex flex-col gap-2 mb-4">
+                    <div className="flex justify-between items-center">
+                      <h2 className="font-semibold">{column.title}</h2>
+                      <Badge variant="secondary">
+                        {cases.filter(case_ => case_.status === column.id).length}
+                      </Badge>
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Total: R$ {cases
+                        .filter(case_ => case_.status === column.id)
+                        .reduce((sum, case_) => sum + case_.potentialValue, 0)
+                        .toLocaleString('pt-BR')}
+                    </div>
+                  </div>
                   <div className="space-y-4">
                     {cases
                       .filter(case_ => case_.status === column.id)
