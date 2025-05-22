@@ -4,7 +4,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, Copy, ExternalLink, Plus } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { ChevronLeft, Copy, ExternalLink, Plus, Trash2, Edit } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 
 const sampleCases = [
@@ -20,6 +21,8 @@ const sampleCases = [
     column: "received",
     receivedDate: "2024-01-15",
     recipient: "John Doe",
+    trackingCode: "BR123456789",
+    deliveryStatus: "Em trânsito",
     observations: "Caso prioritário",
     history: [
       { date: "2024-01-15 09:00", action: "Caso criado", user: "Sistema" },
@@ -32,6 +35,7 @@ export default function IPToolsCaseView() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [newLink, setNewLink] = useState("");
+  const [editingLinkIndex, setEditingLinkIndex] = useState<number | null>(null);
   
   const selectedCase = sampleCases.find(c => c.id === id);
 
@@ -51,6 +55,37 @@ export default function IPToolsCaseView() {
     }
   };
 
+  const handleEditLink = (index: number, newValue: string) => {
+    if (selectedCase) {
+      selectedCase.links[index] = newValue;
+      selectedCase.history.push({
+        date: new Date().toLocaleString(),
+        action: "Link editado",
+        user: "Usuário atual"
+      });
+      setEditingLinkIndex(null);
+      toast({
+        title: "Link atualizado",
+        description: "O link foi atualizado com sucesso."
+      });
+    }
+  };
+
+  const handleRemoveLink = (index: number) => {
+    if (selectedCase) {
+      selectedCase.links.splice(index, 1);
+      selectedCase.history.push({
+        date: new Date().toLocaleString(),
+        action: "Link removido",
+        user: "Usuário atual"
+      });
+      toast({
+        title: "Link removido",
+        description: "O link foi removido do caso."
+      });
+    }
+  };
+
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast({
@@ -60,7 +95,8 @@ export default function IPToolsCaseView() {
   };
 
   const handleSendReport = () => {
-    if (selectedCase && selectedCase.links.length > 0) {
+    if (selectedCase && selectedCase.links.length >= 2) {
+      // Simulação do envio do report
       selectedCase.column = "inProgress";
       selectedCase.history.push({
         date: new Date().toLocaleString(),
@@ -95,7 +131,7 @@ export default function IPToolsCaseView() {
         {selectedCase.column === "received" && (
           <Button
             className="bg-green-500 hover:bg-green-600"
-            disabled={!selectedCase.links.length}
+            disabled={selectedCase.links.length < 2}
             onClick={handleSendReport}
           >
             Enviar report
@@ -111,28 +147,58 @@ export default function IPToolsCaseView() {
           <CardContent className="space-y-4">
             {selectedCase.links.map((link, index) => (
               <div key={index} className="flex items-center gap-2">
-                <a
-                  href={link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
-                >
-                  {link}
-                </a>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => copyToClipboard(link)}
-                >
-                  <Copy className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => window.open(link, '_blank')}
-                >
-                  <ExternalLink className="h-4 w-4" />
-                </Button>
+                {editingLinkIndex === index ? (
+                  <div className="flex-1 flex gap-2">
+                    <Input
+                      defaultValue={link}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          handleEditLink(index, e.currentTarget.value);
+                        }
+                      }}
+                    />
+                    <Button onClick={() => setEditingLinkIndex(null)}>Cancelar</Button>
+                  </div>
+                ) : (
+                  <>
+                    <a
+                      href={link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline flex-1"
+                    >
+                      {link}
+                    </a>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => copyToClipboard(link)}
+                    >
+                      <Copy className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => window.open(link, '_blank')}
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setEditingLinkIndex(index)}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleRemoveLink(index)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </>
+                )}
               </div>
             ))}
 
@@ -167,12 +233,20 @@ export default function IPToolsCaseView() {
                 <p className="text-muted-foreground">{selectedCase.brand}</p>
               </div>
               <div>
-                <h4 className="font-medium">Data de Recebimento</h4>
+                <h4 className="font-medium">Data da Notificação</h4>
                 <p className="text-muted-foreground">{selectedCase.receivedDate}</p>
               </div>
               <div>
                 <h4 className="font-medium">Plataforma</h4>
                 <p className="text-muted-foreground">{selectedCase.platform}</p>
+              </div>
+              <div>
+                <h4 className="font-medium">Código de Rastreio</h4>
+                <p className="text-muted-foreground">{selectedCase.trackingCode}</p>
+              </div>
+              <div>
+                <h4 className="font-medium">Status de Entrega</h4>
+                <Badge>{selectedCase.deliveryStatus}</Badge>
               </div>
               {selectedCase.observations && (
                 <div className="col-span-2">
