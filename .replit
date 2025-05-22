@@ -12,6 +12,7 @@ localPort = 8080
 externalPort = 80
 
 [workflows]
+runButton = "API"
 
 [[workflows.workflow]]
 name = "API"
@@ -20,4 +21,4 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python3 api/app.py"
+args = "/nix/store/*/bin/python3 api/app.py"
