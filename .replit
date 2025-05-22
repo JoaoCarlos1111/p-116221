@@ -12,7 +12,6 @@ localPort = 8080
 externalPort = 80
 
 [workflows]
-runButton = "API"
 
 [[workflows.workflow]]
 name = "API"
