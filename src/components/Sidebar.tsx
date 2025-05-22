@@ -99,6 +99,14 @@ export default function Sidebar() {
           )}>IP Tools</span>
         </NavLink>
 
+        <NavLink to="/atendimento" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+          <UserCircle size={20} />
+          <span className={cn(
+            "transition-all duration-300",
+            isCollapsed && "hidden"
+          )}>Atendimento</span>
+        </NavLink>
+
         <NavLink to="/profile" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
           <UserCircle size={20} />
           <span className={cn(
