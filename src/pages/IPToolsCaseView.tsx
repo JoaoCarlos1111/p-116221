@@ -140,37 +140,58 @@ export default function IPToolsCaseView() {
           <CardTitle>Links de Infrações</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {selectedCase.links.map((link, index) => (
-            <div key={index} className="flex items-center gap-2">
-              <a
-                href={link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline flex-1"
-              >
-                {link}
-              </a>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => {
-                  navigator.clipboard.writeText(link);
-                  toast({
-                    title: "Link copiado",
-                    description: "O link foi copiado para a área de transferência."
-                  });
-                }}
-              >
-                <Copy className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => window.open(link, '_blank')}
-              >
-                <ExternalLink className="h-4 w-4" />
-              </Button>
-            </div>
+          <div className="flex gap-2 mb-4">
+            <Input
+              placeholder="Cole aqui o link da infração..."
+              value={newLink}
+              onChange={(e) => setNewLink(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && newLink.trim()) {
+                  handleAddLink();
+                }
+              }}
+            />
+            <Button onClick={handleAddLink} disabled={!newLink.trim()}>
+              <Plus className="h-4 w-4 mr-2" />
+              Adicionar
+            </Button>
+          </div>
+
+          <div className="space-y-2">
+            {selectedCase.links.map((link, index) => (
+              <div key={index} className="flex items-center gap-2 p-2 rounded-lg border">
+                <Link className="h-4 w-4 text-muted-foreground" />
+                <a
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline flex-1"
+                >
+                  {link}
+                </a>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    navigator.clipboard.writeText(link);
+                    toast({
+                      title: "Link copiado",
+                      description: "O link foi copiado para a área de transferência."
+                    });
+                  }}
+                >
+                  <Copy className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => window.open(link, '_blank')}
+                >
+                  <ExternalLink className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+          </div>
           ))}
 
           {selectedCase.status === "Recebido" && (
