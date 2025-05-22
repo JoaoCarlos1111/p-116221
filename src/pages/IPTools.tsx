@@ -93,7 +93,7 @@ export default function IPTools() {
   };
 
   const handleCaseClick = (caseItem: any) => {
-    navigate(`/iptools/case/${caseItem.id}`);
+    // navigate(`/iptools/case/${caseItem.id}`);
   };
 
   const handleAddLink = () => {
@@ -230,7 +230,6 @@ export default function IPTools() {
                 <div className="space-y-2">
                   <div className="flex flex-col gap-2">
                     <h4 className="font-medium">{caseItem.id}</h4>
-                    <Badge className="w-fit">{caseItem.status}</Badge>
                   </div>
                   <div className="space-y-1">
                     <p className="text-sm text-muted-foreground">Marca: {caseItem.brand}</p>
@@ -265,7 +264,6 @@ export default function IPTools() {
                 <div className="space-y-2">
                   <div className="flex flex-col gap-2">
                     <h4 className="font-medium">{caseItem.id}</h4>
-                    <Badge className="w-fit">{caseItem.status}</Badge>
                   </div>
                   <div className="space-y-1">
                     <p className="text-sm text-muted-foreground">Marca: {caseItem.brand}</p>
@@ -300,7 +298,6 @@ export default function IPTools() {
                 <div className="space-y-2">
                   <div className="flex flex-col gap-2">
                     <h4 className="font-medium">{caseItem.id}</h4>
-                    <Badge className="w-fit">{caseItem.status}</Badge>
                   </div>
                   <div className="space-y-1">
                     <p className="text-sm text-muted-foreground">Marca: {caseItem.brand}</p>
