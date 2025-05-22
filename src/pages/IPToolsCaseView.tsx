@@ -18,9 +18,8 @@ const sampleCases = [
     responsible: "Ana Silva",
     type: "Loja completa",
     links: ["instagram.com/store1", "whatsapp.com/link1"],
-    column: "received",
-    receivedDate: "2024-01-15",
     recipient: "John Doe",
+    notificationDate: "2024-01-15",
     trackingCode: "BR123456789",
     deliveryStatus: "Em trânsito",
     observations: "Caso prioritário",
@@ -229,12 +228,16 @@ export default function IPToolsCaseView() {
                 <p className="text-muted-foreground">{selectedCase.recipient}</p>
               </div>
               <div>
+                <h4 className="font-medium">Número do Caso</h4>
+                <p className="text-muted-foreground">{selectedCase.id}</p>
+              </div>
+              <div>
                 <h4 className="font-medium">Marca</h4>
                 <p className="text-muted-foreground">{selectedCase.brand}</p>
               </div>
               <div>
                 <h4 className="font-medium">Data da Notificação</h4>
-                <p className="text-muted-foreground">{selectedCase.receivedDate}</p>
+                <p className="text-muted-foreground">{selectedCase.notificationDate}</p>
               </div>
               <div>
                 <h4 className="font-medium">Plataforma</h4>
