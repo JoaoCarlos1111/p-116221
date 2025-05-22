@@ -21,4 +21,4 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python api/app.py"
+args = "python3 api/app.py"
