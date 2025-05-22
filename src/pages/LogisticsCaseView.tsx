@@ -46,6 +46,64 @@ export default function LogisticsCaseView() {
 
   return (
     <div className="p-6 space-y-6">
+      <Card className="shadow-lg bg-white">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-xl font-semibold">Informações de Rastreamento</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 p-6">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <p className="text-sm text-muted-foreground">Código de Rastreio</p>
+              <a 
+                href={`https://rastreamento.correios.com.br/app/index.php?objeto=${caseData.trackingCode}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-primary hover:underline"
+              >
+                {caseData.trackingCode}
+              </a>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Data de Envio</p>
+              <p className="font-medium">21/05/2025</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Status</p>
+              <Badge variant={caseData.deliveryStatus === "Entregue" ? "success" : 
+                          caseData.deliveryStatus?.includes("Falha") ? "destructive" : "default"}>
+                {caseData.deliveryStatus || "Saiu para entrega"}
+              </Badge>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Previsão de Entrega</p>
+              <p className="font-medium">24/05/2025</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Data da Entrega</p>
+              <p className="font-medium">{caseData.deliveryDate || "—"}</p>
+            </div>
+            {caseData.deliveryStatus?.toLowerCase().includes("falha") && (
+              <div className="col-span-2">
+                <p className="text-sm text-muted-foreground">Motivo da não entrega</p>
+                <p className="font-medium text-red-600">Destinatário ausente</p>
+              </div>
+            )}
+            <div>
+              <p className="text-sm text-muted-foreground">Impresso em</p>
+              <p className="font-medium">20/05/2025 | Por: João Silva</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Tipo de Envio</p>
+              <p className="font-medium">Carta registrada</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Tentativas de Entrega</p>
+              <p className="font-medium">1</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="flex items-center gap-4 mb-6">
         <Button variant="ghost" onClick={() => navigate('/logistica')}>
           <ChevronLeft className="h-4 w-4 mr-2" />
