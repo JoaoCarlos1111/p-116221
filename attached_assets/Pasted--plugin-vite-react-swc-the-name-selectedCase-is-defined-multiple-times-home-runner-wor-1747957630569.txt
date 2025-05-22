@@ -1,0 +1,69 @@
+[plugin:vite:react-swc] × the name `selectedCase` is defined multiple times
+    ╭─[/home/runner/workspace/src/pages/Approvals.tsx:57:1]
+ 54 │   ]);
+ 55 │   
+ 56 │   const [searchQuery, setSearchQuery] = useState('');
+ 57 │   const [selectedCase, setSelectedCase] = useState<Approval | null>(null);
+    ·          ──────┬─────
+    ·                ╰── previous definition of `selectedCase` here
+ 58 │   const [action, setAction] = useState<'approve' | 'reject' | null>(null);
+ 59 │   const [progress, setProgress] = useState(0);
+ 60 │   const [selectedCase, setSelectedCase] = useState<Approval | null>(null);
+    ·          ──────┬─────
+    ·                ╰── `selectedCase` redefined here
+ 61 │   const [action, setAction] = useState<'approve' | 'reject' | null>(null);
+ 62 │   const [statusFilter, setStatusFilter] = useState('all');
+ 63 │   const [dateRange, setDateRange] = useState({
+    ╰────
+  × the name `setSelectedCase` is defined multiple times
+    ╭─[/home/runner/workspace/src/pages/Approvals.tsx:57:1]
+ 54 │   ]);
+ 55 │   
+ 56 │   const [searchQuery, setSearchQuery] = useState('');
+ 57 │   const [selectedCase, setSelectedCase] = useState<Approval | null>(null);
+    ·                        ───────┬───────
+    ·                               ╰── previous definition of `setSelectedCase` here
+ 58 │   const [action, setAction] = useState<'approve' | 'reject' | null>(null);
+ 59 │   const [progress, setProgress] = useState(0);
+ 60 │   const [selectedCase, setSelectedCase] = useState<Approval | null>(null);
+    ·                        ───────┬───────
+    ·                               ╰── `setSelectedCase` redefined here
+ 61 │   const [action, setAction] = useState<'approve' | 'reject' | null>(null);
+ 62 │   const [statusFilter, setStatusFilter] = useState('all');
+ 63 │   const [dateRange, setDateRange] = useState({
+    ╰────
+  × the name `action` is defined multiple times
+    ╭─[/home/runner/workspace/src/pages/Approvals.tsx:58:1]
+ 55 │   
+ 56 │   const [searchQuery, setSearchQuery] = useState('');
+ 57 │   const [selectedCase, setSelectedCase] = useState<Approval | null>(null);
+ 58 │   const [action, setAction] = useState<'approve' | 'reject' | null>(null);
+    ·          ───┬──
+    ·             ╰── previous definition of `action` here
+ 59 │   const [progress, setProgress] = useState(0);
+ 60 │   const [selectedCase, setSelectedCase] = useState<Approval | null>(null);
+ 61 │   const [action, setAction] = useState<'approve' | 'reject' | null>(null);
+    ·          ───┬──
+    ·             ╰── `action` redefined here
+ 62 │   const [statusFilter, setStatusFilter] = useState('all');
+ 63 │   const [dateRange, setDateRange] = useState({
+ 64 │     from: addDays(new Date(), -7),
+    ╰────
+  × the name `setAction` is defined multiple times
+    ╭─[/home/runner/workspace/src/pages/Approvals.tsx:58:1]
+ 55 │   
+ 56 │   const [searchQuery, setSearchQuery] = useState('');
+ 57 │   const [selectedCase, setSelectedCase] = useState<Approval | null>(null);
+ 58 │   const [action, setAction] = useState<'approve' | 'reject' | null>(null);
+    ·                  ────┬────
+    ·                      ╰── previous definition of `setAction` here
+ 59 │   const [progress, setProgress] = useState(0);
+ 60 │   const [selectedCase, setSelectedCase] = useState<Approval | null>(null);
+ 61 │   const [action, setAction] = useState<'approve' | 'reject' | null>(null);
+    ·                  ────┬────
+    ·                      ╰── `setAction` redefined here
+ 62 │   const [statusFilter, setStatusFilter] = useState('all');
+ 63 │   const [dateRange, setDateRange] = useState({
+ 64 │     from: addDays(new Date(), -7),
+    ╰────
+/home/runner/workspace/src/pages/Approvals.tsx:57:1
