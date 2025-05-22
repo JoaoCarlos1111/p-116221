@@ -231,14 +231,12 @@ export default function Atendimento() {
                                   <p className="text-xs text-gray-500">
                                     Próxima tarefa: {new Date(case_.nextTaskDate).toLocaleDateString()}
                                   </p>
-                                  <p className="text-xs text-gray-500">
-                                    Resp: {case_.responsible}
-                                  </p>
-                                  <div className="flex justify-end mt-2">
-                                    <Badge variant="secondary" className="text-xs">
+                                  <p className="text-xs text-gray-500 flex justify-between items-center">
+                                    <span>Resp: {case_.responsible}</span>
+                                    <span className="text-muted-foreground">
                                       {Math.floor((new Date().getTime() - new Date(case_.statusEntryDate).getTime()) / (1000 * 60 * 60 * 24))}d
-                                    </Badge>
-                                  </div>
+                                    </span>
+                                  </p>
                                 </div>
                               </CardContent>
                             </Card>
