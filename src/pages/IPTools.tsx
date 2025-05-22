@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -6,8 +7,10 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Copy, ExternalLink, Plus } from "lucide-react";
 import { format } from "date-fns";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { toast } from "@/components/ui/use-toast";
 
 const sampleCases = [
   {
@@ -19,7 +22,14 @@ const sampleCases = [
     responsible: "Ana Silva",
     type: "Loja completa",
     links: ["instagram.com/store1", "whatsapp.com/link1"],
-    column: "received"
+    column: "received",
+    receivedDate: "2024-01-15",
+    logisticStatus: "Em trânsito",
+    expectedResponse: "2024-02-15",
+    history: [
+      { date: "2024-01-15 09:00", action: "Caso criado", user: "Sistema" },
+      { date: "2024-01-15 10:30", action: "Links adicionados", user: "Ana Silva" }
+    ]
   },
   {
     id: "IP-2024-002",
@@ -30,7 +40,13 @@ const sampleCases = [
     responsible: "João Santos",
     type: "Anúncio individual",
     links: ["shopee.com/store2"],
-    column: "inProgress"
+    column: "inProgress",
+    receivedDate: "2024-01-10",
+    logisticStatus: "Entregue",
+    expectedResponse: "2024-02-10",
+    history: [
+      { date: "2024-01-10 14:00", action: "Caso criado", user: "Sistema" }
+    ]
   },
   {
     id: "IP-2024-003",
@@ -41,40 +57,85 @@ const sampleCases = [
     responsible: "Carlos Oliveira",
     type: "Link de WhatsApp",
     links: [],
-    column: "analysis"
+    column: "analysis",
+    receivedDate: "2024-01-05",
+    logisticStatus: "Aguardando envio",
+    history: [
+      { date: "2024-01-05 11:00", action: "Caso criado", user: "Sistema" }
+    ]
   }
 ];
 
 export default function IPTools() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterBrand, setFilterBrand] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
-  const [filterPlatform, setFilterPlatform] = useState("");
+  const [filterBrand, setFilterBrand] = useState("all");
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [filterPlatform, setFilterPlatform] = useState("all");
   const [filterDate, setFilterDate] = useState<Date>();
-  const [filterResponsible, setFilterResponsible] = useState("");
-  const [filterType, setFilterType] = useState("");
-  const [filterLinks, setFilterLinks] = useState("");
+  const [selectedCase, setSelectedCase] = useState<any>(null);
+  const [newLink, setNewLink] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const filterCases = (cases: typeof sampleCases) => {
     return cases.filter(caseItem => {
       const searchContent = `${caseItem.id} ${caseItem.brand} ${caseItem.store} ${caseItem.links.join(" ")}`.toLowerCase();
       const matchesSearch = searchContent.includes(searchQuery.toLowerCase());
+      
+      const matchesBrand = filterBrand === "all" || caseItem.brand === filterBrand;
+      const matchesStatus = filterStatus === "all" || caseItem.status === filterStatus;
+      const matchesPlatform = filterPlatform === "all" || caseItem.platform === filterPlatform;
 
-      const matchesBrand = !filterBrand || caseItem.brand === filterBrand;
-      const matchesStatus = !filterStatus || caseItem.status === filterStatus;
-      const matchesPlatform = !filterPlatform || caseItem.platform === filterPlatform;
-      const matchesResponsible = !filterResponsible || caseItem.responsible === filterResponsible;
-      const matchesType = !filterType || caseItem.type === filterType;
-      const matchesLinks = !filterLinks || 
-        (filterLinks === "com" ? caseItem.links.length > 0 : caseItem.links.length === 0);
-
-      return matchesSearch && matchesBrand && matchesStatus && matchesPlatform && 
-             matchesResponsible && matchesType && matchesLinks;
+      return matchesSearch && matchesBrand && matchesStatus && matchesPlatform;
     });
   };
 
   const getCasesByColumn = (column: string) => {
     return filterCases(sampleCases).filter(c => c.column === column);
+  };
+
+  const handleCaseClick = (caseItem: any) => {
+    setSelectedCase(caseItem);
+    setIsDialogOpen(true);
+  };
+
+  const handleAddLink = () => {
+    if (newLink && selectedCase) {
+      selectedCase.links.push(newLink);
+      selectedCase.history.push({
+        date: new Date().toLocaleString(),
+        action: "Link adicionado",
+        user: "Usuário atual"
+      });
+      setNewLink("");
+      toast({
+        title: "Link adicionado com sucesso",
+        description: "O novo link foi adicionado ao caso."
+      });
+    }
+  };
+
+  const handleSendReport = () => {
+    if (selectedCase && selectedCase.links.length > 0) {
+      selectedCase.column = "inProgress";
+      selectedCase.history.push({
+        date: new Date().toLocaleString(),
+        action: "Report enviado e caso movido para Em Andamento",
+        user: "Usuário atual"
+      });
+      setIsDialogOpen(false);
+      toast({
+        title: "Report enviado com sucesso",
+        description: "O caso foi movido para a coluna Em Andamento."
+      });
+    }
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast({
+      title: "Link copiado",
+      description: "O link foi copiado para a área de transferência."
+    });
   };
 
   return (
@@ -163,20 +224,26 @@ export default function IPTools() {
           </CardHeader>
           <CardContent className="space-y-4">
             {getCasesByColumn("received").map((caseItem) => (
-              <Card key={caseItem.id} className="p-4 hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex justify-between items-start mb-2">
-                  <h4 className="font-medium">{caseItem.id}</h4>
-                  <Badge>{caseItem.status}</Badge>
-                </div>
+              <Card 
+                key={caseItem.id} 
+                className="p-4 hover:shadow-md transition-shadow cursor-pointer"
+                onClick={() => handleCaseClick(caseItem)}
+              >
                 <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">Marca: {caseItem.brand}</p>
-                  <p className="text-sm text-muted-foreground">Loja: {caseItem.store}</p>
-                  <p className="text-sm text-muted-foreground">Plataforma: {caseItem.platform}</p>
-                  {caseItem.links.length > 0 && (
-                    <div className="text-sm text-primary">
-                      {caseItem.links.length} link(s) adicionado(s)
-                    </div>
-                  )}
+                  <div className="flex flex-col gap-2">
+                    <h4 className="font-medium">{caseItem.id}</h4>
+                    <Badge className="w-fit">{caseItem.status}</Badge>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm text-muted-foreground">Marca: {caseItem.brand}</p>
+                    <p className="text-sm text-muted-foreground">Loja: {caseItem.store}</p>
+                    <p className="text-sm text-muted-foreground">Plataforma: {caseItem.platform}</p>
+                    {caseItem.links.length > 0 && (
+                      <div className="text-sm text-primary">
+                        {caseItem.links.length} link(s) adicionado(s)
+                      </div>
+                    )}
+                  </div>
                 </div>
               </Card>
             ))}
@@ -192,20 +259,26 @@ export default function IPTools() {
           </CardHeader>
           <CardContent className="space-y-4">
             {getCasesByColumn("inProgress").map((caseItem) => (
-              <Card key={caseItem.id} className="p-4 hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex justify-between items-start mb-2">
-                  <h4 className="font-medium">{caseItem.id}</h4>
-                  <Badge>{caseItem.status}</Badge>
-                </div>
+              <Card 
+                key={caseItem.id} 
+                className="p-4 hover:shadow-md transition-shadow cursor-pointer"
+                onClick={() => handleCaseClick(caseItem)}
+              >
                 <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">Marca: {caseItem.brand}</p>
-                  <p className="text-sm text-muted-foreground">Loja: {caseItem.store}</p>
-                  <p className="text-sm text-muted-foreground">Plataforma: {caseItem.platform}</p>
-                  {caseItem.links.length > 0 && (
-                    <div className="text-sm text-primary">
-                      {caseItem.links.length} link(s) adicionado(s)
-                    </div>
-                  )}
+                  <div className="flex flex-col gap-2">
+                    <h4 className="font-medium">{caseItem.id}</h4>
+                    <Badge className="w-fit">{caseItem.status}</Badge>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm text-muted-foreground">Marca: {caseItem.brand}</p>
+                    <p className="text-sm text-muted-foreground">Loja: {caseItem.store}</p>
+                    <p className="text-sm text-muted-foreground">Plataforma: {caseItem.platform}</p>
+                    {caseItem.links.length > 0 && (
+                      <div className="text-sm text-primary">
+                        {caseItem.links.length} link(s) adicionado(s)
+                      </div>
+                    )}
+                  </div>
                 </div>
               </Card>
             ))}
@@ -221,26 +294,141 @@ export default function IPTools() {
           </CardHeader>
           <CardContent className="space-y-4">
             {getCasesByColumn("analysis").map((caseItem) => (
-              <Card key={caseItem.id} className="p-4 hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex justify-between items-start mb-2">
-                  <h4 className="font-medium">{caseItem.id}</h4>
-                  <Badge>{caseItem.status}</Badge>
-                </div>
+              <Card 
+                key={caseItem.id} 
+                className="p-4 hover:shadow-md transition-shadow cursor-pointer"
+                onClick={() => handleCaseClick(caseItem)}
+              >
                 <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">Marca: {caseItem.brand}</p>
-                  <p className="text-sm text-muted-foreground">Loja: {caseItem.store}</p>
-                  <p className="text-sm text-muted-foreground">Plataforma: {caseItem.platform}</p>
-                  {caseItem.links.length > 0 && (
-                    <div className="text-sm text-primary">
-                      {caseItem.links.length} link(s) adicionado(s)
-                    </div>
-                  )}
+                  <div className="flex flex-col gap-2">
+                    <h4 className="font-medium">{caseItem.id}</h4>
+                    <Badge className="w-fit">{caseItem.status}</Badge>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm text-muted-foreground">Marca: {caseItem.brand}</p>
+                    <p className="text-sm text-muted-foreground">Loja: {caseItem.store}</p>
+                    <p className="text-sm text-muted-foreground">Plataforma: {caseItem.platform}</p>
+                    {caseItem.links.length > 0 && (
+                      <div className="text-sm text-primary">
+                        {caseItem.links.length} link(s) adicionado(s)
+                      </div>
+                    )}
+                  </div>
                 </div>
               </Card>
             ))}
           </CardContent>
         </Card>
       </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <div className="flex justify-between items-center">
+              <DialogTitle>Detalhes do Caso {selectedCase?.id}</DialogTitle>
+              {selectedCase?.column === "received" && (
+                <Button
+                  className="bg-green-500 hover:bg-green-600"
+                  disabled={!selectedCase?.links.length}
+                  onClick={handleSendReport}
+                >
+                  Enviar report
+                </Button>
+              )}
+            </div>
+          </DialogHeader>
+          
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Links de Infrações</h3>
+              {selectedCase?.links.map((link: string, index: number) => (
+                <div key={index} className="flex items-center gap-2 mb-2">
+                  <a
+                    href={link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:underline"
+                  >
+                    {link}
+                  </a>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => copyToClipboard(link)}
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => window.open(link, '_blank')}
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              
+              {selectedCase?.column === "received" && (
+                <div className="flex gap-2 mt-4">
+                  <Input
+                    placeholder="Adicionar novo link..."
+                    value={newLink}
+                    onChange={(e) => setNewLink(e.target.value)}
+                  />
+                  <Button onClick={handleAddLink}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Adicionar
+                  </Button>
+                </div>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <h4 className="font-medium">Marca</h4>
+                <p className="text-muted-foreground">{selectedCase?.brand}</p>
+              </div>
+              <div>
+                <h4 className="font-medium">Data de Recebimento</h4>
+                <p className="text-muted-foreground">{selectedCase?.receivedDate}</p>
+              </div>
+              <div>
+                <h4 className="font-medium">Plataforma</h4>
+                <p className="text-muted-foreground">{selectedCase?.platform}</p>
+              </div>
+              <div>
+                <h4 className="font-medium">Responsável</h4>
+                <p className="text-muted-foreground">{selectedCase?.responsible}</p>
+              </div>
+              <div>
+                <h4 className="font-medium">Status do Envio</h4>
+                <p className="text-muted-foreground">{selectedCase?.status}</p>
+              </div>
+              <div>
+                <h4 className="font-medium">Status Logístico</h4>
+                <p className="text-muted-foreground">{selectedCase?.logisticStatus}</p>
+              </div>
+              {selectedCase?.expectedResponse && (
+                <div>
+                  <h4 className="font-medium">Previsão de Resposta</h4>
+                  <p className="text-muted-foreground">{selectedCase.expectedResponse}</p>
+                </div>
+              )}
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Histórico</h3>
+              <div className="space-y-2">
+                {selectedCase?.history.map((entry: any, index: number) => (
+                  <div key={index} className="text-sm">
+                    <span className="font-medium">{entry.date}</span> - {entry.action} por {entry.user}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
