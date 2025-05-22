@@ -351,23 +351,31 @@ export default function CaseDetails() {
           {/* SEÇÃO A - Links Suspeitos */}
           <Card className="glass-card p-6 space-y-4">
             <CardHeader>
-              <CardTitle>Links Suspeitos</CardTitle>
+              <div className="flex justify-between items-center">
+                <CardTitle>Links de Novas Infrações</CardTitle>
+                <Badge variant="outline" className="ml-2">
+                  {links.length} links
+                </Badge>
+              </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              {currentStep === 'received' && (
-                <div className="flex gap-2">
-                  <Input 
-                    placeholder="Adicionar novo link" 
-                    value={newLink}
-                    onChange={(e) => setNewLink(e.target.value)}
-                    className={errors.links ? 'border-red-500' : ''}
-                  />
-                  <Button onClick={handleAddLink}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Adicionar Link
-                  </Button>
-                </div>
-              )}
+              <div className="flex gap-2">
+                <Input 
+                  placeholder="Cole aqui o link da infração" 
+                  value={newLink}
+                  onChange={(e) => setNewLink(e.target.value)}
+                  className={errors.links ? 'border-red-500' : ''}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && newLink) {
+                      handleAddLink();
+                    }
+                  }}
+                />
+                <Button onClick={handleAddLink} disabled={!newLink}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Adicionar
+                </Button>
+              </div>
               {errors.links && (
                 <p className="text-sm text-red-500">{errors.links}</p>
               )}
