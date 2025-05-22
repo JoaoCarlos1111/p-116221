@@ -10,15 +10,3 @@ run = ["sh", "-c", "npm run dev"]
 [[ports]]
 localPort = 8080
 externalPort = 80
-
-[workflows]
-runButton = "API"
-
-[[workflows.workflow]]
-name = "API"
-author = 42981405
-mode = "sequential"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "/nix/store/*/bin/python3 api/app.py"
