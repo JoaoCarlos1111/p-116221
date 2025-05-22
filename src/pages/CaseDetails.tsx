@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CalendarIcon, ChevronLeft, Link, Paperclip, Plus, Send, Trash2, ArrowLeft, Check, X } from 'lucide-react';
+import { CalendarIcon, ChevronLeft, Link, Paperclip, Plus, Send, Trash2, ArrowLeft, Check, X, Copy, ExternalLink } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 const steps = [
@@ -354,18 +354,20 @@ export default function CaseDetails() {
               <CardTitle>Links Suspeitos</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex gap-2">
-                <Input 
-                  placeholder="Adicionar novo link" 
-                  value={newLink}
-                  onChange={(e) => setNewLink(e.target.value)}
-                  className={errors.links ? 'border-red-500' : ''}
-                />
-                <Button onClick={handleAddLink}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Adicionar Link
-                </Button>
-              </div>
+              {currentStep === 'received' && (
+                <div className="flex gap-2">
+                  <Input 
+                    placeholder="Adicionar novo link" 
+                    value={newLink}
+                    onChange={(e) => setNewLink(e.target.value)}
+                    className={errors.links ? 'border-red-500' : ''}
+                  />
+                  <Button onClick={handleAddLink}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Adicionar Link
+                  </Button>
+                </div>
+              )}
               {errors.links && (
                 <p className="text-sm text-red-500">{errors.links}</p>
               )}
@@ -373,10 +375,39 @@ export default function CaseDetails() {
                 {links.map((link, index) => (
                   <div key={index} className="flex items-center gap-2 p-2 rounded-lg border">
                     <Link className="h-4 w-4" />
-                    <a href={link} className="flex-1 text-primary hover:underline">{link}</a>
-                    <Button variant="ghost" size="sm" onClick={() => handleRemoveLink(index)}>
-                      <Trash2 className="h-4 w-4 text-destructive" />
+                    <a 
+                      href={link} 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 text-primary hover:underline"
+                    >
+                      {link}
+                    </a>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => {
+                        navigator.clipboard.writeText(link);
+                        toast({
+                          title: "Link copiado",
+                          description: "O link foi copiado para a área de transferência."
+                        });
+                      }}
+                    >
+                      <Copy className="h-4 w-4" />
                     </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => window.open(link, '_blank')}
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                    </Button>
+                    {currentStep === 'received' && (
+                      <Button variant="ghost" size="sm" onClick={() => handleRemoveLink(index)}>
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    )}
                   </div>
                 ))}
               </div>
