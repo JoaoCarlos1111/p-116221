@@ -14,6 +14,7 @@ import LogisticsCaseView from './pages/LogisticsCaseView';
 import IPTools from './pages/IPTools'
 import IPToolsCaseView from './pages/IPToolsCaseView';
 import Atendimento from './pages/Atendimento';
+import AtendimentoCaseDetails from "@/pages/AtendimentoCaseDetails";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             <Route path="/iptools" element={<IPTools />} />
             <Route path="/iptools/case/:id" element={<IPToolsCaseView />} />
             <Route path="/atendimento" element={<Atendimento />} />
+            <Route path="/atendimento/caso/:id" element={<AtendimentoCaseDetails />} />
           </Routes>
         </main>
       </div>
