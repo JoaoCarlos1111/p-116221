@@ -57,8 +57,6 @@ export default function Approvals() {
   const [selectedCase, setSelectedCase] = useState<Approval | null>(null);
   const [action, setAction] = useState<'approve' | 'reject' | null>(null);
   const [progress, setProgress] = useState(0);
-  const [selectedCase, setSelectedCase] = useState<Approval | null>(null);
-  const [action, setAction] = useState<'approve' | 'reject' | null>(null);
   const [statusFilter, setStatusFilter] = useState('all');
   const [dateRange, setDateRange] = useState({
     from: addDays(new Date(), -7),
