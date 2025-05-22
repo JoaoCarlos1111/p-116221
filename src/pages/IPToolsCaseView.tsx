@@ -1,68 +1,50 @@
+
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ChevronLeft, Copy, ExternalLink, Plus, Link, Trash2, Edit } from "lucide-react";
+import { ChevronLeft, Copy, ExternalLink, Plus, Trash2, Edit } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 
+// Match cases structure with IPTools.tsx
 const sampleCases = [
   {
-    id: "001",
-    brand: "Nike",
-    store: "Sport Center",
+    id: "101",
+    brand: "Gucci",
+    store: "Luxury Store",
     platform: "Instagram",
     status: "Recebido",
-    responsible: "João Silva",
-    type: "Produtos Isolados",
+    responsible: "Amanda Silva",
+    type: "Loja completa",
     links: [],
-    recipient: "Carlos Santos",
-    notificationDate: "2024-03-26",
-    trackingCode: "BR123456789",
-    deliveryStatus: "Aguardando",
-    observations: "Caso novo - necessita adicionar links",
-    history: [
-      { date: "2024-03-26 09:00", action: "Caso criado", user: "Sistema" }
-    ]
-  },
-  {
-    id: "002",
-    brand: "Adidas",
-    store: "Mega Sports",
-    platform: "Facebook",
-    status: "Recebido",
-    responsible: "Maria Oliveira",
-    type: "Loja Completa",
-    links: ["facebook.com/megasports", "instagram.com/megasports.store"],
-    recipient: "Ana Lima",
-    notificationDate: "2024-03-26",
-    trackingCode: "BR987654321",
+    recipient: "Maria Santos",
+    notificationDate: "2024-03-25",
+    trackingCode: "BR456789123",
     deliveryStatus: "Em análise",
-    observations: "Pronto para enviar report",
+    observations: "Caso de alta prioridade",
     history: [
-      { date: "2024-03-26 10:00", action: "Caso criado", user: "Sistema" },
-      { date: "2024-03-26 10:30", action: "Links adicionados", user: "Maria Oliveira" }
+      { date: "2024-03-25 10:00", action: "Caso recebido da Logística", user: "Sistema" }
     ]
   },
   {
-    id: "003",
-    brand: "Puma",
-    store: "Athletic Shop",
+    id: "201",
+    brand: "Balenciaga",
+    store: "Fashion World",
     platform: "Shopee",
     status: "Em andamento",
-    responsible: "Pedro Santos",
-    type: "Dropshipping",
-    links: ["shopee.com/athletic", "whatsapp.com/athleticshop"],
-    recipient: "Roberto Costa",
-    notificationDate: "2024-03-25",
-    trackingCode: "BR456123789",
-    deliveryStatus: "Em progresso",
-    observations: "Report enviado - aguardando retorno",
+    responsible: "Carolina Lima",
+    type: "Loja completa",
+    links: ["shopee.com/fashionworld"],
+    recipient: "Pedro Oliveira",
+    notificationDate: "2024-03-23",
+    trackingCode: "BR789123456",
+    deliveryStatus: "Em andamento",
+    observations: "Múltiplos canais de venda",
     history: [
-      { date: "2024-03-25 14:00", action: "Caso criado", user: "Sistema" },
-      { date: "2024-03-25 14:30", action: "Links adicionados", user: "Pedro Santos" },
-      { date: "2024-03-25 15:00", action: "Report enviado", user: "Pedro Santos" }
+      { date: "2024-03-23 09:00", action: "Caso recebido da Logística", user: "Sistema" },
+      { date: "2024-03-23 10:15", action: "Link adicionado", user: "Carolina Lima" }
     ]
   }
 ];
@@ -71,7 +53,6 @@ export default function IPToolsCaseView() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [newLink, setNewLink] = useState("");
-  const [editingLinkIndex, setEditingLinkIndex] = useState<number | null>(null);
 
   const selectedCase = sampleCases.find(c => c.id === id);
 
@@ -107,6 +88,12 @@ export default function IPToolsCaseView() {
       toast({
         title: "Report enviado com sucesso",
         description: "O caso foi movido para a coluna Em Andamento."
+      });
+    } else {
+      toast({
+        title: "Erro ao enviar report",
+        description: "É necessário ter pelo menos 2 links para enviar o report.",
+        variant: "destructive"
       });
     }
   };
@@ -160,7 +147,7 @@ export default function IPToolsCaseView() {
           <div className="space-y-2">
             {selectedCase.links.map((link, index) => (
               <div key={index} className="flex items-center gap-2 p-2 rounded-lg border">
-                <Link className="h-4 w-4 text-muted-foreground" />
+                <div className="h-4 w-4 text-muted-foreground">🔗</div>
                 <a
                   href={link.startsWith('http') ? link : `https://${link}`}
                   target="_blank"
