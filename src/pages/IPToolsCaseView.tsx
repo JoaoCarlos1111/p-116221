@@ -13,7 +13,7 @@ const sampleCases = [
     brand: "Gucci",
     store: "Luxury Store",
     platform: "Instagram",
-    status: "received",
+    status: "Recebido",
     responsible: "Amanda Silva",
     type: "Loja completa",
     links: ["instagram.com/luxury_store", "whatsapp.com/luxurystore"],
@@ -72,22 +72,6 @@ export default function IPToolsCaseView() {
   const navigate = useNavigate();
   const [newLink, setNewLink] = useState("");
   const [editingLinkIndex, setEditingLinkIndex] = useState<number | null>(null);
-
-  const handleSendReport = () => {
-    if (selectedCase.links.length >= 2) {
-      selectedCase.status = "Em andamento";
-      selectedCase.history.push({
-        date: new Date().toLocaleString(),
-        action: "Report enviado e caso movido para Em Andamento",
-        user: "Usuário atual"
-      });
-      navigate('/iptools');
-      toast({
-        title: "Report enviado com sucesso",
-        description: "O caso foi movido para a coluna Em Andamento."
-      });
-    }
-  };
 
   const selectedCase = sampleCases.find(c => c.id === id);
 
@@ -149,14 +133,6 @@ export default function IPToolsCaseView() {
             Enviar Report
           </Button>
         )}
-          <Button
-            className="bg-green-500 hover:bg-green-600"
-            disabled={selectedCase.links.length < 2}
-            onClick={handleSendReport}
-          >
-            Enviar report
-          </Button>
-        )}
       </div>
 
       <Card>
@@ -209,28 +185,13 @@ export default function IPToolsCaseView() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => window.open(link, '_blank')}
+                  onClick={() => window.open(link.startsWith('http') ? link : `https://${link}`, '_blank')}
                 >
                   <ExternalLink className="h-4 w-4" />
                 </Button>
               </div>
             ))}
           </div>
-          ))}
-
-          {selectedCase.status === "Recebido" && (
-            <div className="flex gap-2 mt-4">
-              <Input
-                placeholder="Adicionar novo link..."
-                value={newLink}
-                onChange={(e) => setNewLink(e.target.value)}
-              />
-              <Button onClick={handleAddLink}>
-                <Plus className="h-4 w-4 mr-2" />
-                Adicionar
-              </Button>
-            </div>
-          )}
         </CardContent>
       </Card>
 
