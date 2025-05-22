@@ -28,7 +28,6 @@ export default function AtendimentoCaseDetails() {
 
   // Mock data - replace with actual data fetching
   const caseData = {
-    ...
     status: currentStatus,
     id,
     brand: "Nike",
