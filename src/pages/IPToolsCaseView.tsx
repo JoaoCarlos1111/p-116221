@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ChevronLeft, Copy, ExternalLink, Plus, Trash2, Edit } from "lucide-react";
+import { ChevronLeft, Copy, ExternalLink, Plus, Link, Trash2, Edit } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 
 const sampleCases = [
