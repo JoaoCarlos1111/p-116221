@@ -17,6 +17,7 @@ interface Case {
 
 export default function IPTools() {
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
   const [cases, setCases] = useState<Case[]>([
     // Recebido
     {
@@ -129,7 +130,18 @@ export default function IPTools() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">IP Tools - Kanban</h1>
+      <div className="flex flex-col gap-6">
+        <h1 className="text-2xl font-bold">IP Tools - Kanban</h1>
+        <div className="w-full">
+          <input
+            type="text"
+            placeholder="Buscar casos por número, marca ou nome da loja..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+      </div>
 
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -144,7 +156,15 @@ export default function IPTools() {
                   <h2 className="font-semibold mb-4">{column.title}</h2>
                   <div className="space-y-4">
                     {cases
-                      .filter(case_ => case_.status === column.id)
+                      .filter(case_ => {
+                        const searchLower = searchQuery.toLowerCase();
+                        const matchesSearch = 
+                          case_.id.toLowerCase().includes(searchLower) ||
+                          case_.brand.toLowerCase().includes(searchLower) ||
+                          case_.responsible.toLowerCase().includes(searchLower);
+                        
+                        return case_.status === column.id && (searchQuery === '' || matchesSearch);
+                      })
                       .map((case_, index) => (
                         <Draggable
                           key={case_.id}
