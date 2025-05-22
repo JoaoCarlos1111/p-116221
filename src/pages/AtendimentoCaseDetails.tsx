@@ -167,15 +167,6 @@ export default function AtendimentoCaseDetails() {
               <p className="font-medium">{caseData.storeInfo.document}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Valor Potencial Indenizatório</p>
-              <p className="font-medium text-green-600">
-                {new Intl.NumberFormat('pt-BR', { 
-                  style: 'currency', 
-                  currency: 'BRL' 
-                }).format(caseData.potentialValue || 0)}
-              </p>
-            </div>
-            <div>
               <p className="text-sm text-muted-foreground">Telefone</p>
               <p className="font-medium">{caseData.storeInfo.phone}</p>
             </div>
