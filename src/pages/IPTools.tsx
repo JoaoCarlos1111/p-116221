@@ -39,18 +39,40 @@ export default function IPTools() {
       brand: "Gucci",
       entryDate: "25/03/2024",
       responsible: "Amanda Silva",
-      linksFound: 12,
+      linksFound: 0,
       status: "received",
-      platform: "Instagram"
+      platform: "Instagram",
+      store: "Luxury Store",
+      type: "Loja completa",
+      links: [],
+      recipient: "Maria Santos",
+      notificationDate: "2024-03-25",
+      trackingCode: "BR456789123",
+      deliveryStatus: "Em análise",
+      observations: "Caso de alta prioridade",
+      history: [
+        { date: "2024-03-25 10:00", action: "Caso recebido da Logística", user: "Sistema" }
+      ]
     },
     {
       id: "102",
       brand: "Louis Vuitton",
       entryDate: "24/03/2024",
       responsible: "Ricardo Santos",
-      linksFound: 8,
+      linksFound: 0,
       status: "received",
-      platform: "Facebook"
+      platform: "Facebook",
+      store: "LV Store",
+      type: "Loja completa",
+      links: [],
+      recipient: "João Silva",
+      notificationDate: "2024-03-24",
+      trackingCode: "BR456789124",
+      deliveryStatus: "Em análise",
+      observations: "Verificar urgente",
+      history: [
+        { date: "2024-03-24 10:00", action: "Caso recebido da Logística", user: "Sistema" }
+      ]
     },
     // Em andamento
     {
@@ -58,37 +80,41 @@ export default function IPTools() {
       brand: "Balenciaga",
       entryDate: "23/03/2024",
       responsible: "Carolina Lima",
-      linksFound: 15,
+      linksFound: 1,
       status: "inProgress",
-      platform: "Shopee"
+      platform: "Shopee",
+      store: "Fashion World",
+      type: "Loja completa",
+      links: ["shopee.com/fashionworld"],
+      recipient: "Pedro Oliveira",
+      notificationDate: "2024-03-23",
+      trackingCode: "BR789123456",
+      deliveryStatus: "Em andamento",
+      observations: "Múltiplos canais de venda",
+      history: [
+        { date: "2024-03-23 09:00", action: "Caso recebido da Logística", user: "Sistema" },
+        { date: "2024-03-23 10:15", action: "Link adicionado", user: "Carolina Lima" }
+      ]
     },
     {
       id: "202",
       brand: "Dior",
       entryDate: "22/03/2024",
       responsible: "Paulo Mendes",
-      linksFound: 6,
+      linksFound: 0,
       status: "inProgress",
-      platform: "Mercado Livre"
-    },
-    // Análise
-    {
-      id: "301",
-      brand: "Hermès",
-      entryDate: "21/03/2024",
-      responsible: "Fernanda Costa",
-      linksFound: 10,
-      status: "analysis",
-      platform: "Instagram"
-    },
-    {
-      id: "302",
-      brand: "Chanel",
-      entryDate: "20/03/2024",
-      responsible: "Gabriel Oliveira",
-      linksFound: 9,
-      status: "analysis",
-      platform: "Facebook"
+      platform: "Mercado Livre",
+      store: "Dior Official",
+      type: "Loja completa",
+      links: [],
+      recipient: "Ana Costa",
+      notificationDate: "2024-03-22",
+      trackingCode: "BR789123457",
+      deliveryStatus: "Em andamento",
+      observations: "Caso prioritário",
+      history: [
+        { date: "2024-03-22 09:00", action: "Caso recebido da Logística", user: "Sistema" }
+      ]
     }
   ]);
 
