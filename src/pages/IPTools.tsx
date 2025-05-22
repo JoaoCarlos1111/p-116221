@@ -93,7 +93,7 @@ export default function IPTools() {
   };
 
   const handleCaseClick = (caseItem: any) => {
-    // navigate(`/iptools/case/${caseItem.id}`);
+    navigate(`/iptools/case/${caseItem.id}`);
   };
 
   const handleAddLink = () => {

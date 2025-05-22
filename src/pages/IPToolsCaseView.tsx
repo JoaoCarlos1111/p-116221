@@ -1,18 +1,38 @@
 
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { ChevronLeft, Copy, ExternalLink, Plus } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+
+const sampleCases = [
+  {
+    id: "IP-2024-001",
+    brand: "Nike",
+    store: "SuperSports",
+    platform: "Instagram",
+    status: "Aguardando resposta",
+    responsible: "Ana Silva",
+    type: "Loja completa",
+    links: ["instagram.com/store1", "whatsapp.com/link1"],
+    column: "received",
+    receivedDate: "2024-01-15",
+    recipient: "John Doe",
+    observations: "Caso prioritário",
+    history: [
+      { date: "2024-01-15 09:00", action: "Caso criado", user: "Sistema" },
+      { date: "2024-01-15 10:30", action: "Links adicionados", user: "Ana Silva" }
+    ]
+  }
+];
 
 export default function IPToolsCaseView() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [newLink, setNewLink] = useState("");
-
-  // Find case by id from sample data
+  
   const selectedCase = sampleCases.find(c => c.id === id);
 
   const handleAddLink = () => {
@@ -61,18 +81,20 @@ export default function IPToolsCaseView() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-center gap-4 mb-6">
-        <Button variant="ghost" onClick={() => navigate('/iptools')}>
-          <ChevronLeft className="h-4 w-4 mr-2" />
-          Voltar
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold">Caso {selectedCase.id}</h1>
-          <p className="text-sm text-muted-foreground">Visualização do caso</p>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" onClick={() => navigate('/iptools')}>
+            <ChevronLeft className="h-4 w-4 mr-2" />
+            Voltar
+          </Button>
+          <div>
+            <h1 className="text-2xl font-bold">Caso {selectedCase.id}</h1>
+            <p className="text-sm text-muted-foreground">Visualização detalhada do caso</p>
+          </div>
         </div>
         {selectedCase.column === "received" && (
           <Button
-            className="ml-auto bg-green-500 hover:bg-green-600"
+            className="bg-green-500 hover:bg-green-600"
             disabled={!selectedCase.links.length}
             onClick={handleSendReport}
           >
@@ -134,37 +156,31 @@ export default function IPToolsCaseView() {
           <CardHeader>
             <CardTitle>Informações do Caso</CardTitle>
           </CardHeader>
-          <CardContent className="grid md:grid-cols-2 gap-4">
-            <div>
-              <h4 className="font-medium">Marca</h4>
-              <p className="text-muted-foreground">{selectedCase.brand}</p>
-            </div>
-            <div>
-              <h4 className="font-medium">Data de Recebimento</h4>
-              <p className="text-muted-foreground">{selectedCase.receivedDate}</p>
-            </div>
-            <div>
-              <h4 className="font-medium">Plataforma</h4>
-              <p className="text-muted-foreground">{selectedCase.platform}</p>
-            </div>
-            <div>
-              <h4 className="font-medium">Responsável</h4>
-              <p className="text-muted-foreground">{selectedCase.responsible}</p>
-            </div>
-            <div>
-              <h4 className="font-medium">Status do Envio</h4>
-              <p className="text-muted-foreground">{selectedCase.status}</p>
-            </div>
-            <div>
-              <h4 className="font-medium">Status Logístico</h4>
-              <p className="text-muted-foreground">{selectedCase.logisticStatus}</p>
-            </div>
-            {selectedCase.expectedResponse && (
+          <CardContent>
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <h4 className="font-medium">Previsão de Resposta</h4>
-                <p className="text-muted-foreground">{selectedCase.expectedResponse}</p>
+                <h4 className="font-medium">Destinatário</h4>
+                <p className="text-muted-foreground">{selectedCase.recipient}</p>
               </div>
-            )}
+              <div>
+                <h4 className="font-medium">Marca</h4>
+                <p className="text-muted-foreground">{selectedCase.brand}</p>
+              </div>
+              <div>
+                <h4 className="font-medium">Data de Recebimento</h4>
+                <p className="text-muted-foreground">{selectedCase.receivedDate}</p>
+              </div>
+              <div>
+                <h4 className="font-medium">Plataforma</h4>
+                <p className="text-muted-foreground">{selectedCase.platform}</p>
+              </div>
+              {selectedCase.observations && (
+                <div className="col-span-2">
+                  <h4 className="font-medium">Observações</h4>
+                  <p className="text-muted-foreground">{selectedCase.observations}</p>
+                </div>
+              )}
+            </div>
           </CardContent>
         </Card>
 
