@@ -16,6 +16,7 @@ interface Case {
   potentialValue: number;
   responsible: string;
   status: string;
+  statusEntryDate: string;
 }
 
 export default function Atendimento() {
@@ -32,7 +33,8 @@ export default function Atendimento() {
       nextTaskDate: "2024-03-28",
       potentialValue: 5000,
       responsible: "Maria Santos",
-      status: "waiting"
+      status: "waiting",
+      statusEntryDate: "2024-03-20"
     },
     {
       id: "ATD002",
@@ -107,7 +109,10 @@ export default function Atendimento() {
 
     const items = Array.from(cases);
     const [reorderedItem] = items.splice(result.source.index, 1);
-    reorderedItem.status = result.destination.droppableId;
+    if (reorderedItem.status !== result.destination.droppableId) {
+      reorderedItem.status = result.destination.droppableId;
+      reorderedItem.statusEntryDate = new Date().toISOString().split('T')[0];
+    }
     items.splice(result.destination.index, 0, reorderedItem);
     setCases(items);
   };
@@ -229,6 +234,11 @@ export default function Atendimento() {
                                   <p className="text-xs text-gray-500">
                                     Resp: {case_.responsible}
                                   </p>
+                                  <div className="flex justify-end mt-2">
+                                    <Badge variant="secondary" className="text-xs">
+                                      {Math.floor((new Date().getTime() - new Date(case_.statusEntryDate).getTime()) / (1000 * 60 * 60 * 24))}d
+                                    </Badge>
+                                  </div>
                                 </div>
                               </CardContent>
                             </Card>
