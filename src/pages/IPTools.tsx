@@ -17,6 +17,8 @@ interface Case {
   responsible: string;
   linksFound: number;
   status: string;
+  programStatus?: string;
+  platform?: string;
 }
 
 export default function IPTools() {
@@ -160,7 +162,7 @@ export default function IPTools() {
                 <SelectValue placeholder="Selecionar Marca" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todas as Marcas</SelectItem>
+                <SelectItem value="all">Todas as Marcas</SelectItem>
                 <SelectItem value="Nike">Nike</SelectItem>
                 <SelectItem value="Adidas">Adidas</SelectItem>
                 <SelectItem value="Puma">Puma</SelectItem>
@@ -172,7 +174,7 @@ export default function IPTools() {
                 <SelectValue placeholder="Status do Programa" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos os Status</SelectItem>
+                <SelectItem value="all">Todos os Status</SelectItem>
                 <SelectItem value="waiting">Aguardando resposta</SelectItem>
                 <SelectItem value="positive">Respondido (positivamente)</SelectItem>
                 <SelectItem value="negative">Respondido (negativamente)</SelectItem>
@@ -184,7 +186,7 @@ export default function IPTools() {
                 <SelectValue placeholder="Plataforma" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todas as Plataformas</SelectItem>
+                <SelectItem value="all">Todas as Plataformas</SelectItem>
                 <SelectItem value="instagram">Instagram</SelectItem>
                 <SelectItem value="facebook">Facebook</SelectItem>
                 <SelectItem value="shopee">Shopee</SelectItem>
@@ -215,7 +217,7 @@ export default function IPTools() {
                   initialFocus
                   mode="range"
                   selected={{ from: dateRange.from, to: dateRange.to }}
-                  onSelect={(range) => setDateRange({ from: range?.from, to: range?.to })}
+                  onSelect={(range: any) => setDateRange({ from: range?.from, to: range?.to })}
                 />
               </PopoverContent>
             </Popover>
@@ -225,7 +227,7 @@ export default function IPTools() {
                 <SelectValue placeholder="Responsável" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos os Responsáveis</SelectItem>
+                <SelectItem value="all">Todos os Responsáveis</SelectItem>
                 <SelectItem value="joao">João Silva</SelectItem>
                 <SelectItem value="maria">Maria Santos</SelectItem>
                 <SelectItem value="pedro">Pedro Costa</SelectItem>
@@ -254,12 +256,12 @@ export default function IPTools() {
                           case_.id.toLowerCase().includes(searchLower) ||
                           case_.brand.toLowerCase().includes(searchLower) ||
                           case_.responsible.toLowerCase().includes(searchLower);
-                        
-                        const matchesBrand = !selectedBrand || case_.brand === selectedBrand;
-                        const matchesStatus = !selectedStatus || case_.programStatus === selectedStatus;
-                        const matchesPlatform = !selectedPlatform || case_.platform === selectedPlatform;
-                        const matchesResponsible = !selectedResponsible || case_.responsible === selectedResponsible;
-                        
+
+                        const matchesBrand = selectedBrand === 'all' || !selectedBrand || case_.brand === selectedBrand;
+                        const matchesStatus = selectedStatus === 'all' || !selectedStatus || case_.programStatus === selectedStatus;
+                        const matchesPlatform = selectedPlatform === 'all' || !selectedPlatform || case_.platform === selectedPlatform;
+                        const matchesResponsible = selectedResponsible === 'all' || !selectedResponsible || case_.responsible === selectedResponsible;
+
                         const matchesDateRange = !dateRange.from || !dateRange.to || 
                           (new Date(case_.entryDate) >= dateRange.from && 
                            new Date(case_.entryDate) <= dateRange.to);
