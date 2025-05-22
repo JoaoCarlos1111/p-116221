@@ -1,0 +1,53 @@
+[plugin:vite:react-swc] × the name `handleSendReport` is defined multiple times
+     ╭─[/home/runner/workspace/src/pages/IPToolsCaseView.tsx:76:1]
+  73 │   const [newLink, setNewLink] = useState("");
+  74 │   const [editingLinkIndex, setEditingLinkIndex] = useState<number | null>(null);
+  75 │ 
+  76 │   const handleSendReport = () => {
+     ·         ────────┬───────
+     ·                 ╰── previous definition of `handleSendReport` here
+  77 │     if (selectedCase.links.length >= 2) {
+  78 │       selectedCase.status = "Em andamento";
+  79 │       selectedCase.history.push({
+  80 │         date: new Date().toLocaleString(),
+  81 │         action: "Report enviado e caso movido para Em Andamento",
+  82 │         user: "Usuário atual"
+  83 │       });
+  84 │       navigate('/iptools');
+  85 │       toast({
+  86 │         title: "Report enviado com sucesso",
+  87 │         description: "O caso foi movido para a coluna Em Andamento."
+  88 │       });
+  89 │     }
+  90 │   };
+  91 │ 
+  92 │   const selectedCase = sampleCases.find(c => c.id === id);
+  93 │ 
+  94 │   if (!selectedCase) {
+  95 │     return <div data-component-path="src/pages/IPToolsCaseView.tsx" data-component-name="div" data-component-line="95" data-component-file="IPToolsCaseView.tsx" data-component-content="%7B%22text%22%3A%22Caso%20n%C3%A3o%20encontrado%22%2C%22className%22%3A%22p-6%22%7D" className="p-6">Caso não encontrado</div>;
+  96 │   }
+  97 │ 
+  98 │   const handleAddLink = () => {
+  99 │     if (newLink) {
+ 100 │       selectedCase.links.push(newLink);
+ 101 │       selectedCase.history.push({
+ 102 │         date: new Date().toLocaleString(),
+ 103 │         action: "Link adicionado",
+ 104 │         user: "Usuário atual"
+ 105 │       });
+ 106 │       setNewLink("");
+ 107 │       toast({
+ 108 │         title: "Link adicionado com sucesso",
+ 109 │         description: "O novo link foi adicionado ao caso."
+ 110 │       });
+ 111 │     }
+ 112 │   };
+ 113 │ 
+ 114 │   const handleSendReport = () => {
+     ·         ────────┬───────
+     ·                 ╰── `handleSendReport` redefined here
+ 115 │     if (selectedCase.links.length >= 2) {
+ 116 │       selectedCase.status = "Em andamento";
+ 117 │       selectedCase.history.push({
+     ╰────
+/home/runner/workspace/src/pages/IPToolsCaseView.tsx:76:1
