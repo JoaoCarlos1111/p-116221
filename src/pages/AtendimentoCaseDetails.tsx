@@ -9,6 +9,13 @@ export default function AtendimentoCaseDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const steps = [
+    { id: 'waiting', title: 'Aguardando entrega', number: 1 },
+    { id: 'delivered', title: 'Entregues', number: 2 },
+    { id: 'firstContact', title: 'Primeiro contato', number: 3 },
+    { id: 'proposal', title: 'Proposta de acordo', number: 4 }
+  ];
+
   // Mock data - replace with actual data fetching
   const caseData = {
     id,
@@ -72,51 +79,36 @@ export default function AtendimentoCaseDetails() {
           </div>
         </div>
         
-        <div className="flex justify-between items-center bg-muted p-4 rounded-lg">
-          <div className="flex items-center gap-8">
-            <Button 
-              variant={caseData.status === "waiting" ? "default" : "ghost"}
-              onClick={() => {
-                // Handle status change
-                console.log("Mudar para Aguardando entrega");
-              }}
-            >
-              Aguardando entrega
-            </Button>
-            <Button 
-              variant={caseData.status === "delivered" ? "default" : "ghost"}
-              onClick={() => {
-                // Handle status change
-                console.log("Mudar para Entregues");
-              }}
-            >
-              Entregues
-            </Button>
-            <Button 
-              variant={caseData.status === "firstContact" ? "default" : "ghost"}
-              onClick={() => {
-                // Handle status change
-                console.log("Mudar para Primeiro contato");
-              }}
-            >
-              Primeiro contato
-            </Button>
-            <Button 
-              variant={caseData.status === "proposal" ? "default" : "ghost"}
-              onClick={() => {
-                // Handle status change
-                console.log("Mudar para Proposta de acordo");
-              }}
-            >
-              Proposta de acordo
-            </Button>
+        <div className="flex items-center justify-between bg-muted/30 p-6 rounded-lg">
+          <div className="flex-1 flex items-center">
+            {steps.map((step, index) => (
+              <div key={step.id} className="flex items-center">
+                <button
+                  onClick={() => {
+                    // Handle status change
+                    console.log(`Mudar para ${step.title}`);
+                  }}
+                  className={`flex items-center group ${
+                    caseData.status === step.id ? 'opacity-100' : 'opacity-60 hover:opacity-100'
+                  }`}
+                >
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
+                    ${caseData.status === step.id ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}
+                  >
+                    {step.number}
+                  </div>
+                  <span className="ml-3 text-sm font-medium">{step.title}</span>
+                </button>
+                {index < steps.length - 1 && (
+                  <div className="mx-3 h-[2px] w-24 bg-muted" />
+                )}
+              </div>
+            ))}
           </div>
-          <Badge variant="outline" className="text-xs">
-            {caseData.status === "waiting" ? "Aguardando entrega" :
-             caseData.status === "delivered" ? "Entregues" :
-             caseData.status === "firstContact" ? "Primeiro contato" :
-             "Proposta de acordo"}
-          </Badge>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">🕒 5 dias nesta etapa</span>
+            <Badge variant="secondary">Atendimento</Badge>
+          </div>
         </div>
       </header>
 
