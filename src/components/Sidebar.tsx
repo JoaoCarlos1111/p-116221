@@ -1,48 +1,38 @@
 import { NavLink } from "react-router-dom";
-import { 
-  LayoutDashboard, 
-  Kanban, 
-  CheckSquare, 
+import { cn } from "@/lib/utils";
+import {
+  LayoutDashboard,
+  KanbanSquare,
   UserCircle,
   Settings as SettingsIcon,
-  ChevronLeft,
-  ChevronRight,
   LogOut,
-  GitPullRequest,
-  Shield
+  Menu,
+  ChevronRight,
+  ChevronLeft,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
 
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
     <div className={cn(
-      "relative h-screen border-r bg-card transition-all duration-300",
+      "h-screen border-r bg-card transition-all duration-300",
       isCollapsed ? "w-16" : "w-64"
     )}>
-      <button
-        onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute -right-3 top-6 z-40 flex h-6 w-6 items-center justify-center rounded-full border bg-background shadow-sm"
-      >
-        {isCollapsed ? (
-          <ChevronRight className="h-4 w-4" />
-        ) : (
-          <ChevronLeft className="h-4 w-4" />
-        )}
-      </button>
-
-      <div className="mb-8 p-4">
-        <h2 className={cn(
-          "text-lg font-bold transition-all duration-300",
-          isCollapsed && "opacity-0"
-        )}>
-          Total Brand Protection
-        </h2>
+      <div className="flex h-16 items-center justify-between px-4">
+        {!isCollapsed && <span className="font-semibold">Total Brand Protection</span>}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+        >
+          {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+        </Button>
       </div>
 
-      <nav className="space-y-2 px-2">
+      <nav className="space-y-2 p-2">
         <NavLink to="/" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
           <LayoutDashboard size={20} />
           <span className={cn(
@@ -51,52 +41,12 @@ export default function Sidebar() {
           )}>Dashboard</span>
         </NavLink>
 
-        <NavLink to="/kanban/verificacao" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <Kanban size={20} />
+        <NavLink to="/kanban/verification" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+          <KanbanSquare size={20} />
           <span className={cn(
             "transition-all duration-300",
             isCollapsed && "hidden"
-          )}>Kanban</span>
-        </NavLink>
-
-        <NavLink to="/prospeccao" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <GitPullRequest size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Workflow</span>
-        </NavLink>
-
-        <NavLink to="/auditoria" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <CheckSquare size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Auditoria</span>
-        </NavLink>
-
-        <NavLink to="/approvals" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <CheckSquare size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Aprovações</span>
-        </NavLink>
-
-        <NavLink to="/logistica" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <Kanban size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Logística</span>
-        </NavLink>
-
-        <NavLink to="/iptools" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <Shield size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>IP Tools</span>
+          )}>Pipeline</span>
         </NavLink>
 
         <NavLink to="/profile" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">

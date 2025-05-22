@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Toaster } from "@/components/ui/toaster"
 import Sidebar from '@/components/Sidebar'
@@ -11,8 +12,6 @@ import Auditoria from './pages/Auditoria';
 import AuditoriaCaseDetails from './pages/AuditoriaCaseDetails';
 import Logistics from './pages/Logistics';
 import LogisticsCaseView from './pages/LogisticsCaseView';
-import IPTools from './pages/IPTools';
-import IPToolsCaseView from './pages/IPToolsCaseView';
 
 function App() {
   return (
@@ -30,9 +29,7 @@ function App() {
             <Route path="/auditoria" element={<Auditoria />} />
             <Route path="/auditoria/caso/:id" element={<AuditoriaCaseDetails />} />
             <Route path="/logistica" element={<Logistics />} />
-        <Route path="/logistica/caso/:id" element={<LogisticsCaseView />} />
-            <Route path="/iptools" element={<IPTools />} />
-            <Route path="/iptools/case/:id" element={<IPToolsCaseView />} />
+            <Route path="/logistica/caso/:id" element={<LogisticsCaseView />} />
           </Routes>
         </main>
       </div>
