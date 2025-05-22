@@ -140,6 +140,15 @@ export default function AtendimentoCaseDetails() {
               <p className="text-sm text-muted-foreground">Analista responsável</p>
               <p className="font-medium">{caseData.responsible}</p>
             </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Valor Potencial Indenizatório</p>
+              <p className="font-medium text-green-600">
+                {new Intl.NumberFormat('pt-BR', { 
+                  style: 'currency', 
+                  currency: 'BRL' 
+                }).format(caseData.potentialValue || 0)}
+              </p>
+            </div>
           </CardContent>
         </Card>
 
@@ -166,25 +175,13 @@ export default function AtendimentoCaseDetails() {
                 }).format(caseData.potentialValue || 0)}
               </p>
             </div>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-muted-foreground">Telefone</p>
-                <p className="font-medium">{caseData.storeInfo.phone}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Telefone Alternativo</p>
-                <p className="font-medium">{caseData.storeInfo.alternativePhone || "—"}</p>
-              </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Telefone</p>
+              <p className="font-medium">{caseData.storeInfo.phone}</p>
             </div>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-muted-foreground">E-mail Principal</p>
-                <p className="font-medium">{caseData.storeInfo.email}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">E-mail Alternativo</p>
-                <p className="font-medium">{caseData.storeInfo.alternativeEmail || "—"}</p>
-              </div>
+            <div>
+              <p className="text-sm text-muted-foreground">E-mail</p>
+              <p className="font-medium">{caseData.storeInfo.email}</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Endereço completo</p>
