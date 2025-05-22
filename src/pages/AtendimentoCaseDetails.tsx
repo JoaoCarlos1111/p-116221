@@ -77,10 +77,14 @@ export default function AtendimentoCaseDetails() {
             <h1 className="text-2xl font-bold">Caso #{id}</h1>
             <p className="text-sm text-muted-foreground">Visualização do caso</p>
           </div>
+          <div className="flex items-center gap-2 ml-auto">
+            <span className="text-sm text-muted-foreground">🕒 5 dias nesta etapa</span>
+            <Badge variant="secondary">Atendimento</Badge>
+          </div>
         </div>
         
-        <div className="flex items-center justify-between bg-muted/30 p-6 rounded-lg">
-          <div className="flex-1 flex items-center">
+        <div className="bg-muted/30 p-6 rounded-lg">
+          <div className="flex items-center justify-center w-full">
             {steps.map((step, index) => (
               <div key={step.id} className="flex items-center">
                 <button
@@ -104,10 +108,6 @@ export default function AtendimentoCaseDetails() {
                 )}
               </div>
             ))}
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">🕒 5 dias nesta etapa</span>
-            <Badge variant="secondary">Atendimento</Badge>
           </div>
         </div>
       </header>
