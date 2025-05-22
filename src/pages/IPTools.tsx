@@ -139,7 +139,7 @@ export default function IPTools() {
   };
 
   return (
-    <div className="space-y-8 p-6">
+    <div className="space-y-8 p-8">
       <header className="flex flex-col gap-6">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">IP Tools</h1>
