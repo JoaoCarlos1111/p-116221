@@ -13,8 +13,8 @@ const sampleCases = [
     brand: "Nike",
     store: "SuperSports",
     platform: "Instagram",
-    status: "Recebido",
-    responsible: "Ana Silva",
+    status: "received",
+    responsible: "João Silva",
     type: "Loja completa",
     links: ["instagram.com/store1", "whatsapp.com/link1"],
     recipient: "John Doe",
@@ -25,6 +25,25 @@ const sampleCases = [
     history: [
       { date: "2024-01-15 09:00", action: "Caso criado", user: "Sistema" },
       { date: "2024-01-15 10:30", action: "Links adicionados", user: "Ana Silva" }
+    ]
+  },
+  {
+    id: "004",
+    brand: "Under Armour",
+    store: "Sports Shop",
+    platform: "Facebook",
+    status: "inProgress",
+    responsible: "Ana Lima",
+    type: "Loja completa",
+    links: ["facebook.com/store1", "whatsapp.com/link2"],
+    recipient: "Jane Smith",
+    notificationDate: "2024-01-20",
+    trackingCode: "BR987654321",
+    deliveryStatus: "Pendente",
+    observations: "Links múltiplos",
+    history: [
+      { date: "2024-01-20 14:00", action: "Caso criado", user: "Sistema" },
+      { date: "2024-01-20 15:30", action: "Links adicionados", user: "Ana Lima" }
     ]
   }
 ];
