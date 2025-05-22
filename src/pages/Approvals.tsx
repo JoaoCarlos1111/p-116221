@@ -21,6 +21,14 @@ interface Approval {
   selected?: boolean;
 }
 
+interface Approval {
+  id: string;
+  proofUrl: string;
+  entryDate: string;
+  status: 'pending' | 'approved' | 'rejected';
+  selected?: boolean;
+}
+
 export default function Approvals() {
   const [approvals, setApprovals] = useState<Approval[]>([
     { id: 'CASE-001', proofUrl: '/proofs/nike1.pdf', entryDate: '2024-03-01', status: 'pending' },
@@ -46,6 +54,8 @@ export default function Approvals() {
   ]);
   
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCase, setSelectedCase] = useState<Approval | null>(null);
+  const [action, setAction] = useState<'approve' | 'reject' | null>(null);
   const [progress, setProgress] = useState(0);
   const [selectedCase, setSelectedCase] = useState<Approval | null>(null);
   const [action, setAction] = useState<'approve' | 'reject' | null>(null);
