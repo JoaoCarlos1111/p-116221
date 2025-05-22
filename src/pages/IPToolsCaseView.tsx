@@ -149,12 +149,19 @@ export default function IPToolsCaseView() {
 
   const handleSendReport = () => {
     if (selectedCase.links.length >= 2) {
-      selectedCase.status = "Em andamento";
+      selectedCase.status = "inProgress";  // Match the status ID from IPTools.tsx
       selectedCase.history.push({
         date: new Date().toLocaleString(),
         action: "Report enviado e caso movido para Em Andamento",
         user: "Usuário atual"
       });
+      
+      // Find and update the case in the global array
+      const caseIndex = sampleCases.findIndex(c => c.id === selectedCase.id);
+      if (caseIndex !== -1) {
+        sampleCases[caseIndex] = selectedCase;
+      }
+      
       navigate('/iptools');
       toast({
         title: "Report enviado com sucesso",
