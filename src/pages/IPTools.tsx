@@ -144,7 +144,7 @@ export default function IPTools() {
 
   return (
     <div className="p-6">
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 mb-6">
         <h1 className="text-2xl font-bold">IP Tools - Kanban</h1>
         <div className="space-y-4">
           <div className="w-full">
@@ -156,7 +156,7 @@ export default function IPTools() {
               className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Select value={selectedBrand} onValueChange={setSelectedBrand}>
               <SelectTrigger>
                 <SelectValue placeholder="Selecionar Marca" />
@@ -166,18 +166,6 @@ export default function IPTools() {
                 <SelectItem value="Nike">Nike</SelectItem>
                 <SelectItem value="Adidas">Adidas</SelectItem>
                 <SelectItem value="Puma">Puma</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-              <SelectTrigger>
-                <SelectValue placeholder="Status do Programa" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos os Status</SelectItem>
-                <SelectItem value="waiting">Aguardando resposta</SelectItem>
-                <SelectItem value="positive">Respondido (positivamente)</SelectItem>
-                <SelectItem value="negative">Respondido (negativamente)</SelectItem>
               </SelectContent>
             </Select>
 
