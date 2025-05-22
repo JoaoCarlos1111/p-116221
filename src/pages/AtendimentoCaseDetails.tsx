@@ -121,27 +121,7 @@ export default function AtendimentoCaseDetails() {
           </CardContent>
         </Card>
 
-        {/* URLs Suspeitas */}
-        <Card>
-          <CardHeader>
-            <CardTitle>URLs Suspeitas</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {caseData.suspectUrls.map((url, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <ExternalLink className="h-4 w-4" />
-                <a 
-                  href={url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline"
-                >
-                  {url}
-                </a>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+        
 
         {/* Logística */}
         <Card>
