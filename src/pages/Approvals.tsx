@@ -23,6 +23,9 @@ interface Approval {
 
 export default function Approvals() {
   const [approvals, setApprovals] = useState<Approval[]>([
+    { id: 'TEST-001', proofUrl: '/proofs/test1.pdf', entryDate: '2024-03-15', status: 'pending' },
+    { id: 'TEST-002', proofUrl: '/proofs/test2.pdf', entryDate: '2024-03-15', status: 'pending' },
+    { id: 'TEST-003', proofUrl: '/proofs/test3.pdf', entryDate: '2024-03-15', status: 'pending' },
     { id: 'CASE-001', proofUrl: '/proofs/nike1.pdf', entryDate: '2024-03-01', status: 'pending' },
     { id: 'CASE-002', proofUrl: '/proofs/adidas1.pdf', entryDate: '2024-03-02', status: 'pending' },
     { id: 'CASE-003', proofUrl: '/proofs/gucci1.pdf', entryDate: '2024-03-03', status: 'pending' },
