@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -67,7 +66,6 @@ const sampleCases = [
 ];
 
 export default function IPTools() {
-  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [filterBrand, setFilterBrand] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -139,7 +137,7 @@ export default function IPTools() {
   };
 
   return (
-    <div className="space-y-8 p-8">
+    <div className="space-y-8 p-6">
       <header className="flex flex-col gap-6">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">IP Tools</h1>
