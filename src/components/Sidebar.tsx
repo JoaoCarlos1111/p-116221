@@ -9,7 +9,7 @@ import {
   ChevronRight,
   LogOut,
   GitPullRequest,
-  ShieldCheck
+  Shield
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -92,7 +92,7 @@ export default function Sidebar() {
         </NavLink>
 
         <NavLink to="/iptools" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <ShieldCheck size={20} />
+          <Shield size={20} />
           <span className={cn(
             "transition-all duration-300",
             isCollapsed && "hidden"
