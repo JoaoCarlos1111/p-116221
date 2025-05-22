@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -272,7 +271,6 @@ export default function IPTools() {
                     <p className="text-sm text-muted-foreground">Marca: {caseItem.brand}</p>
                     <p className="text-sm text-muted-foreground">Loja: {caseItem.store}</p>
                     <p className="text-sm text-muted-foreground">Plataforma: {caseItem.platform}</p>
-                    <p className="text-sm text-muted-foreground">Status: {caseItem.status}</p>
                     {caseItem.links.length > 0 && (
                       <div className="text-sm text-primary">
                         {caseItem.links.length} link(s) adicionado(s)
@@ -307,7 +305,6 @@ export default function IPTools() {
                     <p className="text-sm text-muted-foreground">Marca: {caseItem.brand}</p>
                     <p className="text-sm text-muted-foreground">Loja: {caseItem.store}</p>
                     <p className="text-sm text-muted-foreground">Plataforma: {caseItem.platform}</p>
-                    <p className="text-sm text-muted-foreground">Status: {caseItem.status}</p>
                     {caseItem.links.length > 0 && (
                       <div className="text-sm text-primary">
                         {caseItem.links.length} link(s) adicionado(s)
