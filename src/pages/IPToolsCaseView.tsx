@@ -14,7 +14,7 @@ const sampleCases = [
     brand: "Nike",
     store: "SuperSports",
     platform: "Instagram",
-    status: "Aguardando resposta",
+    status: "Recebido",
     responsible: "Ana Silva",
     type: "Loja completa",
     links: ["instagram.com/store1", "whatsapp.com/link1"],
@@ -86,18 +86,10 @@ export default function IPToolsCaseView() {
     }
   };
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    toast({
-      title: "Link copiado",
-      description: "O link foi copiado para a área de transferência."
-    });
-  };
-
   const handleSendReport = () => {
     if (selectedCase && selectedCase.links.length >= 2) {
       // Simulação do envio do report
-      selectedCase.column = "inProgress";
+      selectedCase.status = "Em andamento";
       selectedCase.history.push({
         date: new Date().toLocaleString(),
         action: "Report enviado e caso movido para Em Andamento",
@@ -109,6 +101,14 @@ export default function IPToolsCaseView() {
         description: "O caso foi movido para a coluna Em Andamento."
       });
     }
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast({
+      title: "Link copiado",
+      description: "O link foi copiado para a área de transferência."
+    });
   };
 
   if (!selectedCase) {
@@ -128,7 +128,7 @@ export default function IPToolsCaseView() {
             <p className="text-sm text-muted-foreground">Visualização detalhada do caso</p>
           </div>
         </div>
-        {selectedCase.column === "received" && (
+        {selectedCase.status === "Recebido" && (
           <Button
             className="bg-green-500 hover:bg-green-600"
             disabled={selectedCase.links.length < 2}
@@ -202,7 +202,7 @@ export default function IPToolsCaseView() {
               </div>
             ))}
 
-            {selectedCase.column === "received" && (
+            {selectedCase.status === "Recebido" && (
               <div className="flex gap-2 mt-4">
                 <Input
                   placeholder="Adicionar novo link..."
