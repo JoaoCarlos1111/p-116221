@@ -132,6 +132,14 @@ export default function IPTools() {
     setCases(items);
   };
 
+  // Add function to update case status
+  const updateCaseStatus = (caseId: string, newStatus: string) => {
+    const updatedCases = cases.map(c => 
+      c.id === caseId ? { ...c, status: newStatus } : c
+    );
+    setCases(updatedCases);
+  };
+
   const columns = [
     {
       id: 'received',

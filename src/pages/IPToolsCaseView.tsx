@@ -149,18 +149,24 @@ export default function IPToolsCaseView() {
 
   const handleSendReport = () => {
     if (selectedCase.links.length >= 2) {
-      selectedCase.status = "inProgress";  // Match the status ID from IPTools.tsx
+      // Update local state
+      selectedCase.status = "inProgress";
       selectedCase.history.push({
         date: new Date().toLocaleString(),
         action: "Report enviado e caso movido para Em Andamento",
         user: "Usuário atual"
       });
       
-      // Find and update the case in the global array
+      // Update global state
       const caseIndex = sampleCases.findIndex(c => c.id === selectedCase.id);
       if (caseIndex !== -1) {
-        sampleCases[caseIndex] = selectedCase;
+        sampleCases[caseIndex] = { ...selectedCase };
       }
+      
+      // Force refresh of parent component
+      window.dispatchEvent(new CustomEvent('caseStatusUpdated', { 
+        detail: { id: selectedCase.id, status: "inProgress" } 
+      }));
       
       navigate('/iptools');
       toast({
