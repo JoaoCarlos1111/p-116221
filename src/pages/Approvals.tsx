@@ -23,11 +23,26 @@ interface Approval {
 
 export default function Approvals() {
   const [approvals, setApprovals] = useState<Approval[]>([
-    { id: 'CASE-001', proofUrl: '/proof1.pdf', entryDate: '2024-03-20', status: 'pending' },
-    { id: 'CASE-002', proofUrl: '/proof2.pdf', entryDate: '2024-03-21', status: 'pending' },
-    { id: 'CASE-003', proofUrl: '/proof3.pdf', entryDate: '2024-03-22', status: 'pending' },
-    { id: 'CASE-004', proofUrl: '/proof4.pdf', entryDate: '2024-03-23', status: 'pending' },
-    { id: 'CASE-005', proofUrl: '/proof5.pdf', entryDate: '2024-03-24', status: 'pending' },
+    { id: 'CASE-001', proofUrl: '/proofs/nike1.pdf', entryDate: '2024-03-01', status: 'pending' },
+    { id: 'CASE-002', proofUrl: '/proofs/adidas1.pdf', entryDate: '2024-03-02', status: 'pending' },
+    { id: 'CASE-003', proofUrl: '/proofs/gucci1.pdf', entryDate: '2024-03-03', status: 'pending' },
+    { id: 'CASE-004', proofUrl: '/proofs/prada1.pdf', entryDate: '2024-03-04', status: 'pending' },
+    { id: 'CASE-005', proofUrl: '/proofs/lv1.pdf', entryDate: '2024-03-05', status: 'pending' },
+    { id: 'CASE-006', proofUrl: '/proofs/nike2.pdf', entryDate: '2024-03-06', status: 'pending' },
+    { id: 'CASE-007', proofUrl: '/proofs/adidas2.pdf', entryDate: '2024-03-07', status: 'pending' },
+    { id: 'CASE-008', proofUrl: '/proofs/gucci2.pdf', entryDate: '2024-03-08', status: 'pending' },
+    { id: 'CASE-009', proofUrl: '/proofs/prada2.pdf', entryDate: '2024-03-09', status: 'pending' },
+    { id: 'CASE-010', proofUrl: '/proofs/lv2.pdf', entryDate: '2024-03-10', status: 'pending' },
+    { id: 'CASE-011', proofUrl: '/proofs/nike3.pdf', entryDate: '2024-03-11', status: 'pending' },
+    { id: 'CASE-012', proofUrl: '/proofs/adidas3.pdf', entryDate: '2024-03-12', status: 'pending' },
+    { id: 'CASE-013', proofUrl: '/proofs/gucci3.pdf', entryDate: '2024-03-13', status: 'pending' },
+    { id: 'CASE-014', proofUrl: '/proofs/prada3.pdf', entryDate: '2024-03-14', status: 'pending' },
+    { id: 'CASE-015', proofUrl: '/proofs/lv3.pdf', entryDate: '2024-03-15', status: 'pending' },
+    { id: 'CASE-016', proofUrl: '/proofs/nike4.pdf', entryDate: '2024-03-16', status: 'pending' },
+    { id: 'CASE-017', proofUrl: '/proofs/adidas4.pdf', entryDate: '2024-03-17', status: 'pending' },
+    { id: 'CASE-018', proofUrl: '/proofs/gucci4.pdf', entryDate: '2024-03-18', status: 'pending' },
+    { id: 'CASE-019', proofUrl: '/proofs/prada4.pdf', entryDate: '2024-03-19', status: 'pending' },
+    { id: 'CASE-020', proofUrl: '/proofs/lv4.pdf', entryDate: '2024-03-20', status: 'pending' },
   ]);
   
   const [searchQuery, setSearchQuery] = useState('');
