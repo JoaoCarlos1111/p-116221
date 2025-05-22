@@ -3,7 +3,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useNavigate } from 'react-router-dom';
-import { Eye } from 'lucide-react';
+import { Eye, CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from '@/components/ui/button';
 
 interface Case {
@@ -18,6 +22,14 @@ interface Case {
 export default function IPTools() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedBrand, setSelectedBrand] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('');
+  const [selectedPlatform, setSelectedPlatform] = useState('');
+  const [selectedResponsible, setSelectedResponsible] = useState('');
+  const [dateRange, setDateRange] = useState<{ from: Date | undefined; to: Date | undefined }>({
+    from: undefined,
+    to: undefined,
+  });
   const [cases, setCases] = useState<Case[]>([
     // Recebido
     {
@@ -132,14 +144,94 @@ export default function IPTools() {
     <div className="p-6">
       <div className="flex flex-col gap-6">
         <h1 className="text-2xl font-bold">IP Tools - Kanban</h1>
-        <div className="w-full">
-          <input
-            type="text"
-            placeholder="Buscar casos por número, marca ou nome da loja..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
+        <div className="space-y-4">
+          <div className="w-full">
+            <input
+              type="text"
+              placeholder="Buscar casos por número, marca ou nome da loja..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Select value={selectedBrand} onValueChange={setSelectedBrand}>
+              <SelectTrigger>
+                <SelectValue placeholder="Selecionar Marca" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Todas as Marcas</SelectItem>
+                <SelectItem value="Nike">Nike</SelectItem>
+                <SelectItem value="Adidas">Adidas</SelectItem>
+                <SelectItem value="Puma">Puma</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+              <SelectTrigger>
+                <SelectValue placeholder="Status do Programa" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Todos os Status</SelectItem>
+                <SelectItem value="waiting">Aguardando resposta</SelectItem>
+                <SelectItem value="positive">Respondido (positivamente)</SelectItem>
+                <SelectItem value="negative">Respondido (negativamente)</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={selectedPlatform} onValueChange={setSelectedPlatform}>
+              <SelectTrigger>
+                <SelectValue placeholder="Plataforma" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Todas as Plataformas</SelectItem>
+                <SelectItem value="instagram">Instagram</SelectItem>
+                <SelectItem value="facebook">Facebook</SelectItem>
+                <SelectItem value="shopee">Shopee</SelectItem>
+                <SelectItem value="mercadolivre">Mercado Livre</SelectItem>
+                <SelectItem value="outros">Outros</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="justify-start text-left font-normal">
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {dateRange.from ? (
+                    dateRange.to ? (
+                      <>
+                        {format(dateRange.from, "dd/MM/yy")} - {format(dateRange.to, "dd/MM/yy")}
+                      </>
+                    ) : (
+                      format(dateRange.from, "dd/MM/yy")
+                    )
+                  ) : (
+                    "Selecionar período"
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  initialFocus
+                  mode="range"
+                  selected={{ from: dateRange.from, to: dateRange.to }}
+                  onSelect={(range) => setDateRange({ from: range?.from, to: range?.to })}
+                />
+              </PopoverContent>
+            </Popover>
+
+            <Select value={selectedResponsible} onValueChange={setSelectedResponsible}>
+              <SelectTrigger>
+                <SelectValue placeholder="Responsável" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Todos os Responsáveis</SelectItem>
+                <SelectItem value="joao">João Silva</SelectItem>
+                <SelectItem value="maria">Maria Santos</SelectItem>
+                <SelectItem value="pedro">Pedro Costa</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 
@@ -163,7 +255,22 @@ export default function IPTools() {
                           case_.brand.toLowerCase().includes(searchLower) ||
                           case_.responsible.toLowerCase().includes(searchLower);
                         
-                        return case_.status === column.id && (searchQuery === '' || matchesSearch);
+                        const matchesBrand = !selectedBrand || case_.brand === selectedBrand;
+                        const matchesStatus = !selectedStatus || case_.programStatus === selectedStatus;
+                        const matchesPlatform = !selectedPlatform || case_.platform === selectedPlatform;
+                        const matchesResponsible = !selectedResponsible || case_.responsible === selectedResponsible;
+                        
+                        const matchesDateRange = !dateRange.from || !dateRange.to || 
+                          (new Date(case_.entryDate) >= dateRange.from && 
+                           new Date(case_.entryDate) <= dateRange.to);
+
+                        return case_.status === column.id && 
+                               (searchQuery === '' || matchesSearch) &&
+                               matchesBrand &&
+                               matchesStatus &&
+                               matchesPlatform &&
+                               matchesResponsible &&
+                               matchesDateRange;
                       })
                       .map((case_, index) => (
                         <Draggable
