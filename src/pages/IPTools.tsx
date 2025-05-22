@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -80,7 +79,7 @@ export default function IPTools() {
     return cases.filter(caseItem => {
       const searchContent = `${caseItem.id} ${caseItem.brand} ${caseItem.store} ${caseItem.links.join(" ")}`.toLowerCase();
       const matchesSearch = searchContent.includes(searchQuery.toLowerCase());
-      
+
       const matchesBrand = filterBrand === "all" || caseItem.brand === filterBrand;
       const matchesStatus = filterStatus === "all" || caseItem.status === filterStatus;
       const matchesPlatform = filterPlatform === "all" || caseItem.platform === filterPlatform;
@@ -337,7 +336,7 @@ export default function IPTools() {
               )}
             </div>
           </DialogHeader>
-          
+
           <div className="space-y-6">
             <div>
               <h3 className="text-lg font-semibold mb-2">Links de Infrações</h3>
@@ -367,7 +366,7 @@ export default function IPTools() {
                   </Button>
                 </div>
               ))}
-              
+
               {selectedCase?.column === "received" && (
                 <div className="flex gap-2 mt-4">
                   <Input
