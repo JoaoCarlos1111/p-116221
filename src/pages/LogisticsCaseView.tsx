@@ -1,4 +1,3 @@
-
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,7 @@ import { ChevronLeft, ExternalLink, FileText, Download } from 'lucide-react';
 export default function LogisticsCaseView() {
   const { id } = useParams();
   const navigate = useNavigate();
-  
+
   // Mock data - replace with actual data fetching
   const caseData = {
     id: id,
@@ -46,6 +45,17 @@ export default function LogisticsCaseView() {
 
   return (
     <div className="p-6 space-y-6">
+      <div className="flex items-center gap-4 mb-6">
+        <Button variant="ghost" onClick={() => navigate('/logistica')}>
+          <ChevronLeft className="h-4 w-4 mr-2" />
+          Voltar
+        </Button>
+        <div>
+          <h1 className="text-2xl font-bold">Caso #{id}</h1>
+          <p className="text-sm text-muted-foreground">Visualização do caso</p>
+        </div>
+      </div>
+
       <Card className="shadow-lg bg-white">
         <CardHeader className="pb-2">
           <CardTitle className="text-xl font-semibold">Informações de Rastreamento</CardTitle>
@@ -103,17 +113,6 @@ export default function LogisticsCaseView() {
           </div>
         </CardContent>
       </Card>
-
-      <div className="flex items-center gap-4 mb-6">
-        <Button variant="ghost" onClick={() => navigate('/logistica')}>
-          <ChevronLeft className="h-4 w-4 mr-2" />
-          Voltar
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold">Caso #{id}</h1>
-          <p className="text-sm text-muted-foreground">Visualização do caso</p>
-        </div>
-      </div>
 
       <div className="grid gap-6">
         <Card className="shadow-lg bg-white">
