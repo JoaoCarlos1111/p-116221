@@ -91,6 +91,14 @@ export default function Sidebar() {
           )}>Logística</span>
         </NavLink>
 
+        <NavLink to="/iptools" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+          <Shield size={20} />
+          <span className={cn(
+            "transition-all duration-300",
+            isCollapsed && "hidden"
+          )}>IP Tools</span>
+        </NavLink>
+
         <NavLink to="/profile" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
           <UserCircle size={20} />
           <span className={cn(
