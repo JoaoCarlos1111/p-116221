@@ -60,14 +60,63 @@ export default function AtendimentoCaseDetails() {
 
   return (
     <div className="p-6 space-y-6">
-      <header className="flex items-center gap-4 mb-6">
-        <Button variant="ghost" onClick={() => navigate('/atendimento')}>
-          <ChevronLeft className="h-4 w-4 mr-2" />
-          Voltar
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold">Caso #{id}</h1>
-          <p className="text-sm text-muted-foreground">Visualização do caso</p>
+      <header className="space-y-6 mb-6">
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" onClick={() => navigate('/atendimento')}>
+            <ChevronLeft className="h-4 w-4 mr-2" />
+            Voltar
+          </Button>
+          <div>
+            <h1 className="text-2xl font-bold">Caso #{id}</h1>
+            <p className="text-sm text-muted-foreground">Visualização do caso</p>
+          </div>
+        </div>
+        
+        <div className="flex justify-between items-center bg-muted p-4 rounded-lg">
+          <div className="flex items-center gap-8">
+            <Button 
+              variant={caseData.status === "waiting" ? "default" : "ghost"}
+              onClick={() => {
+                // Handle status change
+                console.log("Mudar para Aguardando entrega");
+              }}
+            >
+              Aguardando entrega
+            </Button>
+            <Button 
+              variant={caseData.status === "delivered" ? "default" : "ghost"}
+              onClick={() => {
+                // Handle status change
+                console.log("Mudar para Entregues");
+              }}
+            >
+              Entregues
+            </Button>
+            <Button 
+              variant={caseData.status === "firstContact" ? "default" : "ghost"}
+              onClick={() => {
+                // Handle status change
+                console.log("Mudar para Primeiro contato");
+              }}
+            >
+              Primeiro contato
+            </Button>
+            <Button 
+              variant={caseData.status === "proposal" ? "default" : "ghost"}
+              onClick={() => {
+                // Handle status change
+                console.log("Mudar para Proposta de acordo");
+              }}
+            >
+              Proposta de acordo
+            </Button>
+          </div>
+          <Badge variant="outline" className="text-xs">
+            {caseData.status === "waiting" ? "Aguardando entrega" :
+             caseData.status === "delivered" ? "Entregues" :
+             caseData.status === "firstContact" ? "Primeiro contato" :
+             "Proposta de acordo"}
+          </Badge>
         </div>
       </header>
 
