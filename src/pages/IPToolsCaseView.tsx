@@ -73,6 +73,22 @@ export default function IPToolsCaseView() {
   const [newLink, setNewLink] = useState("");
   const [editingLinkIndex, setEditingLinkIndex] = useState<number | null>(null);
 
+  const handleSendReport = () => {
+    if (selectedCase.links.length >= 2) {
+      selectedCase.status = "Em andamento";
+      selectedCase.history.push({
+        date: new Date().toLocaleString(),
+        action: "Report enviado e caso movido para Em Andamento",
+        user: "Usuário atual"
+      });
+      navigate('/iptools');
+      toast({
+        title: "Report enviado com sucesso",
+        description: "O caso foi movido para a coluna Em Andamento."
+      });
+    }
+  };
+
   const selectedCase = sampleCases.find(c => c.id === id);
 
   if (!selectedCase) {
@@ -125,6 +141,14 @@ export default function IPToolsCaseView() {
           </div>
         </div>
         {selectedCase.status === "Recebido" && (
+          <Button
+            className="bg-green-500 hover:bg-green-600 text-white"
+            onClick={handleSendReport}
+            disabled={selectedCase.links.length < 2}
+          >
+            Enviar Report
+          </Button>
+        )}
           <Button
             className="bg-green-500 hover:bg-green-600"
             disabled={selectedCase.links.length < 2}
