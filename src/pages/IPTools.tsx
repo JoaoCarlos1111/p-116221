@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -101,11 +100,11 @@ export default function IPTools() {
 
     const items = Array.from(cases);
     const [reorderedItem] = items.splice(result.source.index, 1);
-    
+
     // Update status based on destination column
     const newStatus = result.destination.droppableId;
     reorderedItem.status = newStatus;
-    
+
     items.splice(result.destination.index, 0, reorderedItem);
     setCases(items);
   };
