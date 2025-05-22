@@ -9,41 +9,60 @@ import { toast } from "@/components/ui/use-toast";
 
 const sampleCases = [
   {
-    id: "001",
-    brand: "Nike",
-    store: "SuperSports",
+    id: "101",
+    brand: "Gucci",
+    store: "Luxury Store",
     platform: "Instagram",
     status: "received",
-    responsible: "João Silva",
+    responsible: "Amanda Silva",
     type: "Loja completa",
-    links: ["instagram.com/store1", "whatsapp.com/link1"],
-    recipient: "John Doe",
-    notificationDate: "2024-01-15",
-    trackingCode: "BR123456789",
-    deliveryStatus: "Em trânsito",
-    observations: "Caso prioritário",
+    links: ["instagram.com/luxury_store", "whatsapp.com/luxurystore"],
+    recipient: "Maria Santos",
+    notificationDate: "2024-03-25",
+    trackingCode: "BR456789123",
+    deliveryStatus: "Em análise",
+    observations: "Caso de alta prioridade - produtos de alto valor",
     history: [
-      { date: "2024-01-15 09:00", action: "Caso criado", user: "Sistema" },
-      { date: "2024-01-15 10:30", action: "Links adicionados", user: "Ana Silva" }
+      { date: "2024-03-25 10:00", action: "Caso criado", user: "Sistema" },
+      { date: "2024-03-25 11:30", action: "Links adicionados", user: "Amanda Silva" }
     ]
   },
   {
-    id: "004",
-    brand: "Under Armour",
-    store: "Sports Shop",
-    platform: "Facebook",
+    id: "201",
+    brand: "Balenciaga",
+    store: "Fashion World",
+    platform: "Shopee",
     status: "inProgress",
-    responsible: "Ana Lima",
+    responsible: "Carolina Lima",
     type: "Loja completa",
-    links: ["facebook.com/store1", "whatsapp.com/link2"],
-    recipient: "Jane Smith",
-    notificationDate: "2024-01-20",
-    trackingCode: "BR987654321",
-    deliveryStatus: "Pendente",
-    observations: "Links múltiplos",
+    links: ["shopee.com/fashionworld", "instagram.com/fashionworld"],
+    recipient: "Pedro Oliveira",
+    notificationDate: "2024-03-23",
+    trackingCode: "BR789123456",
+    deliveryStatus: "Em andamento",
+    observations: "Múltiplos canais de venda",
     history: [
-      { date: "2024-01-20 14:00", action: "Caso criado", user: "Sistema" },
-      { date: "2024-01-20 15:30", action: "Links adicionados", user: "Ana Lima" }
+      { date: "2024-03-23 09:00", action: "Caso criado", user: "Sistema" },
+      { date: "2024-03-23 10:15", action: "Links adicionados", user: "Carolina Lima" }
+    ]
+  },
+  {
+    id: "301",
+    brand: "Hermès",
+    store: "Premium Outlet",
+    platform: "Instagram",
+    status: "analysis",
+    responsible: "Fernanda Costa",
+    type: "Loja completa",
+    links: ["instagram.com/premium_outlet", "facebook.com/premiumoutlet"],
+    recipient: "Lucas Silva",
+    notificationDate: "2024-03-21",
+    trackingCode: "BR321654987",
+    deliveryStatus: "Aguardando",
+    observations: "Necessário análise detalhada dos produtos",
+    history: [
+      { date: "2024-03-21 14:00", action: "Caso criado", user: "Sistema" },
+      { date: "2024-03-21 15:45", action: "Links adicionados", user: "Fernanda Costa" }
     ]
   }
 ];

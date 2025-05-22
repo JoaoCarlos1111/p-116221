@@ -35,78 +35,60 @@ export default function IPTools() {
   const [cases, setCases] = useState<Case[]>([
     // Recebido
     {
-      id: "001",
-      brand: "Nike",
-      entryDate: "21/05/2025",
-      responsible: "João Silva",
-      linksFound: 3,
-      status: "received"
+      id: "101",
+      brand: "Gucci",
+      entryDate: "25/03/2024",
+      responsible: "Amanda Silva",
+      linksFound: 12,
+      status: "received",
+      platform: "Instagram"
     },
     {
-      id: "002",
-      brand: "Adidas",
-      entryDate: "22/05/2025",
-      responsible: "Maria Santos",
-      linksFound: 5,
-      status: "received"
-    },
-    {
-      id: "003",
-      brand: "Puma",
-      entryDate: "23/05/2025",
-      responsible: "Pedro Costa",
-      linksFound: 2,
-      status: "received"
+      id: "102",
+      brand: "Louis Vuitton",
+      entryDate: "24/03/2024",
+      responsible: "Ricardo Santos",
+      linksFound: 8,
+      status: "received",
+      platform: "Facebook"
     },
     // Em andamento
     {
-      id: "004",
-      brand: "Under Armour",
-      entryDate: "20/05/2025",
-      responsible: "Ana Lima",
-      linksFound: 7,
-      status: "inProgress"
+      id: "201",
+      brand: "Balenciaga",
+      entryDate: "23/03/2024",
+      responsible: "Carolina Lima",
+      linksFound: 15,
+      status: "inProgress",
+      platform: "Shopee"
     },
     {
-      id: "005",
-      brand: "Reebok",
-      entryDate: "19/05/2025",
-      responsible: "Carlos Souza",
-      linksFound: 4,
-      status: "inProgress"
-    },
-    {
-      id: "006",
-      brand: "New Balance",
-      entryDate: "18/05/2025",
-      responsible: "Lucia Ferreira",
+      id: "202",
+      brand: "Dior",
+      entryDate: "22/03/2024",
+      responsible: "Paulo Mendes",
       linksFound: 6,
-      status: "inProgress"
+      status: "inProgress",
+      platform: "Mercado Livre"
     },
     // Análise
     {
-      id: "007",
-      brand: "Fila",
-      entryDate: "17/05/2025",
-      responsible: "Roberto Santos",
-      linksFound: 8,
-      status: "analysis"
+      id: "301",
+      brand: "Hermès",
+      entryDate: "21/03/2024",
+      responsible: "Fernanda Costa",
+      linksFound: 10,
+      status: "analysis",
+      platform: "Instagram"
     },
     {
-      id: "008",
-      brand: "Asics",
-      entryDate: "16/05/2025",
-      responsible: "Sandra Silva",
-      linksFound: 3,
-      status: "analysis"
-    },
-    {
-      id: "009",
-      brand: "Mizuno",
-      entryDate: "15/05/2025",
-      responsible: "Felipe Oliveira",
-      linksFound: 5,
-      status: "analysis"
+      id: "302",
+      brand: "Chanel",
+      entryDate: "20/03/2024",
+      responsible: "Gabriel Oliveira",
+      linksFound: 9,
+      status: "analysis",
+      platform: "Facebook"
     }
   ]);
 
