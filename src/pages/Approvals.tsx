@@ -97,11 +97,43 @@ export default function Approvals() {
   const confirmAction = () => {
     if (!selectedCase || !action) return;
     
-    setApprovals(prev => prev.map(a => 
-      a.id === selectedCase.id 
-        ? { ...a, status: action === 'approve' ? 'approved' : 'rejected' }
-        : a
-    ));
+    if (action === 'approve') {
+      // Create logistics case data
+      const logisticsCase = {
+        id: selectedCase.id,
+        storeName: selectedCase.storeName || `Store ${selectedCase.id}`,
+        address: selectedCase.address || "Pending address",
+        brand: selectedCase.brand || "Pending brand",
+        approvalDate: new Date().toISOString().split('T')[0],
+        status: "Approved",
+        document: selectedCase.document || "Pending",
+        proofUrl: selectedCase.proofUrl
+      };
+
+      // Remove from approvals list
+      setApprovals(prev => prev.filter(a => a.id !== selectedCase.id));
+
+      // In production: Add to logistics queue
+      try {
+        // Store in localStorage as fallback
+        const existingCases = JSON.parse(localStorage.getItem('logisticsCases') || '[]');
+        localStorage.setItem('logisticsCases', JSON.stringify([...existingCases, logisticsCase]));
+        
+        // Trigger confetti on successful approval
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      } catch (error) {
+        console.error('Error transferring case to logistics:', error);
+      }
+    } else {
+      // Handle rejection
+      setApprovals(prev => prev.map(a => 
+        a.id === selectedCase.id ? { ...a, status: 'rejected' } : a
+      ));
+    }
     
     setSelectedCase(null);
     setAction(null);
