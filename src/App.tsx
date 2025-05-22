@@ -32,7 +32,7 @@ function App() {
             <Route path="/logistica" element={<Logistics />} />
         <Route path="/logistica/caso/:id" element={<LogisticsCaseView />} />
             <Route path="/iptools" element={<IPTools />} />
-            <Route path="/iptools/caso/:id" element={<IPToolsCaseView />} />
+            <Route path="/iptools/case/:id" element={<IPToolsCaseView />} />
           </Routes>
         </main>
       </div>
