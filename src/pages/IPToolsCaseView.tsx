@@ -1,15 +1,15 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ChevronLeft, Copy, ExternalLink, Plus, Trash2, Edit } from "lucide-react";
+import { ChevronLeft, Copy, ExternalLink, Plus } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 
-// Match cases structure with IPTools.tsx
-const sampleCases = [
+// Initialize cases array that will store all cases
+let sampleCases = [
   {
     id: "101",
     brand: "Gucci",
@@ -85,12 +85,47 @@ const sampleCases = [
   }
 ];
 
+// Function to add new case to array
+const addNewCase = (newCase) => {
+  if (!sampleCases.find(c => c.id === newCase.id)) {
+    sampleCases.push({
+      ...newCase,
+      history: [
+        { date: new Date().toLocaleString(), action: "Caso recebido da Logística", user: "Sistema" }
+      ]
+    });
+  }
+};
+
 export default function IPToolsCaseView() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [newLink, setNewLink] = useState("");
 
   const selectedCase = sampleCases.find(c => c.id === id);
+
+  useEffect(() => {
+    // If case doesn't exist in array, add it with default values
+    if (!selectedCase && id) {
+      const newCase = {
+        id: id,
+        brand: "Nova Marca",
+        store: "Nova Loja",
+        platform: "Plataforma",
+        status: "Recebido",
+        responsible: "Responsável",
+        type: "Loja completa",
+        links: [],
+        recipient: "Destinatário",
+        notificationDate: new Date().toISOString().split('T')[0],
+        trackingCode: "",
+        deliveryStatus: "Em análise",
+        observations: "",
+        history: []
+      };
+      addNewCase(newCase);
+    }
+  }, [id]);
 
   if (!selectedCase) {
     return <div className="p-6">Caso não encontrado</div>;
