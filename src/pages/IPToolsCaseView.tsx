@@ -29,6 +29,24 @@ const sampleCases = [
     ]
   },
   {
+    id: "102",
+    brand: "Louis Vuitton",
+    store: "LV Store",
+    platform: "Facebook",
+    status: "Recebido",
+    responsible: "Ricardo Santos",
+    type: "Loja completa",
+    links: [],
+    recipient: "João Silva",
+    notificationDate: "2024-03-24",
+    trackingCode: "BR456789124",
+    deliveryStatus: "Em análise",
+    observations: "Verificar urgente",
+    history: [
+      { date: "2024-03-24 10:00", action: "Caso recebido da Logística", user: "Sistema" }
+    ]
+  },
+  {
     id: "201",
     brand: "Balenciaga",
     store: "Fashion World",
@@ -45,6 +63,24 @@ const sampleCases = [
     history: [
       { date: "2024-03-23 09:00", action: "Caso recebido da Logística", user: "Sistema" },
       { date: "2024-03-23 10:15", action: "Link adicionado", user: "Carolina Lima" }
+    ]
+  },
+  {
+    id: "202",
+    brand: "Dior",
+    store: "Dior Official",
+    platform: "Mercado Livre",
+    status: "Em andamento",
+    responsible: "Paulo Mendes",
+    type: "Loja completa",
+    links: [],
+    recipient: "Ana Costa",
+    notificationDate: "2024-03-22",
+    trackingCode: "BR789123457",
+    deliveryStatus: "Em andamento",
+    observations: "Caso prioritário",
+    history: [
+      { date: "2024-03-22 09:00", action: "Caso recebido da Logística", user: "Sistema" }
     ]
   }
 ];
