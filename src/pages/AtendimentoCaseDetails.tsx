@@ -15,9 +15,21 @@ export default function AtendimentoCaseDetails() {
     { id: 'firstContact', title: 'Primeiro contato', number: 3 },
     { id: 'proposal', title: 'Proposta de acordo', number: 4 }
   ];
+  
+  const [currentStatus, setCurrentStatus] = useState('waiting');
+
+  const handleStatusChange = (newStatus: string) => {
+    setCurrentStatus(newStatus);
+    // Here you would typically make an API call to update the case status
+    toast({
+      description: `Status atualizado para ${steps.find(s => s.id === newStatus)?.title}`,
+    });
+  };
 
   // Mock data - replace with actual data fetching
   const caseData = {
+    ...
+    status: currentStatus,
     id,
     brand: "Nike",
     responsible: "Maria Santos",
@@ -88,16 +100,13 @@ export default function AtendimentoCaseDetails() {
             {steps.map((step, index) => (
               <div key={step.id} className="flex items-center">
                 <button
-                  onClick={() => {
-                    // Handle status change
-                    console.log(`Mudar para ${step.title}`);
-                  }}
-                  className={`flex items-center group ${
-                    caseData.status === step.id ? 'opacity-100' : 'opacity-60 hover:opacity-100'
+                  onClick={() => handleStatusChange(step.id)}
+                  className={`flex items-center group cursor-pointer ${
+                    currentStatus === step.id ? 'opacity-100' : 'opacity-60 hover:opacity-100'
                   }`}
                 >
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
-                    ${caseData.status === step.id ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors
+                    ${currentStatus === step.id ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80'}`}
                   >
                     {step.number}
                   </div>
