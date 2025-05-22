@@ -12,6 +12,7 @@ import AuditoriaCaseDetails from './pages/AuditoriaCaseDetails';
 import Logistics from './pages/Logistics';
 import LogisticsCaseView from './pages/LogisticsCaseView';
 import IPTools from './pages/IPTools';
+import IPToolsCaseView from './pages/IPToolsCaseView';
 
 function App() {
   return (
