@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -57,7 +56,7 @@ export default function Logistics() {
       document: "45678912301"
     }
   ]);
-  
+
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
@@ -105,6 +104,69 @@ export default function Logistics() {
   });
 
   const selectedCount = cases.filter(c => c.selected).length;
+
+  const transferToIPTools = (caseData: Case) => {
+    // Wait 2 minutes then transfer to IP Tools
+    setTimeout(() => {
+      const ipToolsCase = {
+        id: caseData.id,
+        brand: caseData.brand,
+        entryDate: new Date().toLocaleDateString(),
+        responsible: "Não atribuído",
+        linksFound: 0,
+        status: "received",
+        store: caseData.storeName,
+        type: "Loja completa",
+        links: [],
+        recipient: caseData.storeName,
+        notificationDate: new Date().toISOString().split('T')[0],
+        trackingCode: caseData.trackingCode,
+        deliveryStatus: "Em análise",
+        observations: "",
+        history: [
+          { date: new Date().toISOString(), action: "Caso recebido da Logística", user: "Sistema" }
+        ]
+      };
+
+      // Update IP Tools cases
+      fetch('/api/iptools/cases', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(ipToolsCase),
+      });
+
+      toast({
+        description: `Caso ${caseData.id} transferido para IP Tools`,
+      });
+
+      // Remove from logistics cases
+      setCases(prevCases => prevCases.filter(c => c.id !== caseData.id));
+    }, 120000); // 2 minutes
+  };
+
+  const handleDragEnd = (result: any) => {
+    if (!result.destination) return;
+
+    const items = Array.from(cases);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+
+    // Update status based on destination column
+    const newStatus = result.destination.droppableId;
+    reorderedItem.status = newStatus;
+
+    items.splice(result.destination.index, 0, reorderedItem);
+    setCases(items);
+
+    // If case is moved to "posted" column, start transfer timer
+    if (result.destination.droppableId === 'Postado') {
+      transferToIPTools(reorderedItem);
+      toast({
+        description: `Caso ${reorderedItem.id} será transferido para IP Tools em 2 minutos`,
+      });
+    }
+  };
 
   const columns = [
     {
