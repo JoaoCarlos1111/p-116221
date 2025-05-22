@@ -174,6 +174,14 @@ export default function IPToolsCaseView() {
                 <h4 className="font-medium">Plataforma</h4>
                 <p className="text-muted-foreground">{selectedCase.platform}</p>
               </div>
+              <div>
+                <h4 className="font-medium">Quantidade de Links</h4>
+                <p className="text-muted-foreground">{selectedCase.links?.length || 0}</p>
+              </div>
+              <div>
+                <h4 className="font-medium">Total de Solicitações</h4>
+                <p className="text-muted-foreground">{selectedCase.reportCount || '0'}</p>
+              </div>
               {selectedCase.observations && (
                 <div className="col-span-2">
                   <h4 className="font-medium">Observações</h4>
@@ -186,13 +194,68 @@ export default function IPToolsCaseView() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Histórico</CardTitle>
+            <CardTitle>Status da Solicitação</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <h4 className="font-medium">Status do Envio</h4>
+                <Badge variant={
+                  selectedCase.protectionStatus === "Respondido" ? "success" :
+                  selectedCase.protectionStatus === "Enviado" ? "warning" : "secondary"
+                }>
+                  {selectedCase.protectionStatus || "Pendente"}
+                </Badge>
+              </div>
+              {selectedCase.protectionStatus === "Respondido" && (
+                <div>
+                  <h4 className="font-medium">Data da Resposta</h4>
+                  <p className="text-muted-foreground">{selectedCase.responseDate || "—"}</p>
+                </div>
+              )}
+              <div>
+                <h4 className="font-medium">Status Logístico</h4>
+                <Badge variant={
+                  selectedCase.logisticStatus === "Entregue" ? "success" :
+                  selectedCase.logisticStatus === "Em trânsito" ? "warning" :
+                  selectedCase.logisticStatus === "Não entregue" ? "destructive" : "secondary"
+                }>
+                  {selectedCase.logisticStatus || "Aguardando envio"}
+                </Badge>
+              </div>
+              {selectedCase.trackingCode && (
+                <div>
+                  <h4 className="font-medium">Código de Rastreio</h4>
+                  <a
+                    href={`https://rastreamento.correios.com.br/app/index.php?objeto=${selectedCase.trackingCode}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    {selectedCase.trackingCode}
+                  </a>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Histórico da Solicitação</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
               {selectedCase.history.map((entry, index) => (
-                <div key={index} className="text-sm">
-                  <span className="font-medium">{entry.date}</span> - {entry.action} por {entry.user}
+                <div key={index} className="flex items-start gap-2 text-sm border-b border-gray-100 pb-2">
+                  <div className="min-w-32">
+                    <span className="font-medium">{entry.date}</span>
+                  </div>
+                  <div className="flex-1">
+                    <span className="text-primary">{entry.action}</span>
+                    <span className="text-muted-foreground"> por </span>
+                    <span className="font-medium">{entry.user}</span>
+                  </div>
                 </div>
               ))}
             </div>
