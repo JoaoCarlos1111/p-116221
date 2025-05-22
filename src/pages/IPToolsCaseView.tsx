@@ -9,60 +9,60 @@ import { toast } from "@/components/ui/use-toast";
 
 const sampleCases = [
   {
-    id: "101",
-    brand: "Gucci",
-    store: "Luxury Store",
+    id: "001",
+    brand: "Nike",
+    store: "Sport Center",
     platform: "Instagram",
     status: "Recebido",
-    responsible: "Amanda Silva",
-    type: "Loja completa",
-    links: ["instagram.com/luxury_store", "whatsapp.com/luxurystore"],
-    recipient: "Maria Santos",
-    notificationDate: "2024-03-25",
-    trackingCode: "BR456789123",
-    deliveryStatus: "Em análise",
-    observations: "Caso de alta prioridade - produtos de alto valor",
-    history: [
-      { date: "2024-03-25 10:00", action: "Caso criado", user: "Sistema" },
-      { date: "2024-03-25 11:30", action: "Links adicionados", user: "Amanda Silva" }
-    ]
-  },
-  {
-    id: "201",
-    brand: "Balenciaga",
-    store: "Fashion World",
-    platform: "Shopee",
-    status: "inProgress",
-    responsible: "Carolina Lima",
-    type: "Loja completa",
-    links: ["shopee.com/fashionworld", "instagram.com/fashionworld"],
-    recipient: "Pedro Oliveira",
-    notificationDate: "2024-03-23",
-    trackingCode: "BR789123456",
-    deliveryStatus: "Em andamento",
-    observations: "Múltiplos canais de venda",
-    history: [
-      { date: "2024-03-23 09:00", action: "Caso criado", user: "Sistema" },
-      { date: "2024-03-23 10:15", action: "Links adicionados", user: "Carolina Lima" }
-    ]
-  },
-  {
-    id: "301",
-    brand: "Hermès",
-    store: "Premium Outlet",
-    platform: "Instagram",
-    status: "analysis",
-    responsible: "Fernanda Costa",
-    type: "Loja completa",
-    links: ["instagram.com/premium_outlet", "facebook.com/premiumoutlet"],
-    recipient: "Lucas Silva",
-    notificationDate: "2024-03-21",
-    trackingCode: "BR321654987",
+    responsible: "João Silva",
+    type: "Produtos Isolados",
+    links: [],
+    recipient: "Carlos Santos",
+    notificationDate: "2024-03-26",
+    trackingCode: "BR123456789",
     deliveryStatus: "Aguardando",
-    observations: "Necessário análise detalhada dos produtos",
+    observations: "Caso novo - necessita adicionar links",
     history: [
-      { date: "2024-03-21 14:00", action: "Caso criado", user: "Sistema" },
-      { date: "2024-03-21 15:45", action: "Links adicionados", user: "Fernanda Costa" }
+      { date: "2024-03-26 09:00", action: "Caso criado", user: "Sistema" }
+    ]
+  },
+  {
+    id: "002",
+    brand: "Adidas",
+    store: "Mega Sports",
+    platform: "Facebook",
+    status: "Recebido",
+    responsible: "Maria Oliveira",
+    type: "Loja Completa",
+    links: ["facebook.com/megasports", "instagram.com/megasports.store"],
+    recipient: "Ana Lima",
+    notificationDate: "2024-03-26",
+    trackingCode: "BR987654321",
+    deliveryStatus: "Em análise",
+    observations: "Pronto para enviar report",
+    history: [
+      { date: "2024-03-26 10:00", action: "Caso criado", user: "Sistema" },
+      { date: "2024-03-26 10:30", action: "Links adicionados", user: "Maria Oliveira" }
+    ]
+  },
+  {
+    id: "003",
+    brand: "Puma",
+    store: "Athletic Shop",
+    platform: "Shopee",
+    status: "Em andamento",
+    responsible: "Pedro Santos",
+    type: "Dropshipping",
+    links: ["shopee.com/athletic", "whatsapp.com/athleticshop"],
+    recipient: "Roberto Costa",
+    notificationDate: "2024-03-25",
+    trackingCode: "BR456123789",
+    deliveryStatus: "Em progresso",
+    observations: "Report enviado - aguardando retorno",
+    history: [
+      { date: "2024-03-25 14:00", action: "Caso criado", user: "Sistema" },
+      { date: "2024-03-25 14:30", action: "Links adicionados", user: "Pedro Santos" },
+      { date: "2024-03-25 15:00", action: "Report enviado", user: "Pedro Santos" }
     ]
   }
 ];
