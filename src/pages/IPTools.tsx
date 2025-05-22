@@ -275,7 +275,10 @@ export default function IPTools() {
                               {...provided.dragHandleProps}
                               className="bg-white cursor-pointer shadow-lg hover:shadow-xl transition-all duration-200"
                             >
-                              <CardContent className="p-4">
+                              <CardContent 
+                                className="p-4 cursor-pointer"
+                                onClick={() => navigate(`/iptools/case/${case_.id}`)}
+                              >
                                 <div className="flex justify-between items-start">
                                   <div>
                                     <h3 className="font-medium">Caso #{case_.id}</h3>
@@ -289,7 +292,10 @@ export default function IPTools() {
                                   <Button
                                     variant="ghost"
                                     size="icon"
-                                    onClick={() => navigate(`/iptools/case/${case_.id}`)}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      navigate(`/iptools/case/${case_.id}`);
+                                    }}
                                   >
                                     <Eye className="h-4 w-4" />
                                   </Button>
