@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -60,7 +59,7 @@ export default function IPTools() {
     return cases.filter(caseItem => {
       const searchContent = `${caseItem.id} ${caseItem.brand} ${caseItem.store} ${caseItem.links.join(" ")}`.toLowerCase();
       const matchesSearch = searchContent.includes(searchQuery.toLowerCase());
-      
+
       const matchesBrand = !filterBrand || caseItem.brand === filterBrand;
       const matchesStatus = !filterStatus || caseItem.status === filterStatus;
       const matchesPlatform = !filterPlatform || caseItem.platform === filterPlatform;
@@ -102,7 +101,7 @@ export default function IPTools() {
                 <SelectValue placeholder="Marca" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todas</SelectItem>
+                <SelectItem value="all">Todas</SelectItem>
                 <SelectItem value="Nike">Nike</SelectItem>
                 <SelectItem value="Adidas">Adidas</SelectItem>
                 <SelectItem value="Puma">Puma</SelectItem>
@@ -114,7 +113,7 @@ export default function IPTools() {
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos</SelectItem>
+                <SelectItem value="all">Todos</SelectItem>
                 <SelectItem value="Aguardando resposta">Aguardando resposta</SelectItem>
                 <SelectItem value="Respondido (positivamente)">Respondido (positivamente)</SelectItem>
                 <SelectItem value="Respondido (negativamente)">Respondido (negativamente)</SelectItem>
@@ -126,7 +125,7 @@ export default function IPTools() {
                 <SelectValue placeholder="Plataforma" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todas</SelectItem>
+                <SelectItem value="all">Todas</SelectItem>
                 <SelectItem value="Instagram">Instagram</SelectItem>
                 <SelectItem value="Facebook">Facebook</SelectItem>
                 <SelectItem value="Shopee">Shopee</SelectItem>
