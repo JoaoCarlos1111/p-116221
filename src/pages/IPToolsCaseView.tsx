@@ -162,7 +162,7 @@ export default function IPToolsCaseView() {
               <div key={index} className="flex items-center gap-2 p-2 rounded-lg border">
                 <Link className="h-4 w-4 text-muted-foreground" />
                 <a
-                  href={link}
+                  href={link.startsWith('http') ? link : `https://${link}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary hover:underline flex-1"
