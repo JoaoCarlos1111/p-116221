@@ -1,4 +1,3 @@
-
 import { NavLink } from "react-router-dom";
 import { 
   LayoutDashboard, 
@@ -9,7 +8,8 @@ import {
   ChevronLeft,
   ChevronRight,
   LogOut,
-  GitPullRequest
+  GitPullRequest,
+  Shield
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
