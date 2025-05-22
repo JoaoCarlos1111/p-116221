@@ -1,0 +1,67 @@
+criação da tela "IP Tools" no Replit
+
+Crie uma nova tela para o setor IP Tools, responsável pela comunicação com ferramentas de proteção à propriedade intelectual em redes sociais e marketplaces. A interface deve seguir o modelo Kanban, com foco em organização e acompanhamento do status dos casos. Utilize uma interface limpa, com boa hierarquia visual, priorizando usabilidade e clareza.
+
+🔹 Estrutura do Kanban:
+Divida a tela em três colunas principais:
+
+Recebido
+
+Casos chegam automaticamente após o envio da notificação extrajudicial pelo setor de logística.
+
+Nessa etapa, o analista do IP Tools deverá analisar os perfis e lojas do caso para coletar links de outras infrações de marca.
+
+Adicione um botão ou funcionalidade para adicionar links de violação relacionados ao caso.
+
+Os casos só podem ser movidos para "Em Andamento" se houver links adicionados.
+
+Em Andamento
+
+Representa os casos já enviados para os programas/ferramentas de proteção (como Meta Brand Protection, VeRO da Amazon, etc.).
+
+Os casos permanecem aqui até que haja uma resposta das plataformas.
+
+O sistema deve permitir a edição e visualização dos links enviados.
+
+Análise
+
+Casos que retornaram com resposta.
+
+O analista deverá verificar se os anúncios foram removidos com sucesso.
+
+Se a solicitação tiver sido bem-sucedida, o caso é movido automaticamente ou manualmente para o próximo setor (Atendimento).
+
+Se os anúncios não forem removidos, o caso pode ser movido de volta para Em Andamento para uma nova tentativa de notificação.
+
+🔍 Funcionalidades adicionais:
+Cada card de caso no Kanban deve exibir:
+
+Número do caso
+
+Marca
+
+Nome ou loja analisada
+
+Quantidade de links de infração adicionados
+
+Botão para acessar os detalhes do caso
+
+A tela de detalhes do caso deve abrir ao clicar no card, exibindo:
+
+Todos os dados relevantes do caso
+
+Lista de links de infração adicionados
+
+Histórico de movimentações entre etapas
+
+Observações internas (se houver)
+
+Adicione também:
+
+Barra de busca por número do caso, marca ou nome da loja.
+
+Filtro por etapa, marca ou data.
+
+Controle de movimentação drag-and-drop entre colunas.
+
+Confirmação ao mover o caso de volta para “Em Andamento”.
