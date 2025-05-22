@@ -11,7 +11,8 @@ import Auditoria from './pages/Auditoria';
 import AuditoriaCaseDetails from './pages/AuditoriaCaseDetails';
 import Logistics from './pages/Logistics';
 import LogisticsCaseView from './pages/LogisticsCaseView';
-import IPTools from './pages/IPTools';
+import IPTools from './pages/IPTools'
+import IPToolsCaseView from './pages/IPToolsCaseView';
 import IPToolsCaseView from './pages/IPToolsCaseView';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
             <Route path="/logistica" element={<Logistics />} />
         <Route path="/logistica/caso/:id" element={<LogisticsCaseView />} />
             <Route path="/iptools" element={<IPTools />} />
+        <Route path="/iptools/case/:id" element={<IPToolsCaseView />} />
             <Route path="/iptools/case/:id" element={<IPToolsCaseView />} />
           </Routes>
         </main>
