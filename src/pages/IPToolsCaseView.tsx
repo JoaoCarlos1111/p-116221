@@ -198,6 +198,79 @@ export default function IPToolsCaseView() {
             </div>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Informações Complementares</CardTitle>
+          </CardHeader>
+          <CardContent className="grid grid-cols-2 gap-4">
+            <div>
+              <h4 className="font-medium">Quantidade de Links</h4>
+              <p className="text-muted-foreground">{selectedCase.links.length}</p>
+            </div>
+            <div>
+              <h4 className="font-medium">Status do Envio</h4>
+              <Badge variant={
+                selectedCase.status === 'Respondido' ? 'success' :
+                selectedCase.status === 'Enviado' ? 'warning' : 'secondary'
+              }>
+                {selectedCase.status || 'Pendente'}
+              </Badge>
+            </div>
+            {selectedCase.status === 'Respondido' && (
+              <div>
+                <h4 className="font-medium">Data da Resposta</h4>
+                <p className="text-muted-foreground">{selectedCase.responseDate || '—'}</p>
+              </div>
+            )}
+            <div>
+              <h4 className="font-medium">Status Logístico</h4>
+              <Badge variant={
+                selectedCase.logisticStatus === 'Entregue' ? 'success' :
+                selectedCase.logisticStatus === 'Em trânsito' ? 'warning' :
+                selectedCase.logisticStatus === 'Não entregue' ? 'destructive' : 'secondary'
+              }>
+                {selectedCase.logisticStatus || 'Aguardando envio'}
+              </Badge>
+            </div>
+            {selectedCase.trackingCode && (
+              <div>
+                <h4 className="font-medium">Código de Rastreio</h4>
+                <a 
+                  href={`https://rastreamento.correios.com.br/app/index.php?objeto=${selectedCase.trackingCode}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline"
+                >
+                  {selectedCase.trackingCode}
+                </a>
+              </div>
+            )}
+            <div>
+              <h4 className="font-medium">Total de Solicitações</h4>
+              <p className="text-muted-foreground">{selectedCase.requestCount || '0'}</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Histórico da Solicitação</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {selectedCase.history.map((entry, index) => (
+                <div key={index} className="flex items-center gap-2 text-sm">
+                  <span className="text-muted-foreground">{entry.date}</span>
+                  <span>•</span>
+                  <span>{entry.action}</span>
+                  <span>•</span>
+                  <span className="font-medium">{entry.user}</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
