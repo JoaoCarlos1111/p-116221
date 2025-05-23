@@ -53,6 +53,8 @@ export default function FinanceiroDetails() {
     installmentValue: caseData.acordo.valorParcela
   });
 
+  const [paymentHistory, setPaymentHistory] = useState(caseData.parcelas);
+  
   const [previewInstallments, setPreviewInstallments] = useState(
     Array(parseInt(caseData.acordo.parcelas)).fill(null).map((_, index) => {
       const date = new Date(caseData.acordo.primeiroVencimento);
@@ -199,8 +201,7 @@ export default function FinanceiroDetails() {
               <div className="flex justify-end mt-4">
                 <Button type="submit" onClick={(e) => {
                   e.preventDefault();
-                  // Update caseData.parcelas with previewInstallments data
-                  caseData.parcelas = previewInstallments.map(parcela => ({
+                  const updatedPayments = previewInstallments.map(parcela => ({
                     numero: parcela.numero,
                     valor: parcela.valor,
                     vencimento: parcela.vencimento,
@@ -208,9 +209,19 @@ export default function FinanceiroDetails() {
                     status: 'Em aberto',
                     comprovante: false
                   }));
-                  // Here you implement the logic to save the configurations
+                  
+                  setPaymentHistory(updatedPayments);
+                  caseData.parcelas = updatedPayments;
+                  caseData.acordo = {
+                    ...caseData.acordo,
+                    formaPagamento: paymentConfig.method,
+                    parcelas: paymentConfig.installments,
+                    valorParcela: paymentConfig.installmentValue,
+                    primeiroVencimento: paymentConfig.firstPaymentDate
+                  };
+                  
                   console.log('Saving payment configurations', paymentConfig);
-                  console.log('Updated installments:', caseData.parcelas);
+                  console.log('Updated installments:', updatedPayments);
                 }}>
                   Confirmar Configuração
                 </Button>
@@ -237,7 +248,7 @@ export default function FinanceiroDetails() {
                   </tr>
                 </thead>
                 <tbody>
-                  {caseData.parcelas.map((parcela) => (
+                  {paymentHistory.map((parcela) => (
                     <tr key={parcela.numero} className="border-b">
                       <td className="px-4 py-2">{parcela.numero}/{paymentConfig.installments}</td>
                       <td className="px-4 py-2">
