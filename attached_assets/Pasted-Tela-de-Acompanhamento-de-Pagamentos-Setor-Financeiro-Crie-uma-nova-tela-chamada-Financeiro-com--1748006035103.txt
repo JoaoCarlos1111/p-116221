@@ -1,0 +1,106 @@
+Tela de Acompanhamento de Pagamentos (Setor Financeiro)
+Crie uma nova tela chamada "Financeiro" com modelo de gestão Kanban, seguindo o design visual do sistema já existente. A tela deve conter:
+
+🔹 Kanban com as seguintes colunas:
+Aguardando pagamento
+
+Pago parcialmente
+
+Quitado
+
+Inadimplente
+
+🔹 Em cada coluna:
+Exibir a quantidade de casos
+
+Exibir a soma do valor de potencial indenizatório dos casos
+
+Os cards devem ter:
+
+Código do caso
+
+Nome do devedor
+
+Valor total do acordo
+
+Valor da parcela atual
+
+Status da parcela atual (Ex: em dia, atrasada)
+
+Contador de dias que o caso está na coluna (formato: 4d)
+
+🔹 Barra superior:
+Incluir barra de pesquisa
+
+Incluir filtros por:
+
+Status de pagamento (em dia, atrasado, quitado)
+
+Faixa de valor (mínimo e máximo)
+
+Data de vencimento da próxima parcela
+
+🔹 Ao clicar em um card:
+Abrir uma nova página de detalhes do caso, sem opção de edição, contendo as seguintes seções:
+
+1. Identificação do caso
+Código do caso
+
+Nome do devedor / responsável
+
+CPF ou CNPJ
+
+Setor de origem (ex: Atendimento, IP Tools)
+
+Status geral do pagamento
+
+2. Resumo do acordo
+Valor total da indenização
+
+Número de parcelas e valor por parcela
+
+Forma de pagamento
+
+Data do acordo
+
+Data do vencimento da 1ª parcela
+
+Dias em atraso (se houver)
+
+Multa ou juros aplicados (se houver)
+
+3. Histórico de parcelas (em tabela):
+Nº Parcela	Valor	Vencimento	Pagamento	Status	Comprovante
+1/3	R$500,00	05/05/2025	06/05/2025	Pago	Ver recibo
+2/3	R$500,00	05/06/2025	—	Em aberto	—
+3/3	R$500,00	05/07/2025	—	Em aberto	—
+
+4. Comprovantes anexados
+Lista com nome do arquivo, data de upload e tipo (PDF ou imagem)
+
+5. Observações internas
+Texto não editável com anotações do setor financeiro
+
+6. Reativação da página de vendas (informações vindas do setor IP Tools)
+Solicitação de reativação: Sim / Não
+
+Data da solicitação
+
+Status da reativação: Aguardando, Aprovado, Recusado
+
+Link da página de vendas
+
+Observações do setor IP Tools
+
+Histórico de interações com a plataforma
+
+7. Resumo de acompanhamento
+Próxima data de vencimento
+
+Total já pago
+
+Total pendente
+
+Data prevista para quitação
+
+Crie também alguns cards de exemplo com dados variados para teste de layout e funcionamento.
