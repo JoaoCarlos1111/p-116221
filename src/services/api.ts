@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 
 const api = axios.create({
@@ -33,5 +34,38 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const CasesService = {
+  getAll: async () => {
+    try {
+      const response = await api.get('/cases');
+      return response.data;
+    } catch (error) {
+      console.error('Failed to fetch cases:', error);
+      throw error;
+    }
+  },
+  
+  create: async (prospectionData: {
+    storeUrl: string;
+    adUrl: string;
+    brands: string[];
+  }) => {
+    try {
+      const cases = prospectionData.brands.map(brand => ({
+        brand,
+        storeUrl: prospectionData.storeUrl,
+        adUrl: prospectionData.adUrl,
+        status: 'received'
+      }));
+
+      const response = await api.post('/cases/batch', { cases });
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao criar casos:', error);
+      throw error;
+    }
+  }
+};
 
 export default api;
