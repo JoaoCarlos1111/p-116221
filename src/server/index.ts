@@ -1,3 +1,4 @@
+
 import express from 'express';
 import cors from 'cors';
 import { PrismaClient } from '@prisma/client';
@@ -18,51 +19,25 @@ try {
   process.exit(1);
 }
 
-app.use(cors());
-app.use(express.json());
-
-// Cases endpoints
-app.post('/api/cases', async (req, res) => {
-  try {
-    const data = req.body;
-    const createdCase = await prisma.case.create({
-      data: {
-        code: Math.random().toString(36).substring(7),
-        debtorName: data.brand || '',
-        storeUrl: data.storeUrl || '',
-        adUrl: data.adUrl || '',
-        totalAmount: 0,
-        currentPayment: 0,
-        status: 'received',
-        daysInColumn: 0,
-        userId: "1"
-      }
-    });
-    res.json(createdCase);
-  } catch (error) {
-    console.error('Error creating case:', error);
-    res.status(500).json({ error: 'Error creating case' });
-  }
-});
-
-app.get('/api/cases/batch', async (req, res) => {
-  try {
-    const cases = await prisma.case.findMany({
-      take: 10,
-      orderBy: { createdAt: 'desc' }
-    });
-    res.json(cases);
-  } catch (error) {
-    console.error('Error fetching cases:', error);
-    res.status(500).json({ error: 'Error fetching cases' });
-  }
-});
+// Configuração do CORS para permitir qualquer origem
+app.use(cors({
+  origin: function(origin, callback) {
+    callback(null, true);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Content-Length', 'X-Confirm-Delete']
+}));
 
 // Middleware para log de requisições
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
   next();
 });
+
+// Middleware para parsing do body como JSON
+app.use(express.json());
 
 // Middleware para verificar se o Prisma está conectado
 app.use(async (req, res, next) => {
@@ -71,7 +46,7 @@ app.use(async (req, res, next) => {
     if (req.url === '/api/health') {
       return next();
     }
-
+    
     // Verifica a conexão com o banco de dados
     await prisma.$queryRaw`SELECT 1`;
     next();
@@ -143,12 +118,12 @@ app.post('/api/cases/batch', async (req, res) => {
   try {
     console.log('Received batch request:', req.body);
     const { cases } = req.body;
-
+    
     if (!cases || !Array.isArray(cases)) {
       console.error('Invalid request format. Expected cases array.');
       return res.status(400).json({ error: 'Formato de requisição inválido. Array de casos esperado.' });
     }
-
+    
     // Verificar se há um usuário padrão
     const defaultUser = await prisma.user.findFirst();
     if (!defaultUser) {
@@ -163,9 +138,9 @@ app.post('/api/cases/batch', async (req, res) => {
         }
       });
     }
-
+    
     const userId = defaultUser?.id || "1";
-
+    
     const createdCases = await prisma.$transaction(
       cases.map(caseData => 
         prisma.case.create({
@@ -174,20 +149,16 @@ app.post('/api/cases/batch', async (req, res) => {
             debtorName: caseData.brand || '',
             storeUrl: caseData.storeUrl || '',
             adUrl: caseData.adUrl || '',
-            observations: caseData.observations || '',
-            origin: caseData.origin || 'Prospecção',
             totalAmount: 0,
             currentPayment: 0,
             status: caseData.status || 'received',
-            column: caseData.column || 'received',
             daysInColumn: 0,
-            userId: userId,
-            createdAt: new Date()
+            userId: userId
           }
         })
       )
     );
-
+    
     console.log('Created cases:', createdCases.length);
     res.json(createdCases);
   } catch (error) {

@@ -1,17 +1,29 @@
+
 import axios from 'axios';
 
-// Create API instance
+// Get the current host dynamically to handle different environments
+const currentHost = window.location.hostname;
+const port = '5000';
+
 const api = axios.create({
-  baseURL: `http://0.0.0.0:5000/api`,
+  baseURL: `http://${currentHost}:${port}/api`,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json'
-  }
+  },
+  withCredentials: true
 });
 
-// Add response interceptor for error handling
+// Interceptor para log de erros
 api.interceptors.response.use(
-  response => response,
+  response => {
+    console.log('API Success:', {
+      url: response.config.url,
+      method: response.config.method,
+      status: response.status
+    });
+    return response;
+  },
   error => {
     console.error('API Error:', {
       url: error.config?.url,
@@ -38,25 +50,29 @@ api.interceptors.request.use(
   }
 );
 
-// API service methods
 export const CasesService = {
+  getAll: async () => {
+    try {
+      const response = await api.get('/cases');
+      return response.data;
+    } catch (error) {
+      console.error('Failed to fetch cases:', error);
+      throw error;
+    }
+  },
+  
   create: async (prospectionData: {
     storeUrl: string;
     adUrl: string;
     brands: string[];
-    observations?: string;
-    origin?: string;
-    status?: string;
   }) => {
     try {
       // Criar um caso para cada marca
       const cases = prospectionData.brands.map(brand => ({
         brand,
-        storeUrl: prospectionData.storeUrl || '',
-        adUrl: prospectionData.adUrl || '',
-        observations: prospectionData.observations || '',
-        origin: prospectionData.origin || 'Prospecção',
-        status: prospectionData.status || 'received',
+        storeUrl: prospectionData.storeUrl,
+        adUrl: prospectionData.adUrl,
+        status: 'received',
         column: 'received',
         createdAt: new Date().toISOString()
       }));
@@ -68,41 +84,6 @@ export const CasesService = {
       console.error('Erro ao criar casos:', error);
       throw error;
     }
-  },
-
-  getAll: async () => {
-    try {
-      const response = await api.get('/cases');
-      return response.data;
-    } catch (error) {
-      console.error('Failed to fetch cases:', error);
-      throw error;
-    }
-  },
-
-  getById: async (id: string) => {
-    try {
-      const response = await api.get(`/cases/${id}`);
-      return response.data;
-    } catch (error) {
-      console.error(`Failed to fetch case ${id}:`, error);
-      throw error;
-    }
-  },
-
-  update: async (id: string, data: any) => {
-    try {
-      const response = await api.put(`/cases/${id}`, data);
-      return response.data;
-    } catch (error) {
-      console.error(`Failed to update case ${id}:`, error);
-      throw error;
-    }
-  },
-
-  getBatch: async () => {
-    const response = await api.get('/cases/batch');
-    return response.data;
   }
 };
 
