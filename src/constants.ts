@@ -7,5 +7,6 @@ export const departments = {
   IP_TOOLS: 'ip_tools',
   ATENDIMENTO: 'atendimento',
   FINANCEIRO: 'financeiro',
-  APROVACAO: 'aprovacao'
+  APROVACAO: 'aprovacao',
+  CLIENTE: 'cliente'
 };

@@ -109,6 +109,30 @@ export const AuthService = {
           mainDepartment: departments.FINANCEIRO,
           isAdmin: false
         }
+      },
+      auditoria: {
+        email: 'auditoria@tbp.com',
+        password: 'tbp123',
+        user: {
+          id: '8',
+          name: 'Equipe Auditoria',
+          email: 'auditoria@tbp.com',
+          departments: [departments.AUDITORIA],
+          mainDepartment: departments.AUDITORIA,
+          isAdmin: false
+        }
+      },
+      cliente: {
+        email: 'cliente@empresa.com',
+        password: 'tbp123',
+        user: {
+          id: '9',
+          name: 'Cliente',
+          email: 'cliente@empresa.com',
+          departments: [departments.CLIENTE],
+          mainDepartment: departments.CLIENTE,
+          isAdmin: false
+        }
       }
     };
 
