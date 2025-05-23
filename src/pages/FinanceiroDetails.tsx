@@ -133,25 +133,11 @@ export default function FinanceiroDetails() {
           <CardContent>
             <form className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Valor Total</p>
-                    <p className="font-medium">
-                      {caseData.acordo.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Status</p>
-                    <Button 
-                      variant={caseData.statusPagamento === "Pago" ? "default" : "secondary"}
-                      size="sm"
-                      onClick={() => {
-                        caseData.statusPagamento = caseData.statusPagamento === "Pago" ? "Não Pago" : "Pago";
-                      }}
-                    >
-                      {caseData.statusPagamento === "Pago" ? "Pago" : "Não Pago"}
-                    </Button>
-                  </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Valor Total</p>
+                  <p className="font-medium">
+                    {caseData.acordo.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                  </p>
                 </div>
                 <div>
                   <label className="text-sm text-muted-foreground">Forma de Pagamento</label>
