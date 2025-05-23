@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { Toaster } from "@/components/ui/toaster"
 import Sidebar from '@/components/Sidebar'
@@ -23,10 +22,11 @@ import TopBar from "@/components/TopBar";
 import InternalLogin from "@/pages/InternalLogin";
 import RouteGuard from "@/components/RouteGuard";
 import { departments } from './constants';
+import AdminDashboard from './pages/AdminDashboard'; // Import AdminDashboard component
 
 function AppContent() {
   const location = useLocation();
-  
+
   return (
     <div className="flex h-screen bg-background">
       {location.pathname !== '/login' && <Sidebar />}
@@ -51,8 +51,13 @@ function AppContent() {
                 <Profile />
               </RouteGuard>
             } />
+            <Route path="/admin" element={
+              <RouteGuard requiredDepartment={departments.ADMIN}>
+                <AdminDashboard />
+              </RouteGuard>
+            } />
             <Route path="/settings" element={
-              <RouteGuard>
+              <RouteGuard requiredDepartment={departments.ADMIN}>
                 <Settings />
               </RouteGuard>
             } />
