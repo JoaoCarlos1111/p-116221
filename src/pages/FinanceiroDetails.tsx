@@ -1,9 +1,10 @@
-
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, FileText, ExternalLink } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 
 export default function FinanceiroDetails() {
   const { id } = useParams();
@@ -86,29 +87,87 @@ export default function FinanceiroDetails() {
           <CardHeader>
             <CardTitle>Resumo do Acordo</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-muted-foreground">Valor Total</p>
-                <p className="font-medium">
-                  {caseData.acordo.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                </p>
+          <CardContent>
+            <form className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Valor Total</p>
+                  <p className="font-medium">
+                    {caseData.acordo.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                  </p>
+                </div>
+                <div>
+                  <label className="text-sm text-muted-foreground">Forma de Pagamento</label>
+                  <Select defaultValue={caseData.acordo.formaPagamento} onValueChange={(value) => console.log(value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione a forma de pagamento" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="pix">PIX</SelectItem>
+                      <SelectItem value="boleto">Boleto Bancário</SelectItem>
+                      <SelectItem value="cartao">Cartão de Crédito</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="text-sm text-muted-foreground">Número de Parcelas</label>
+                  <Select defaultValue="1" onValueChange={(value) => {
+                    const parcelas = parseInt(value);
+                    const valorParcela = caseData.acordo.valorTotal / parcelas;
+                    console.log(`Valor da parcela: ${valorParcela}`);
+                  }}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione o número de parcelas" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {[1,2,3,4,5,6].map(num => (
+                        <SelectItem key={num} value={num.toString()}>
+                          {num}x de {(caseData.acordo.valorTotal / num).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="text-sm text-muted-foreground">Data do Primeiro Pagamento</label>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      type="date"
+                      min={new Date().toISOString().split('T')[0]}
+                      onChange={(e) => {
+                        const date = new Date(e.target.value);
+                        console.log('Data selecionada:', date);
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Valor da Parcela</p>
-                <p className="font-medium">
-                  {caseData.acordo.valorParcela.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                </p>
+              <div className="mt-4">
+                <p className="text-sm font-medium mb-2">Previsão das Parcelas</p>
+                <div className="space-y-2">
+                  {[...Array(parseInt(caseData.acordo.parcelas) || 1)].map((_, index) => {
+                    const data = new Date(caseData.acordo.primeiroVencimento);
+                    data.setMonth(data.getMonth() + index);
+                    return (
+                      <div key={index} className="flex justify-between items-center p-2 bg-muted rounded-md">
+                        <span>Parcela {index + 1}</span>
+                        <span>{data.toLocaleDateString()}</span>
+                        <span>{(caseData.acordo.valorParcela).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Forma de Pagamento</p>
-                <p className="font-medium">{caseData.acordo.formaPagamento}</p>
+              <div className="flex justify-end mt-4">
+                <Button type="submit" onClick={(e) => {
+                  e.preventDefault();
+                  // Aqui você implementaria a lógica para salvar as configurações
+                  console.log('Salvando configurações de pagamento');
+                }}>
+                  Confirmar Configuração
+                </Button>
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Data do Acordo</p>
-                <p className="font-medium">{new Date(caseData.acordo.dataAcordo).toLocaleDateString()}</p>
-              </div>
-            </div>
+            </form>
           </CardContent>
         </Card>
 
