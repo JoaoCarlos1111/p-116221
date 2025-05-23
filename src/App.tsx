@@ -43,9 +43,9 @@ function App() {
             <Route path="/iptools/case/:id" element={<IPToolsCaseView />} />
             <Route path="/atendimento" element={<Atendimento />} />
             <Route path="/atendimento/caso/:id" element={<AtendimentoCaseDetails />} />
-            <Route path="/approvals" element={<Approvals />} />
-            <Route path="/financeiro" element={<Financeiro />} />
-            <Route path="/financeiro/:id" element={<FinanceiroDetails />} />
+            <Route path="approvals" element={<Approvals />} />
+            <Route path="financeiro" element={<Financeiro />} />
+            <Route path="financeiro/:id" element={<FinanceiroDetails />} />
           </Routes>
         </main>
         </div>
