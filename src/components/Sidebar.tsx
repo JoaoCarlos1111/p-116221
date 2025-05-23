@@ -24,7 +24,15 @@ export default function Sidebar() {
   const userDepartments = user.departments || [];
   const isAdmin = user.isAdmin;
 
-  const menuItems = [
+  const adminMenuItems = [
+    {
+      path: "/dashboard",
+      icon: <LayoutDashboard size={20} />,
+      label: "Dashboard Admin"
+    }
+  ];
+
+  const menuItems = isAdmin ? adminMenuItems : [
     {
       path: "/dashboard",
       icon: <LayoutDashboard size={20} />,
@@ -40,18 +48,12 @@ export default function Sidebar() {
     {
       path: "/verificacao",
       icon: <Kanban size={20} />,
-      label: "Verificação",
+      label: "Verificação", 
       departments: [departments.VERIFICACAO]
     },
     {
       path: "/auditoria",
       icon: <ScrollText size={20} />,
-      label: "Auditoria",
-      departments: [departments.AUDITORIA]
-    },
-    {
-      path: "/auditoria",
-      icon: <CheckSquare size={20} />,
       label: "Auditoria",
       departments: [departments.AUDITORIA]
     },
@@ -68,7 +70,7 @@ export default function Sidebar() {
       departments: [departments.LOGISTICA]
     },
     {
-      path: "/iptools",
+      path: "/iptools", 
       icon: <Shield size={20} />,
       label: "IP Tools",
       departments: [departments.IP_TOOLS]
