@@ -93,14 +93,53 @@ export default function FinanceiroDetails() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4 mb-6">
-        <Button variant="ghost" onClick={() => navigate('/financeiro')}>
-          <ChevronLeft className="h-4 w-4 mr-2" />
-          Voltar
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold">Caso #{id}</h1>
-          <p className="text-sm text-muted-foreground">Detalhes financeiros</p>
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" onClick={() => navigate('/financeiro')}>
+            <ChevronLeft className="h-4 w-4 mr-2" />
+            Voltar
+          </Button>
+          <div>
+            <h1 className="text-2xl font-bold">Caso #{id}</h1>
+            <p className="text-sm text-muted-foreground">Detalhes financeiros</p>
+          </div>
+        </div>
+
+        <div className="bg-muted/30 p-6 rounded-lg">
+          <div className="flex items-center justify-center w-full">
+            {[
+              { id: 'emitir', title: 'Emitir pagamento', number: 1 },
+              { id: 'primeira', title: '1° parcela', number: 2 },
+              { id: 'segunda', title: '2° parcela', number: 3 },
+              { id: 'terceira', title: '3° parcela', number: 4 },
+              { id: 'quarta', title: '4° parcela', number: 5 },
+              { id: 'inadimplente', title: 'Inadimplente', number: 6 },
+              { id: 'finalizado', title: 'Pagamento finalizado', number: 7 }
+            ].map((step, index, steps) => (
+              <div key={step.id} className="flex items-center">
+                <button
+                  onClick={() => {
+                    // Aqui você pode adicionar a lógica para mudar o status
+                    caseData.status = step.id;
+                    // Atualizar o estado local e fazer chamada à API
+                  }}
+                  className={`flex items-center group cursor-pointer ${
+                    caseData.status === step.id ? 'opacity-100' : 'opacity-60 hover:opacity-100'
+                  }`}
+                >
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors
+                    ${caseData.status === step.id ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80'}`}
+                  >
+                    {step.number}
+                  </div>
+                  <span className="ml-3 text-sm font-medium">{step.title}</span>
+                </button>
+                {index < steps.length - 1 && (
+                  <div className="mx-3 h-[2px] w-12 bg-muted" />
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
