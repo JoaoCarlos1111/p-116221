@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, FileText, ExternalLink } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { useState } from 'react';
 
 export default function FinanceiroDetails() {
   const { id } = useParams();
@@ -43,6 +44,46 @@ export default function FinanceiroDetails() {
       linkPagina: "https://exemplo.com/pagina-vendas",
       observacoesIPTools: "Página em conformidade com as diretrizes."
     }
+  };
+
+  const [paymentConfig, setPaymentConfig] = useState({
+    method: caseData.acordo.formaPagamento,
+    installments: caseData.acordo.parcelas,
+    firstPaymentDate: caseData.acordo.primeiroVencimento,
+    installmentValue: caseData.acordo.valorParcela
+  });
+
+  const [previewInstallments, setPreviewInstallments] = useState(
+    Array(parseInt(caseData.acordo.parcelas)).fill(null).map((_, index) => {
+      const date = new Date(caseData.acordo.primeiroVencimento);
+      date.setMonth(date.getMonth() + index);
+      return {
+        numero: index + 1,
+        valor: caseData.acordo.valorParcela,
+        vencimento: date.toISOString().split('T')[0],
+        status: 'Em aberto'
+      };
+    })
+  );
+
+  const updatePreviewInstallments = (numInstallments: number, firstDate: string, totalValue: number) => {
+    const installmentValue = totalValue / numInstallments;
+    const newInstallments = Array(numInstallments).fill(null).map((_, index) => {
+      const date = new Date(firstDate);
+      date.setMonth(date.getMonth() + index);
+      return {
+        numero: index + 1,
+        valor: installmentValue,
+        vencimento: date.toISOString().split('T')[0],
+        status: 'Em aberto'
+      };
+    });
+    setPreviewInstallments(newInstallments);
+    setPaymentConfig(prev => ({
+      ...prev,
+      installments: numInstallments,
+      installmentValue: installmentValue
+    }));
   };
 
   return (
@@ -98,7 +139,7 @@ export default function FinanceiroDetails() {
                 </div>
                 <div>
                   <label className="text-sm text-muted-foreground">Forma de Pagamento</label>
-                  <Select defaultValue={caseData.acordo.formaPagamento} onValueChange={(value) => console.log(value)}>
+                  <Select defaultValue={caseData.acordo.formaPagamento} onValueChange={(value) => setPaymentConfig(prev => ({ ...prev, method: value }))}>
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione a forma de pagamento" />
                     </SelectTrigger>
@@ -111,16 +152,15 @@ export default function FinanceiroDetails() {
                 </div>
                 <div>
                   <label className="text-sm text-muted-foreground">Número de Parcelas</label>
-                  <Select defaultValue="1" onValueChange={(value) => {
+                  <Select defaultValue={caseData.acordo.parcelas.toString()} onValueChange={(value) => {
                     const parcelas = parseInt(value);
-                    const valorParcela = caseData.acordo.valorTotal / parcelas;
-                    console.log(`Valor da parcela: ${valorParcela}`);
+                    updatePreviewInstallments(parcelas, paymentConfig.firstPaymentDate, caseData.acordo.valorTotal);
                   }}>
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione o número de parcelas" />
                     </SelectTrigger>
                     <SelectContent>
-                      {[1,2,3,4,5,6].map(num => (
+                      {[1, 2, 3, 4, 5, 6].map(num => (
                         <SelectItem key={num} value={num.toString()}>
                           {num}x de {(caseData.acordo.valorTotal / num).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                         </SelectItem>
@@ -134,9 +174,11 @@ export default function FinanceiroDetails() {
                     <Input
                       type="date"
                       min={new Date().toISOString().split('T')[0]}
+                      defaultValue={caseData.acordo.primeiroVencimento}
                       onChange={(e) => {
-                        const date = new Date(e.target.value);
-                        console.log('Data selecionada:', date);
+                        const date = e.target.value;
+                        updatePreviewInstallments(paymentConfig.installments, date, caseData.acordo.valorTotal);
+                        setPaymentConfig(prev => ({ ...prev, firstPaymentDate: date }));
                       }}
                     />
                   </div>
@@ -145,24 +187,30 @@ export default function FinanceiroDetails() {
               <div className="mt-4">
                 <p className="text-sm font-medium mb-2">Previsão das Parcelas</p>
                 <div className="space-y-2">
-                  {[...Array(parseInt(caseData.acordo.parcelas) || 1)].map((_, index) => {
-                    const data = new Date(caseData.acordo.primeiroVencimento);
-                    data.setMonth(data.getMonth() + index);
-                    return (
-                      <div key={index} className="flex justify-between items-center p-2 bg-muted rounded-md">
-                        <span>Parcela {index + 1}</span>
-                        <span>{data.toLocaleDateString()}</span>
-                        <span>{(caseData.acordo.valorParcela).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
-                      </div>
-                    );
-                  })}
+                  {previewInstallments.map((parcela, index) => (
+                    <div key={index} className="flex justify-between items-center p-2 bg-muted rounded-md">
+                      <span>Parcela {index + 1}</span>
+                      <span>{new Date(parcela.vencimento).toLocaleDateString()}</span>
+                      <span>{parcela.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
               <div className="flex justify-end mt-4">
                 <Button type="submit" onClick={(e) => {
                   e.preventDefault();
-                  // Aqui você implementaria a lógica para salvar as configurações
-                  console.log('Salvando configurações de pagamento');
+                  // Update caseData.parcelas with previewInstallments data
+                  caseData.parcelas = previewInstallments.map(parcela => ({
+                    numero: parcela.numero,
+                    valor: parcela.valor,
+                    vencimento: parcela.vencimento,
+                    pagamento: null,
+                    status: 'Em aberto',
+                    comprovante: false
+                  }));
+                  // Here you implement the logic to save the configurations
+                  console.log('Saving payment configurations', paymentConfig);
+                  console.log('Updated installments:', caseData.parcelas);
                 }}>
                   Confirmar Configuração
                 </Button>
@@ -191,7 +239,7 @@ export default function FinanceiroDetails() {
                 <tbody>
                   {caseData.parcelas.map((parcela) => (
                     <tr key={parcela.numero} className="border-b">
-                      <td className="px-4 py-2">{parcela.numero}/{caseData.acordo.parcelas}</td>
+                      <td className="px-4 py-2">{parcela.numero}/{paymentConfig.installments}</td>
                       <td className="px-4 py-2">
                         {parcela.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                       </td>
@@ -240,7 +288,7 @@ export default function FinanceiroDetails() {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Link da Página</p>
-              <a href={caseData.reativacao.linkPagina} target="_blank" rel="noopener noreferrer" 
+              <a href={caseData.reativacao.linkPagina} target="_blank" rel="noopener noreferrer"
                 className="text-primary hover:underline flex items-center gap-1">
                 Acessar página <ExternalLink className="h-4 w-4" />
               </a>
