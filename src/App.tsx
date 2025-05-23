@@ -67,12 +67,12 @@ function AppContent() {
               </RouteGuard>
             } />
             <Route path="/auditoria" element={
-              <RouteGuard requiredDepartment={departments.VERIFICACAO}>
+              <RouteGuard requiredDepartment={departments.AUDITORIA}>
                 <Auditoria />
               </RouteGuard>
             } />
             <Route path="/auditoria/caso/:id" element={
-              <RouteGuard requiredDepartment={departments.VERIFICACAO}>
+              <RouteGuard requiredDepartment={departments.AUDITORIA}>
                 <AuditoriaCaseDetails />
               </RouteGuard>
             } />
@@ -107,7 +107,7 @@ function AppContent() {
               </RouteGuard>
             } />
             <Route path="/approvals" element={
-              <RouteGuard requiredDepartment={[departments.APROVACAO, departments.CLIENTE]}>
+              <RouteGuard requiredDepartment={departments.CLIENTE}>
                 <Approvals />
               </RouteGuard>
             } />

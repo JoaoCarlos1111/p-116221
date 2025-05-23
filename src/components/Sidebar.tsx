@@ -39,9 +39,9 @@ export default function Sidebar() {
       departments: [departments.PROSPECCAO]
     },
     {
-      path: "/kanban/verificacao",
+      path: "/verificacao",
       icon: <Kanban size={20} />,
-      label: "Kanban",
+      label: "Verificação",
       departments: [departments.VERIFICACAO]
     },
     {
@@ -54,7 +54,7 @@ export default function Sidebar() {
       path: "/approvals",
       icon: <CheckSquare size={20} />,
       label: "Aprovações",
-      departments: [departments.APROVACAO, departments.CLIENTE]
+      departments: [departments.CLIENTE]
     },
     {
       path: "/logistica",
