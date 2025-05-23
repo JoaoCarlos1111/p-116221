@@ -85,12 +85,49 @@ export default function Approvals() {
   };
 
   const handleBulkAction = (actionType: 'approve' | 'reject') => {
-    setApprovals(prev => prev.map(approval => {
-      if (approval.selected && approval.status === 'pending') {
-        return { ...approval, status: actionType === 'approve' ? 'approved' : 'rejected', selected: false };
+    if (actionType === 'approve') {
+      // Get selected cases
+      const selectedApprovals = approvals.filter(a => a.selected && a.status === 'pending');
+      
+      // Create logistics cases
+      const logisticsCases = selectedApprovals.map(approval => ({
+        id: approval.id,
+        storeName: `Store ${approval.id}`,
+        address: "Pending address",
+        brand: "Pending brand",
+        approvalDate: new Date().toISOString().split('T')[0],
+        status: "Approved",
+        document: "Pending",
+        proofUrl: approval.proofUrl
+      }));
+
+      // Store in logistics queue
+      try {
+        const existingCases = JSON.parse(localStorage.getItem('logisticsCases') || '[]');
+        localStorage.setItem('logisticsCases', JSON.stringify([...existingCases, ...logisticsCases]));
+        
+        // Remove approved cases from approvals list
+        setApprovals(prev => prev.filter(a => !a.selected || a.status !== 'pending'));
+        
+        // Trigger confetti for success
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      } catch (error) {
+        console.error('Error transferring cases to logistics:', error);
       }
-      return approval;
-    }));
+    } else {
+      // Handle rejection
+      setApprovals(prev => prev.map(approval => {
+        if (approval.selected && approval.status === 'pending') {
+          return { ...approval, status: 'rejected', selected: false };
+        }
+        return approval;
+      }));
+    }
+    
     setSelectAll(false);
   };
 
