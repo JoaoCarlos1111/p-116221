@@ -12,57 +12,49 @@ export const departments = {
 
 export const AuthService = {
   async login(email: string, password: string) {
-    try {
-      const response = await fetch('http://0.0.0.0:5000/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || 'Credenciais inválidas');
+    // Credenciais de teste
+    const testCredentials = {
+      admin: {
+        email: 'admin@tbp.com',
+        password: 'admin123',
+        user: {
+          id: '1',
+          name: 'Administrador',
+          email: 'admin@tbp.com',
+          departments: Object.values(departments),
+          mainDepartment: departments.ADMIN,
+          isAdmin: true
+        }
+      },
+      user: {
+        email: 'user@tbp.com',
+        password: 'user123',
+        user: {
+          id: '2',
+          name: 'Usuário Teste',
+          email: 'user@tbp.com',
+          departments: [departments.VERIFICACAO],
+          mainDepartment: departments.VERIFICACAO,
+          isAdmin: false
+        }
       }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Login error:', error);
-      throw new Error('Erro ao fazer login. Por favor, verifique suas credenciais.');
-    }
-  },
-
-  async register(userData: { 
-    email: string; 
-    password: string; 
-    name: string; 
-    departments: string[];
-    mainDepartment: string;
-    isAdmin?: boolean;
-  }) {
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
-    
-    const user = await prisma.user.create({
-      data: {
-        ...userData,
-        password: hashedPassword,
-        isAdmin: userData.isAdmin || false
-      }
-    });
-
-    return { 
-      id: user.id, 
-      email: user.email, 
-      name: user.name, 
-      departments: user.departments,
-      mainDepartment: user.mainDepartment,
-      isAdmin: user.isAdmin 
     };
-  },
 
-  hasAccess(userDepartments: string[], requiredDepartment: string) {
-    return userDepartments.includes(requiredDepartment) || userDepartments.includes(departments.ADMIN);
+    // Simula delay da rede
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Verifica credenciais
+    const adminMatch = email === testCredentials.admin.email && password === testCredentials.admin.password;
+    const userMatch = email === testCredentials.user.email && password === testCredentials.user.password;
+
+    if (adminMatch || userMatch) {
+      const userData = adminMatch ? testCredentials.admin.user : testCredentials.user.user;
+      return {
+        token: 'test-jwt-token-' + userData.id,
+        user: userData
+      };
+    }
+
+    throw new Error('Credenciais inválidas');
   }
 };
