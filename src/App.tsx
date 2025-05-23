@@ -22,7 +22,7 @@ import TopBar from "@/components/TopBar";
 
 function App() {
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <div className="flex h-screen bg-background">
         <Sidebar />
         <div className="flex-1 flex flex-col">
