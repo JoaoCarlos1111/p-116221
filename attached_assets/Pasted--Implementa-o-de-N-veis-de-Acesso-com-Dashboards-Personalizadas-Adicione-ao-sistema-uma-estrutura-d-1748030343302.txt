@@ -1,0 +1,84 @@
+ Implementação de Níveis de Acesso com Dashboards Personalizadas
+Adicione ao sistema uma estrutura de autenticação e controle de acesso baseada em permissões de setor, com dashboards personalizadas por nível de acesso.
+
+Cada usuário estará vinculado a um ou mais setores e terá acesso apenas às telas e funcionalidades correspondentes. Cada setor terá sua própria dashboard, com dados e métricas relevantes para o operador logado.
+
+👤 Níveis de acesso por setor + Dashboards
+Administração
+
+Acesso total ao sistema
+
+Pode gerenciar usuários e permissões
+
+Dashboard Admin: resumo geral de todos os setores, número de casos por etapa, total de notificações, pagamentos realizados, etc.
+
+Prospecção
+
+Acesso à tela /prospeccao
+
+Pode criar novos casos
+
+Dashboard Prospecção: total de casos criados, marcas mais citadas, links enviados, produtividade individual
+
+Verificação
+
+Acesso ao kanban de verificação
+
+Pode aprovar/reprovar e adicionar observações
+
+Dashboard Verificação: número de casos aprovados/reprovados, tempo médio de verificação, volume por analista
+
+Aprovação do Cliente
+
+Acesso à tela de aprovação
+
+Pode visualizar e aprovar/reprovar
+
+Dashboard do Cliente: casos pendentes, aprovados, reprovados, prazo médio de resposta
+
+Logística
+
+Acesso ao kanban de logística
+
+Pode imprimir, atualizar envio, mover cards
+
+Dashboard Logística: número de notificações impressas, enviadas, entregues, em trânsito, com atraso
+
+IP Tools
+
+Acesso ao kanban de IP Tools
+
+Pode adicionar links e enviar report
+
+Dashboard IP Tools: número de links enviados, taxa de remoção, casos pendentes de resposta, reenvios necessários
+
+Atendimento
+
+Acesso ao kanban de atendimento
+
+Visualiza dados logísticos, contato e proposta de acordo
+
+Dashboard Atendimento: número de contatos feitos, propostas enviadas, acordos fechados, tempo médio de resposta
+
+Financeiro
+
+Acesso ao kanban de financeiro
+
+Pode atualizar status de parcelas e visualizar documentos
+
+Dashboard Financeiro: total recebido, inadimplência, pagamentos a vencer, pagamentos finalizados
+
+🔑 Regras gerais
+Ao fazer login, o sistema deve verificar as permissões e redirecionar o usuário à dashboard do seu setor principal.
+
+Se o usuário tiver múltiplos acessos, deve haver um seletor de setor visível para alternar entre as telas e dashboards correspondentes.
+
+Criar uma tela de gerenciamento de usuários (acesso Admin) com:
+
+Nome
+
+E-mail
+
+Setores permitidos
+
+Botão de resetar senha
