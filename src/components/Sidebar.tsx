@@ -1,3 +1,4 @@
+
 import { NavLink } from "react-router-dom";
 import { 
   LayoutDashboard, 
@@ -9,13 +10,83 @@ import {
   ChevronRight,
   LogOut,
   GitPullRequest,
-  Shield
+  Shield,
+  Banknote,
+  ScrollText
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { departments } from "@/constants";
 
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const userDepartments = user.departments || [];
+  const isAdmin = user.isAdmin;
+
+  const menuItems = [
+    {
+      path: "/dashboard",
+      icon: <LayoutDashboard size={20} />,
+      label: "Dashboard",
+      departments: "all"
+    },
+    {
+      path: "/prospeccao",
+      icon: <GitPullRequest size={20} />,
+      label: "Workflow",
+      departments: [departments.PROSPECCAO]
+    },
+    {
+      path: "/kanban/verificacao",
+      icon: <Kanban size={20} />,
+      label: "Kanban",
+      departments: [departments.VERIFICACAO]
+    },
+    {
+      path: "/auditoria",
+      icon: <CheckSquare size={20} />,
+      label: "Auditoria",
+      departments: [departments.VERIFICACAO]
+    },
+    {
+      path: "/approvals",
+      icon: <CheckSquare size={20} />,
+      label: "Aprovações",
+      departments: [departments.APROVACAO]
+    },
+    {
+      path: "/logistica",
+      icon: <Kanban size={20} />,
+      label: "Logística",
+      departments: [departments.LOGISTICA]
+    },
+    {
+      path: "/iptools",
+      icon: <Shield size={20} />,
+      label: "IP Tools",
+      departments: [departments.IP_TOOLS]
+    },
+    {
+      path: "/financeiro",
+      icon: <Banknote size={20} />,
+      label: "Financeiro",
+      departments: [departments.FINANCEIRO]
+    },
+    {
+      path: "/atendimento",
+      icon: <UserCircle size={20} />,
+      label: "Atendimento",
+      departments: [departments.ATENDIMENTO]
+    }
+  ];
+
+  const hasAccess = (item: any) => {
+    if (isAdmin) return true;
+    if (item.departments === "all") return true;
+    return item.departments.some((dept: string) => userDepartments.includes(dept));
+  };
 
   return (
     <div className={cn(
@@ -43,79 +114,21 @@ export default function Sidebar() {
       </div>
 
       <nav className="space-y-2 px-2">
-        <NavLink to="/dashboard" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <LayoutDashboard size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Dashboard</span>
-        </NavLink>
-
-        <NavLink to="/kanban/verificacao" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <Kanban size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Kanban</span>
-        </NavLink>
-
-        <NavLink to="/prospeccao" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <GitPullRequest size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Workflow</span>
-        </NavLink>
-
-        <NavLink to="/auditoria" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <CheckSquare size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Auditoria</span>
-        </NavLink>
-
-        <NavLink to="/approvals" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <CheckSquare size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Aprovações</span>
-        </NavLink>
-
-        <NavLink to="/logistica" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <Kanban size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Logística</span>
-        </NavLink>
-
-        <NavLink to="/iptools" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <Shield size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>IP Tools</span>
-        </NavLink>
-
-        <NavLink to="/financeiro" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <Kanban size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Financeiro</span>
-        </NavLink>
-
-        <NavLink to="/atendimento" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <UserCircle size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Atendimento</span>
-        </NavLink>
-
-        
+        {menuItems.map((item, index) => (
+          hasAccess(item) && (
+            <NavLink 
+              key={index}
+              to={item.path} 
+              className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent"
+            >
+              {item.icon}
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>{item.label}</span>
+            </NavLink>
+          )
+        ))}
 
         <div className="absolute bottom-4 left-0 right-0 px-2">
           <button
