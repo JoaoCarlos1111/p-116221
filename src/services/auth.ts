@@ -13,7 +13,7 @@ export const departments = {
 export const AuthService = {
   async login(email: string, password: string) {
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch('http://0.0.0.0:5000/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -22,14 +22,15 @@ export const AuthService = {
       });
 
       if (!response.ok) {
-        throw new Error('Login failed');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Credenciais inválidas');
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
       console.error('Login error:', error);
-      throw error;
+      throw new Error('Erro ao fazer login. Por favor, verifique suas credenciais.');
     }
   },
 
