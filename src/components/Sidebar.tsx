@@ -1,4 +1,3 @@
-
 import { NavLink } from "react-router-dom";
 import { 
   LayoutDashboard, 
@@ -20,7 +19,7 @@ import { departments } from "@/constants";
 
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  
+
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const userDepartments = user.departments || [];
   const isAdmin = user.isAdmin;
