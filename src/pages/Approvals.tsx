@@ -27,15 +27,6 @@ interface Approval {
 
 export default function Approvals() {
   const [approvals, setApprovals] = useState<Approval[]>([
-    { id: 'APROV-001', proofUrl: '/proofs/nike_store.pdf', entryDate: '2024-03-21', status: 'pending', title: 'Nike Store BR', description: 'Loja não autorizada vendendo produtos Nike', platform: 'Shopee', brand: 'Nike' },
-    { id: 'APROV-002', proofUrl: '/proofs/adidas_outlet.pdf', entryDate: '2024-03-21', status: 'pending', title: 'Adidas Outlet', description: 'Produtos falsificados Adidas', platform: 'Mercado Livre', brand: 'Adidas' },
-    { id: 'APROV-003', proofUrl: '/proofs/lv_bags.pdf', entryDate: '2024-03-21', status: 'pending', title: 'LV Bags Store', description: 'Bolsas Louis Vuitton falsificadas', platform: 'Instagram', brand: 'Louis Vuitton' },
-    { id: 'APROV-004', proofUrl: '/proofs/gucci_shoes.pdf', entryDate: '2024-03-21', status: 'pending', title: 'Gucci Shoes BR', description: 'Calçados Gucci não autorizados', platform: 'Facebook', brand: 'Gucci' },
-    { id: 'APROV-005', proofUrl: '/proofs/prada_store.pdf', entryDate: '2024-03-21', status: 'pending', title: 'Prada Store', description: 'Produtos Prada sem autorização', platform: 'TikTok Shop', brand: 'Prada' },
-    { id: 'APROV-006', proofUrl: '/proofs/balenciaga_outlet.pdf', entryDate: '2024-03-21', status: 'pending', title: 'Balenciaga Outlet', description: 'Tênis Balenciaga falsificados', platform: 'WhatsApp', brand: 'Balenciaga' },
-    { id: 'CASE-001', proofUrl: '/proofs/nike1.pdf', entryDate: '2024-03-01', status: 'pending', title: 'Nike 1', description: 'Descrição Nike 1', platform: 'Facebook', brand: 'Nike' },
-    { id: 'CASE-002', proofUrl: '/proofs/adidas1.pdf', entryDate: '2024-03-02', status: 'pending', title: 'Adidas 1', description: 'Descrição Adidas 1', platform: 'Instagram', brand: 'Adidas' },
-    { id: 'CASE-003', proofUrl: '/proofs/gucci1.pdf', entryDate: '2024-03-03', status: 'pending', title: 'Gucci 1', description: 'Descrição Gucci 1', platform: 'TikTok', brand: 'Gucci' },
     { id: 'CASE-004', proofUrl: '/proofs/prada1.pdf', entryDate: '2024-03-04', status: 'pending', title: 'Prada 1', description: 'Descrição Prada 1', platform: 'Facebook', brand: 'Prada' },
     { id: 'CASE-005', proofUrl: '/proofs/lv1.pdf', entryDate: '2024-03-05', status: 'pending', title: 'LV 1', description: 'Descrição LV 1', platform: 'Instagram', brand: 'LV' },
     { id: 'CASE-006', proofUrl: '/proofs/nike2.pdf', entryDate: '2024-03-06', status: 'pending', title: 'Nike 2', description: 'Descrição Nike 2', platform: 'TikTok', brand: 'Nike' },
