@@ -32,13 +32,14 @@ import { departments } from './constants';
 
 function AppContent() {
   const location = useLocation();
+  const isLoginPage = location.pathname === '/login';
 
   return (
     <div className="flex h-screen bg-background">
-      {location.pathname !== '/login' && <Sidebar />}
+      {!isLoginPage && <Sidebar />}
       <div className="flex-1 flex flex-col">
-        {location.pathname !== '/login' && <TopBar />}
-        <main className="flex-1 overflow-y-auto p-8">
+        {!isLoginPage && <TopBar />}
+        <main className="flex-1 overflow-y-auto p-8 bg-background">
           <Routes>
             <Route path="/login" element={<InternalLogin />} />
             <Route path="/" element={<Navigate to="/login" replace />} />
