@@ -7,7 +7,6 @@ import KanbanBoard from '@/pages/KanbanBoard'
 import Profile from '@/pages/Profile'
 import Settings from '@/pages/Settings'
 import CaseDetails from '@/pages/CaseDetails'
-import Admin from '@/pages/Admin'
 import Prospeccao from '@/pages/Prospeccao';
 import Auditoria from './pages/Auditoria';
 import AuditoriaCaseDetails from './pages/AuditoriaCaseDetails';
@@ -55,11 +54,6 @@ function AppContent() {
             <Route path="/settings" element={
               <RouteGuard>
                 <Settings />
-              </RouteGuard>
-            } />
-            <Route path="/admin" element={
-              <RouteGuard requiredDepartment={departments.ADMIN}>
-                <Admin />
               </RouteGuard>
             } />
             <Route path="/case/:id" element={
