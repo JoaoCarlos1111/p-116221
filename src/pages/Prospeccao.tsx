@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { PlusCircle, AlertCircle, Store, Link2, BoxSelect, ChevronRight } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast"
+import { CasesService } from "@/services/api";
 
 interface LinkSet {
   id: string;
@@ -105,10 +106,11 @@ export default function Prospeccao() {
       // Limpar formulário
       setLinkSets([{ id: Date.now().toString(), storeUrl: '', adUrl: '', brand: '' }]);
     } catch (error) {
+      console.error('Erro ao criar casos:', error);
       toast({
         variant: "destructive",
         title: "Erro ao criar casos",
-        description: "Ocorreu um erro ao enviar os casos para verificação"
+        description: error instanceof Error ? error.message : "Ocorreu um erro ao enviar os casos para verificação"
       });
     }
   };
