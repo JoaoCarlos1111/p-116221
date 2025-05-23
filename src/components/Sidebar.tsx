@@ -99,6 +99,14 @@ export default function Sidebar() {
           )}>IP Tools</span>
         </NavLink>
 
+        <NavLink to="/financeiro" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+          <Kanban size={20} />
+          <span className={cn(
+            "transition-all duration-300",
+            isCollapsed && "hidden"
+          )}>Financeiro</span>
+        </NavLink>
+
         <NavLink to="/atendimento" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
           <UserCircle size={20} />
           <span className={cn(
