@@ -65,14 +65,19 @@ export const CasesService = {
     storeUrl: string;
     adUrl: string;
     brands: string[];
+    observations?: string;
+    origin?: string;
+    status?: string;
   }) => {
     try {
       // Criar um caso para cada marca
       const cases = prospectionData.brands.map(brand => ({
         brand,
-        storeUrl: prospectionData.storeUrl,
-        adUrl: prospectionData.adUrl,
-        status: 'received',
+        storeUrl: prospectionData.storeUrl || '',
+        adUrl: prospectionData.adUrl || '',
+        observations: prospectionData.observations || '',
+        origin: prospectionData.origin || 'Prospecção',
+        status: prospectionData.status || 'received',
         column: 'received',
         createdAt: new Date().toISOString()
       }));
@@ -82,6 +87,26 @@ export const CasesService = {
       return response.data;
     } catch (error) {
       console.error('Erro ao criar casos:', error);
+      throw error;
+    }
+  },
+  
+  getById: async (id: string) => {
+    try {
+      const response = await api.get(`/cases/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to fetch case ${id}:`, error);
+      throw error;
+    }
+  },
+  
+  update: async (id: string, data: any) => {
+    try {
+      const response = await api.put(`/cases/${id}`, data);
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to update case ${id}:`, error);
       throw error;
     }
   }

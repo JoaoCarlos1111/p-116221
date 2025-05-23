@@ -149,11 +149,15 @@ app.post('/api/cases/batch', async (req, res) => {
             debtorName: caseData.brand || '',
             storeUrl: caseData.storeUrl || '',
             adUrl: caseData.adUrl || '',
+            observations: caseData.observations || '',
+            origin: caseData.origin || 'Prospecção',
             totalAmount: 0,
             currentPayment: 0,
             status: caseData.status || 'received',
+            column: caseData.column || 'received',
             daysInColumn: 0,
-            userId: userId
+            userId: userId,
+            createdAt: new Date()
           }
         })
       )
