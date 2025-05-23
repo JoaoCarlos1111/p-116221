@@ -1,3 +1,4 @@
+
 import { NavLink } from "react-router-dom";
 import { 
   LayoutDashboard, 
@@ -19,7 +20,7 @@ import { departments } from "@/constants";
 
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
-
+  
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const userDepartments = user.departments || [];
   const isAdmin = user.isAdmin;
@@ -84,18 +85,6 @@ export default function Sidebar() {
       icon: <UserCircle size={20} />,
       label: "Atendimento",
       departments: [departments.ATENDIMENTO]
-    },
-    {
-      path: "/admin",
-      icon: <Shield size={20} />,
-      label: "Admin",
-      departments: [departments.ADMIN]
-    },
-    {
-      path: "/settings",
-      icon: <SettingsIcon size={20} />,
-      label: "Settings",
-      departments: [departments.ADMIN]
     }
   ];
 
