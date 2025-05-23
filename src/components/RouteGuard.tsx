@@ -1,6 +1,6 @@
 
 import { Navigate } from 'react-router-dom';
-import { departments } from '@/services/auth';
+import { useEffect } from 'react';
 
 interface RouteGuardProps {
   children: React.ReactNode;
@@ -10,6 +10,12 @@ interface RouteGuardProps {
 export default function RouteGuard({ children, requiredDepartment }: RouteGuardProps) {
   const token = localStorage.getItem('token');
   const userStr = localStorage.getItem('user');
+
+  useEffect(() => {
+    if (!token || !userStr) {
+      window.location.href = '/login';
+    }
+  }, [token, userStr]);
 
   if (!token || !userStr) {
     return <Navigate to="/login" replace />;

@@ -33,7 +33,8 @@ function App() {
           <main className="flex-1 overflow-y-auto p-8">
           <Routes>
             <Route path="/login" element={<InternalLogin />} />
-            <Route path="/" element={
+            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/dashboard" element={
               <RouteGuard>
                 <Dashboard />
               </RouteGuard>
