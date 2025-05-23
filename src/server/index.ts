@@ -9,11 +9,21 @@ const app = express();
 const prisma = new PrismaClient();
 
 app.use(cors({
-  origin: ['http://localhost:8080', 'http://0.0.0.0:8080'],
+  origin: function(origin, callback) {
+    // Allow any origin
+    callback(null, true);
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Content-Length', 'X-Confirm-Delete']
 }));
+
+// Middleware to log requests
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  next();
+});
 
 // Middleware de erro global
 app.use((err, req, res, next) => {
@@ -69,27 +79,36 @@ app.post('/api/cases', async (req, res) => {
 
 app.post('/api/cases/batch', async (req, res) => {
   try {
+    console.log('Received batch request:', req.body);
     const { cases } = req.body;
+    
+    if (!cases || !Array.isArray(cases)) {
+      console.error('Invalid request format. Expected cases array.');
+      return res.status(400).json({ error: 'Formato de requisição inválido. Array de casos esperado.' });
+    }
+    
     const createdCases = await prisma.$transaction(
       cases.map((caseData: any) => 
         prisma.case.create({
           data: {
             code: Math.random().toString(36).substring(7),
-            debtorName: caseData.brand,
+            debtorName: caseData.brand || '',
+            storeUrl: caseData.storeUrl || '',
+            adUrl: caseData.adUrl || '',
             totalAmount: 0,
             currentPayment: 0,
-            status: caseData.status,
+            status: caseData.status || 'received',
             daysInColumn: 0,
             userId: "1", // Temporary default user ID
-            ...caseData
           }
         })
       )
     );
+    console.log('Created cases:', createdCases.length);
     res.json(createdCases);
   } catch (error) {
     console.error('Error creating cases:', error);
-    res.status(500).json({ error: 'Erro ao criar casos em lote' });
+    res.status(500).json({ error: 'Erro ao criar casos em lote', details: error.message });
   }
 });
 

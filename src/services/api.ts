@@ -1,12 +1,17 @@
 
 import axios from 'axios';
 
+// Get the current host dynamically to handle different environments
+const currentHost = window.location.hostname;
+const port = '5000';
+
 const api = axios.create({
-  baseURL: 'http://0.0.0.0:5000/api',
-  timeout: 5000,
+  baseURL: `http://${currentHost}:${port}/api`,
+  timeout: 8000,
   headers: {
     'Content-Type': 'application/json'
-  }
+  },
+  withCredentials: true
 });
 
 // Interceptor para log de erros
