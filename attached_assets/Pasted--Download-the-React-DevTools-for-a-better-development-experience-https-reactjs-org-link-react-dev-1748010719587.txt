@@ -1,0 +1,117 @@
+ Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+ ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+warnOnce @ react-router-dom.js:4393
+ ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+warnOnce @ react-router-dom.js:4393
+ Erro ao criar casos: AxiosError
+handleSubmit @ src/pages/Prospeccao.tsx:137
+localhost:5000/api/cases/batch:1 
+            
+            
+           Failed to load resource: net::ERR_CONNECTION_REFUSED
+ Erro ao criar casos: AxiosError
+handleSubmit @ src/pages/Prospeccao.tsx:137
+localhost:5000/api/cases/batch:1 
+            
+            
+           Failed to load resource: net::ERR_CONNECTION_REFUSED
+ Erro ao criar casos: AxiosError
+handleSubmit @ src/pages/Prospeccao.tsx:137
+localhost:5000/api/cases/batch:1 
+            
+            
+           Failed to load resource: net::ERR_CONNECTION_REFUSED
+ Erro ao criar casos: AxiosError {message: 'Network Error', name: 'AxiosError', code: 'ERR_NETWORK', config: {…}, request: XMLHttpRequest, …}
+handleSubmit @ src/pages/Prospeccao.tsx:137
+await in handleSubmit
+callCallback2 @ chunk-QT63QQJV.js:3674
+invokeGuardedCallbackDev @ chunk-QT63QQJV.js:3699
+invokeGuardedCallback @ chunk-QT63QQJV.js:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-QT63QQJV.js:3736
+executeDispatch @ chunk-QT63QQJV.js:7014
+processDispatchQueueItemsInOrder @ chunk-QT63QQJV.js:7034
+processDispatchQueue @ chunk-QT63QQJV.js:7043
+dispatchEventsForPlugins @ chunk-QT63QQJV.js:7051
+(anonymous) @ chunk-QT63QQJV.js:7174
+batchedUpdates$1 @ chunk-QT63QQJV.js:18913
+batchedUpdates @ chunk-QT63QQJV.js:3579
+dispatchEventForPluginEventSystem @ chunk-QT63QQJV.js:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-QT63QQJV.js:5478
+dispatchEvent @ chunk-QT63QQJV.js:5472
+dispatchDiscreteEvent @ chunk-QT63QQJV.js:5449
+ 
+            
+            
+           POST http://localhost:5000/api/cases/batch net::ERR_CONNECTION_REFUSED
+dispatchXhrRequest @ axios.js:1648
+xhr @ axios.js:1528
+dispatchRequest @ axios.js:2003
+_request @ axios.js:2224
+request @ axios.js:2115
+httpMethod @ axios.js:2253
+wrap @ axios.js:8
+create @ src/services/api.ts:20
+(anonymous) @ src/pages/Prospeccao.tsx:116
+handleSubmit @ src/pages/Prospeccao.tsx:116
+callCallback2 @ chunk-QT63QQJV.js:3674
+invokeGuardedCallbackDev @ chunk-QT63QQJV.js:3699
+invokeGuardedCallback @ chunk-QT63QQJV.js:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-QT63QQJV.js:3736
+executeDispatch @ chunk-QT63QQJV.js:7014
+processDispatchQueueItemsInOrder @ chunk-QT63QQJV.js:7034
+processDispatchQueue @ chunk-QT63QQJV.js:7043
+dispatchEventsForPlugins @ chunk-QT63QQJV.js:7051
+(anonymous) @ chunk-QT63QQJV.js:7174
+batchedUpdates$1 @ chunk-QT63QQJV.js:18913
+batchedUpdates @ chunk-QT63QQJV.js:3579
+dispatchEventForPluginEventSystem @ chunk-QT63QQJV.js:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-QT63QQJV.js:5478
+dispatchEvent @ chunk-QT63QQJV.js:5472
+dispatchDiscreteEvent @ chunk-QT63QQJV.js:5449
+ Erro ao criar casos: AxiosError {message: 'Network Error', name: 'AxiosError', code: 'ERR_NETWORK', config: {…}, request: XMLHttpRequest, …}code: "ERR_NETWORK"config: {transitional: {…}, adapter: Array(3), transformRequest: Array(1), transformResponse: Array(1), timeout: 0, …}message: "Network Error"name: "AxiosError"request: XMLHttpRequest {onreadystatechange: null, readyState: 4, timeout: 0, withCredentials: false, upload: XMLHttpRequestUpload, …}stack: "AxiosError: Network Error\n    at XMLHttpRequest.handleError (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/axios.js?v=438fe550:1591:14)\n    at Axios.request (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/axios.js?v=438fe550:2119:41)\n    at async Object.create (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/src/services/api.ts:20:26)\n    at async Promise.all (index 0)\n    at async handleSubmit (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/src/pages/Prospeccao.tsx:116:29)"[[Prototype]]: Error
+handleSubmit @ src/pages/Prospeccao.tsx:137
+await in handleSubmit
+callCallback2 @ chunk-QT63QQJV.js:3674
+invokeGuardedCallbackDev @ chunk-QT63QQJV.js:3699
+invokeGuardedCallback @ chunk-QT63QQJV.js:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-QT63QQJV.js:3736
+executeDispatch @ chunk-QT63QQJV.js:7014
+processDispatchQueueItemsInOrder @ chunk-QT63QQJV.js:7034
+processDispatchQueue @ chunk-QT63QQJV.js:7043
+dispatchEventsForPlugins @ chunk-QT63QQJV.js:7051
+(anonymous) @ chunk-QT63QQJV.js:7174
+batchedUpdates$1 @ chunk-QT63QQJV.js:18913
+batchedUpdates @ chunk-QT63QQJV.js:3579
+dispatchEventForPluginEventSystem @ chunk-QT63QQJV.js:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-QT63QQJV.js:5478
+dispatchEvent @ chunk-QT63QQJV.js:5472
+dispatchDiscreteEvent @ chunk-QT63QQJV.js:5449
+ 
+            
+            
+           POST http://localhost:5000/api/cases/batch net::ERR_CONNECTION_REFUSED
+dispatchXhrRequest @ axios.js:1648
+xhr @ axios.js:1528
+dispatchRequest @ axios.js:2003
+_request @ axios.js:2224
+request @ axios.js:2115
+httpMethod @ axios.js:2253
+wrap @ axios.js:8
+create @ src/services/api.ts:20
+(anonymous) @ src/pages/Prospeccao.tsx:116
+handleSubmit @ src/pages/Prospeccao.tsx:116
+callCallback2 @ chunk-QT63QQJV.js:3674
+invokeGuardedCallbackDev @ chunk-QT63QQJV.js:3699
+invokeGuardedCallback @ chunk-QT63QQJV.js:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-QT63QQJV.js:3736
+executeDispatch @ chunk-QT63QQJV.js:7014
+processDispatchQueueItemsInOrder @ chunk-QT63QQJV.js:7034
+processDispatchQueue @ chunk-QT63QQJV.js:7043
+dispatchEventsForPlugins @ chunk-QT63QQJV.js:7051
+(anonymous) @ chunk-QT63QQJV.js:7174
+batchedUpdates$1 @ chunk-QT63QQJV.js:18913
+batchedUpdates @ chunk-QT63QQJV.js:3579
+dispatchEventForPluginEventSystem @ chunk-QT63QQJV.js:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-QT63QQJV.js:5478
+dispatchEvent @ chunk-QT63QQJV.js:5472
+dispatchDiscreteEvent @ chunk-QT63QQJV.js:5449
