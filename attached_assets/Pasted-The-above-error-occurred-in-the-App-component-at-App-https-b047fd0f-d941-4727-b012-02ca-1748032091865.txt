@@ -1,0 +1,26 @@
+The above error occurred in the <App> component:
+
+    at App (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/src/App.tsx:128:76)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+at App (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/src/App.tsx:128:76)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+at t.value (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Navigate is not defined
+at App (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/src/App.tsx:128:76)
+at renderWithHooks (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-QT63QQJV.js?v=d2089c62:11548:26)
+at mountIndeterminateComponent (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-QT63QQJV.js?v=d2089c62:14926:21)
+at beginWork (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-QT63QQJV.js?v=d2089c62:15914:22)
+at beginWork$1 (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-QT63QQJV.js?v=d2089c62:19753:22)
+at performUnitOfWork (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-QT63QQJV.js?v=d2089c62:19198:20)
+at workLoopSync (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-QT63QQJV.js?v=d2089c62:19137:13)
+at renderRootSync (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-QT63QQJV.js?v=d2089c62:19116:15)
+at recoverFromConcurrentError (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-QT63QQJV.js?v=d2089c62:18736:28)
+at performConcurrentWorkOnRoot (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-QT63QQJV.js?v=
