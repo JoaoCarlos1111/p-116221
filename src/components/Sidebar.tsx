@@ -43,7 +43,7 @@ export default function Sidebar() {
       </div>
 
       <nav className="space-y-2 px-2">
-        <NavLink to="/" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+        <NavLink to="/dashboard" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
           <LayoutDashboard size={20} />
           <span className={cn(
             "transition-all duration-300",
