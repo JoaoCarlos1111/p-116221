@@ -54,7 +54,7 @@ export default function Sidebar() {
       path: "/approvals",
       icon: <CheckSquare size={20} />,
       label: "Aprovações",
-      departments: [departments.APROVACAO]
+      departments: [departments.APROVACAO, departments.CLIENTE]
     },
     {
       path: "/logistica",
