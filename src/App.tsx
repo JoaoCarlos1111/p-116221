@@ -1,13 +1,7 @@
+
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { Toaster } from "@/components/ui/toaster"
 import Sidebar from '@/components/Sidebar'
-import Admin from '@/pages/Admin'
-import AdminUsers from '@/pages/AdminUsers'
-import AdminPermissions from '@/pages/AdminPermissions'
-import AdminAudit from '@/pages/AdminAudit'
-import AdminBrands from '@/pages/AdminBrands'
-import AdminTemplates from '@/pages/AdminTemplates'
-import AdminSettings from '@/pages/AdminSettings'
 import Dashboard from '@/pages/Dashboard'
 import KanbanBoard from '@/pages/KanbanBoard'
 import Profile from '@/pages/Profile'
@@ -32,14 +26,13 @@ import { departments } from './constants';
 
 function AppContent() {
   const location = useLocation();
-  const isLoginPage = location.pathname === '/login';
-
+  
   return (
     <div className="flex h-screen bg-background">
-      {!isLoginPage && <Sidebar />}
+      {location.pathname !== '/login' && <Sidebar />}
       <div className="flex-1 flex flex-col">
-        {!isLoginPage && <TopBar />}
-        <main className="flex-1 overflow-y-auto p-8 bg-background">
+        {location.pathname !== '/login' && <TopBar />}
+        <main className="flex-1 overflow-y-auto p-8">
           <Routes>
             <Route path="/login" element={<InternalLogin />} />
             <Route path="/" element={<Navigate to="/login" replace />} />
@@ -126,41 +119,6 @@ function AppContent() {
             <Route path="/financeiro/:id" element={
               <RouteGuard requiredDepartment={departments.FINANCEIRO}>
                 <FinanceiroDetails />
-              </RouteGuard>
-            } />
-            <Route path="/admin/dashboard" element={
-              <RouteGuard requiredDepartment={departments.ADMIN}>
-                <Admin />
-              </RouteGuard>
-            } />
-            <Route path="/admin/users" element={
-              <RouteGuard requiredDepartment={departments.ADMIN}>
-                <AdminUsers />
-              </RouteGuard>
-            } />
-            <Route path="/admin/permissions" element={
-              <RouteGuard requiredDepartment={departments.ADMIN}>
-                <AdminPermissions />
-              </RouteGuard>
-            } />
-            <Route path="/admin/audit" element={
-              <RouteGuard requiredDepartment={departments.ADMIN}>
-                <AdminAudit />
-              </RouteGuard>
-            } />
-            <Route path="/admin/brands" element={
-              <RouteGuard requiredDepartment={departments.ADMIN}>
-                <AdminBrands />
-              </RouteGuard>
-            } />
-            <Route path="/admin/templates" element={
-              <RouteGuard requiredDepartment={departments.ADMIN}>
-                <AdminTemplates />
-              </RouteGuard>
-            } />
-            <Route path="/admin/settings" element={
-              <RouteGuard requiredDepartment={departments.ADMIN}>
-                <AdminSettings />
               </RouteGuard>
             } />
           </Routes>
