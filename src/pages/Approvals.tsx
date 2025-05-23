@@ -27,6 +27,11 @@ interface Approval {
 
 export default function Approvals() {
   const [approvals, setApprovals] = useState<Approval[]>([
+    { id: 'TEST-001', proofUrl: '/proofs/test1.pdf', entryDate: '2024-03-15', status: 'pending', title: 'Teste 1', description: 'Descrição Teste 1', platform: 'Facebook', brand: 'Nike' },
+    { id: 'TEST-002', proofUrl: '/proofs/test2.pdf', entryDate: '2024-03-15', status: 'pending', title: 'Teste 2', description: 'Descrição Teste 2', platform: 'Instagram', brand: 'Adidas' },
+    { id: 'TEST-003', proofUrl: '/proofs/test3.pdf', entryDate: '2024-03-15', status: 'pending', title: 'Teste 3', description: 'Descrição Teste 3', platform: 'TikTok', brand: 'Gucci' },
+    { id: 'TEST-004', proofUrl: '/proofs/test4.pdf', entryDate: '2024-03-15', status: 'pending', title: 'Teste 4', description: 'Descrição Teste 4', platform: 'Shopee', brand: 'Prada' },
+    { id: 'TEST-005', proofUrl: '/proofs/test5.pdf', entryDate: '2024-03-15', status: 'pending', title: 'Teste 5', description: 'Descrição Teste 5', platform: 'Mercado Livre', brand: 'Louis Vuitton' }
   ]);
 
   const [searchQuery, setSearchQuery] = useState('');
