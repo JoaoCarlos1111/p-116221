@@ -66,29 +66,22 @@ app.post('/api/cases/batch', async (req, res) => {
     const createdCases = await prisma.$transaction(
       cases.map((caseData: any) => 
         prisma.case.create({
-          data: caseData
+          data: {
+            code: Math.random().toString(36).substring(7),
+            debtorName: caseData.brand,
+            totalAmount: 0,
+            currentPayment: 0,
+            status: caseData.status,
+            daysInColumn: 0,
+            userId: "1", // Temporary default user ID
+            ...caseData
+          }
         })
       )
     );
     res.json(createdCases);
   } catch (error) {
     console.error('Error creating cases:', error);
-    res.status(500).json({ error: 'Erro ao criar casos em lote' });
-  }
-});
-
-app.post('/api/cases/batch', async (req, res) => {
-  try {
-    const { cases } = req.body;
-    const createdCases = await prisma.$transaction(
-      cases.map((caseData: any) => 
-        prisma.case.create({
-          data: caseData
-        })
-      )
-    );
-    res.json(createdCases);
-  } catch (error) {
     res.status(500).json({ error: 'Erro ao criar casos em lote' });
   }
 });
