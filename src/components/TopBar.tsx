@@ -10,11 +10,9 @@ export default function TopBar() {
       <div className="flex items-center gap-2">
         <Link to="/profile" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
           <UserCircle size={20} />
-          <span>Perfil</span>
         </Link>
         <Link to="/settings" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
           <SettingsIcon size={20} />
-          <span>Configurações</span>
         </Link>
       </div>
     </div>
