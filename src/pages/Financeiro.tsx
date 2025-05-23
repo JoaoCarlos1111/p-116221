@@ -1,11 +1,11 @@
-
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Search, Calendar } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
+import { PaymentsService } from '@/services/api';
 
 // Mock data
 const mockData = [
@@ -57,6 +57,20 @@ const colunas = [
 export default function Financeiro() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const [payments, setPayments] = useState([]);
+
+  useEffect(() => {
+    const fetchPayments = async () => {
+      try {
+        const data = await PaymentsService.getPayments();
+        setPayments(data);
+      } catch (error) {
+        console.error("Failed to fetch payments:", error);
+      }
+    };
+
+    fetchPayments();
+  }, []);
 
   const getCardsByColumn = (coluna: string) => {
     return mockData.filter(card => card.coluna === coluna);
