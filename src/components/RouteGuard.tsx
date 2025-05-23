@@ -15,11 +15,17 @@ export default function RouteGuard({ children, requiredDepartment }: RouteGuardP
     return <Navigate to="/login" replace />;
   }
 
-  const user = JSON.parse(userStr);
+  try {
+    const user = JSON.parse(userStr);
 
-  if (requiredDepartment && !user.isAdmin && !user.departments.includes(requiredDepartment)) {
-    return <Navigate to="/unauthorized" replace />;
+    if (requiredDepartment && !user.isAdmin && !user.departments.includes(requiredDepartment)) {
+      return <Navigate to="/" replace />;
+    }
+
+    return <>{children}</>;
+  } catch (error) {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    return <Navigate to="/login" replace />;
   }
-
-  return <>{children}</>;
 }

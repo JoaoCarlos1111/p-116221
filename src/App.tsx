@@ -21,6 +21,7 @@ import FinanceiroDetails from "@/pages/FinanceiroDetails";
 import TopBar from "@/components/TopBar";
 import InternalLogin from "@/pages/InternalLogin";
 import RouteGuard from "@/components/RouteGuard";
+import { departments } from './constants';
 
 function App() {
   return (
@@ -31,28 +32,92 @@ function App() {
           <TopBar />
           <main className="flex-1 overflow-y-auto p-8">
           <Routes>
-          <Route path="/login" element={<InternalLogin />} />
-          <Route path="/" element={
-            <RouteGuard>
-              <Dashboard />
-            </RouteGuard>
-          } />
-            <Route path="/kanban/:sector" element={<KanbanBoard />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/case/:id" element={<CaseDetails />} />
-            <Route path="/prospeccao" element={<Prospeccao />} />
-            <Route path="/auditoria" element={<Auditoria />} />
-            <Route path="/auditoria/caso/:id" element={<AuditoriaCaseDetails />} />
-            <Route path="/logistica" element={<Logistics />} />
-        <Route path="/logistica/caso/:id" element={<LogisticsCaseView />} />
-            <Route path="/iptools" element={<IPTools />} />
-            <Route path="/iptools/case/:id" element={<IPToolsCaseView />} />
-            <Route path="/atendimento" element={<Atendimento />} />
-            <Route path="/atendimento/caso/:id" element={<AtendimentoCaseDetails />} />
-            <Route path="approvals" element={<Approvals />} />
-            <Route path="financeiro" element={<Financeiro />} />
-            <Route path="financeiro/:id" element={<FinanceiroDetails />} />
+            <Route path="/login" element={<InternalLogin />} />
+            <Route path="/" element={
+              <RouteGuard>
+                <Dashboard />
+              </RouteGuard>
+            } />
+            <Route path="/kanban/:sector" element={
+              <RouteGuard>
+                <KanbanBoard />
+              </RouteGuard>
+            } />
+            <Route path="/profile" element={
+              <RouteGuard>
+                <Profile />
+              </RouteGuard>
+            } />
+            <Route path="/settings" element={
+              <RouteGuard>
+                <Settings />
+              </RouteGuard>
+            } />
+            <Route path="/case/:id" element={
+              <RouteGuard>
+                <CaseDetails />
+              </RouteGuard>
+            } />
+            <Route path="/prospeccao" element={
+              <RouteGuard requiredDepartment={departments.PROSPECCAO}>
+                <Prospeccao />
+              </RouteGuard>
+            } />
+            <Route path="/auditoria" element={
+              <RouteGuard requiredDepartment={departments.VERIFICACAO}>
+                <Auditoria />
+              </RouteGuard>
+            } />
+            <Route path="/auditoria/caso/:id" element={
+              <RouteGuard requiredDepartment={departments.VERIFICACAO}>
+                <AuditoriaCaseDetails />
+              </RouteGuard>
+            } />
+            <Route path="/logistica" element={
+              <RouteGuard requiredDepartment={departments.LOGISTICA}>
+                <Logistics />
+              </RouteGuard>
+            } />
+            <Route path="/logistica/caso/:id" element={
+              <RouteGuard requiredDepartment={departments.LOGISTICA}>
+                <LogisticsCaseView />
+              </RouteGuard>
+            } />
+            <Route path="/iptools" element={
+              <RouteGuard requiredDepartment={departments.IP_TOOLS}>
+                <IPTools />
+              </RouteGuard>
+            } />
+            <Route path="/iptools/case/:id" element={
+              <RouteGuard requiredDepartment={departments.IP_TOOLS}>
+                <IPToolsCaseView />
+              </RouteGuard>
+            } />
+            <Route path="/atendimento" element={
+              <RouteGuard requiredDepartment={departments.ATENDIMENTO}>
+                <Atendimento />
+              </RouteGuard>
+            } />
+            <Route path="/atendimento/caso/:id" element={
+              <RouteGuard requiredDepartment={departments.ATENDIMENTO}>
+                <AtendimentoCaseDetails />
+              </RouteGuard>
+            } />
+            <Route path="/approvals" element={
+              <RouteGuard requiredDepartment={departments.APROVACAO}>
+                <Approvals />
+              </RouteGuard>
+            } />
+            <Route path="/financeiro" element={
+              <RouteGuard requiredDepartment={departments.FINANCEIRO}>
+                <Financeiro />
+              </RouteGuard>
+            } />
+            <Route path="/financeiro/:id" element={
+              <RouteGuard requiredDepartment={departments.FINANCEIRO}>
+                <FinanceiroDetails />
+              </RouteGuard>
+            } />
           </Routes>
         </main>
         </div>
