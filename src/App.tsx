@@ -22,7 +22,7 @@ import TopBar from "@/components/TopBar";
 import InternalLogin from "@/pages/InternalLogin";
 import RouteGuard from "@/components/RouteGuard";
 import { departments } from './constants';
-import AdminDashboard from './pages/AdminDashboard'; // Import AdminDashboard component
+import AdminDashboard from './pages/Admin'; // Import AdminDashboard component
 
 function AppContent() {
   const location = useLocation();
