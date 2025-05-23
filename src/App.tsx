@@ -1,6 +1,13 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { Toaster } from "@/components/ui/toaster"
 import Sidebar from '@/components/Sidebar'
+import Admin from '@/pages/Admin'
+import AdminUsers from '@/pages/AdminUsers'
+import AdminPermissions from '@/pages/AdminPermissions'
+import AdminAudit from '@/pages/AdminAudit'
+import AdminBrands from '@/pages/AdminBrands'
+import AdminTemplates from '@/pages/AdminTemplates'
+import AdminSettings from '@/pages/AdminSettings'
 import Dashboard from '@/pages/Dashboard'
 import KanbanBoard from '@/pages/KanbanBoard'
 import Profile from '@/pages/Profile'
