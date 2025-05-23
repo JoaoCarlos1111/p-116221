@@ -4,8 +4,7 @@ import Sidebar from '@/components/Sidebar'
 import Dashboard from '@/pages/Dashboard'
 import KanbanBoard from '@/pages/KanbanBoard'
 import Profile from '@/pages/Profile'
-import Settings from '@/pages/Settings';
-import Approvals from './pages/Approvals';
+import Settings from '@/pages/Settings'
 import CaseDetails from '@/pages/CaseDetails'
 import Prospeccao from '@/pages/Prospeccao';
 import Auditoria from './pages/Auditoria';
@@ -28,8 +27,7 @@ function App() {
             <Route path="/kanban/:sector" element={<KanbanBoard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
-          <Route path="/approvals" element={<Approvals />} />
-        <Route path="/case/:id" element={<CaseDetails />} />
+            <Route path="/case/:id" element={<CaseDetails />} />
             <Route path="/prospeccao" element={<Prospeccao />} />
             <Route path="/auditoria" element={<Auditoria />} />
             <Route path="/auditoria/caso/:id" element={<AuditoriaCaseDetails />} />

@@ -23,17 +23,6 @@ interface Case {
 }
 
 export default function Logistics() {
-  useEffect(() => {
-    // Load cases from localStorage in production
-    const storedCases = localStorage.getItem('logisticsCases');
-    if (storedCases) {
-      const parsedCases = JSON.parse(storedCases);
-      setCases(prev => [...prev, ...parsedCases]);
-      // Clear storage after loading
-      localStorage.removeItem('logisticsCases');
-    }
-  }, []);
-
   const [cases, setCases] = useState<Case[]>([
     {
       id: "NOT001",
