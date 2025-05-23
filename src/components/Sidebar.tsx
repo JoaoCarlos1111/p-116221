@@ -48,7 +48,7 @@ export default function Sidebar() {
       path: "/auditoria",
       icon: <CheckSquare size={20} />,
       label: "Auditoria",
-      departments: [departments.VERIFICACAO]
+      departments: [departments.AUDITORIA]
     },
     {
       path: "/approvals",
