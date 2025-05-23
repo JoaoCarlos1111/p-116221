@@ -2,8 +2,21 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api'
+  baseURL: 'http://0.0.0.0:5000/api',
+  timeout: 5000,
+  headers: {
+    'Content-Type': 'application/json'
+  }
 });
+
+// Interceptor para log de erros
+api.interceptors.response.use(
+  response => response,
+  error => {
+    console.error('API Error:', error.message);
+    return Promise.reject(error);
+  }
+);
 
 export const CasesService = {
   getAll: async () => {

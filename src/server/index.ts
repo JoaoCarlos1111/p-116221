@@ -8,8 +8,18 @@ dotenv.config();
 const app = express();
 const prisma = new PrismaClient();
 
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', DELETE', 'OPTIONS'],
+  credentials: true
+}));
 app.use(express.json());
+
+// Log das requisições
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
 
 // Rotas de Usuários
 app.get('/api/users', async (req, res) => {
