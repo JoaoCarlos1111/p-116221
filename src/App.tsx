@@ -107,7 +107,7 @@ function AppContent() {
               </RouteGuard>
             } />
             <Route path="/approvals" element={
-              <RouteGuard requiredDepartment={departments.APROVACAO}>
+              <RouteGuard requiredDepartment={[departments.APROVACAO, departments.CLIENTE]}>
                 <Approvals />
               </RouteGuard>
             } />

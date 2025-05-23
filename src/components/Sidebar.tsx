@@ -85,7 +85,11 @@ export default function Sidebar() {
   const hasAccess = (item: any) => {
     if (isAdmin) return true;
     if (item.departments === "all") return true;
-    return item.departments.some((dept: string) => userDepartments.includes(dept));
+    if (!Array.isArray(userDepartments)) return false;
+    const userDeptArray = Array.isArray(userDepartments) ? userDepartments : [userDepartments];
+    return Array.isArray(item.departments) ? 
+      item.departments.some((dept: string) => userDeptArray.includes(dept)) : 
+      userDeptArray.includes(item.departments);
   };
 
   return (
