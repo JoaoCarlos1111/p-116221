@@ -27,23 +27,6 @@ interface Approval {
 
 export default function Approvals() {
   const [approvals, setApprovals] = useState<Approval[]>([
-    { id: 'CASE-004', proofUrl: '/proofs/prada1.pdf', entryDate: '2024-03-04', status: 'pending', title: 'Prada 1', description: 'Descrição Prada 1', platform: 'Facebook', brand: 'Prada' },
-    { id: 'CASE-005', proofUrl: '/proofs/lv1.pdf', entryDate: '2024-03-05', status: 'pending', title: 'LV 1', description: 'Descrição LV 1', platform: 'Instagram', brand: 'LV' },
-    { id: 'CASE-006', proofUrl: '/proofs/nike2.pdf', entryDate: '2024-03-06', status: 'pending', title: 'Nike 2', description: 'Descrição Nike 2', platform: 'TikTok', brand: 'Nike' },
-    { id: 'CASE-007', proofUrl: '/proofs/adidas2.pdf', entryDate: '2024-03-07', status: 'pending', title: 'Adidas 2', description: 'Descrição Adidas 2', platform: 'Facebook', brand: 'Adidas' },
-    { id: 'CASE-008', proofUrl: '/proofs/gucci2.pdf', entryDate: '2024-03-08', status: 'pending', title: 'Gucci 2', description: 'Descrição Gucci 2', platform: 'Instagram', brand: 'Gucci' },
-    { id: 'CASE-009', proofUrl: '/proofs/prada2.pdf', entryDate: '2024-03-09', status: 'pending', title: 'Prada 2', description: 'Descrição Prada 2', platform: 'TikTok', brand: 'Prada' },
-    { id: 'CASE-010', proofUrl: '/proofs/lv2.pdf', entryDate: '2024-03-10', status: 'pending', title: 'LV 2', description: 'Descrição LV 2', platform: 'Facebook', brand: 'LV' },
-    { id: 'CASE-011', proofUrl: '/proofs/nike3.pdf', entryDate: '2024-03-11', status: 'pending', title: 'Nike 3', description: 'Descrição Nike 3', platform: 'Instagram', brand: 'Nike' },
-    { id: 'CASE-012', proofUrl: '/proofs/adidas3.pdf', entryDate: '2024-03-12', status: 'pending', title: 'Adidas 3', description: 'Descrição Adidas 3', platform: 'TikTok', brand: 'Adidas' },
-    { id: 'CASE-013', proofUrl: '/proofs/gucci3.pdf', entryDate: '2024-03-13', status: 'pending', title: 'Gucci 3', description: 'Descrição Gucci 3', platform: 'Facebook', brand: 'Gucci' },
-    { id: 'CASE-014', proofUrl: '/proofs/prada3.pdf', entryDate: '2024-03-14', status: 'pending', title: 'Prada 3', description: 'Descrição Prada 3', platform: 'Instagram', brand: 'Prada' },
-    { id: 'CASE-015', proofUrl: '/proofs/lv3.pdf', entryDate: '2024-03-15', status: 'pending', title: 'LV 3', description: 'Descrição LV 3', platform: 'TikTok', brand: 'LV' },
-    { id: 'CASE-016', proofUrl: '/proofs/nike4.pdf', entryDate: '2024-03-16', status: 'pending', title: 'Nike 4', description: 'Descrição Nike 4', platform: 'Facebook', brand: 'Nike' },
-    { id: 'CASE-017', proofUrl: '/proofs/adidas4.pdf', entryDate: '2024-03-17', status: 'pending', title: 'Adidas 4', description: 'Descrição Adidas 4', platform: 'Instagram', brand: 'Adidas' },
-    { id: 'CASE-018', proofUrl: '/proofs/gucci4.pdf', entryDate: '2024-03-18', status: 'pending', title: 'Gucci 4', description: 'Descrição Gucci 4', platform: 'TikTok', brand: 'Gucci' },
-    { id: 'CASE-019', proofUrl: '/proofs/prada4.pdf', entryDate: '2024-03-19', status: 'pending', title: 'Prada 4', description: 'Descrição Prada 4', platform: 'Facebook', brand: 'Prada' },
-    { id: 'CASE-020', proofUrl: '/proofs/lv4.pdf', entryDate: '2024-03-20', status: 'pending', title: 'LV 4', description: 'Descrição LV 4', platform: 'Instagram', brand: 'LV' },
   ]);
 
   const [searchQuery, setSearchQuery] = useState('');
