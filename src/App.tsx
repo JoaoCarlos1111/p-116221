@@ -27,9 +27,9 @@ function App() {
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <div className="flex h-screen bg-background">
-        <Sidebar />
+        {window.location.pathname !== '/login' && <Sidebar />}
         <div className="flex-1 flex flex-col">
-          <TopBar />
+          {window.location.pathname !== '/login' && <TopBar />}
           <main className="flex-1 overflow-y-auto p-8">
           <Routes>
             <Route path="/login" element={<InternalLogin />} />
