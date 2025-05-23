@@ -1,11 +1,4 @@
 
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-
 export const departments = {
   ADMIN: 'admin',
   PROSPECCAO: 'prospeccao',
@@ -19,40 +12,25 @@ export const departments = {
 
 export const AuthService = {
   async login(email: string, password: string) {
-    const user = await prisma.user.findUnique({ where: { email } });
-    
-    if (!user || !user.isActive) {
-      throw new Error('User not found or inactive');
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Login failed');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
     }
-
-    const isValidPassword = await bcrypt.compare(password, user.password);
-    if (!isValidPassword) {
-      throw new Error('Invalid password');
-    }
-
-    const token = jwt.sign(
-      { 
-        userId: user.id, 
-        email: user.email, 
-        departments: user.departments,
-        mainDepartment: user.mainDepartment,
-        isAdmin: user.isAdmin 
-      },
-      JWT_SECRET,
-      { expiresIn: '24h' }
-    );
-
-    return { 
-      token, 
-      user: { 
-        id: user.id, 
-        email: user.email, 
-        name: user.name, 
-        departments: user.departments,
-        mainDepartment: user.mainDepartment,
-        isAdmin: user.isAdmin 
-      } 
-    };
   },
 
   async register(userData: { 
