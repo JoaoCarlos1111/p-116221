@@ -15,7 +15,7 @@ import IPTools from './pages/IPTools'
 import IPToolsCaseView from './pages/IPToolsCaseView';
 import Atendimento from './pages/Atendimento';
 import AtendimentoCaseDetails from "@/pages/AtendimentoCaseDetails";
-import Approvals from './pages/Approvals';
+import Approvals from "@/pages/Approvals";
 
 function App() {
   return (
