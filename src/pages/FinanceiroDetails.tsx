@@ -50,7 +50,10 @@ export default function FinanceiroDetails() {
     method: caseData.acordo.formaPagamento,
     installments: caseData.acordo.parcelas,
     firstPaymentDate: caseData.acordo.primeiroVencimento,
-    installmentValue: caseData.acordo.valorParcela
+    installmentValue: caseData.acordo.valorParcela,
+    totalValue: caseData.acordo.valorTotal,
+    status: caseData.acordo.statusPagamento,
+    paidInstallments: caseData.acordo.parcelasPagas
   });
 
   const [paymentHistory, setPaymentHistory] = useState(caseData.parcelas);

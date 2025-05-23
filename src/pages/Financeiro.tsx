@@ -20,13 +20,13 @@ const mockPayments = [
   {
     id: 'PAY001',
     codigo: 'CASO-001',
-    valorTotal: 5000,
-    valorParcela: 1250,
+    valorTotal: caseData.acordo.valorTotal,
+    valorParcela: caseData.acordo.valorParcela,
     status: 'emitir',
-    statusPagamento: 'em_dia',
-    vencimentoParcela: '2024-04-15',
-    parcelasPagas: 0,
-    totalParcelas: 4
+    statusPagamento: caseData.acordo.statusPagamento,
+    vencimentoParcela: caseData.acordo.primeiroVencimento,
+    parcelasPagas: caseData.acordo.parcelasPagas,
+    totalParcelas: caseData.acordo.parcelas
   },
   {
     id: 'PAY002',
