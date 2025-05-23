@@ -26,9 +26,39 @@ export default function Sidebar() {
 
   const adminMenuItems = [
     {
-      path: "/dashboard",
+      path: "/admin",
       icon: <LayoutDashboard size={20} />,
-      label: "Dashboard Admin"
+      label: "Resumo Geral"
+    },
+    {
+      path: "/admin/users",
+      icon: <Users size={20} />,
+      label: "Usuários"
+    },
+    {
+      path: "/admin/permissions",
+      icon: <Lock size={20} />,
+      label: "Permissões"
+    },
+    {
+      path: "/admin/audit",
+      icon: <History size={20} />,
+      label: "Auditoria"
+    },
+    {
+      path: "/admin/brands",
+      icon: <Tag size={20} />,
+      label: "Marcas e Clientes"
+    },
+    {
+      path: "/admin/templates",
+      icon: <FileText size={20} />,
+      label: "Templates"
+    },
+    {
+      path: "/admin/settings",
+      icon: <Settings size={20} />,
+      label: "Configurações"
     }
   ];
 
