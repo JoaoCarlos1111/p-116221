@@ -1,4 +1,3 @@
-
 import express from 'express';
 import cors from 'cors';
 import { PrismaClient } from '@prisma/client';
@@ -62,6 +61,15 @@ app.get('/api/payments', async (req, res) => {
     res.json(payments);
   } catch (error) {
     res.status(500).json({ error: 'Erro ao buscar pagamentos' });
+  }
+});
+
+app.get('/api/test', async (req, res) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    res.json({ status: 'Database connection successful' });
+  } catch (error) {
+    res.status(500).json({ error: 'Database connection failed' });
   }
 });
 
