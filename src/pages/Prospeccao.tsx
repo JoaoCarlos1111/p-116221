@@ -57,8 +57,58 @@ export default function Prospeccao() {
     }));
   };
 
-  const handleSubmit = () => {
-    console.log('Submitting cases:', linkSets);
+  const handleSubmit = async () => {
+    try {
+      // Validar se todos os campos necessários estão preenchidos
+      const invalidSets = linkSets.filter(set => !set.storeUrl || !set.adUrl || !set.brand);
+      if (invalidSets.length > 0) {
+        toast({
+          variant: "destructive",
+          title: "Erro ao criar casos",
+          description: "Preencha todos os campos obrigatórios"
+        });
+        return;
+      }
+
+      // Agrupar URLs por marca
+      const brandGroups = linkSets.reduce((acc, set) => {
+        if (!acc[set.brand]) {
+          acc[set.brand] = {
+            brand: set.brand,
+            storeUrls: new Set(),
+            adUrls: new Set()
+          };
+        }
+        acc[set.brand].storeUrls.add(set.storeUrl);
+        acc[set.brand].adUrls.add(set.adUrl);
+        return acc;
+      }, {} as Record<string, { brand: string; storeUrls: Set<string>; adUrls: Set<string> }>);
+
+      // Criar casos para cada marca
+      const results = await Promise.all(
+        Object.values(brandGroups).map(group => 
+          CasesService.create({
+            storeUrl: Array.from(group.storeUrls).join('\n'),
+            adUrl: Array.from(group.adUrls).join('\n'),
+            brands: [group.brand]
+          })
+        )
+      );
+
+      toast({
+        title: "Casos criados com sucesso",
+        description: `${results.length} casos foram enviados para verificação`
+      });
+
+      // Limpar formulário
+      setLinkSets([{ id: Date.now().toString(), storeUrl: '', adUrl: '', brand: '' }]);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Erro ao criar casos",
+        description: "Ocorreu um erro ao enviar os casos para verificação"
+      });
+    }
   };
 
   const cardStyle = "glass-card hover-scale";

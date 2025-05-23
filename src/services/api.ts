@@ -11,8 +11,22 @@ export const CasesService = {
     return response.data;
   },
   
-  create: async (caseData: any) => {
-    const response = await api.post('/cases', caseData);
+  create: async (prospectionData: {
+    storeUrl: string;
+    adUrl: string;
+    brands: string[];
+  }) => {
+    // Criar um caso para cada marca
+    const cases = prospectionData.brands.map(brand => ({
+      brand,
+      storeUrl: prospectionData.storeUrl,
+      adUrl: prospectionData.adUrl,
+      status: 'received',
+      column: 'received',
+      createdAt: new Date().toISOString()
+    }));
+
+    const response = await api.post('/cases/batch', { cases });
     return response.data;
   }
 };
