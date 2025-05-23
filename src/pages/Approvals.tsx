@@ -22,6 +22,11 @@ interface Approval {
 }
 
 export default function Approvals() {
+  const [selectedCases, setSelectedCases] = useState<string[]>([]);
+  const [rejectReason, setRejectReason] = useState('');
+  const [showRejectDialog, setShowRejectDialog] = useState(false);
+  const [rejectingId, setRejectingId] = useState<string | null>(null);
+  
   const [approvals, setApprovals] = useState<Approval[]>([
     { id: 'APROV-001', proofUrl: '/proofs/nike_store.pdf', entryDate: '2024-03-21', status: 'pending', title: 'Nike Store BR', description: 'Loja não autorizada vendendo produtos Nike', platform: 'Shopee', brand: 'Nike' },
     { id: 'APROV-002', proofUrl: '/proofs/adidas_outlet.pdf', entryDate: '2024-03-21', status: 'pending', title: 'Adidas Outlet', description: 'Produtos falsificados Adidas', platform: 'Mercado Livre', brand: 'Adidas' },
@@ -80,26 +85,36 @@ export default function Approvals() {
     }
   }, [progress]);
 
-  const handleAction = (id: string, action: 'approve' | 'reject') => {
-    setDialogCase({ id, action });
+  const handleApprove = (id: string) => {
+    setApprovals(prev => prev.map(approval => 
+      approval.id === id ? { ...approval, status: 'approved' } : approval
+    ));
   };
 
-  const confirmAction = () => {
-    if (!dialogCase) return;
+  const handleReject = (id: string) => {
+    setRejectingId(id);
+    setShowRejectDialog(true);
+  };
+
+  const confirmReject = () => {
+    if (!rejectingId || !rejectReason) return;
 
     setApprovals(prev => prev.map(approval => 
-      approval.id === dialogCase.id 
-        ? { ...approval, status: dialogCase.action === 'approve' ? 'approved' : 'rejected' }
+      approval.id === rejectingId 
+        ? { ...approval, status: 'rejected', rejectionReason: rejectReason }
         : approval
     ));
 
-    setDialogCase(null);
+    setShowRejectDialog(false);
+    setRejectingId(null);
+    setRejectReason('');
   };
 
   const handleBulkApprove = () => {
     setApprovals(prev => prev.map(approval => 
-      approval.status === 'pending' ? { ...approval, status: 'approved' } : approval
+      selectedCases.includes(approval.id) ? { ...approval, status: 'approved' } : approval
     ));
+    setSelectedCases([]);
   };
 
   const filteredApprovals = approvals
@@ -175,8 +190,20 @@ export default function Approvals() {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="w-[50px]">
+                    <Checkbox 
+                      checked={selectedCases.length === filteredApprovals.length}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          setSelectedCases(filteredApprovals.map(a => a.id));
+                        } else {
+                          setSelectedCases([]);
+                        }
+                      }}
+                    />
+                  </TableHead>
                   <TableHead>Código do Caso</TableHead>
-                  <TableHead>Prova</TableHead>
+                  <TableHead>Certificação do Anúncio</TableHead>
                   <TableHead>Data de Entrada</TableHead>
                   <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
@@ -184,6 +211,18 @@ export default function Approvals() {
               <TableBody>
                 {filteredApprovals.map((approval) => (
                   <TableRow key={approval.id}>
+                    <TableCell>
+                      <Checkbox 
+                        checked={selectedCases.includes(approval.id)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setSelectedCases([...selectedCases, approval.id]);
+                          } else {
+                            setSelectedCases(selectedCases.filter(id => id !== approval.id));
+                          }
+                        }}
+                      />
+                    </TableCell>
                     <TableCell>{approval.id}</TableCell>
                     <TableCell>
                       <Button variant="ghost" size="sm" className="gap-2">
@@ -199,7 +238,7 @@ export default function Approvals() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => handleAction(approval.id, 'approve')}
+                          onClick={() => handleApprove(approval.id)}
                           className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50"
                         >
                           <CheckCircle className="h-4 w-4" />
@@ -207,7 +246,7 @@ export default function Approvals() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => handleAction(approval.id, 'reject')}
+                          onClick={() => handleReject(approval.id)}
                           className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50"
                         >
                           <XCircle className="h-4 w-4" />
@@ -237,25 +276,35 @@ export default function Approvals() {
         </Card>
       </div>
 
-      <AlertDialog open={!!dialogCase} onOpenChange={() => setDialogCase(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {dialogCase?.action === 'approve' ? 'Aprovar' : 'Reprovar'} caso
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              Tem certeza que deseja {dialogCase?.action === 'approve' ? 'aprovar' : 'reprovar'} o caso {dialogCase?.id}?
-              Esta ação não pode ser desfeita.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmAction}>
-              Confirmar
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Motivo da Rejeição</DialogTitle>
+            <DialogDescription>
+              Por favor, informe o motivo da rejeição para ajudar a otimizar análises futuras.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="reason">Motivo</Label>
+              <Textarea
+                id="reason"
+                value={rejectReason}
+                onChange={(e) => setRejectReason(e.target.value)}
+                placeholder="Descreva o motivo da rejeição..."
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowRejectDialog(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={confirmReject} disabled={!rejectReason}>
+              Confirmar Rejeição
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
