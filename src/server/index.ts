@@ -50,6 +50,22 @@ app.post('/api/cases', async (req, res) => {
   }
 });
 
+app.post('/api/cases/batch', async (req, res) => {
+  try {
+    const { cases } = req.body;
+    const createdCases = await prisma.$transaction(
+      cases.map((caseData: any) => 
+        prisma.case.create({
+          data: caseData
+        })
+      )
+    );
+    res.json(createdCases);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao criar casos em lote' });
+  }
+});
+
 // Rotas de Pagamentos
 app.get('/api/payments', async (req, res) => {
   try {

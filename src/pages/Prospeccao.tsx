@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { PlusCircle, AlertCircle, Store, Link2, BoxSelect, ChevronRight } from 'lucide-react';
+import { useToast } from "@/components/ui/use-toast"
 
 interface LinkSet {
   id: string;
@@ -26,6 +27,7 @@ const mockData = [
 ];
 
 export default function Prospeccao() {
+  const { toast } = useToast();
   const [linkSets, setLinkSets] = useState<LinkSet[]>([{ 
     id: '1', 
     storeUrl: '', 
