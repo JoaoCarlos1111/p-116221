@@ -16,13 +16,16 @@ import IPToolsCaseView from './pages/IPToolsCaseView';
 import Atendimento from './pages/Atendimento';
 import AtendimentoCaseDetails from "@/pages/AtendimentoCaseDetails";
 import Approvals from "@/pages/Approvals";
+import TopBar from "@/components/TopBar";
 
 function App() {
   return (
     <Router>
       <div className="flex h-screen bg-background">
         <Sidebar />
-        <main className="flex-1 overflow-y-auto p-8">
+        <div className="flex-1 flex flex-col">
+          <TopBar />
+          <main className="flex-1 overflow-y-auto p-8">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/kanban/:sector" element={<KanbanBoard />} />
@@ -41,6 +44,7 @@ function App() {
             <Route path="/approvals" element={<Approvals />} />
           </Routes>
         </main>
+        </div>
       </div>
       <Toaster />
     </Router>
