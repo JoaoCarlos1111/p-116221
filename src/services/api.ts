@@ -7,7 +7,7 @@ const port = '5000';
 
 const api = axios.create({
   baseURL: `http://${currentHost}:${port}/api`,
-  timeout: 8000,
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json'
   },
@@ -35,10 +35,30 @@ api.interceptors.response.use(
   }
 );
 
+// Interceptor para adicionar retentativas em caso de falha de rede
+api.interceptors.request.use(
+  config => {
+    console.log('API Request:', {
+      url: config.url,
+      method: config.method
+    });
+    return config;
+  },
+  error => {
+    console.error('Request Error:', error);
+    return Promise.reject(error);
+  }
+);
+
 export const CasesService = {
   getAll: async () => {
-    const response = await api.get('/cases');
-    return response.data;
+    try {
+      const response = await api.get('/cases');
+      return response.data;
+    } catch (error) {
+      console.error('Failed to fetch cases:', error);
+      throw error;
+    }
   },
   
   create: async (prospectionData: {
@@ -46,31 +66,47 @@ export const CasesService = {
     adUrl: string;
     brands: string[];
   }) => {
-    // Criar um caso para cada marca
-    const cases = prospectionData.brands.map(brand => ({
-      brand,
-      storeUrl: prospectionData.storeUrl,
-      adUrl: prospectionData.adUrl,
-      status: 'received',
-      column: 'received',
-      createdAt: new Date().toISOString()
-    }));
+    try {
+      // Criar um caso para cada marca
+      const cases = prospectionData.brands.map(brand => ({
+        brand,
+        storeUrl: prospectionData.storeUrl,
+        adUrl: prospectionData.adUrl,
+        status: 'received',
+        column: 'received',
+        createdAt: new Date().toISOString()
+      }));
 
-    const response = await api.post('/cases/batch', { cases });
-    return response.data;
+      console.log('Sending cases to API:', cases);
+      const response = await api.post('/cases/batch', { cases });
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao criar casos:', error);
+      throw error;
+    }
   }
 };
 
 export const UsersService = {
   getAll: async () => {
-    const response = await api.get('/users');
-    return response.data;
+    try {
+      const response = await api.get('/users');
+      return response.data;
+    } catch (error) {
+      console.error('Failed to fetch users:', error);
+      throw error;
+    }
   }
 };
 
 export const PaymentsService = {
   getAll: async () => {
-    const response = await api.get('/payments');
-    return response.data;
+    try {
+      const response = await api.get('/payments');
+      return response.data;
+    } catch (error) {
+      console.error('Failed to fetch payments:', error);
+      throw error;
+    }
   }
 };
