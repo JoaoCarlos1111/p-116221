@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { PlusCircle, ChevronRight, Link2, BrandApple, FileText } from 'lucide-react';
+import { PlusCircle, ChevronRight, Link2, Building2, FileText } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 import { CasesService } from "@/services/api";
 
@@ -152,7 +152,7 @@ export default function Prospeccao() {
 
               <div>
                 <label className="font-medium flex items-center mb-2">
-                  <BrandApple className="h-4 w-4 mr-2 text-muted-foreground" />
+                  <Building2 className="h-4 w-4 mr-2 text-muted-foreground" />
                   Marcas afetadas <span className="text-red-500 ml-1">*</span>
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">

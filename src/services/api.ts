@@ -1,29 +1,17 @@
-
 import axios from 'axios';
 
-// Get the current host dynamically to handle different environments
-const currentHost = window.location.hostname;
-const port = '5000';
-
+// Create API instance
 const api = axios.create({
-  baseURL: `http://${currentHost}:${port}/api`,
+  baseURL: `http://0.0.0.0:5000/api`,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json'
-  },
-  withCredentials: true
+  }
 });
 
-// Interceptor para log de erros
+// Add response interceptor for error handling
 api.interceptors.response.use(
-  response => {
-    console.log('API Success:', {
-      url: response.config.url,
-      method: response.config.method,
-      status: response.status
-    });
-    return response;
-  },
+  response => response,
   error => {
     console.error('API Error:', {
       url: error.config?.url,
@@ -50,17 +38,8 @@ api.interceptors.request.use(
   }
 );
 
+// API service methods
 export const CasesService = {
-  getAll: async () => {
-    try {
-      const response = await api.get('/cases');
-      return response.data;
-    } catch (error) {
-      console.error('Failed to fetch cases:', error);
-      throw error;
-    }
-  },
-  
   create: async (prospectionData: {
     storeUrl: string;
     adUrl: string;
@@ -90,7 +69,17 @@ export const CasesService = {
       throw error;
     }
   },
-  
+
+  getAll: async () => {
+    try {
+      const response = await api.get('/cases');
+      return response.data;
+    } catch (error) {
+      console.error('Failed to fetch cases:', error);
+      throw error;
+    }
+  },
+
   getById: async (id: string) => {
     try {
       const response = await api.get(`/cases/${id}`);
@@ -100,7 +89,7 @@ export const CasesService = {
       throw error;
     }
   },
-  
+
   update: async (id: string, data: any) => {
     try {
       const response = await api.put(`/cases/${id}`, data);
@@ -109,6 +98,11 @@ export const CasesService = {
       console.error(`Failed to update case ${id}:`, error);
       throw error;
     }
+  },
+
+  getBatch: async () => {
+    const response = await api.get('/cases/batch');
+    return response.data;
   }
 };
 
