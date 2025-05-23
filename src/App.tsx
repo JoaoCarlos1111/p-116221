@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { Toaster } from "@/components/ui/toaster"
 import Sidebar from '@/components/Sidebar'
@@ -23,15 +24,15 @@ import InternalLogin from "@/pages/InternalLogin";
 import RouteGuard from "@/components/RouteGuard";
 import { departments } from './constants';
 
-function App() {
+function AppContent() {
   const location = useLocation();
+  
   return (
-    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <div className="flex h-screen bg-background">
-        {location.pathname !== '/login' && <Sidebar />}
-        <div className="flex-1 flex flex-col">
-          {location.pathname !== '/login' && <TopBar />}
-          <main className="flex-1 overflow-y-auto p-8">
+    <div className="flex h-screen bg-background">
+      {location.pathname !== '/login' && <Sidebar />}
+      <div className="flex-1 flex flex-col">
+        {location.pathname !== '/login' && <TopBar />}
+        <main className="flex-1 overflow-y-auto p-8">
           <Routes>
             <Route path="/login" element={<InternalLogin />} />
             <Route path="/" element={<Navigate to="/login" replace />} />
@@ -122,8 +123,15 @@ function App() {
             } />
           </Routes>
         </main>
-        </div>
       </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <AppContent />
       <Toaster />
     </Router>
   )
