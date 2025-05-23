@@ -19,6 +19,8 @@ import Approvals from "@/pages/Approvals";
 import Financeiro from "@/pages/Financeiro";
 import FinanceiroDetails from "@/pages/FinanceiroDetails";
 import TopBar from "@/components/TopBar";
+import InternalLogin from "@/pages/InternalLogin";
+import RouteGuard from "@/components/RouteGuard";
 
 function App() {
   return (
@@ -29,7 +31,12 @@ function App() {
           <TopBar />
           <main className="flex-1 overflow-y-auto p-8">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+          <Route path="/login" element={<InternalLogin />} />
+          <Route path="/" element={
+            <RouteGuard>
+              <Dashboard />
+            </RouteGuard>
+          } />
             <Route path="/kanban/:sector" element={<KanbanBoard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
