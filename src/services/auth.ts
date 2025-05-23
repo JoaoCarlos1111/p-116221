@@ -12,7 +12,7 @@ export const departments = {
 
 export const AuthService = {
   async login(email: string, password: string) {
-    // Credenciais de teste
+    // Credenciais de teste para cada setor
     const testCredentials = {
       admin: {
         email: 'admin@tbp.com',
@@ -26,15 +26,75 @@ export const AuthService = {
           isAdmin: true
         }
       },
-      user: {
-        email: 'user@tbp.com',
-        password: 'user123',
+      prospeccao: {
+        email: 'prospeccao@tbp.com',
+        password: 'tbp123',
         user: {
           id: '2',
-          name: 'Usuário Teste',
-          email: 'user@tbp.com',
+          name: 'Equipe Prospecção',
+          email: 'prospeccao@tbp.com',
+          departments: [departments.PROSPECCAO],
+          mainDepartment: departments.PROSPECCAO,
+          isAdmin: false
+        }
+      },
+      verificacao: {
+        email: 'verificacao@tbp.com',
+        password: 'tbp123',
+        user: {
+          id: '3',
+          name: 'Equipe Verificação',
+          email: 'verificacao@tbp.com',
           departments: [departments.VERIFICACAO],
           mainDepartment: departments.VERIFICACAO,
+          isAdmin: false
+        }
+      },
+      iptools: {
+        email: 'iptools@tbp.com',
+        password: 'tbp123',
+        user: {
+          id: '4',
+          name: 'Equipe IP Tools',
+          email: 'iptools@tbp.com',
+          departments: [departments.IP_TOOLS],
+          mainDepartment: departments.IP_TOOLS,
+          isAdmin: false
+        }
+      },
+      logistica: {
+        email: 'logistica@tbp.com',
+        password: 'tbp123',
+        user: {
+          id: '5',
+          name: 'Equipe Logística',
+          email: 'logistica@tbp.com',
+          departments: [departments.LOGISTICA],
+          mainDepartment: departments.LOGISTICA,
+          isAdmin: false
+        }
+      },
+      atendimento: {
+        email: 'atendimento@tbp.com',
+        password: 'tbp123',
+        user: {
+          id: '6',
+          name: 'Equipe Atendimento',
+          email: 'atendimento@tbp.com',
+          departments: [departments.ATENDIMENTO],
+          mainDepartment: departments.ATENDIMENTO,
+          isAdmin: false
+        }
+      },
+      financeiro: {
+        email: 'financeiro@tbp.com',
+        password: 'tbp123',
+        user: {
+          id: '7',
+          name: 'Equipe Financeiro',
+          email: 'financeiro@tbp.com',
+          departments: [departments.FINANCEIRO],
+          mainDepartment: departments.FINANCEIRO,
           isAdmin: false
         }
       }
@@ -44,14 +104,14 @@ export const AuthService = {
     await new Promise(resolve => setTimeout(resolve, 500));
 
     // Verifica credenciais
-    const adminMatch = email === testCredentials.admin.email && password === testCredentials.admin.password;
-    const userMatch = email === testCredentials.user.email && password === testCredentials.user.password;
+    const match = Object.values(testCredentials).find(
+      cred => cred.email === email && cred.password === password
+    );
 
-    if (adminMatch || userMatch) {
-      const userData = adminMatch ? testCredentials.admin.user : testCredentials.user.user;
+    if (match) {
       return {
-        token: 'test-jwt-token-' + userData.id,
-        user: userData
+        token: 'test-jwt-token-' + match.user.id,
+        user: match.user
       };
     }
 

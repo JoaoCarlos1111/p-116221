@@ -120,9 +120,9 @@ export default function Sidebar() {
         <div className="absolute bottom-4 left-0 right-0 px-2">
           <button
             onClick={() => {
-              localStorage.removeItem('isAuthenticated');
-              localStorage.removeItem('userRole');
-              window.location.href = '/login/internal';
+              localStorage.removeItem('token');
+              localStorage.removeItem('user');
+              window.location.href = '/login';
             }}
             className="flex w-full items-center gap-2 p-2 rounded-lg hover:bg-accent text-red-600"
           >
