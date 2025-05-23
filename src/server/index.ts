@@ -92,5 +92,5 @@ app.get('/api/test', async (req, res) => {
 const port = process.env.PORT || 5000;
 
 app.listen(port, '0.0.0.0', () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`Server running on http://0.0.0.0:${port}`);
 });
