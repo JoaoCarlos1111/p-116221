@@ -1,0 +1,82 @@
+Tela do Administrador
+Objetivo: Criar a tela de acesso do Administrador do sistema, com visualização estratégica e acesso a todas as funcionalidades críticas da plataforma.
+
+Crie uma nova rota chamada /admin acessível apenas para usuários com perfil de Administrador.
+
+Na tela /admin, deve ser exibido:
+
+🧭 Header da página:
+Título: "Painel do Administrador"
+
+Ícone de engrenagem ou escudo ao lado do título
+
+Botão de acesso rápido para suporte ou documentação interna
+
+🟨 Cards de KPIs (no topo da página):
+Exiba os seguintes cards com ícones e estilo destacado, mostrando números e valores atualizados:
+
+Usuários ativos
+
+Marcas protegidas
+
+Casos ativos
+
+Valor potencial de indenização
+
+Notificações emitidas no mês
+
+Cada card deve ser dinâmico, puxando os dados reais do sistema.
+
+🟧 Painel Administrativo (em abas ou colapsável na lateral):
+Crie seções com navegação por abas ou menu lateral, contendo:
+
+1. Usuários
+Lista de usuários cadastrados
+
+Botão "Criar novo usuário"
+
+Filtros por setor e status (ativo/inativo)
+
+Ações: editar, redefinir senha, desativar
+
+2. Permissões de acesso
+Visualizar perfis de acesso existentes
+
+Ver e editar permissões por perfil
+
+(Opcional) Criar novo perfil personalizado
+
+3. Auditoria e histórico
+Exibir logs de ações dos usuários no sistema
+
+Colunas: usuário, ação, data/hora
+
+Filtros por tipo de ação e período
+
+4. Marcas e clientes
+Lista de marcas cadastradas
+
+Botão "Adicionar nova marca"
+
+Opção de visualizar todos os casos da marca
+
+5. Templates e documentos
+Lista de modelos de notificação e outros documentos
+
+Ações: visualizar, editar, subir nova versão
+
+6. Configurações gerais
+Prazo padrão de movimentação de casos entre setores
+
+E-mails automáticos de notificação
+
+Gerenciamento de chaves de API e integrações (ex: Correios, plataformas de denúncia)
+
+🟦 Design:
+Siga o padrão visual do sistema
+
+Cards com visual moderno (bordas arredondadas, ícones e cores sutis)
+
+Barra lateral colapsável com ícones de cada seção
+
+Responsivo (funcione bem em telas menores)
