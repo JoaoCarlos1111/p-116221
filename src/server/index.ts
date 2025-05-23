@@ -9,8 +9,8 @@ const app = express();
 const prisma = new PrismaClient();
 
 app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', DELETE', 'OPTIONS'],
+  origin: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 }));
 app.use(express.json());
