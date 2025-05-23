@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card"
-import { User, Tag, Package, CircleDollar, Bell } from "lucide-react"
+import { User, Tag, Package, CircleDollarSign, Bell } from "lucide-react"
 
 export default function Admin() {
   return (
@@ -36,7 +36,7 @@ export default function Admin() {
 
         <Card className="p-6 flex flex-col gap-2">
           <div className="flex items-center gap-2">
-            <CircleDollar className="h-5 w-5 text-yellow-500" />
+            <CircleDollarSign className="h-5 w-5 text-yellow-500" />
             <h3 className="font-semibold">Valor potencial</h3>
           </div>
           <p className="text-3xl font-bold">R$ 1.283.000</p>
