@@ -11,9 +11,21 @@ const api = axios.create({
 
 // Interceptor para log de erros
 api.interceptors.response.use(
-  response => response,
+  response => {
+    console.log('API Success:', {
+      url: response.config.url,
+      method: response.config.method,
+      status: response.status
+    });
+    return response;
+  },
   error => {
-    console.error('API Error:', error.message);
+    console.error('API Error:', {
+      url: error.config?.url,
+      method: error.config?.method,
+      message: error.message,
+      status: error.response?.status
+    });
     return Promise.reject(error);
   }
 );
