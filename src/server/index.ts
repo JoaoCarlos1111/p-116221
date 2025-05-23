@@ -9,11 +9,17 @@ const app = express();
 const prisma = new PrismaClient();
 
 app.use(cors({
-  origin: true,
+  origin: ['http://localhost:8080', 'http://0.0.0.0:8080'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// Middleware de erro global
+app.use((err, req, res, next) => {
+  console.error('Server Error:', err);
+  res.status(500).json({ error: err.message });
+});
 app.use(express.json());
 
 // Log das requisições
