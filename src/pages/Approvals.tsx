@@ -205,10 +205,12 @@ export default function Approvals() {
 
   const selectedCount = approvals.filter(a => a.selected).length;
 
+  console.log("Casos de aprovação:", approvals); // Debug
+
   return (
     <div className="space-y-6 p-6">
       <header>
-        <h1 className="text-3xl font-bold">Aprovações Pendentes</h1>
+        <h1 className="text-3xl font-bold">Aprovações Pendentes ({approvals.length})</h1>
         <p className="text-muted-foreground">Gerencie as notificações extrajudiciais que precisam de sua aprovação</p>
       </header>
 
@@ -285,7 +287,16 @@ export default function Approvals() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredApprovals.slice(0, 50).map((approval) => (
+              {approvals.filter(a => {
+                const matchesSearch = searchQuery === '' || 
+                  a.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  (a.title && a.title.toLowerCase().includes(searchQuery.toLowerCase()));
+                const matchesStatus = statusFilter === 'all' || a.status === statusFilter;
+                const matchesDate = !dateRange.from || !dateRange.to || 
+                  (new Date(a.entryDate) >= dateRange.from && new Date(a.entryDate) <= dateRange.to);
+                
+                return matchesSearch && matchesStatus && matchesDate;
+              }).map((approval) => (
                 <TableRow key={approval.id}>
                   <TableCell>
                     <Checkbox 
