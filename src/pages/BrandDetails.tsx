@@ -1,0 +1,336 @@
+
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { FileText, Users, Bookmark, GitBranch } from "lucide-react";
+
+interface Brand {
+  id: string;
+  name: string;
+  company: string;
+  document: string;
+  status: "active" | "validating" | "inactive";
+  analyst: string;
+  lastUpdate: string;
+  classification: string;
+  createdAt: string;
+  notes: string;
+  tags: string[];
+  companyGroup: {
+    name: string;
+    document: string;
+    contact: {
+      name: string;
+      email: string;
+      phone: string;
+    };
+    contract: {
+      status: "active" | "inactive" | "negotiating";
+      signedAt: string;
+      expiresAt: string;
+    };
+    users: Array<{
+      name: string;
+      role: string;
+    }>;
+  };
+  inpiRegistrations: Array<{
+    id: string;
+    number: string;
+    class: string;
+    status: "active" | "analyzing" | "extinct";
+    owner: string;
+    validUntil: string;
+    publicUrl?: string;
+  }>;
+}
+
+export default function BrandDetails() {
+  const { id } = useParams();
+  const [activeTab, setActiveTab] = useState("brand");
+  
+  // Mock data - replace with API call
+  const brand: Brand = {
+    id: "1",
+    name: "Nike",
+    company: "Nike Inc.",
+    document: "12.345.678/0001-90",
+    status: "active",
+    analyst: "John Doe",
+    lastUpdate: "2024-01-24",
+    classification: "Esportes",
+    createdAt: "2023-12-01",
+    notes: "Marca premium no segmento esportivo",
+    tags: ["Premium", "Esportes", "Internacional"],
+    companyGroup: {
+      name: "Nike Group",
+      document: "12.345.678/0001-90",
+      contact: {
+        name: "Jane Smith",
+        email: "jane@nike.com",
+        phone: "(11) 99999-9999"
+      },
+      contract: {
+        status: "active",
+        signedAt: "2023-01-01",
+        expiresAt: "2024-12-31"
+      },
+      users: [
+        { name: "John Smith", role: "Admin" },
+        { name: "Mary Johnson", role: "Viewer" }
+      ]
+    },
+    inpiRegistrations: [
+      {
+        id: "reg1",
+        number: "123456789",
+        class: "25",
+        status: "active",
+        owner: "Nike Inc.",
+        validUntil: "2030-12-31",
+        publicUrl: "https://busca.inpi.gov.br"
+      }
+    ]
+  };
+
+  const getStatusBadge = (status: Brand['status']) => {
+    const variants = {
+      active: "success",
+      validating: "warning",
+      inactive: "destructive"
+    };
+    const labels = {
+      active: "Ativa",
+      validating: "Em validação",
+      inactive: "Inativa"
+    };
+    return <Badge variant={variants[status] as any}>{labels[status]}</Badge>;
+  };
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader className="pb-4">
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-2xl font-bold">{brand.name}</h1>
+              <p className="text-muted-foreground">{brand.company}</p>
+            </div>
+            <Button>Editar Marca</Button>
+          </div>
+          <div className="grid grid-cols-3 gap-4 mt-4">
+            <div>
+              <p className="text-sm text-muted-foreground">CNPJ</p>
+              <p>{brand.document}</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Status</p>
+              {getStatusBadge(brand.status)}
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Analista</p>
+              <p>{brand.analyst}</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Última atualização</p>
+              <p>{new Date(brand.lastUpdate).toLocaleDateString()}</p>
+            </div>
+          </div>
+        </CardHeader>
+      </Card>
+
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList>
+          <TabsTrigger value="brand" className="flex items-center gap-2">
+            <Bookmark className="h-4 w-4" />
+            Dados da Marca
+          </TabsTrigger>
+          <TabsTrigger value="company" className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            Empresa / Grupo
+          </TabsTrigger>
+          <TabsTrigger value="inpi" className="flex items-center gap-2">
+            <FileText className="h-4 w-4" />
+            Registros INPI
+          </TabsTrigger>
+          <TabsTrigger value="cases" className="flex items-center gap-2">
+            <GitBranch className="h-4 w-4" />
+            Fluxo de Casos
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="brand" className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Dados da Marca</CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Nome</p>
+                  <p className="font-medium">{brand.name}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Classificação</p>
+                  <p className="font-medium">{brand.classification}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Data de Inclusão</p>
+                  <p className="font-medium">{new Date(brand.createdAt).toLocaleDateString()}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Status</p>
+                  {getStatusBadge(brand.status)}
+                </div>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground mb-2">Tags</p>
+                <div className="flex gap-2">
+                  {brand.tags.map(tag => (
+                    <Badge key={tag} variant="secondary">{tag}</Badge>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground mb-2">Observações</p>
+                <p>{brand.notes}</p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="company" className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Empresa / Grupo</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Nome do Grupo</p>
+                  <p className="font-medium">{brand.companyGroup.name}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">CNPJ</p>
+                  <p className="font-medium">{brand.companyGroup.document}</p>
+                </div>
+              </div>
+              
+              <div>
+                <p className="font-medium mb-2">Contato Principal</p>
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Nome</p>
+                    <p>{brand.companyGroup.contact.name}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Email</p>
+                    <p>{brand.companyGroup.contact.email}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Telefone</p>
+                    <p>{brand.companyGroup.contact.phone}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <p className="font-medium mb-2">Contrato</p>
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Status</p>
+                    <Badge>{brand.companyGroup.contract.status}</Badge>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Assinatura</p>
+                    <p>{new Date(brand.companyGroup.contract.signedAt).toLocaleDateString()}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Expiração</p>
+                    <p>{new Date(brand.companyGroup.contract.expiresAt).toLocaleDateString()}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <p className="font-medium mb-2">Acessos</p>
+                <div className="grid gap-2">
+                  {brand.companyGroup.users.map((user, index) => (
+                    <div key={index} className="flex justify-between items-center p-2 bg-muted rounded-md">
+                      <span>{user.name}</span>
+                      <Badge variant="secondary">{user.role}</Badge>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="inpi" className="mt-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Registros no INPI</CardTitle>
+              <Button>+ Novo Registro</Button>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4">
+                {brand.inpiRegistrations.map((reg) => (
+                  <div key={reg.id} className="border p-4 rounded-lg">
+                    <div className="grid grid-cols-3 gap-4">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Número do Processo</p>
+                        <p className="font-medium">{reg.number}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Classe</p>
+                        <p className="font-medium">{reg.class}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Situação</p>
+                        <Badge>{reg.status}</Badge>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Titular</p>
+                        <p className="font-medium">{reg.owner}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Vigência</p>
+                        <p className="font-medium">{new Date(reg.validUntil).toLocaleDateString()}</p>
+                      </div>
+                      {reg.publicUrl && (
+                        <div>
+                          <Button variant="outline" size="sm" asChild>
+                            <a href={reg.publicUrl} target="_blank" rel="noopener noreferrer">
+                              Consulta Pública
+                            </a>
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="cases" className="mt-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Fluxo de Casos</CardTitle>
+              <Button>+ Novo Caso</Button>
+            </CardHeader>
+            <CardContent>
+              {/* Add cases pipeline/list component here */}
+              <p className="text-muted-foreground">Implementar visualização de casos</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}

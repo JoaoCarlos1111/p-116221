@@ -138,6 +138,11 @@ function AppContent() {
                   <BrandsAndClients />
                 </RouteGuard>
               } />
+              <Route path="/admin/brands/:id" element={
+                <RouteGuard requiredDepartment={["admin", "analyst"]}>
+                  <BrandDetails />
+                </RouteGuard>
+              } />
               <Route path="/admin/audit" element={
                 <RouteGuard requiredDepartment="admin">
                   <Audit />
