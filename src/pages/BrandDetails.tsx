@@ -536,20 +536,7 @@ export default function BrandDetails() {
                           </SelectContent>
                         </Select>
                       </div>
-                      <div>
-                        <Label>Apresentação</Label>
-                        <Select defaultValue="nominative">
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="nominative">Nominativa</SelectItem>
-                            <SelectItem value="mixed">Mista</SelectItem>
-                            <SelectItem value="figurative">Figurativa</SelectItem>
-                            <SelectItem value="3d">Tridimensional</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
+                      
                       <div>
                         <Label>Especificação</Label>
                         <Textarea id="specification" placeholder="Descreva a especificação da marca" />
@@ -651,10 +638,7 @@ export default function BrandDetails() {
                                 <p className="font-medium mb-1">Natureza</p>
                                 <p>{reg.nature || 'Marca de Produto'}</p>
                               </div>
-                              <div>
-                                <p className="font-medium mb-1">Apresentação</p>
-                                <p>{reg.presentation || 'Nominativa'}</p>
-                              </div>
+                              
                               <div>
                                 <p className="font-medium mb-1">Especificação</p>
                                 <p className="text-sm">{reg.specification || 'N/A'}</p>
@@ -755,27 +739,7 @@ export default function BrandDetails() {
                                 </SelectContent>
                               </Select>
                             </div>
-                            <div>
-                              <Label>Apresentação</Label>
-                              <Select
-                                value={reg.presentation || 'nominative'}
-                                onValueChange={(value) => {
-                                  const newRegistrations = [...brand.inpiRegistrations];
-                                  newRegistrations[index] = { ...reg, presentation: value };
-                                  handleChange('inpiRegistrations', newRegistrations);
-                                }}
-                              >
-                                <SelectTrigger>
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="nominative">Nominativa</SelectItem>
-                                  <SelectItem value="mixed">Mista</SelectItem>
-                                  <SelectItem value="figurative">Figurativa</SelectItem>
-                                  <SelectItem value="3d">Tridimensional</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
+                            
                             <div>
                               <Label>Especificação</Label>
                               <Textarea 
