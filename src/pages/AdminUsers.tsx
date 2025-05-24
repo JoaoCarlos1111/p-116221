@@ -539,9 +539,135 @@ const AdminUsers = () => {
                       </form>
                     </DialogContent>
                   </Dialog>
-                  <Button variant="ghost" size="icon">
-                    <Key className="h-4 w-4" />
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <Key className="h-4 w-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Redefinir Senha</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Defina uma nova senha para o usuário {user.name}
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      
+                      <div className="space-y-4 py-4">
+                        <div className="flex items-center space-x-2">
+                          <Checkbox 
+                            id="generate-password"
+                            checked={newUser.sendEmail}
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                generatePassword();
+                              }
+                              setNewUser({ ...newUser, sendEmail: checked as boolean });
+                            }}
+                          />
+                          <Label htmlFor="generate-password">Gerar senha aleatória segura</Label>
+                        </div>
+
+                        {!newUser.sendEmail ? (
+                          <>
+                            <div className="space-y-2">
+                              <Label htmlFor="new-password">Nova senha</Label>
+                              <Input
+                                id="new-password"
+                                type="password"
+                                placeholder="Digite a nova senha"
+                                onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="confirm-password">Confirmar senha</Label>
+                              <Input
+                                id="confirm-password"
+                                type="password"
+                                placeholder="Confirme a nova senha"
+                                onChange={(e) => {
+                                  if (e.target.value !== newUser.password) {
+                                    setErrors({ ...errors, confirmPassword: 'As senhas não coincidem' });
+                                  } else {
+                                    const { confirmPassword, ...restErrors } = errors;
+                                    setErrors(restErrors);
+                                  }
+                                }}
+                              />
+                              {errors.confirmPassword && (
+                                <p className="text-sm text-red-500">{errors.confirmPassword}</p>
+                              )}
+                            </div>
+                          </>
+                        ) : (
+                          <div className="space-y-2">
+                            <Label>Senha gerada</Label>
+                            <div className="flex gap-2">
+                              <Input
+                                type="text"
+                                value={newUser.password}
+                                readOnly
+                              />
+                              <Button 
+                                variant="outline" 
+                                onClick={() => {
+                                  navigator.clipboard.writeText(newUser.password);
+                                  toast({
+                                    title: "Senha copiada",
+                                    description: "A senha foi copiada para a área de transferência"
+                                  });
+                                }}
+                              >
+                                Copiar
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="send-email"
+                            checked={newUser.sendEmail}
+                            onCheckedChange={(checked) => setNewUser({ ...newUser, sendEmail: checked as boolean })}
+                          />
+                          <Label htmlFor="send-email">Enviar nova senha por e-mail ao usuário</Label>
+                        </div>
+                      </div>
+
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction onClick={async () => {
+                          if (!newUser.sendEmail && (!newUser.password || newUser.password.length < 8)) {
+                            setErrors({ ...errors, password: 'A senha deve ter no mínimo 8 caracteres' });
+                            return;
+                          }
+                          
+                          try {
+                            // TODO: Implement API call to update password
+                            // await api.put(`/users/${user.id}/password`, {
+                            //   password: newUser.password,
+                            //   sendEmail: newUser.sendEmail
+                            // });
+                            
+                            toast({
+                              title: "Senha redefinida com sucesso",
+                              description: newUser.sendEmail 
+                                ? "A nova senha foi enviada para o e-mail do usuário"
+                                : "A senha foi atualizada com sucesso"
+                            });
+                          } catch (error) {
+                            toast({
+                              title: "Erro ao redefinir senha",
+                              description: "Ocorreu um erro ao tentar redefinir a senha",
+                              variant: "destructive"
+                            });
+                          }
+                        }}>
+                          Redefinir Senha
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="ghost" size="icon">
