@@ -1,0 +1,27 @@
+Switch is not defined
+at https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/src/pages/BrandDetails.tsx?t=1748120948738:5432:95
+at Array.map (<anonymous>)
+at BrandDetails (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/src/pages/BrandDetails.tsx?t=1748120948738:5152:43)
+at renderWithHooks (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-QT63QQJV.js?v=d459ca29:11548:26)
+at mountIndeterminateComponent (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-QT63QQJV.js?v=d459ca29:14926:21)
+at beginWork (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-QT63QQJV.js?v=d459ca29:15914:22)
+at HTMLUnknownElement.callCallback2 (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-QT63QQJV.js?v=d459ca29:3674:22)
+at Object.invokeGuardedCallbackDev (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-QT63QQJV.js?v=d459ca29:3699:24)
+at invokeGuardedCallback (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-QT63QQJV.js?v=d459ca29:3733:39)
+at beginWork$1 (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-QT63QQJV.js?v=d459ca29:19765:15)
+The above error occurred in the <BrandDetails> component:
+
+    at BrandDetails (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/src/pages/BrandDetails.tsx?t=1748120948738:26:37)
+    at RouteGuard (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/src/components/RouteGuard.tsx:13:38)
+    at RenderedRoute (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=d459ca29:4088:5)
+    at Routes (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=d459ca29:4558:5)
+    at main
+    at div
+    at div
+    at AppContent (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/src/App.tsx?t=1748120948738:44:22)
+    at Router (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=d459ca29:4501:15)
+    at BrowserRouter (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=d459ca29:5247:5)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
