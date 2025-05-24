@@ -26,10 +26,7 @@ const Analytics = () => {
             <div>
               <p className="text-sm text-muted-foreground">Usuários ativos</p>
               <p className="text-2xl font-bold">128</p>
-              <div className="flex items-center gap-1">
-                <p className="text-sm text-green-600">+12%</p>
-                <ArrowUpRight className="h-4 w-4 text-green-600" />
-              </div>
+              <p className="text-sm text-green-600">+12% em relação ao mês anterior</p>
             </div>
           </div>
         </Card>
@@ -42,10 +39,7 @@ const Analytics = () => {
             <div>
               <p className="text-sm text-muted-foreground">Marcas protegidas</p>
               <p className="text-2xl font-bold">52</p>
-              <div className="flex items-center gap-1">
-                <p className="text-sm text-green-600">+8%</p>
-                <ArrowUpRight className="h-4 w-4 text-green-600" />
-              </div>
+              <p className="text-sm text-green-600">+8% em relação ao mês anterior</p>
             </div>
           </div>
         </Card>
@@ -58,10 +52,7 @@ const Analytics = () => {
             <div>
               <p className="text-sm text-muted-foreground">Casos ativos</p>
               <p className="text-2xl font-bold">1.247</p>
-              <div className="flex items-center gap-1">
-                <p className="text-sm text-red-600">-3%</p>
-                <ArrowDownRight className="h-4 w-4 text-red-600" />
-              </div>
+              <p className="text-sm text-red-600">-3% em relação ao mês anterior</p>
             </div>
           </div>
         </Card>
@@ -74,10 +65,6 @@ const Analytics = () => {
             <div>
               <p className="text-sm text-muted-foreground">Notificações do mês</p>
               <p className="text-2xl font-bold">402</p>
-              <div className="flex items-center gap-1">
-                <p className="text-sm text-green-600">+15%</p>
-                <ArrowUpRight className="h-4 w-4 text-green-600" />
-              </div>
             </div>
           </div>
         </Card>
@@ -90,10 +77,6 @@ const Analytics = () => {
             <div>
               <p className="text-sm text-muted-foreground">Acordos extrajudiciais</p>
               <p className="text-2xl font-bold">76</p>
-              <div className="flex items-center gap-1">
-                <p className="text-sm text-green-600">+5%</p>
-                <ArrowUpRight className="h-4 w-4 text-green-600" />
-              </div>
             </div>
           </div>
         </Card>
@@ -106,10 +89,6 @@ const Analytics = () => {
             <div>
               <p className="text-sm text-muted-foreground">Anúncios desativados</p>
               <p className="text-2xl font-bold">980</p>
-              <div className="flex items-center gap-1">
-                <p className="text-sm text-red-600">-7%</p>
-                <ArrowDownRight className="h-4 w-4 text-red-600" />
-              </div>
             </div>
           </div>
         </Card>
@@ -122,10 +101,6 @@ const Analytics = () => {
             <div>
               <p className="text-sm text-muted-foreground">Valor potencial de indenização</p>
               <p className="text-2xl font-bold">R$ 1.283.000,00</p>
-              <div className="flex items-center gap-1">
-                <p className="text-sm text-green-600">+22%</p>
-                <ArrowUpRight className="h-4 w-4 text-green-600" />
-              </div>
             </div>
           </div>
         </Card>
