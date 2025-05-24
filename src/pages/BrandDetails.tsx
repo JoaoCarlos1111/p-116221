@@ -723,6 +723,82 @@ export default function BrandDetails() {
                               />
                             </div>
                             <div>
+                              <Label>Data do Depósito</Label>
+                              <Input 
+                                type="date"
+                                value={reg.filingDate}
+                                onChange={(e) => {
+                                  const newRegistrations = [...brand.inpiRegistrations];
+                                  newRegistrations[index] = { ...reg, filingDate: e.target.value };
+                                  handleChange('inpiRegistrations', newRegistrations);
+                                }}
+                              />
+                            </div>
+                            <div>
+                              <Label>Natureza</Label>
+                              <Select
+                                value={reg.nature || 'product'}
+                                onValueChange={(value) => {
+                                  const newRegistrations = [...brand.inpiRegistrations];
+                                  newRegistrations[index] = { ...reg, nature: value };
+                                  handleChange('inpiRegistrations', newRegistrations);
+                                }}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="product">Marca de Produto</SelectItem>
+                                  <SelectItem value="service">Marca de Serviço</SelectItem>
+                                  <SelectItem value="collective">Marca Coletiva</SelectItem>
+                                  <SelectItem value="certification">Marca de Certificação</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div>
+                              <Label>Apresentação</Label>
+                              <Select
+                                value={reg.presentation || 'nominative'}
+                                onValueChange={(value) => {
+                                  const newRegistrations = [...brand.inpiRegistrations];
+                                  newRegistrations[index] = { ...reg, presentation: value };
+                                  handleChange('inpiRegistrations', newRegistrations);
+                                }}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="nominative">Nominativa</SelectItem>
+                                  <SelectItem value="mixed">Mista</SelectItem>
+                                  <SelectItem value="figurative">Figurativa</SelectItem>
+                                  <SelectItem value="3d">Tridimensional</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div>
+                              <Label>Especificação</Label>
+                              <Textarea 
+                                value={reg.specification}
+                                onChange={(e) => {
+                                  const newRegistrations = [...brand.inpiRegistrations];
+                                  newRegistrations[index] = { ...reg, specification: e.target.value };
+                                  handleChange('inpiRegistrations', newRegistrations);
+                                }}
+                              />
+                            </div>
+                            <div>
+                              <Label>NCL</Label>
+                              <Input
+                                value={reg.niceClassification}
+                                onChange={(e) => {
+                                  const newRegistrations = [...brand.inpiRegistrations];
+                                  newRegistrations[index] = { ...reg, niceClassification: e.target.value };
+                                  handleChange('inpiRegistrations', newRegistrations);
+                                }}
+                              />
+                            </div>
+                            <div>
                               <Label>Situação</Label>
                               <Select
                                 value={reg.status}
