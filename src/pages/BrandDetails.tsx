@@ -242,7 +242,7 @@ export default function BrandDetails() {
               <CardTitle>Dados da Marca</CardTitle>
             </CardHeader>
             <CardContent className="grid gap-4">
-              <div className="flex justify-between items-start gap-6">
+              <div className="flex justify-between items-start">
                 <div className="grid grid-cols-2 gap-4 flex-1">
                   <div>
                     <p className="text-sm text-muted-foreground">Nome</p>
@@ -260,7 +260,7 @@ export default function BrandDetails() {
                     />
                   </div>
                 </div>
-                <div className="self-center mt-6">
+                <div className="ml-6">
                   <label 
                     htmlFor="logoUpload" 
                     className="relative flex items-center justify-center w-32 h-32 rounded-full border-2 border-dashed hover:border-primary/50 transition-colors cursor-pointer bg-muted"
