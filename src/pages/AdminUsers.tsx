@@ -14,6 +14,102 @@ const AdminUsers = () => {
   const [status, setStatus] = useState('all');
   const [department, setDepartment] = useState('all');
   const [search, setSearch] = useState('');
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  
+  const [newUser, setNewUser] = useState({
+    name: '',
+    email: '',
+    type: '',
+    department: '',
+    role: '',
+    brands: [],
+    company: '',
+    password: '',
+    sendEmail: true
+  });
+
+  // Mock data - replace with API calls
+  const availableBrands = [
+    { id: '1', name: 'Marca A' },
+    { id: '2', name: 'Marca B' },
+  ];
+
+  const availableCompanies = [
+    { id: '1', name: 'Empresa A' },
+    { id: '2', name: 'Empresa B' },
+  ];
+
+  const generatePassword = () => {
+    const length = 12;
+    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+    let password = "";
+    for (let i = 0; i < length; i++) {
+      password += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+    setNewUser({ ...newUser, password });
+  };
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    
+    if (!newUser.name) newErrors.name = 'Nome é obrigatório';
+    if (!newUser.email) newErrors.email = 'E-mail é obrigatório';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newUser.email)) {
+      newErrors.email = 'E-mail inválido';
+    }
+    if (!newUser.type) newErrors.type = 'Tipo de usuário é obrigatório';
+    if (!newUser.password) newErrors.password = 'Senha é obrigatória';
+    
+    if (newUser.type === 'analyst') {
+      if (!newUser.department) newErrors.department = 'Setor é obrigatório';
+      if (!newUser.role) newErrors.role = 'Perfil de acesso é obrigatório';
+    }
+    
+    if (newUser.type === 'client') {
+      if (!newUser.brands?.length) newErrors.brands = 'Selecione pelo menos uma marca';
+      if (!newUser.company) newErrors.company = 'Empresa é obrigatória';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleCreateUser = async () => {
+    if (!validateForm()) return;
+
+    try {
+      // Replace with actual API call
+      console.log('Creating user:', newUser);
+      
+      toast({
+        title: "Usuário criado com sucesso",
+        description: "O novo usuário foi adicionado ao sistema.",
+      });
+      
+      closeDialog();
+    } catch (error) {
+      toast({
+        title: "Erro ao criar usuário",
+        description: "Ocorreu um erro ao criar o usuário. Tente novamente.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const closeDialog = () => {
+    setNewUser({
+      name: '',
+      email: '',
+      type: '',
+      department: '',
+      role: '',
+      brands: [],
+      company: '',
+      password: '',
+      sendEmail: true
+    });
+    setErrors({});
+  };
 
   const mockUsers = [
     {
@@ -49,7 +145,153 @@ const AdminUsers = () => {
             <DialogHeader>
               <DialogTitle>Criar Novo Usuário</DialogTitle>
             </DialogHeader>
-            {/* Form content will be added here */}
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              handleCreateUser();
+            }} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Nome completo</Label>
+                <Input
+                  id="name"
+                  value={newUser.name}
+                  onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+                  placeholder="Digite o nome completo"
+                />
+                {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="email">E-mail</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={newUser.email}
+                  onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                  placeholder="exemplo@empresa.com"
+                />
+                {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="type">Tipo de usuário</Label>
+                <Select value={newUser.type} onValueChange={(value) => setNewUser({ ...newUser, type: value })}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o tipo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="analyst">Analista</SelectItem>
+                    <SelectItem value="client">Cliente</SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.type && <p className="text-sm text-red-500">{errors.type}</p>}
+              </div>
+
+              {newUser.type === 'analyst' && (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="department">Setor</Label>
+                    <Select value={newUser.department} onValueChange={(value) => setNewUser({ ...newUser, department: value })}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o setor" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="prospection">Prospecção</SelectItem>
+                        <SelectItem value="verification">Verificação</SelectItem>
+                        <SelectItem value="ip_tools">IP Tools</SelectItem>
+                        <SelectItem value="service">Atendimento</SelectItem>
+                        <SelectItem value="financial">Financeiro</SelectItem>
+                        <SelectItem value="admin">Administração</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {errors.department && <p className="text-sm text-red-500">{errors.department}</p>}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="role">Perfil de acesso</Label>
+                    <Select value={newUser.role} onValueChange={(value) => setNewUser({ ...newUser, role: value })}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o perfil" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="admin">Administrador</SelectItem>
+                        <SelectItem value="manager">Gerente</SelectItem>
+                        <SelectItem value="analyst">Analista</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {errors.role && <p className="text-sm text-red-500">{errors.role}</p>}
+                  </div>
+                </>
+              )}
+
+              {newUser.type === 'client' && (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="brands">Marcas associadas</Label>
+                    <Select value={newUser.brands} onValueChange={(value) => setNewUser({ ...newUser, brands: value })} multiple>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione as marcas" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {availableBrands.map(brand => (
+                          <SelectItem key={brand.id} value={brand.id}>{brand.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.brands && <p className="text-sm text-red-500">{errors.brands}</p>}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="company">Empresa</Label>
+                    <Select value={newUser.company} onValueChange={(value) => setNewUser({ ...newUser, company: value })}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione a empresa" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {availableCompanies.map(company => (
+                          <SelectItem key={company.id} value={company.id}>{company.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.company && <p className="text-sm text-red-500">{errors.company}</p>}
+                  </div>
+                </>
+              )}
+
+              <div className="space-y-2">
+                <Label htmlFor="password">Senha temporária</Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="password"
+                    type="text"
+                    value={newUser.password}
+                    onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+                    placeholder="Digite a senha ou gere automaticamente"
+                  />
+                  <Button type="button" variant="outline" onClick={generatePassword}>
+                    Gerar senha
+                  </Button>
+                </div>
+                {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="sendEmail"
+                  checked={newUser.sendEmail}
+                  onCheckedChange={(checked) => setNewUser({ ...newUser, sendEmail: checked as boolean })}
+                />
+                <Label htmlFor="sendEmail">Enviar convite por e-mail com instruções de acesso</Label>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-4">
+                <Button type="button" variant="outline" onClick={closeDialog}>
+                  Cancelar
+                </Button>
+                <Button type="submit">
+                  Salvar usuário
+                </Button>
+              </div>
+            </form>
           </DialogContent>
         </Dialog>
       </div>
