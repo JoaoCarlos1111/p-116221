@@ -26,7 +26,7 @@ const AdminUsers = () => {
     type: '',
     department: '',
     role: '',
-    brands: [],
+    brands: [] as string[],
     company: '',
     password: '',
     sendEmail: true
@@ -67,6 +67,7 @@ const AdminUsers = () => {
     if (newUser.type === 'analyst') {
       if (!newUser.department) newErrors.department = 'Setor é obrigatório';
       if (!newUser.role) newErrors.role = 'Perfil de acesso é obrigatório';
+      if (!newUser.brands?.length) newErrors.brands = 'Selecione pelo menos uma marca';
     }
     
     if (newUser.type === 'client') {
@@ -189,6 +190,42 @@ const AdminUsers = () => {
                 </Select>
                 {errors.type && <p className="text-sm text-red-500">{errors.type}</p>}
               </div>
+
+              {(newUser.type === 'analyst' || newUser.type === 'client') && (
+                <div className="space-y-2">
+                  <Label htmlFor="brands">Marcas vinculadas</Label>
+                  <Select 
+                    value={newUser.brands} 
+                    onValueChange={(value) => setNewUser({ ...newUser, brands: Array.isArray(value) ? value : [value] })}
+                    multiple
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione as marcas" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <div className="p-2">
+                        <Input
+                          placeholder="Buscar marca..."
+                          className="mb-2"
+                          onChange={(e) => {
+                            // Implement brand search filter
+                            const searchTerm = e.target.value.toLowerCase();
+                            // Filter availableBrands based on search
+                          }}
+                        />
+                      </div>
+                      {availableBrands
+                        .sort((a, b) => a.name.localeCompare(b.name))
+                        .map(brand => (
+                          <SelectItem key={brand.id} value={brand.id}>
+                            {brand.name}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                  {errors.brands && <p className="text-sm text-red-500">{errors.brands}</p>}
+                </div>
+              )}
 
               {newUser.type === 'analyst' && (
                 <>
@@ -415,6 +452,37 @@ const AdminUsers = () => {
                             </SelectContent>
                           </Select>
                         </div>
+
+                        {(user.type === 'analyst' || user.type === 'client') && (
+                          <div className="space-y-2">
+                            <Label htmlFor="edit-brands">Marcas vinculadas</Label>
+                            <Select defaultValue={user.brands} multiple>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Selecione as marcas" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <div className="p-2">
+                                  <Input
+                                    placeholder="Buscar marca..."
+                                    className="mb-2"
+                                    onChange={(e) => {
+                                      // Implement brand search filter
+                                      const searchTerm = e.target.value.toLowerCase();
+                                      // Filter availableBrands based on search
+                                    }}
+                                  />
+                                </div>
+                                {availableBrands
+                                  .sort((a, b) => a.name.localeCompare(b.name))
+                                  .map(brand => (
+                                    <SelectItem key={brand.id} value={brand.id}>
+                                      {brand.name}
+                                    </SelectItem>
+                                  ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        )}
 
                         <div className="space-y-2">
                           <Label htmlFor="edit-status">Status</Label>
