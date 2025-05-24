@@ -5,7 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { FileText, Users, Bookmark, GitBranch, Save } from "lucide-react";
+import { FileText, Users, Bookmark, GitBranch, Save, Eye, Pencil, Trash2 } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -482,103 +483,252 @@ export default function BrandDetails() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Registros no INPI</CardTitle>
-              <Button onClick={() => {
-                const newRegistration = {
-                  id: `reg${brand.inpiRegistrations.length + 1}`,
-                  number: '',
-                  class: '',
-                  status: 'active' as const,
-                  owner: brand.company,
-                  validUntil: new Date().toISOString().split('T')[0],
-                  publicUrl: ''
-                };
-                handleChange('inpiRegistrations', [...brand.inpiRegistrations, newRegistration]);
-              }}>
-                + Novo Registro
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button>+ Novo Registro</Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                  <DialogHeader>
+                    <DialogTitle>Novo Registro INPI</DialogTitle>
+                  </DialogHeader>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label>Número do Processo</Label>
+                      <Input id="number" />
+                    </div>
+                    <div>
+                      <Label>Classe</Label>
+                      <Input id="class" />
+                    </div>
+                    <div>
+                      <Label>Situação</Label>
+                      <Select defaultValue="active">
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="active">Vigente</SelectItem>
+                          <SelectItem value="analyzing">Em análise</SelectItem>
+                          <SelectItem value="extinct">Extinto</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label>Titular</Label>
+                      <Input id="owner" defaultValue={brand.company} />
+                    </div>
+                    <div>
+                      <Label>Vigência</Label>
+                      <Input type="date" id="validUntil" />
+                    </div>
+                    <div>
+                      <Label>URL Pública</Label>
+                      <Input id="publicUrl" placeholder="https://" />
+                    </div>
+                  </div>
+                  <DialogFooter className="mt-4">
+                    <Button onClick={() => {
+                      const newRegistration = {
+                        id: `reg${brand.inpiRegistrations.length + 1}`,
+                        number: (document.getElementById('number') as HTMLInputElement).value,
+                        class: (document.getElementById('class') as HTMLInputElement).value,
+                        status: 'active' as const,
+                        owner: (document.getElementById('owner') as HTMLInputElement).value,
+                        validUntil: (document.getElementById('validUntil') as HTMLInputElement).value,
+                        publicUrl: (document.getElementById('publicUrl') as HTMLInputElement).value,
+                      };
+                      handleChange('inpiRegistrations', [...brand.inpiRegistrations, newRegistration]);
+                    }}>Salvar</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-4">
+              <div className="space-y-2">
                 {brand.inpiRegistrations.map((reg, index) => (
-                  <div key={reg.id} className="border p-4 rounded-lg">
-                    <div className="grid grid-cols-3 gap-4">
+                  <div key={reg.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div className="flex-1 grid grid-cols-4 gap-4">
                       <div>
-                        <p className="text-sm text-muted-foreground">Número do Processo</p>
-                        <Input
-                          value={reg.number}
-                          onChange={(e) => {
-                            const newRegistrations = [...brand.inpiRegistrations];
-                            newRegistrations[index] = { ...reg, number: e.target.value };
-                            handleChange('inpiRegistrations', newRegistrations);
-                          }}
-                        />
+                        <p className="text-sm font-medium">Processo</p>
+                        <p>{reg.number}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">Classe</p>
-                        <Input
-                          value={reg.class}
-                          onChange={(e) => {
-                            const newRegistrations = [...brand.inpiRegistrations];
-                            newRegistrations[index] = { ...reg, class: e.target.value };
-                            handleChange('inpiRegistrations', newRegistrations);
-                          }}
-                        />
+                        <p className="text-sm font-medium">Classe</p>
+                        <p>{reg.class}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">Situação</p>
-                        <Select
-                          value={reg.status}
-                          onValueChange={(value) => {
-                            const newRegistrations = [...brand.inpiRegistrations];
-                            newRegistrations[index] = { ...reg, status: value as any };
-                            handleChange('inpiRegistrations', newRegistrations);
-                          }}
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="active">Vigente</SelectItem>
-                            <SelectItem value="analyzing">Em análise</SelectItem>
-                            <SelectItem value="extinct">Extinto</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <p className="text-sm font-medium">Situação</p>
+                        <Badge variant={reg.status === 'active' ? 'default' : reg.status === 'analyzing' ? 'secondary' : 'destructive'}>
+                          {reg.status === 'active' ? 'Vigente' : reg.status === 'analyzing' ? 'Em análise' : 'Extinto'}
+                        </Badge>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">Titular</p>
-                        <Input
-                          value={reg.owner}
-                          onChange={(e) => {
-                            const newRegistrations = [...brand.inpiRegistrations];
-                            newRegistrations[index] = { ...reg, owner: e.target.value };
-                            handleChange('inpiRegistrations', newRegistrations);
-                          }}
-                        />
+                        <p className="text-sm font-medium">Vigência</p>
+                        <p>{new Date(reg.validUntil).toLocaleDateString()}</p>
                       </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Vigência</p>
-                        <Input
-                          type="date"
-                          value={reg.validUntil}
-                          onChange={(e) => {
-                            const newRegistrations = [...brand.inpiRegistrations];
-                            newRegistrations[index] = { ...reg, validUntil: e.target.value };
-                            handleChange('inpiRegistrations', newRegistrations);
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">URL Pública</p>
-                        <Input
-                          value={reg.publicUrl}
-                          onChange={(e) => {
-                            const newRegistrations = [...brand.inpiRegistrations];
-                            newRegistrations[index] = { ...reg, publicUrl: e.target.value };
-                            handleChange('inpiRegistrations', newRegistrations);
-                          }}
-                          placeholder="https://"
-                        />
-                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Visualizar Registro INPI</DialogTitle>
+                          </DialogHeader>
+                          <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <p className="font-medium mb-1">Número do Processo</p>
+                                <p>{reg.number}</p>
+                              </div>
+                              <div>
+                                <p className="font-medium mb-1">Classe</p>
+                                <p>{reg.class}</p>
+                              </div>
+                              <div>
+                                <p className="font-medium mb-1">Situação</p>
+                                <Badge variant={reg.status === 'active' ? 'default' : reg.status === 'analyzing' ? 'secondary' : 'destructive'}>
+                                  {reg.status === 'active' ? 'Vigente' : reg.status === 'analyzing' ? 'Em análise' : 'Extinto'}
+                                </Badge>
+                              </div>
+                              <div>
+                                <p className="font-medium mb-1">Titular</p>
+                                <p>{reg.owner}</p>
+                              </div>
+                              <div>
+                                <p className="font-medium mb-1">Vigência</p>
+                                <p>{new Date(reg.validUntil).toLocaleDateString()}</p>
+                              </div>
+                              <div>
+                                <p className="font-medium mb-1">URL Pública</p>
+                                <a href={reg.publicUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                  {reg.publicUrl}
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                      
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-2xl">
+                          <DialogHeader>
+                            <DialogTitle>Editar Registro INPI</DialogTitle>
+                          </DialogHeader>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label>Número do Processo</Label>
+                              <Input 
+                                value={reg.number}
+                                onChange={(e) => {
+                                  const newRegistrations = [...brand.inpiRegistrations];
+                                  newRegistrations[index] = { ...reg, number: e.target.value };
+                                  handleChange('inpiRegistrations', newRegistrations);
+                                }}
+                              />
+                            </div>
+                            <div>
+                              <Label>Classe</Label>
+                              <Input 
+                                value={reg.class}
+                                onChange={(e) => {
+                                  const newRegistrations = [...brand.inpiRegistrations];
+                                  newRegistrations[index] = { ...reg, class: e.target.value };
+                                  handleChange('inpiRegistrations', newRegistrations);
+                                }}
+                              />
+                            </div>
+                            <div>
+                              <Label>Situação</Label>
+                              <Select
+                                value={reg.status}
+                                onValueChange={(value) => {
+                                  const newRegistrations = [...brand.inpiRegistrations];
+                                  newRegistrations[index] = { ...reg, status: value as any };
+                                  handleChange('inpiRegistrations', newRegistrations);
+                                }}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="active">Vigente</SelectItem>
+                                  <SelectItem value="analyzing">Em análise</SelectItem>
+                                  <SelectItem value="extinct">Extinto</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div>
+                              <Label>Titular</Label>
+                              <Input 
+                                value={reg.owner}
+                                onChange={(e) => {
+                                  const newRegistrations = [...brand.inpiRegistrations];
+                                  newRegistrations[index] = { ...reg, owner: e.target.value };
+                                  handleChange('inpiRegistrations', newRegistrations);
+                                }}
+                              />
+                            </div>
+                            <div>
+                              <Label>Vigência</Label>
+                              <Input 
+                                type="date"
+                                value={reg.validUntil}
+                                onChange={(e) => {
+                                  const newRegistrations = [...brand.inpiRegistrations];
+                                  newRegistrations[index] = { ...reg, validUntil: e.target.value };
+                                  handleChange('inpiRegistrations', newRegistrations);
+                                }}
+                              />
+                            </div>
+                            <div>
+                              <Label>URL Pública</Label>
+                              <Input 
+                                value={reg.publicUrl}
+                                onChange={(e) => {
+                                  const newRegistrations = [...brand.inpiRegistrations];
+                                  newRegistrations[index] = { ...reg, publicUrl: e.target.value };
+                                  handleChange('inpiRegistrations', newRegistrations);
+                                }}
+                                placeholder="https://"
+                              />
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Excluir Registro</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Tem certeza que deseja excluir este registro? Esta ação não pode ser desfeita.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => {
+                              const newRegistrations = brand.inpiRegistrations.filter((_, i) => i !== index);
+                              handleChange('inpiRegistrations', newRegistrations);
+                            }}>
+                              Excluir
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   </div>
                 ))}
