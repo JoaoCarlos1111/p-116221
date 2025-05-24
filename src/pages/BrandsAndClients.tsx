@@ -93,6 +93,7 @@ export default function BrandsAndClients() {
               <SelectItem value="active">Ativa</SelectItem>
               <SelectItem value="validating">Em validação</SelectItem>
               <SelectItem value="inactive">Inativa</SelectItem>
+              <SelectItem value="">Todos</SelectItem>
             </SelectContent>
           </Select>
           <Select value={processFilter} onValueChange={setProcessFilter}>

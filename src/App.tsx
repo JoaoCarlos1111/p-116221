@@ -23,6 +23,7 @@ import AdminPermissions from './pages/AdminPermissions';
 import AdminUsers from './pages/AdminUsers';
 import Audit from './pages/Audit';
 import CaseHistoryDetails from './pages/CaseHistoryDetails';
+import BrandsAndClients from './pages/BrandsAndClients';
 import TopBar from "@/components/TopBar";
 import InternalLogin from "@/pages/InternalLogin";
 import RouteGuard from "@/components/RouteGuard";
