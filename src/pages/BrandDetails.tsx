@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { FileText, Users, Bookmark, GitBranch, Save, Eye, Pencil, Trash2 } from "lucide-react";
+import { FileText, Users, Bookmark, GitBranch, Save, Eye, Pencil, Trash2, ArrowLeft } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -190,6 +190,14 @@ export default function BrandDetails() {
 
   return (
     <div className="space-y-6">
+      <Button 
+        variant="ghost" 
+        onClick={() => window.history.back()} 
+        className="mb-4"
+      >
+        <ArrowLeft className="h-4 w-4 mr-2" />
+        Voltar
+      </Button>
       <Card>
         <CardHeader className="pb-4">
           <div className="flex justify-between items-start">
