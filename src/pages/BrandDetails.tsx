@@ -242,53 +242,65 @@ export default function BrandDetails() {
               <CardTitle>Dados da Marca</CardTitle>
             </CardHeader>
             <CardContent className="grid gap-4">
-              <div className="flex justify-center mb-6">
-                <label 
-                  htmlFor="logoUpload" 
-                  className="relative flex items-center justify-center w-32 h-32 rounded-full border-2 border-dashed hover:border-primary/50 transition-colors cursor-pointer bg-muted"
-                >
-                  {brand.logo ? (
-                    <img 
-                      src={brand.logo} 
-                      alt="Logo da marca" 
-                      className="w-full h-full object-cover rounded-full"
+              <div className="flex justify-between items-start">
+                <div className="grid grid-cols-2 gap-4 flex-1">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Nome</p>
+                    <Input 
+                      value={brand.name}
+                      onChange={(e) => handleChange('name', e.target.value)}
                     />
-                  ) : (
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="p-2 rounded-full bg-primary/10">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                        </svg>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Data de Inclusão</p>
+                    <Input 
+                      type="date"
+                      value={brand.createdAt}
+                      onChange={(e) => handleChange('createdAt', e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="ml-6">
+                  <label 
+                    htmlFor="logoUpload" 
+                    className="relative flex items-center justify-center w-32 h-32 rounded-full border-2 border-dashed hover:border-primary/50 transition-colors cursor-pointer bg-muted"
+                  >
+                    {brand.logo ? (
+                      <img 
+                        src={brand.logo} 
+                        alt="Logo da marca" 
+                        className="w-full h-full object-cover rounded-full"
+                      />
+                    ) : (
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="p-2 rounded-full bg-primary/10">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                          </svg>
+                        </div>
+                        <span className="text-xs text-center text-muted-foreground">Upload Logo</span>
                       </div>
-                      <span className="text-xs text-center text-muted-foreground">Upload Logo</span>
-                    </div>
-                  )}
-                  <input 
-                    type="file" 
-                    id="logoUpload" 
-                    className="hidden" 
-                    accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          handleChange('logo', reader.result);
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                  />
-                </label>
+                    )}
+                    <input 
+                      type="file" 
+                      id="logoUpload" 
+                      className="hidden" 
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            handleChange('logo', reader.result);
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                  </label>
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm text-muted-foreground">Nome</p>
-                  <Input 
-                    value={brand.name}
-                    onChange={(e) => handleChange('name', e.target.value)}
-                  />
-                </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Classificação</p>
                   <Input 
@@ -296,14 +308,7 @@ export default function BrandDetails() {
                     onChange={(e) => handleChange('classification', e.target.value)}
                   />
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Data de Inclusão</p>
-                  <Input 
-                    type="date"
-                    value={brand.createdAt}
-                    onChange={(e) => handleChange('createdAt', e.target.value)}
-                  />
-                </div>
+                
                 <div>
                   <p className="text-sm text-muted-foreground">Status</p>
                   <Select 
