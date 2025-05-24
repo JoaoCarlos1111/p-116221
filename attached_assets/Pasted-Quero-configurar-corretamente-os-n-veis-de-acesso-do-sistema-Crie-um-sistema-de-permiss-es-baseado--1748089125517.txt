@@ -1,0 +1,69 @@
+Quero configurar corretamente os níveis de acesso do sistema. Crie um sistema de permissões baseado nos setores da empresa. Cada setor representa um tipo de acesso com permissões específicas. Listei abaixo os acessos permitidos para cada um:
+
+Perfis e Permissões
+1. Prospecção
+
+Acesso à página: /prospeccao
+
+Permissões: adicionar, editar, excluir casos de prospecção; anexar e visualizar documentos; visualizar o dashboard do setor
+
+2. Verificação
+
+Acesso à página: /verificacao
+
+Permissões: aprovar/reprovar casos, adicionar observações, anexar documentos, visualizar documentos, editar informações, acessar dashboard do setor
+
+3. Auditoria
+
+Acesso à página: /auditoria
+
+Permissões: visualizar logs de ações do sistema, gerar relatórios, acessar dashboard do setor
+
+4. Logística
+
+Acesso à página: /logistica
+
+Permissões: adicionar e acompanhar envios de notificação, inserir código de rastreio, atualizar status logístico, acessar dashboard do setor
+
+5. IP Tools
+
+Acesso à página: /iptools
+
+Permissões: adicionar links de anúncios, enviar report às plataformas, acompanhar status da solicitação de remoção, acessar dashboard do setor
+
+6. Atendimento
+
+Acesso à página: /atendimento
+
+Permissões: contatar infrator, adicionar histórico de conversa, criar proposta de acordo, anexar documentos, acessar dashboard do setor
+
+7. Financeiro
+
+Acesso à página: /financeiro
+
+Permissões: registrar parcelas, marcar pagamentos, adicionar recibos e observações, visualizar e gerenciar o kanban financeiro, acessar dashboard do setor
+
+8. Administrador
+
+Acesso irrestrito a todas as telas
+
+Pode criar, editar e excluir qualquer dado no sistema
+
+Acesso à área de configurações, usuários, permissões, marcas, templates, integrações etc.
+
+9. Cliente
+
+Acesso à tela de aprovações de notificações extrajudiciais
+
+Pode visualizar casos da sua marca
+
+Pode aprovar ou reprovar notificações
+
+Pode visualizar dashboards próprios
+
+Observações adicionais:
+Cada tipo de acesso deve ser salvo como uma role ou perfil no sistema (ex: prospeccao, verificacao, atendimento, etc.)
+
+Cada usuário poderá ter apenas um tipo de acesso
+
+O sistema deve exibir no menu lateral apenas as páginas permitidas de acordo com o perfil do usuário logado
