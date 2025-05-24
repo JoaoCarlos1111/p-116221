@@ -1,10 +1,9 @@
-
 import { UserCircle, Settings as SettingsIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function TopBar() {
   const path = window.location.pathname;
-  
+
   return (
     <div className="h-16 border-b bg-card px-4 flex items-center">
       <div className="flex justify-between items-center w-full">
@@ -15,10 +14,6 @@ export default function TopBar() {
               <p className="text-sm text-secondary-foreground">Track your performance</p>
             </div>
           )}
-          <Link to="/admin/users" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-            <UserCircle size={20} />
-            <span>Gestão de Usuários</span>
-          </Link>
         </div>
         <div className="flex items-center gap-2">
           <Link to="/profile" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
