@@ -212,25 +212,25 @@ export default function BrandDetails() {
         </CardHeader>
       </Card>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
-          <TabsTrigger value="brand" className="flex items-center gap-2">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="w-full justify-start gap-2">
+          <TabsTrigger value="brand" className="flex items-center gap-2 flex-1 max-w-[200px]">
             <Bookmark className="h-4 w-4" />
             Dados da Marca
           </TabsTrigger>
-          <TabsTrigger value="company" className="flex items-center gap-2">
+          <TabsTrigger value="company" className="flex items-center gap-2 flex-1 max-w-[200px]">
             <Users className="h-4 w-4" />
             Empresa / Grupo
           </TabsTrigger>
-          <TabsTrigger value="documents" className="flex items-center gap-2">
+          <TabsTrigger value="documents" className="flex items-center gap-2 flex-1 max-w-[200px]">
             <FileText className="h-4 w-4" />
             Documentos
           </TabsTrigger>
-          <TabsTrigger value="inpi" className="flex items-center gap-2">
+          <TabsTrigger value="inpi" className="flex items-center gap-2 flex-1 max-w-[200px]">
             <GitBranch className="h-4 w-4" />
             Registros INPI
           </TabsTrigger>
-          <TabsTrigger value="cases" className="flex items-center gap-2">
+          <TabsTrigger value="cases" className="flex items-center gap-2 flex-1 max-w-[200px]">
             <GitBranch className="h-4 w-4" />
             Fluxo de Casos
           </TabsTrigger>
