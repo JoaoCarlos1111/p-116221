@@ -159,8 +159,7 @@ export default function BrandDetails() {
     <div className="space-y-6">
       <Card>
         <CardHeader className="pb-4">
-          <div className="flex justify-between items-start">
-            <div className="space-y-2">
+          <div className="space-y-2">
               <Input 
                 value={brand.name}
                 onChange={(e) => handleChange('name', e.target.value)}
@@ -172,11 +171,6 @@ export default function BrandDetails() {
                 className="text-muted-foreground"
               />
             </div>
-            <Button onClick={handleSave}>
-              <Save className="h-4 w-4 mr-2" />
-              Salvar Alterações
-            </Button>
-          </div>
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <p className="text-sm text-muted-foreground">CNPJ</p>
@@ -210,6 +204,10 @@ export default function BrandDetails() {
             </div>
           </div>
         </CardHeader>
+        <Button onClick={handleSave}>
+          <Save className="h-4 w-4 mr-2" />
+          Salvar Alterações
+        </Button>
       </Card>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -298,6 +296,10 @@ export default function BrandDetails() {
                 />
               </div>
             </CardContent>
+            <Button onClick={handleSave}>
+              <Save className="h-4 w-4 mr-2" />
+              Salvar Alterações
+            </Button>
           </Card>
         </TabsContent>
 
@@ -432,6 +434,10 @@ export default function BrandDetails() {
                 </div>
               </div>
             </CardContent>
+            <Button onClick={handleSave}>
+              <Save className="h-4 w-4 mr-2" />
+              Salvar Alterações
+            </Button>
           </Card>
         </TabsContent>
 
@@ -605,7 +611,7 @@ export default function BrandDetails() {
                           </SelectContent>
                         </Select>
                       </div>
-                      
+
                       <div>
                         <Label>Especificação *</Label>
                         <Textarea id="specification" placeholder="Descreva a especificação da marca" required />
@@ -707,7 +713,7 @@ export default function BrandDetails() {
                                 <p className="font-medium mb-1">Natureza</p>
                                 <p>{reg.nature || 'Marca de Produto'}</p>
                               </div>
-                              
+
                               <div>
                                 <p className="font-medium mb-1">Especificação</p>
                                 <p className="text-sm">{reg.specification || 'N/A'}</p>
@@ -808,7 +814,7 @@ export default function BrandDetails() {
                                 </SelectContent>
                               </Select>
                             </div>
-                            
+
                             <div>
                               <Label>Especificação</Label>
                               <Textarea 
@@ -835,7 +841,7 @@ export default function BrandDetails() {
                               <Label>Situação</Label>
                               <Select
                                 value={reg.status}
-                                onValueChange={(value) => {
+                                onChange={(value) => {
                                   const newRegistrations = [...brand.inpiRegistrations];
                                   newRegistrations[index] = { ...reg, status: value as any };
                                   handleChange('inpiRegistrations', newRegistrations);
