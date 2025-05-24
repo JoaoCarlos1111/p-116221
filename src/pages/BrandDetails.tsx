@@ -587,7 +587,7 @@ export default function BrandDetails() {
                                 <p>{reg.number}</p>
                               </div>
                               <div>
-                                <p className="font-medium mb-1">Classe</p>
+                                <p className="font-medium mb-1">Classe Nice</p>
                                 <p>{reg.class}</p>
                               </div>
                               <div>
@@ -605,10 +605,45 @@ export default function BrandDetails() {
                                 <p>{new Date(reg.validUntil).toLocaleDateString()}</p>
                               </div>
                               <div>
+                                <p className="font-medium mb-1">Data do Depósito</p>
+                                <p>{reg.filingDate ? new Date(reg.filingDate).toLocaleDateString() : 'N/A'}</p>
+                              </div>
+                              <div>
+                                <p className="font-medium mb-1">Natureza</p>
+                                <p>{reg.nature || 'Marca de Produto'}</p>
+                              </div>
+                              <div>
+                                <p className="font-medium mb-1">Apresentação</p>
+                                <p>{reg.presentation || 'Nominativa'}</p>
+                              </div>
+                              <div>
+                                <p className="font-medium mb-1">Especificação</p>
+                                <p className="text-sm">{reg.specification || 'N/A'}</p>
+                              </div>
+                              <div>
+                                <p className="font-medium mb-1">NCL</p>
+                                <p>{reg.niceClassification || 'N/A'}</p>
+                              </div>
+                              <div>
+                                <p className="font-medium mb-1">Última Atualização</p>
+                                <p>{reg.lastUpdate ? new Date(reg.lastUpdate).toLocaleDateString() : 'N/A'}</p>
+                              </div>
+                              <div>
                                 <p className="font-medium mb-1">URL Pública</p>
                                 <a href={reg.publicUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                                   {reg.publicUrl}
                                 </a>
+                              </div>
+                            </div>
+                            <div className="mt-4">
+                              <p className="font-medium mb-1">Histórico de Eventos</p>
+                              <div className="space-y-2 max-h-40 overflow-y-auto">
+                                {reg.events?.map((event, i) => (
+                                  <div key={i} className="p-2 bg-muted rounded-md">
+                                    <p className="text-sm font-medium">{event.description}</p>
+                                    <p className="text-xs text-muted-foreground">{new Date(event.date).toLocaleDateString()}</p>
+                                  </div>
+                                )) || <p className="text-sm text-muted-foreground">Nenhum evento registrado</p>}
                               </div>
                             </div>
                           </div>
