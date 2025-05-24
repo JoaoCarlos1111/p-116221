@@ -8,7 +8,7 @@ export default function TopBar() {
   return (
     <div className="h-16 border-b bg-card px-4 flex items-center justify-between">
       {path === '/analytics' && (
-        <div>
+        <div className="ml-auto mr-8">
           <h1 className="text-2xl font-bold text-primary">Analytics Overview</h1>
           <p className="text-sm text-secondary-foreground">Track your performance</p>
         </div>
