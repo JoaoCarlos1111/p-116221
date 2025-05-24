@@ -13,10 +13,6 @@ export default function TopBar() {
               <p className="text-sm text-secondary-foreground">Track your performance</p>
             </div>
           )}
-          <Link to="/admin/users" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-            <UserCircle size={20} />
-            <span>Gestão de Usuários</span>
-          </Link>
         </div>
         <div className="flex items-center gap-2">
           <Link to="/profile" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
