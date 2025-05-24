@@ -50,7 +50,7 @@ export default function Sidebar() {
       <nav className="space-y-2 px-2">
         {isAdmin && (
           <>
-            <NavLink to="/admin" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+            <NavLink to="/analytics" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
               <LayoutDashboard size={20} />
               <span className={cn(
                 "transition-all duration-300",
