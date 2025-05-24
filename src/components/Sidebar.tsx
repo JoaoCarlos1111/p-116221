@@ -1,4 +1,3 @@
-
 import { NavLink } from "react-router-dom";
 import { 
   Users,
@@ -11,16 +10,45 @@ import {
   Building2,
   FileStack,
   LayoutDashboard,
-  Boxes
+  Boxes,
+  Search,
+  CheckCircle,
+  Scroll,
+  Truck,
+  Tool,
+  Headset,
+  DollarSign,
+  Lock
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/use-auth"; // Assuming you have an auth hook
 
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const userStr = localStorage.getItem('user');
   const user = userStr ? JSON.parse(userStr) : null;
   const isAdmin = user?.isAdmin;
+
+  const allMenuItems = [
+    { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, department: '*' },
+    { path: '/prospeccao', label: 'Prospecção', icon: Search, department: 'prospeccao' },
+    { path: '/verificacao', label: 'Verificação', icon: CheckCircle, department: 'verificacao' },
+    { path: '/auditoria', label: 'Auditoria', icon: Scroll, department: 'auditoria' },
+    { path: '/logistica', label: 'Logística', icon: Truck, department: 'logistica' },
+    { path: '/iptools', label: 'IP Tools', icon: Tool, department: 'ip_tools' },
+    { path: '/atendimento', label: 'Atendimento', icon: Headset, department: 'atendimento' },
+    { path: '/financeiro', label: 'Financeiro', icon: DollarSign, department: 'financeiro' },
+    { path: '/admin/users', label: 'Usuários', icon: Users, department: 'admin' },
+    { path: '/admin/permissions', label: 'Permissões', icon: Lock, department: 'admin' },
+  ];
+
+  const { user: authUser } = useAuth();
+  const isMainAdmin = authUser?.mainDepartment === 'admin';
+
+  const menuItems = allMenuItems.filter(item => 
+    isMainAdmin || item.department === '*' || item.department === authUser?.mainDepartment
+  );
 
   return (
     <div className={cn(
@@ -48,65 +76,15 @@ export default function Sidebar() {
       </div>
 
       <nav className="space-y-2 px-2">
-        {isAdmin && (
-          <>
-            <NavLink to="/analytics" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <LayoutDashboard size={20} />
-              <span className={cn(
-                "transition-all duration-300",
-                isCollapsed && "hidden"
-              )}>Resumo Geral</span>
+        {menuItems.map((item) => (
+            <NavLink to={item.path} key={item.path} className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+                <item.icon size={20} />
+                <span className={cn(
+                    "transition-all duration-300",
+                    isCollapsed && "hidden"
+                )}>{item.label}</span>
             </NavLink>
-
-            <NavLink to="/admin/users" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <Users size={20} />
-              <span className={cn(
-                "transition-all duration-300",
-                isCollapsed && "hidden"
-              )}>Usuários</span>
-            </NavLink>
-
-            <NavLink to="/admin/permissions" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <Shield size={20} />
-              <span className={cn(
-                "transition-all duration-300",
-                isCollapsed && "hidden"
-              )}>Permissões</span>
-            </NavLink>
-
-            <NavLink to="/admin/audit" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <History size={20} />
-              <span className={cn(
-                "transition-all duration-300",
-                isCollapsed && "hidden"
-              )}>Auditoria</span>
-            </NavLink>
-
-            <NavLink to="/admin/brands" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <Building2 size={20} />
-              <span className={cn(
-                "transition-all duration-300",
-                isCollapsed && "hidden"
-              )}>Marcas e Clientes</span>
-            </NavLink>
-
-            <NavLink to="/admin/templates" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <FileStack size={20} />
-              <span className={cn(
-                "transition-all duration-300",
-                isCollapsed && "hidden"
-              )}>Templates</span>
-            </NavLink>
-
-            <NavLink to="/admin/settings" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <Boxes size={20} />
-              <span className={cn(
-                "transition-all duration-300",
-                isCollapsed && "hidden"
-              )}>Configurações</span>
-            </NavLink>
-          </>
-        )}
+        ))}
 
         <div className="absolute bottom-4 left-0 right-0 px-2">
           <button
