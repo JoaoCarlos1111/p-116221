@@ -198,9 +198,22 @@ export default function CaseHistoryDetails() {
                     <TableCell>{entry.description}</TableCell>
                     <TableCell>
                       {entry.details && (
-                        <pre className="text-xs text-muted-foreground">
-                          {JSON.stringify(entry.details, null, 2)}
-                        </pre>
+                        <div className="text-sm">
+                          {Object.entries(entry.details).map(([key, value]) => (
+                            <div key={key} className="mb-1">
+                              <span className="font-medium">{key}: </span>
+                              {Array.isArray(value) ? (
+                                <div className="ml-2">
+                                  {value.map((item, i) => (
+                                    <div key={i}>{item}</div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <span>{String(value)}</span>
+                              )}
+                            </div>
+                          ))}
+                        </div>
                       )}
                     </TableCell>
                   </TableRow>
