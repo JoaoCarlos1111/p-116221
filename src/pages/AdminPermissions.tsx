@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -13,65 +12,43 @@ import { Plus, Users } from "lucide-react";
 const initialProfiles = [
   { id: 1, name: "Administrador", userCount: 4 },
   { id: 2, name: "Analista de Prospecção", userCount: 6 },
-  { id: 3, name: "Cliente", userCount: 12 },
+  { id: 3, name: "Gestor Cliente", userCount: 8 },
+  { id: 4, name: "Analista de Contrafação", userCount: 12 },
+  { id: 5, name: "Financeiro Cliente", userCount: 4 },
 ];
 
 const permissionGroups = {
-  prospeccao: {
-    title: "Prospecção",
+  gestorCliente: {
+    title: "Gestor Cliente",
     permissions: [
-      "Acessar tela de Prospecção",
-      "Adicionar casos",
-      "Editar casos",
-      "Visualizar documentos",
+      "Visualizar todos os casos",
+      "Aprovar/reprovar ações",
+      "Gerenciar usuários da empresa",
+      "Acessar dashboards completos",
+      "Acessar área financeira",
+      "Cadastrar novos casos",
+      "Aprovar notificações extrajudiciais",
+      "Visualizar relatórios detalhados"
     ]
   },
-  verificacao: {
-    title: "Verificação",
+  analistaContrafacao: {
+    title: "Analista de Contrafação",
     permissions: [
-      "Acessar Kanban de Verificação",
-      "Aprovar ou reprovar casos",
-      "Anexar documentos",
+      "Visualizar casos atribuídos",
+      "Aprovar/reprovar notificações",
+      "Cadastrar novos casos",
+      "Acessar dashboard operacional",
+      "Acompanhar violações de marca"
     ]
   },
-  auditoria: {
-    title: "Auditoria",
+  financeiroCliente: {
+    title: "Financeiro Cliente",
     permissions: [
-      "Acessar tela de auditoria",
-      "Visualizar logs",
-      "Filtrar por usuário/data",
-    ]
-  },
-  logistica: {
-    title: "Logística",
-    permissions: [
-      "Acessar tela de logística",
-      "Confirmar recebimento de documentos",
-      "Atualizar status de entrega",
-      "Gerar comprovantes",
-    ]
-  },
-  ipTools: {
-    title: "IP Tools",
-    permissions: [
-      "Acessar ferramentas de IP",
-      "Monitorar anúncios",
-      "Marcar como suspeito/confirmado",
-    ]
-  },
-  atendimento: {
-    title: "Atendimento",
-    permissions: [
-      "Acessar tela de atendimento",
-      "Criar histórico de conversa",
-      "Enviar proposta de acordo",
-    ]
-  },
-  financeiro: {
-    title: "Financeiro",
-    permissions: [
-      "Acessar painel financeiro",
-      "Atualizar status de pagamento",
+      "Acessar dashboard geral",
+      "Visualizar área financeira",
+      "Acessar faturas e pagamentos",
+      "Cadastrar novos casos",
+      "Gerar relatórios financeiros"
     ]
   },
   admin: {
@@ -82,14 +59,6 @@ const permissionGroups = {
       "Gerenciar marcas",
       "Editar templates",
       "Ver todas as notificações",
-    ]
-  },
-  cliente: {
-    title: "Cliente",
-    permissions: [
-      "Visualizar notificações da sua marca",
-      "Aprovar ou reprovar notificações",
-      "Acessar seu próprio dashboard",
     ]
   }
 };
@@ -107,20 +76,19 @@ export default function AdminPermissions() {
   };
 
   const handleSaveProfile = () => {
-    // TODO: Implement save logic
     setEditingProfile(null);
     setSelectedPermissions({});
   };
 
   const handleCreateProfile = () => {
     if (!newProfileName) return;
-    
+
     const newProfile = {
       id: profiles.length + 1,
       name: newProfileName,
       userCount: 0,
     };
-    
+
     setProfiles([...profiles, newProfile]);
     setNewProfileName("");
     setIsCreating(false);
