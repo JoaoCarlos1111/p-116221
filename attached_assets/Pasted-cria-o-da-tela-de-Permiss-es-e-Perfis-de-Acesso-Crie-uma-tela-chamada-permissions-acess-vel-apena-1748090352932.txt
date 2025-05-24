@@ -1,0 +1,146 @@
+criação da tela de Permissões e Perfis de Acesso
+Crie uma tela chamada /permissions, acessível apenas por usuários com perfil de administrador.
+
+🎯 Objetivo da Tela:
+Gerenciar os perfis de acesso dos usuários do sistema, permitindo:
+
+Visualizar todos os perfis existentes (como Prospecção, Verificação, Auditoria, Logística, IP Tools, Atendimento, Financeiro, Cliente e Administrador)
+
+Editar permissões de forma granular, por setor e funcionalidade
+
+Criar novos perfis personalizados se necessário
+
+🧱 Estrutura da Tela
+🟩 1. Topo da Página
+Título: Permissões e Perfis de Acesso
+
+Botão: + Criar novo perfil
+
+🟨 2. Lista de Perfis Existentes
+Renderize uma tabela ou painel colapsável com as colunas:
+
+Nome do perfil
+
+Quantidade de usuários vinculados
+
+Ação: Editar
+
+Exemplo:
+
+Perfil	Usuários	Ações
+Administrador	4	Editar
+Analista de Prospecção	6	Editar
+Cliente	12	Editar
+
+🟦 3. Edição de Permissões por Perfil
+Ao clicar em Editar, exibir as permissões detalhadas, agrupadas por módulo/área do sistema.
+
+Utilize checkboxes ou switches para cada permissão.
+
+Exibir resumo no topo com permissões selecionadas.
+
+Incluir botões de ação: Salvar alterações e Cancelar.
+
+Permissões devem ser organizadas por setores/módulos, como:
+Prospecção:
+
+ Acessar tela de Prospecção
+
+ Adicionar casos
+
+ Editar casos
+
+ Visualizar documentos
+
+Verificação:
+
+ Acessar Kanban de Verificação
+
+ Aprovar ou reprovar casos
+
+ Anexar documentos
+
+Auditoria:
+
+ Acessar tela de auditoria
+
+ Visualizar logs
+
+ Filtrar por usuário/data
+
+Logística:
+
+ Acessar tela de logística
+
+ Confirmar recebimento de documentos
+
+ Atualizar status de entrega
+
+ Gerar comprovantes
+
+IP Tools:
+
+ Acessar ferramentas de IP
+
+ Monitorar anúncios
+
+ Marcar como suspeito/confirmado
+
+Atendimento:
+
+ Acessar tela de atendimento
+
+ Criar histórico de conversa
+
+ Enviar proposta de acordo
+
+Financeiro:
+
+ Acessar painel financeiro
+
+ Atualizar status de pagamento
+
+Geral/Administração:
+
+ Acessar Dashboard
+
+ Criar/editar usuários
+
+ Gerenciar marcas
+
+ Editar templates
+
+ Ver todas as notificações
+
+Cliente:
+
+ Visualizar notificações da sua marca
+
+ Aprovar ou reprovar notificações
+
+ Acessar seu próprio dashboard
+
+🟥 4. Criação de Novo Perfil
+Ao clicar em + Criar novo perfil, exibir:
+
+Input de texto para nome do novo perfil
+
+Lista de permissões disponíveis (mesmo modelo da edição)
+
+Botão: Criar perfil
+
+🔐 Boas práticas obrigatórias
+Usuários não podem remover o próprio acesso de administrador
+
+Somente usuários com perfil Administrador podem criar ou editar perfis
+
+Todas as alterações devem ser registradas na tabela de auditoria (quem editou, o que editou, e quando)
+
+🎨 Design
+Usar o mesmo padrão visual do restante do sistema
+
+Layout limpo, com cards arredondados e botões destacados
+
+Permissões agrupadas por módulo para fácil leitura
+
+Exibir ícones setoriais se possível
