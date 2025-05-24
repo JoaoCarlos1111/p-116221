@@ -115,7 +115,7 @@ const Analytics = () => {
           </div>
         </Card>
 
-        <Card className="p-4 glass-card hover:shadow-lg transition-all col-span-2">
+        <Card className="p-4 glass-card hover:shadow-lg transition-all">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-emerald-100 rounded-lg">
               <BanknoteIcon className="h-6 w-6 text-emerald-600" />
