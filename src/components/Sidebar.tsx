@@ -1,3 +1,4 @@
+
 import { NavLink } from "react-router-dom";
 import { 
   Users,
@@ -9,6 +10,7 @@ import {
   LogOut,
   Building2,
   FileStack,
+  LayoutDashboard,
   Boxes
 } from "lucide-react";
 import { useState } from "react";
@@ -16,6 +18,9 @@ import { cn } from "@/lib/utils";
 
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const userStr = localStorage.getItem('user');
+  const user = userStr ? JSON.parse(userStr) : null;
+  const isAdmin = user?.isAdmin;
 
   return (
     <div className={cn(
@@ -43,53 +48,65 @@ export default function Sidebar() {
       </div>
 
       <nav className="space-y-2 px-2">
-        <NavLink to="/admin/users" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <Users size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Usuários</span>
-        </NavLink>
+        {isAdmin && (
+          <>
+            <NavLink to="/admin" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <LayoutDashboard size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Resumo Geral</span>
+            </NavLink>
 
-        <NavLink to="/admin/permissions" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <Shield size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Permissões</span>
-        </NavLink>
+            <NavLink to="/admin/users" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <Users size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Usuários</span>
+            </NavLink>
 
-        <NavLink to="/admin/audit" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <History size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Auditoria</span>
-        </NavLink>
+            <NavLink to="/admin/permissions" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <Shield size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Permissões</span>
+            </NavLink>
 
-        <NavLink to="/admin/brands" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <Building2 size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Marcas</span>
-        </NavLink>
+            <NavLink to="/admin/audit" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <History size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Auditoria</span>
+            </NavLink>
 
-        <NavLink to="/admin/templates" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <FileStack size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Templates</span>
-        </NavLink>
+            <NavLink to="/admin/brands" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <Building2 size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Marcas e Clientes</span>
+            </NavLink>
 
-        <NavLink to="/admin/settings" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <Boxes size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Configurações</span>
-        </NavLink>
+            <NavLink to="/admin/templates" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <FileStack size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Templates</span>
+            </NavLink>
+
+            <NavLink to="/admin/settings" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <Boxes size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Configurações</span>
+            </NavLink>
+          </>
+        )}
 
         <div className="absolute bottom-4 left-0 right-0 px-2">
           <button
