@@ -1,0 +1,98 @@
+Cadastro e Atribuições
+Caso criado por [usuário] no setor [setor]
+
+Marca vinculada ao caso: [nome da marca]
+
+Cliente vinculado: [nome da empresa/titular]
+
+Analista responsável atribuído: [nome]
+
+Caso transferido para outro analista: [nome anterior] → [nome atual]
+
+🔍 Atualizações de Status e Fluxo
+Caso movido para o setor [nome do setor] (ex: Verificação → Auditoria)
+
+Caso aprovado pelo setor de verificação
+
+Caso reprovado com justificativa: [texto]
+
+Caso finalizado
+
+Caso arquivado
+
+📎 Documentos e Anexos
+Documento anexado: [nome do documento]
+
+Documento removido: [nome do documento]
+
+Documento editado: [nome do documento]
+
+✏️ Edições de Dados
+Campo [nome do campo] alterado de “[valor antigo]” para “[valor novo]”
+
+Observação interna adicionada por [usuário]
+
+Observação removida por [usuário]
+
+📩 Notificações e Comunicações
+Notificação extrajudicial enviada ao infrator
+
+Notificação aprovada pelo cliente
+
+Notificação reprovada pelo cliente
+
+Nova tentativa de notificação (2ª via) enviada
+
+E-mail enviado para o infrator: [assunto]
+
+Resposta recebida do infrator: [resumo/texto]
+
+Cliente notificado sobre o andamento do caso
+
+💸 Pagamentos e Acordos
+Acordo extrajudicial registrado: valor R$ [valor], parcelas: [n]
+
+Pagamento recebido: parcela [n], valor R$ [valor]
+
+Pagamento em atraso: parcela [n]
+
+Parcelamento renegociado: [detalhes]
+
+Caso marcado como inadimplente
+
+Pagamento finalizado
+
+🛠️ Ações do IP Tools
+Requisição de desativação do anúncio enviada
+
+Anúncio desativado com sucesso
+
+Reativação solicitada após acordo
+
+Página de vendas reativada
+
+Link monitorado removido do sistema
+
+🔐 Acessos e Segurança
+Caso visualizado por [usuário]
+
+Histórico acessado por [usuário]
+
+Permissão alterada: [qual permissão]
+
+📊 Atualizações manuais ou operacionais
+Anotação manual adicionada: [texto]
+
+Caso reaberto manualmente
+
+Caso revisado por supervisão
+
+Esses tipos de atualização devem ser armazenados com:
+
+Data e hora
+
+Responsável (usuário ou setor)
+
+Descrição do evento
+
+(Opcional) Anexo relacionado ou comentário complementar
