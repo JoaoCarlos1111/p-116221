@@ -439,7 +439,29 @@ export default function BrandDetails() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Documentos</CardTitle>
-              <Button>+ Adicionar Documento</Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button>+ Adicionar Documento</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Adicionar Novo Documento</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label>Nome do Documento</Label>
+                      <Input placeholder="Digite o nome do documento" />
+                    </div>
+                    <div>
+                      <Label>Arquivo</Label>
+                      <Input type="file" />
+                    </div>
+                  </div>
+                  <DialogFooter className="mt-4">
+                    <Button>Adicionar</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
