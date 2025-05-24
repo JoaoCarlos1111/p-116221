@@ -1,0 +1,140 @@
+[plugin:vite:react-swc] × the name `AlertDialog` is defined multiple times
+    ╭─[/home/runner/workspace/src/pages/BrandDetails.tsx:2:1]
+  1 │ import { useState, useEffect } from "react";
+  2 │ import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+    ·          ─────┬─────
+    ·               ╰── previous definition of `AlertDialog` here
+  3 │ import { useParams } from "react-router-dom";
+  4 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+  5 │ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+  6 │ import { Badge } from "@/components/ui/badge";
+  7 │ import { Button } from "@/components/ui/button";
+  8 │ import { FileText, Users, Bookmark, GitBranch, Save, Eye, Pencil, Trash2 } from "lucide-react";
+  9 │ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+    ·          ─────┬─────
+    ·               ╰── `AlertDialog` redefined here
+ 10 │ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+ 11 │ import { Label } from "@/components/ui/label";
+ 12 │ import { Input } from "@/components/ui/input";
+    ╰────
+  × the name `AlertDialogAction` is defined multiple times
+    ╭─[/home/runner/workspace/src/pages/BrandDetails.tsx:2:1]
+  1 │ import { useState, useEffect } from "react";
+  2 │ import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+    ·                       ────────┬────────
+    ·                               ╰── previous definition of `AlertDialogAction` here
+  3 │ import { useParams } from "react-router-dom";
+  4 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+  5 │ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+  6 │ import { Badge } from "@/components/ui/badge";
+  7 │ import { Button } from "@/components/ui/button";
+  8 │ import { FileText, Users, Bookmark, GitBranch, Save, Eye, Pencil, Trash2 } from "lucide-react";
+  9 │ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+    ·                       ────────┬────────
+    ·                               ╰── `AlertDialogAction` redefined here
+ 10 │ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+ 11 │ import { Label } from "@/components/ui/label";
+ 12 │ import { Input } from "@/components/ui/input";
+    ╰────
+  × the name `AlertDialogContent` is defined multiple times
+    ╭─[/home/runner/workspace/src/pages/BrandDetails.tsx:2:1]
+  1 │ import { useState, useEffect } from "react";
+  2 │ import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+    ·                                          ─────────┬────────
+    ·                                                   ╰── previous definition of `AlertDialogContent` here
+  3 │ import { useParams } from "react-router-dom";
+  4 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+  5 │ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+  6 │ import { Badge } from "@/components/ui/badge";
+  7 │ import { Button } from "@/components/ui/button";
+  8 │ import { FileText, Users, Bookmark, GitBranch, Save, Eye, Pencil, Trash2 } from "lucide-react";
+  9 │ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+    ·                                                             ─────────┬────────
+    ·                                                                      ╰── `AlertDialogContent` redefined here
+ 10 │ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+ 11 │ import { Label } from "@/components/ui/label";
+ 12 │ import { Input } from "@/components/ui/input";
+    ╰────
+  × the name `AlertDialogDescription` is defined multiple times
+    ╭─[/home/runner/workspace/src/pages/BrandDetails.tsx:2:1]
+  1 │ import { useState, useEffect } from "react";
+  2 │ import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+    ·                                                              ───────────┬──────────
+    ·                                                                         ╰── previous definition of `AlertDialogDescription` here
+  3 │ import { useParams } from "react-router-dom";
+  4 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+  5 │ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+  6 │ import { Badge } from "@/components/ui/badge";
+  7 │ import { Button } from "@/components/ui/button";
+  8 │ import { FileText, Users, Bookmark, GitBranch, Save, Eye, Pencil, Trash2 } from "lucide-react";
+  9 │ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+    ·                                                                                 ───────────┬──────────
+    ·                                                                                            ╰── `AlertDialogDescription` redefined here
+ 10 │ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+ 11 │ import { Label } from "@/components/ui/label";
+ 12 │ import { Input } from "@/components/ui/input";
+    ╰────
+  × the name `AlertDialogFooter` is defined multiple times
+    ╭─[/home/runner/workspace/src/pages/BrandDetails.tsx:2:1]
+  1 │ import { useState, useEffect } from "react";
+  2 │ import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+    ·                                                                                      ────────┬────────
+    ·                                                                                              ╰── previous definition of `AlertDialogFooter` here
+  3 │ import { useParams } from "react-router-dom";
+  4 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+  5 │ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+  6 │ import { Badge } from "@/components/ui/badge";
+  7 │ import { Button } from "@/components/ui/button";
+  8 │ import { FileText, Users, Bookmark, GitBranch, Save, Eye, Pencil, Trash2 } from "lucide-react";
+  9 │ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+    ·                                                                                                         ────────┬────────
+    ·                                                                                                                 ╰── `AlertDialogFooter` redefined here
+ 10 │ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+ 11 │ import { Label } from "@/components/ui/label";
+ 12 │ import { Input } from "@/components/ui/input";
+    ╰────
+  × the name `AlertDialogHeader` is defined multiple times
+    ╭─[/home/runner/workspace/src/pages/BrandDetails.tsx:2:1]
+  1 │ import { useState, useEffect } from "react";
+  2 │ import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+    ·                                                                                                         ────────┬────────
+    ·                                                                                                                 ╰── previous definition of `AlertDialogHeader` here
+  3 │ import { useParams } from "react-router-dom";
+  4 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+  5 │ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+  6 │ import { Badge } from "@/components/ui/badge";
+  7 │ import { Button } from "@/components/ui/button";
+  8 │ import { FileText, Users, Bookmark, GitBranch, Save, Eye, Pencil, Trash2 } from "lucide-react";
+  9 │ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+    ·                                                                                                                            ────────┬────────
+    ·                                                                                                                                    ╰── `AlertDialogHeader` redefined here
+ 10 │ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+ 11 │ import { Label } from "@/components/ui/label";
+ 12 │ import { Input } from "@/components/ui/input";
+    ╰────
+  × the name `AlertDialogTitle` is defined multiple times
+    ╭─[/home/runner/workspace/src/pages/BrandDetails.tsx:2:1]
+  1 │ import { useState, useEffect } from "react";
+  2 │ import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+    ·                                                                                                                            ────────┬───────
+    ·                                                                                                                                    ╰── previous definition of `AlertDialogTitle` here
+  3 │ import { useParams } from "react-router-dom";
+  4 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+  5 │ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+  6 │ import { Badge } from "@/components/ui/badge";
+  7 │ import { Button } from "@/components/ui/button";
+  8 │ import { FileText, Users, Bookmark, GitBranch, Save, Eye, Pencil, Trash2 } from "lucide-react";
+  9 │ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+    ·                                                                                                                                               ────────┬───────
+    ·                                                                                                                                                       ╰── `AlertDialogTitle` redefined here
+ 10 │ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+ 11 │ import { Label } from "@/components/ui/label";
+ 12 │ import { Input } from "@/components/ui/input";
+    ╰────
+/home/runner/workspace/src/pages/BrandDetails.tsx:2:1
+4  |  import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+5  |  import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+6  |  import { Badge } from "@/components/ui/badge";
+   |                     ^
+7  |  import { Button } from "@/components/ui/button";
+8  |  import { FileText, Users, Bookmark, GitBranch, Save, Eye, Pencil, Trash2 } from "lucide-react";
