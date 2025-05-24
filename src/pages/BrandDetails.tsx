@@ -1048,32 +1048,53 @@ export default function BrandDetails() {
                       </>
                     ) : (
                       <>
-                        <div className="space-y-2">
-                          <Label>Analistas Responsáveis</Label>
-                          <Select required>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Selecione os analistas" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {analysts.map(analyst => (
-                                <SelectItem key={analyst.id} value={analyst.id}>{analyst.name}</SelectItem>
+                        <div className="space-y-4">
+                          <div>
+                            <Label>Analistas Responsáveis</Label>
+                            <div className="space-y-2">
+                              {analysts.map((analyst, analystIndex) => (
+                                <div key={analystIndex} className="flex items-center gap-2">
+                                  <Select className="flex-1">
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Selecione um analista" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {analysts.map(a => (
+                                        <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => {
+                                      const newAnalysts = analysts.filter((_, i) => i !== analystIndex);
+                                      setAnalysts(newAnalysts);
+                                    }}
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </div>
                               ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Switch id={`auto-distribution-${index}`} />
-                          <Label htmlFor={`auto-distribution-${index}`}>Distribuição automática ativa</Label>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <Label>Prazo ideal de conclusão (dias)</Label>
-                            <Input type="number" min="1" />
+                              <Button
+                                variant="outline"
+                                className="w-full"
+                                onClick={() => setAnalysts([...analysts, { id: String(analysts.length + 1), name: '' }])}
+                              >
+                                + Adicionar Analista
+                              </Button>
+                            </div>
                           </div>
-                        </div>
-                        <div className="space-y-2">
-                          <Label>Observações</Label>
-                          <Textarea placeholder="Observações específicas para esta etapa" />
+                          <div className="flex items-center space-x-2">
+                            <Switch id={`auto-distribution-${index}`} />
+                            <Label htmlFor={`auto-distribution-${index}`}>Distribuição automática ativa</Label>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label>Prazo ideal de conclusão (dias)</Label>
+                              <Input type="number" min="1" />
+                            </div>
+                          </div>
                         </div>
                       </>
                     )}
