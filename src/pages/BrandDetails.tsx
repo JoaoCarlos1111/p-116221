@@ -5,7 +5,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { FileText, Users, Bookmark, GitBranch } from "lucide-react";
+import { FileText, Users, Bookmark, GitBranch, Save } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Brand {
   id: string;
@@ -53,7 +56,7 @@ export default function BrandDetails() {
   const [activeTab, setActiveTab] = useState("brand");
   
   // Mock data - replace with API call
-  const brand: Brand = {
+  const [brand, setBrand] = useState<Brand>({
     id: "1",
     name: "Nike",
     company: "Nike Inc.",
@@ -94,7 +97,7 @@ export default function BrandDetails() {
         publicUrl: "https://busca.inpi.gov.br"
       }
     ]
-  };
+  });
 
   const getStatusBadge = (status: Brand['status']) => {
     const variants = {
@@ -110,33 +113,98 @@ export default function BrandDetails() {
     return <Badge variant={variants[status] as any}>{labels[status]}</Badge>;
   };
 
+  const handleSave = async () => {
+    try {
+      // Implement API call to save changes
+      console.log("Saving brand:", brand);
+      // await api.put(`/brands/${id}`, brand);
+    } catch (error) {
+      console.error("Error saving brand:", error);
+    }
+  };
+
+  const handleChange = (field: string, value: any) => {
+    setBrand(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleCompanyGroupChange = (field: string, value: any) => {
+    setBrand(prev => ({
+      ...prev,
+      companyGroup: {
+        ...prev.companyGroup,
+        [field]: value
+      }
+    }));
+  };
+
+  const handleContactChange = (field: string, value: any) => {
+    setBrand(prev => ({
+      ...prev,
+      companyGroup: {
+        ...prev.companyGroup,
+        contact: {
+          ...prev.companyGroup.contact,
+          [field]: value
+        }
+      }
+    }));
+  };
+
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader className="pb-4">
           <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-2xl font-bold">{brand.name}</h1>
-              <p className="text-muted-foreground">{brand.company}</p>
+            <div className="space-y-2">
+              <Input 
+                value={brand.name}
+                onChange={(e) => handleChange('name', e.target.value)}
+                className="text-2xl font-bold"
+              />
+              <Input 
+                value={brand.company}
+                onChange={(e) => handleChange('company', e.target.value)}
+                className="text-muted-foreground"
+              />
             </div>
-            <Button>Editar Marca</Button>
+            <Button onClick={handleSave}>
+              <Save className="h-4 w-4 mr-2" />
+              Salvar Alterações
+            </Button>
           </div>
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <p className="text-sm text-muted-foreground">CNPJ</p>
-              <p>{brand.document}</p>
+              <Input 
+                value={brand.document}
+                onChange={(e) => handleChange('document', e.target.value)}
+              />
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Status</p>
-              {getStatusBadge(brand.status)}
+              <Select 
+                value={brand.status}
+                onValueChange={(value: Brand['status']) => handleChange('status', value)}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="active">Ativa</SelectItem>
+                  <SelectItem value="validating">Em validação</SelectItem>
+                  <SelectItem value="inactive">Inativa</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Analista</p>
-              <p>{brand.analyst}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Última atualização</p>
-              <p>{new Date(brand.lastUpdate).toLocaleDateString()}</p>
+              <Input 
+                value={brand.analyst}
+                onChange={(e) => handleChange('analyst', e.target.value)}
+              />
             </div>
           </div>
         </CardHeader>
@@ -171,32 +239,57 @@ export default function BrandDetails() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm text-muted-foreground">Nome</p>
-                  <p className="font-medium">{brand.name}</p>
+                  <Input 
+                    value={brand.name}
+                    onChange={(e) => handleChange('name', e.target.value)}
+                  />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Classificação</p>
-                  <p className="font-medium">{brand.classification}</p>
+                  <Input 
+                    value={brand.classification}
+                    onChange={(e) => handleChange('classification', e.target.value)}
+                  />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Data de Inclusão</p>
-                  <p className="font-medium">{new Date(brand.createdAt).toLocaleDateString()}</p>
+                  <Input 
+                    type="date"
+                    value={brand.createdAt}
+                    onChange={(e) => handleChange('createdAt', e.target.value)}
+                  />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Status</p>
-                  {getStatusBadge(brand.status)}
+                  <Select 
+                    value={brand.status}
+                    onValueChange={(value: Brand['status']) => handleChange('status', value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">Ativa</SelectItem>
+                      <SelectItem value="validating">Em validação</SelectItem>
+                      <SelectItem value="inactive">Inativa</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground mb-2">Tags</p>
-                <div className="flex gap-2">
-                  {brand.tags.map(tag => (
-                    <Badge key={tag} variant="secondary">{tag}</Badge>
-                  ))}
-                </div>
+                <Input 
+                  value={brand.tags.join(', ')}
+                  onChange={(e) => handleChange('tags', e.target.value.split(',').map(tag => tag.trim()))}
+                  placeholder="Separe as tags com vírgula"
+                />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground mb-2">Observações</p>
-                <p>{brand.notes}</p>
+                <Textarea 
+                  value={brand.notes}
+                  onChange={(e) => handleChange('notes', e.target.value)}
+                />
               </div>
             </CardContent>
           </Card>
@@ -211,11 +304,17 @@ export default function BrandDetails() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm text-muted-foreground">Nome do Grupo</p>
-                  <p className="font-medium">{brand.companyGroup.name}</p>
+                  <Input 
+                    value={brand.companyGroup.name}
+                    onChange={(e) => handleCompanyGroupChange('name', e.target.value)}
+                  />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">CNPJ</p>
-                  <p className="font-medium">{brand.companyGroup.document}</p>
+                  <Input 
+                    value={brand.companyGroup.document}
+                    onChange={(e) => handleCompanyGroupChange('document', e.target.value)}
+                  />
                 </div>
               </div>
               
@@ -224,15 +323,24 @@ export default function BrandDetails() {
                 <div className="grid grid-cols-3 gap-4">
                   <div>
                     <p className="text-sm text-muted-foreground">Nome</p>
-                    <p>{brand.companyGroup.contact.name}</p>
+                    <Input 
+                      value={brand.companyGroup.contact.name}
+                      onChange={(e) => handleContactChange('name', e.target.value)}
+                    />
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Email</p>
-                    <p>{brand.companyGroup.contact.email}</p>
+                    <Input 
+                      value={brand.companyGroup.contact.email}
+                      onChange={(e) => handleContactChange('email', e.target.value)}
+                    />
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Telefone</p>
-                    <p>{brand.companyGroup.contact.phone}</p>
+                    <Input 
+                      value={brand.companyGroup.contact.phone}
+                      onChange={(e) => handleContactChange('phone', e.target.value)}
+                    />
                   </div>
                 </div>
               </div>
@@ -242,15 +350,35 @@ export default function BrandDetails() {
                 <div className="grid grid-cols-3 gap-4">
                   <div>
                     <p className="text-sm text-muted-foreground">Status</p>
-                    <Badge>{brand.companyGroup.contract.status}</Badge>
+                    <Select 
+                      value={brand.companyGroup.contract.status}
+                      onValueChange={(value) => handleCompanyGroupChange('contract', {...brand.companyGroup.contract, status: value})}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="active">Ativo</SelectItem>
+                        <SelectItem value="inactive">Inativo</SelectItem>
+                        <SelectItem value="negotiating">Em negociação</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Assinatura</p>
-                    <p>{new Date(brand.companyGroup.contract.signedAt).toLocaleDateString()}</p>
+                    <Input 
+                      type="date"
+                      value={brand.companyGroup.contract.signedAt}
+                      onChange={(e) => handleCompanyGroupChange('contract', {...brand.companyGroup.contract, signedAt: e.target.value})}
+                    />
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Expiração</p>
-                    <p>{new Date(brand.companyGroup.contract.expiresAt).toLocaleDateString()}</p>
+                    <Input 
+                      type="date"
+                      value={brand.companyGroup.contract.expiresAt}
+                      onChange={(e) => handleCompanyGroupChange('contract', {...brand.companyGroup.contract, expiresAt: e.target.value})}
+                    />
                   </div>
                 </div>
               </div>
@@ -259,11 +387,42 @@ export default function BrandDetails() {
                 <p className="font-medium mb-2">Acessos</p>
                 <div className="grid gap-2">
                   {brand.companyGroup.users.map((user, index) => (
-                    <div key={index} className="flex justify-between items-center p-2 bg-muted rounded-md">
-                      <span>{user.name}</span>
-                      <Badge variant="secondary">{user.role}</Badge>
+                    <div key={index} className="grid grid-cols-2 gap-2">
+                      <Input
+                        value={user.name}
+                        onChange={(e) => {
+                          const newUsers = [...brand.companyGroup.users];
+                          newUsers[index] = { ...user, name: e.target.value };
+                          handleCompanyGroupChange('users', newUsers);
+                        }}
+                      />
+                      <Select
+                        value={user.role}
+                        onValueChange={(value) => {
+                          const newUsers = [...brand.companyGroup.users];
+                          newUsers[index] = { ...user, role: value };
+                          handleCompanyGroupChange('users', newUsers);
+                        }}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Admin">Admin</SelectItem>
+                          <SelectItem value="Viewer">Viewer</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   ))}
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      const newUsers = [...brand.companyGroup.users, { name: '', role: 'Viewer' }];
+                      handleCompanyGroupChange('users', newUsers);
+                    }}
+                  >
+                    Adicionar Usuário
+                  </Button>
                 </div>
               </div>
             </CardContent>
@@ -274,42 +433,103 @@ export default function BrandDetails() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Registros no INPI</CardTitle>
-              <Button>+ Novo Registro</Button>
+              <Button onClick={() => {
+                const newRegistration = {
+                  id: `reg${brand.inpiRegistrations.length + 1}`,
+                  number: '',
+                  class: '',
+                  status: 'active' as const,
+                  owner: brand.company,
+                  validUntil: new Date().toISOString().split('T')[0],
+                  publicUrl: ''
+                };
+                handleChange('inpiRegistrations', [...brand.inpiRegistrations, newRegistration]);
+              }}>
+                + Novo Registro
+              </Button>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4">
-                {brand.inpiRegistrations.map((reg) => (
+                {brand.inpiRegistrations.map((reg, index) => (
                   <div key={reg.id} className="border p-4 rounded-lg">
                     <div className="grid grid-cols-3 gap-4">
                       <div>
                         <p className="text-sm text-muted-foreground">Número do Processo</p>
-                        <p className="font-medium">{reg.number}</p>
+                        <Input
+                          value={reg.number}
+                          onChange={(e) => {
+                            const newRegistrations = [...brand.inpiRegistrations];
+                            newRegistrations[index] = { ...reg, number: e.target.value };
+                            handleChange('inpiRegistrations', newRegistrations);
+                          }}
+                        />
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">Classe</p>
-                        <p className="font-medium">{reg.class}</p>
+                        <Input
+                          value={reg.class}
+                          onChange={(e) => {
+                            const newRegistrations = [...brand.inpiRegistrations];
+                            newRegistrations[index] = { ...reg, class: e.target.value };
+                            handleChange('inpiRegistrations', newRegistrations);
+                          }}
+                        />
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">Situação</p>
-                        <Badge>{reg.status}</Badge>
+                        <Select
+                          value={reg.status}
+                          onValueChange={(value) => {
+                            const newRegistrations = [...brand.inpiRegistrations];
+                            newRegistrations[index] = { ...reg, status: value as any };
+                            handleChange('inpiRegistrations', newRegistrations);
+                          }}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="active">Vigente</SelectItem>
+                            <SelectItem value="analyzing">Em análise</SelectItem>
+                            <SelectItem value="extinct">Extinto</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">Titular</p>
-                        <p className="font-medium">{reg.owner}</p>
+                        <Input
+                          value={reg.owner}
+                          onChange={(e) => {
+                            const newRegistrations = [...brand.inpiRegistrations];
+                            newRegistrations[index] = { ...reg, owner: e.target.value };
+                            handleChange('inpiRegistrations', newRegistrations);
+                          }}
+                        />
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">Vigência</p>
-                        <p className="font-medium">{new Date(reg.validUntil).toLocaleDateString()}</p>
+                        <Input
+                          type="date"
+                          value={reg.validUntil}
+                          onChange={(e) => {
+                            const newRegistrations = [...brand.inpiRegistrations];
+                            newRegistrations[index] = { ...reg, validUntil: e.target.value };
+                            handleChange('inpiRegistrations', newRegistrations);
+                          }}
+                        />
                       </div>
-                      {reg.publicUrl && (
-                        <div>
-                          <Button variant="outline" size="sm" asChild>
-                            <a href={reg.publicUrl} target="_blank" rel="noopener noreferrer">
-                              Consulta Pública
-                            </a>
-                          </Button>
-                        </div>
-                      )}
+                      <div>
+                        <p className="text-sm text-muted-foreground">URL Pública</p>
+                        <Input
+                          value={reg.publicUrl}
+                          onChange={(e) => {
+                            const newRegistrations = [...brand.inpiRegistrations];
+                            newRegistrations[index] = { ...reg, publicUrl: e.target.value };
+                            handleChange('inpiRegistrations', newRegistrations);
+                          }}
+                          placeholder="https://"
+                        />
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -325,7 +545,6 @@ export default function BrandDetails() {
               <Button>+ Novo Caso</Button>
             </CardHeader>
             <CardContent>
-              {/* Add cases pipeline/list component here */}
               <p className="text-muted-foreground">Implementar visualização de casos</p>
             </CardContent>
           </Card>
