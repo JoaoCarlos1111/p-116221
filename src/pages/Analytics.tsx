@@ -89,7 +89,7 @@ const Analytics = () => {
               <Handshake className="h-6 w-6 text-indigo-600" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground h-10">Acordos extrajudiciais</p>
+              <p className="text-sm text-muted-foreground">Acordos extrajudiciais</p>
               <p className="text-2xl font-bold">76</p>
               <div className="flex items-center gap-1 mt-1">
                 <p className="text-sm text-green-600">+12%</p>
@@ -105,7 +105,7 @@ const Analytics = () => {
               <Ban className="h-6 w-6 text-red-600" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground h-10">Anúncios desativados</p>
+              <p className="text-sm text-muted-foreground">Anúncios desativados</p>
               <p className="text-2xl font-bold">980</p>
               <div className="flex items-center gap-1 mt-1">
                 <p className="text-sm text-red-600">-3%</p>
@@ -115,7 +115,7 @@ const Analytics = () => {
           </div>
         </Card>
 
-        <Card className="p-4 glass-card hover:shadow-lg transition-all">
+        <Card className="p-4 glass-card hover:shadow-lg transition-all col-span-2">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-emerald-100 rounded-lg">
               <BanknoteIcon className="h-6 w-6 text-emerald-600" />
