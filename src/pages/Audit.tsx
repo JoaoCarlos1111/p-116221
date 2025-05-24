@@ -70,6 +70,52 @@ export default function Audit() {
         userAgent: 'Firefox/Mac',
         ip: '192.168.1.2'
       }
+    },
+    {
+      id: '3',
+      timestamp: '2024-03-26 09:15:00',
+      userId: 'USR003',
+      userName: 'Pedro Oliveira',
+      department: 'IP Tools',
+      actionType: 'create',
+      description: 'Iniciou processo de remoção de links',
+      target: 'CASO-002',
+      details: {
+        userAgent: 'Chrome/Mac',
+        ip: '192.168.1.3'
+      }
+    },
+    {
+      id: '4',
+      timestamp: '2024-03-26 10:20:00',
+      userId: 'USR004',
+      userName: 'Ana Costa',
+      department: 'Logística',
+      actionType: 'edit',
+      description: 'Atualizou status de entrega',
+      target: 'CASO-003',
+      details: {
+        before: 'Em trânsito',
+        after: 'Entregue',
+        userAgent: 'Safari/iOS',
+        ip: '192.168.1.4'
+      }
+    },
+    {
+      id: '5',
+      timestamp: '2024-03-26 11:45:00',
+      userId: 'USR001',
+      userName: 'João Silva',
+      department: 'Verificação',
+      actionType: 'edit',
+      description: 'Alterou informações do caso',
+      target: 'CASO-001',
+      details: {
+        before: 'Pendente análise',
+        after: 'Em andamento',
+        userAgent: 'Chrome/Windows',
+        ip: '192.168.1.1'
+      }
     }
   ];
 
