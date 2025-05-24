@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -57,7 +56,7 @@ interface Brand {
 export default function BrandDetails() {
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState("brand");
-  
+
   // Mock data - replace with API call
   const [brand, setBrand] = useState<Brand>({
     id: "1",
@@ -324,7 +323,7 @@ export default function BrandDetails() {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <p className="font-medium mb-2">Contato Principal</p>
                 <div className="grid grid-cols-3 gap-4">
@@ -494,39 +493,79 @@ export default function BrandDetails() {
                     <DialogTitle>Novo Registro INPI</DialogTitle>
                   </DialogHeader>
                   <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label>Número do Processo</Label>
-                      <Input id="number" />
-                    </div>
-                    <div>
-                      <Label>Classe</Label>
-                      <Input id="class" />
-                    </div>
-                    <div>
-                      <Label>Situação</Label>
-                      <Select defaultValue="active">
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="active">Vigente</SelectItem>
-                          <SelectItem value="analyzing">Em análise</SelectItem>
-                          <SelectItem value="extinct">Extinto</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label>Titular</Label>
-                      <Input id="owner" defaultValue={brand.company} />
-                    </div>
-                    <div>
-                      <Label>Vigência</Label>
-                      <Input type="date" id="validUntil" />
-                    </div>
-                    <div>
-                      <Label>URL Pública</Label>
-                      <Input id="publicUrl" placeholder="https://" />
-                    </div>
+                      <div>
+                        <Label>Número do Processo</Label>
+                        <Input id="number" />
+                      </div>
+                      <div>
+                        <Label>Classe</Label>
+                        <Input id="class" />
+                      </div>
+                      <div>
+                        <Label>Situação</Label>
+                        <Select defaultValue="active">
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="active">Vigente</SelectItem>
+                            <SelectItem value="analyzing">Em análise</SelectItem>
+                            <SelectItem value="extinct">Extinto</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Titular</Label>
+                        <Input id="owner" defaultValue={brand.company} />
+                      </div>
+                      <div>
+                        <Label>Data do Depósito</Label>
+                        <Input type="date" id="filingDate" />
+                      </div>
+                      <div>
+                        <Label>Natureza</Label>
+                        <Select defaultValue="product">
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="product">Marca de Produto</SelectItem>
+                            <SelectItem value="service">Marca de Serviço</SelectItem>
+                            <SelectItem value="collective">Marca Coletiva</SelectItem>
+                            <SelectItem value="certification">Marca de Certificação</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Apresentação</Label>
+                        <Select defaultValue="nominative">
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="nominative">Nominativa</SelectItem>
+                            <SelectItem value="mixed">Mista</SelectItem>
+                            <SelectItem value="figurative">Figurativa</SelectItem>
+                            <SelectItem value="3d">Tridimensional</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Especificação</Label>
+                        <Textarea id="specification" placeholder="Descreva a especificação da marca" />
+                      </div>
+                      <div>
+                        <Label>NCL</Label>
+                        <Input id="niceClassification" placeholder="Classificação de Nice" />
+                      </div>
+                      <div>
+                        <Label>Vigência</Label>
+                        <Input type="date" id="validUntil" />
+                      </div>
+                      <div>
+                        <Label>URL Pública</Label>
+                        <Input id="publicUrl" placeholder="https://" />
+                      </div>
                   </div>
                   <DialogFooter className="mt-4">
                     <Button onClick={() => {
@@ -649,7 +688,7 @@ export default function BrandDetails() {
                           </div>
                         </DialogContent>
                       </Dialog>
-                      
+
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button variant="ghost" size="icon">
