@@ -75,6 +75,10 @@ const Analytics = () => {
             <div>
               <p className="text-sm text-muted-foreground">Notificações do mês</p>
               <p className="text-2xl font-bold">402</p>
+              <div className="flex items-center gap-1 mt-1">
+                <p className="text-sm text-green-600">+15%</p>
+                <ArrowUpRight className="h-4 w-4 text-green-600" />
+              </div>
             </div>
           </div>
         </Card>
@@ -119,6 +123,10 @@ const Analytics = () => {
             <div>
               <p className="text-sm text-muted-foreground">Valor potencial de indenização</p>
               <p className="text-2xl font-bold">R$ 1.283.000,00</p>
+              <div className="flex items-center gap-1 mt-1">
+                <p className="text-sm text-green-600">+5%</p>
+                <ArrowUpRight className="h-4 w-4 text-green-600" />
+              </div>
             </div>
           </div>
         </Card>
