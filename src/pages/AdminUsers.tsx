@@ -1,8 +1,9 @@
+
 import { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -18,14 +19,14 @@ const AdminUsers = () => {
   const [department, setDepartment] = useState('all');
   const [search, setSearch] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
-
+  
   const [newUser, setNewUser] = useState({
     name: '',
     email: '',
     type: '',
     department: '',
     role: '',
-    brands: [] as string[],
+    brands: [],
     company: '',
     password: '',
     sendEmail: true
@@ -54,7 +55,7 @@ const AdminUsers = () => {
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-
+    
     if (!newUser.name) newErrors.name = 'Nome é obrigatório';
     if (!newUser.email) newErrors.email = 'E-mail é obrigatório';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newUser.email)) {
@@ -62,13 +63,12 @@ const AdminUsers = () => {
     }
     if (!newUser.type) newErrors.type = 'Tipo de usuário é obrigatório';
     if (!newUser.password) newErrors.password = 'Senha é obrigatória';
-
+    
     if (newUser.type === 'analyst') {
       if (!newUser.department) newErrors.department = 'Setor é obrigatório';
       if (!newUser.role) newErrors.role = 'Perfil de acesso é obrigatório';
-      if (!newUser.brands?.length) newErrors.brands = 'Selecione pelo menos uma marca';
     }
-
+    
     if (newUser.type === 'client') {
       if (!newUser.brands?.length) newErrors.brands = 'Selecione pelo menos uma marca';
       if (!newUser.company) newErrors.company = 'Empresa é obrigatória';
@@ -84,12 +84,12 @@ const AdminUsers = () => {
     try {
       // Replace with actual API call
       console.log('Creating user:', newUser);
-
+      
       toast({
         title: "Usuário criado com sucesso",
         description: "O novo usuário foi adicionado ao sistema.",
       });
-
+      
       closeDialog();
     } catch (error) {
       toast({
@@ -189,41 +189,6 @@ const AdminUsers = () => {
                 </Select>
                 {errors.type && <p className="text-sm text-red-500">{errors.type}</p>}
               </div>
-
-              {(newUser.type === 'analyst' || newUser.type === 'client') && (
-                <div className="space-y-2">
-                  <Label htmlFor="brands">Marcas vinculadas</Label>
-                  <Select 
-                    value={newUser.brands}
-                    onValueChange={(value) => setNewUser({ ...newUser, brands: [value] })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione as marcas" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <div className="p-2">
-                        <Input
-                          placeholder="Buscar marca..."
-                          className="mb-2"
-                          onChange={(e) => {
-                            // Implement brand search filter
-                            const searchTerm = e.target.value.toLowerCase();
-                            // Filter availableBrands based on search
-                          }}
-                        />
-                      </div>
-                      {availableBrands
-                        .sort((a, b) => a.name.localeCompare(b.name))
-                        .map(brand => (
-                          <SelectItem key={brand.id} value={brand.id}>
-                            {brand.name}
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
-                  {errors.brands && <p className="text-sm text-red-500">{errors.brands}</p>}
-                </div>
-              )}
 
               {newUser.type === 'analyst' && (
                 <>
@@ -451,44 +416,6 @@ const AdminUsers = () => {
                           </Select>
                         </div>
 
-                        {(user.type === 'analyst' || user.type === 'client') && (
-                          <div className="space-y-2">
-                            <Label htmlFor="edit-brands">Marcas vinculadas</Label>
-                            <Select 
-                              defaultValue={user.brands}
-                              onValueChange={(value) => {
-                                const selectedBrands = value.split(',');
-                                // Handle brand selection update
-                              }}
-                              multiple
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Selecione as marcas" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <div className="p-2">
-                                  <Input
-                                    placeholder="Buscar marca..."
-                                    className="mb-2"
-                                    onChange={(e) => {
-                                      // Implement brand search filter
-                                      const searchTerm = e.target.value.toLowerCase();
-                                      // Filter availableBrands based on search
-                                    }}
-                                  />
-                                </div>
-                                {availableBrands
-                                  .sort((a, b) => a.name.localeCompare(b.name))
-                                  .map(brand => (
-                                    <SelectItem key={brand.id} value={brand.id}>
-                                      {brand.name}
-                                    </SelectItem>
-                                  ))}
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        )}
-
                         <div className="space-y-2">
                           <Label htmlFor="edit-status">Status</Label>
                           <Select defaultValue={user.status}>
@@ -541,7 +468,7 @@ const AdminUsers = () => {
                           <>
                             <div className="space-y-2">
                               <Label htmlFor="edit-brands">Marcas associadas</Label>
-                              <Select defaultValue={user.brands?.[0] || ''}>
+                              <Select defaultValue={user.brands} multiple>
                                 <SelectTrigger>
                                   <SelectValue placeholder="Selecione as marcas" />
                                 </SelectTrigger>
@@ -625,7 +552,7 @@ const AdminUsers = () => {
                           Defina uma nova senha para o usuário {user.name}
                         </AlertDialogDescription>
                       </AlertDialogHeader>
-
+                      
                       <div className="space-y-4 py-4">
                         <div className="flex items-center space-x-2">
                           <Checkbox 
@@ -714,14 +641,14 @@ const AdminUsers = () => {
                             setErrors({ ...errors, password: 'A senha deve ter no mínimo 8 caracteres' });
                             return;
                           }
-
+                          
                           try {
                             // TODO: Implement API call to update password
                             // await api.put(`/users/${user.id}/password`, {
                             //   password: newUser.password,
                             //   sendEmail: newUser.sendEmail
                             // });
-
+                            
                             toast({
                               title: "Senha redefinida com sucesso",
                               description: newUser.sendEmail 
