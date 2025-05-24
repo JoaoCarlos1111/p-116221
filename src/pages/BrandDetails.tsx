@@ -159,7 +159,8 @@ export default function BrandDetails() {
     <div className="space-y-6">
       <Card>
         <CardHeader className="pb-4">
-          <div className="space-y-2">
+          <div className="flex justify-between items-start">
+            <div className="space-y-2">
               <Input 
                 value={brand.name}
                 onChange={(e) => handleChange('name', e.target.value)}
@@ -171,6 +172,11 @@ export default function BrandDetails() {
                 className="text-muted-foreground"
               />
             </div>
+            <Button onClick={handleSave}>
+              <Save className="h-4 w-4 mr-2" />
+              Salvar Alterações
+            </Button>
+          </div>
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <p className="text-sm text-muted-foreground">CNPJ</p>
@@ -204,10 +210,6 @@ export default function BrandDetails() {
             </div>
           </div>
         </CardHeader>
-        <Button onClick={handleSave}>
-          <Save className="h-4 w-4 mr-2" />
-          Salvar Alterações
-        </Button>
       </Card>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -296,10 +298,6 @@ export default function BrandDetails() {
                 />
               </div>
             </CardContent>
-            <Button onClick={handleSave}>
-              <Save className="h-4 w-4 mr-2" />
-              Salvar Alterações
-            </Button>
           </Card>
         </TabsContent>
 
@@ -434,10 +432,6 @@ export default function BrandDetails() {
                 </div>
               </div>
             </CardContent>
-            <Button onClick={handleSave}>
-              <Save className="h-4 w-4 mr-2" />
-              Salvar Alterações
-            </Button>
           </Card>
         </TabsContent>
 
@@ -445,35 +439,6 @@ export default function BrandDetails() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Documentos</CardTitle>
-              <div className="flex justify-center mb-6">
-                <label 
-                  htmlFor="logoUpload" 
-                  className="relative flex items-center justify-center w-32 h-32 rounded-full border-2 border-dashed hover:border-primary/50 transition-colors cursor-pointer bg-muted"
-                >
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="p-2 rounded-full bg-primary/10">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                      </svg>
-                    </div>
-                    <span className="text-xs text-center text-muted-foreground">Logo da Marca</span>
-                  </div>
-                  <input 
-                    type="file" 
-                    id="logoUpload" 
-                    className="hidden" 
-                    accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        // Handle logo upload here
-                        console.log('Logo file selected:', file.name);
-                      }
-                    }}
-                  />
-                </label>
-              </div>
-
               <Dialog>
                 <DialogTrigger asChild>
                   <Button>+ Adicionar Documento</Button>
@@ -640,7 +605,7 @@ export default function BrandDetails() {
                           </SelectContent>
                         </Select>
                       </div>
-
+                      
                       <div>
                         <Label>Especificação *</Label>
                         <Textarea id="specification" placeholder="Descreva a especificação da marca" required />
@@ -742,7 +707,7 @@ export default function BrandDetails() {
                                 <p className="font-medium mb-1">Natureza</p>
                                 <p>{reg.nature || 'Marca de Produto'}</p>
                               </div>
-
+                              
                               <div>
                                 <p className="font-medium mb-1">Especificação</p>
                                 <p className="text-sm">{reg.specification || 'N/A'}</p>
@@ -843,7 +808,7 @@ export default function BrandDetails() {
                                 </SelectContent>
                               </Select>
                             </div>
-
+                            
                             <div>
                               <Label>Especificação</Label>
                               <Textarea 
@@ -870,7 +835,7 @@ export default function BrandDetails() {
                               <Label>Situação</Label>
                               <Select
                                 value={reg.status}
-                                onChange={(value) => {
+                                onValueChange={(value) => {
                                   const newRegistrations = [...brand.inpiRegistrations];
                                   newRegistrations[index] = { ...reg, status: value as any };
                                   handleChange('inpiRegistrations', newRegistrations);
