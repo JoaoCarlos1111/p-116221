@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const userStr = localStorage.getItem('user');
   const user = userStr ? JSON.parse(userStr) : null;
   const isAdmin = user?.isAdmin;
@@ -83,15 +84,27 @@ export default function Sidebar() {
             </NavLink>
 
             <div className="space-y-1">
-              <NavLink to="/admin/brands" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <div
+                onClick={() => !isCollapsed && setIsMenuOpen(!isMenuOpen)}
+                className={cn(
+                  "flex items-center gap-2 p-2 rounded-lg hover:bg-accent cursor-pointer",
+                  isMenuOpen && "bg-accent"
+                )}
+              >
                 <Building2 size={20} />
                 <span className={cn(
-                  "transition-all duration-300",
+                  "transition-all duration-300 flex-1",
                   isCollapsed && "hidden"
                 )}>Marcas e Clientes</span>
-              </NavLink>
+                {!isCollapsed && (
+                  <ChevronRight className={cn(
+                    "h-4 w-4 transition-transform",
+                    isMenuOpen && "transform rotate-90"
+                  )} />
+                )}
+              </div>
               
-              {!isCollapsed && (
+              {!isCollapsed && isMenuOpen && (
                 <div className="ml-7 space-y-1">
                   <NavLink to="/admin/brands/companies" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent text-sm">
                     <span>Empresas e Grupos</span>
