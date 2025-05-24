@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -54,6 +55,28 @@ interface Brand {
 }
 
 export default function BrandDetails() {
+  const [analysts, setAnalysts] = useState([
+    { id: '1', name: 'Analista 1' },
+    { id: '2', name: 'Analista 2' },
+  ]);
+  
+  const [clientUsers, setClientUsers] = useState([
+    { id: '1', name: 'Cliente 1' },
+    { id: '2', name: 'Cliente 2' },
+  ]);
+
+  const hasRequiredAnalysts = (stage: string) => {
+    // Implement validation logic here
+    return true;
+  };
+
+  const handleSaveConfig = () => {
+    // Implement save logic here
+  };
+
+  const handleRestoreDefault = () => {
+    // Implement restore default logic here
+  };
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState("brand");
 
@@ -968,12 +991,108 @@ export default function BrandDetails() {
 
         <TabsContent value="cases" className="mt-6">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Fluxo de Casos</CardTitle>
-              <Button>+ Novo Caso</Button>
+            <CardHeader>
+              <CardTitle>Fluxo de Casos por Setor</CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">Implementar visualização de casos</p>
+            <CardContent className="space-y-6">
+              {[
+                'Prospecção',
+                'Verificação',
+                'Auditoria',
+                'Aprovação',
+                'Logística',
+                'IP Tools',
+                'Atendimento',
+                'Financeiro'
+              ].map((stage, index) => (
+                <Card key={index} className="p-4">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-medium">{stage}</h3>
+                      {stage !== 'Aprovação' && (
+                        <Badge variant={hasRequiredAnalysts(stage) ? 'default' : 'destructive'}>
+                          {hasRequiredAnalysts(stage) ? 'Configurado' : 'Necessita Analistas'}
+                        </Badge>
+                      )}
+                    </div>
+
+                    {stage === 'Aprovação' ? (
+                      <>
+                        <div className="space-y-2">
+                          <Label>Usuários Clientes Aprovadores</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione os aprovadores" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {clientUsers.map(user => (
+                                <SelectItem key={user.id} value={user.id}>{user.name}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Switch id="approval-required" />
+                          <Label htmlFor="approval-required">Requer aprovação antes de prosseguir</Label>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="space-y-2">
+                          <Label>Analistas Responsáveis</Label>
+                          <Select required>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione os analistas" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {analysts.map(analyst => (
+                                <SelectItem key={analyst.id} value={analyst.id}>{analyst.name}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Switch id={`auto-distribution-${index}`} />
+                          <Label htmlFor={`auto-distribution-${index}`}>Distribuição automática ativa</Label>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label>Prazo ideal de conclusão (dias)</Label>
+                            <Input type="number" min="1" />
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Observações</Label>
+                          <Textarea placeholder="Observações específicas para esta etapa" />
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </Card>
+              ))}
+
+              <div className="flex justify-between mt-6">
+                <Button variant="outline" onClick={handleRestoreDefault}>
+                  Restaurar Fluxo Padrão
+                </Button>
+                <Button onClick={handleSaveConfig}>
+                  Salvar Configuração
+                </Button>
+              </div>
+
+              <AlertDialog>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Atenção</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Existem etapas sem analistas designados. Todas as etapas (exceto Aprovação) devem ter pelo menos um analista.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogAction>OK</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </CardContent>
           </Card>
         </TabsContent>
