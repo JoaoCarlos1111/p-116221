@@ -82,13 +82,35 @@ export default function Sidebar() {
               )}>Auditoria</span>
             </NavLink>
 
-            <NavLink to="/admin/brands" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <Building2 size={20} />
-              <span className={cn(
-                "transition-all duration-300",
-                isCollapsed && "hidden"
-              )}>Marcas e Clientes</span>
-            </NavLink>
+            <div className="space-y-1">
+              <NavLink to="/admin/brands" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+                <Building2 size={20} />
+                <span className={cn(
+                  "transition-all duration-300",
+                  isCollapsed && "hidden"
+                )}>Marcas e Clientes</span>
+              </NavLink>
+              
+              {!isCollapsed && (
+                <div className="ml-7 space-y-1">
+                  <NavLink to="/admin/brands/companies" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent text-sm">
+                    <span>Empresas e Grupos</span>
+                  </NavLink>
+                  
+                  <NavLink to="/admin/brands/list" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent text-sm">
+                    <span>Marcas</span>
+                  </NavLink>
+                  
+                  <NavLink to="/admin/brands/registry" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent text-sm">
+                    <span>Registros de Marca (INPI)</span>
+                  </NavLink>
+                  
+                  <NavLink to="/admin/brands/cases" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent text-sm">
+                    <span>Fluxo de Casos por Marca</span>
+                  </NavLink>
+                </div>
+              )}
+            </div>
 
             <NavLink to="/admin/templates" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
               <FileStack size={20} />
