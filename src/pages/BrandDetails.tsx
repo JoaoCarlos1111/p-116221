@@ -454,7 +454,30 @@ export default function BrandDetails() {
                     </div>
                     <div>
                       <Label>Arquivo</Label>
-                      <div className="border-2 border-dashed rounded-lg p-6 hover:border-primary/50 transition-colors">
+                      <label 
+                        htmlFor="fileUpload" 
+                        className="border-2 border-dashed rounded-lg p-6 hover:border-primary/50 transition-colors cursor-pointer"
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                          e.currentTarget.classList.add('border-primary');
+                        }}
+                        onDragLeave={(e) => {
+                          e.preventDefault();
+                          e.currentTarget.classList.remove('border-primary');
+                        }}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          e.currentTarget.classList.remove('border-primary');
+                          const file = e.dataTransfer.files[0];
+                          const input = document.getElementById('fileUpload') as HTMLInputElement;
+                          if (input) {
+                            const dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(file);
+                            input.files = dataTransfer.files;
+                            input.dispatchEvent(new Event('change', { bubbles: true }));
+                          }
+                        }}
+                      >
                         <div className="flex flex-col items-center gap-2 text-center">
                           <div className="p-2 rounded-full bg-primary/10">
                             <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -465,9 +488,20 @@ export default function BrandDetails() {
                             <p>Clique para fazer upload ou</p>
                             <p>Arraste e solte aqui</p>
                           </div>
-                          <Input type="file" className="hidden" id="fileUpload" />
+                          <Input 
+                            type="file" 
+                            className="hidden" 
+                            id="fileUpload" 
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                console.log('File selected:', file.name);
+                                // Add your file handling logic here
+                              }
+                            }}
+                          />
                         </div>
-                      </div>
+                      </label>
                     </div>
                   </div>
                   <DialogFooter className="mt-4">
