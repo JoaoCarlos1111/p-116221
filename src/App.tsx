@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { Toaster } from "@/components/ui/toaster"
 import Sidebar from '@/components/Sidebar'
@@ -22,11 +23,10 @@ import TopBar from "@/components/TopBar";
 import InternalLogin from "@/pages/InternalLogin";
 import RouteGuard from "@/components/RouteGuard";
 import { departments } from './constants';
-import Analytics from './pages/Analytics';
 
 function AppContent() {
   const location = useLocation();
-
+  
   return (
     <div className="flex h-screen bg-background">
       {location.pathname !== '/login' && <Sidebar />}
@@ -121,7 +121,6 @@ function AppContent() {
                 <FinanceiroDetails />
               </RouteGuard>
             } />
-            <Route path="/analytics" element={<Analytics />} />
           </Routes>
         </main>
       </div>
