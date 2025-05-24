@@ -38,7 +38,6 @@ export default function Audit() {
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const [selectedAction, setSelectedAction] = useState('');
-  const [selectedLog, setSelectedLog] = useState<AuditLog | null>(null);
 
   // Mock data - replace with API call
   const auditLogs: AuditLog[] = [
@@ -211,7 +210,7 @@ export default function Audit() {
                     <TableCell className="text-right">
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button variant="ghost" size="icon" onClick={() => setSelectedLog(log)}>
+                          <Button variant="ghost" size="icon">
                             <Eye className="h-4 w-4" />
                           </Button>
                         </DialogTrigger>
