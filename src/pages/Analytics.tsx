@@ -18,7 +18,7 @@ const analyticsData = [
 const Analytics = () => {
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <Card className="p-4 glass-card hover:shadow-lg transition-all">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-blue-100 rounded-lg">
@@ -115,7 +115,7 @@ const Analytics = () => {
           </div>
         </Card>
 
-        <Card className="p-4 glass-card hover:shadow-lg transition-all col-span-2">
+        <Card className="p-4 glass-card hover:shadow-lg transition-all">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-emerald-100 rounded-lg">
               <BanknoteIcon className="h-6 w-6 text-emerald-600" />
