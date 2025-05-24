@@ -1,9 +1,8 @@
-
 import { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -19,7 +18,7 @@ const AdminUsers = () => {
   const [department, setDepartment] = useState('all');
   const [search, setSearch] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
-  
+
   const [newUser, setNewUser] = useState({
     name: '',
     email: '',
@@ -55,7 +54,7 @@ const AdminUsers = () => {
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    
+
     if (!newUser.name) newErrors.name = 'Nome é obrigatório';
     if (!newUser.email) newErrors.email = 'E-mail é obrigatório';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newUser.email)) {
@@ -63,13 +62,13 @@ const AdminUsers = () => {
     }
     if (!newUser.type) newErrors.type = 'Tipo de usuário é obrigatório';
     if (!newUser.password) newErrors.password = 'Senha é obrigatória';
-    
+
     if (newUser.type === 'analyst') {
       if (!newUser.department) newErrors.department = 'Setor é obrigatório';
       if (!newUser.role) newErrors.role = 'Perfil de acesso é obrigatório';
       if (!newUser.brands?.length) newErrors.brands = 'Selecione pelo menos uma marca';
     }
-    
+
     if (newUser.type === 'client') {
       if (!newUser.brands?.length) newErrors.brands = 'Selecione pelo menos uma marca';
       if (!newUser.company) newErrors.company = 'Empresa é obrigatória';
@@ -85,12 +84,12 @@ const AdminUsers = () => {
     try {
       // Replace with actual API call
       console.log('Creating user:', newUser);
-      
+
       toast({
         title: "Usuário criado com sucesso",
         description: "O novo usuário foi adicionado ao sistema.",
       });
-      
+
       closeDialog();
     } catch (error) {
       toast({
@@ -456,7 +455,14 @@ const AdminUsers = () => {
                         {(user.type === 'analyst' || user.type === 'client') && (
                           <div className="space-y-2">
                             <Label htmlFor="edit-brands">Marcas vinculadas</Label>
-                            <Select defaultValue={user.brands} multiple>
+                            <Select 
+                              defaultValue={user.brands}
+                              onValueChange={(value) => {
+                                const selectedBrands = value.split(',');
+                                // Handle brand selection update
+                              }}
+                              multiple
+                            >
                               <SelectTrigger>
                                 <SelectValue placeholder="Selecione as marcas" />
                               </SelectTrigger>
@@ -620,7 +626,7 @@ const AdminUsers = () => {
                           Defina uma nova senha para o usuário {user.name}
                         </AlertDialogDescription>
                       </AlertDialogHeader>
-                      
+
                       <div className="space-y-4 py-4">
                         <div className="flex items-center space-x-2">
                           <Checkbox 
@@ -709,14 +715,14 @@ const AdminUsers = () => {
                             setErrors({ ...errors, password: 'A senha deve ter no mínimo 8 caracteres' });
                             return;
                           }
-                          
+
                           try {
                             // TODO: Implement API call to update password
                             // await api.put(`/users/${user.id}/password`, {
                             //   password: newUser.password,
                             //   sendEmail: newUser.sendEmail
                             // });
-                            
+
                             toast({
                               title: "Senha redefinida com sucesso",
                               description: newUser.sendEmail 
