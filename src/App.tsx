@@ -19,7 +19,8 @@ import Approvals from "@/pages/Approvals";
 import Financeiro from "@/pages/Financeiro";
 import FinanceiroDetails from "@/pages/FinanceiroDetails";
 import Analytics from "@/pages/Analytics";
-import AdminUsers from "./pages/AdminUsers";
+import AdminUsers from './pages/AdminUsers';
+import AdminPermissions from './pages/AdminPermissions';
 import TopBar from "@/components/TopBar";
 import InternalLogin from "@/pages/InternalLogin";
 import RouteGuard from "@/components/RouteGuard";
@@ -128,6 +129,7 @@ function AppContent() {
               </RouteGuard>
             } />
               <Route path="/admin/users" element={<AdminUsers />} />
+              <Route path="/admin/permissions" element={<AdminPermissions />} />
           </Routes>
         </main>
       </div>
