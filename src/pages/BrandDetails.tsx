@@ -494,16 +494,16 @@ export default function BrandDetails() {
                   </DialogHeader>
                   <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label>Número do Processo</Label>
-                        <Input id="number" />
+                        <Label>Número do Processo *</Label>
+                        <Input id="number" required />
                       </div>
                       <div>
-                        <Label>Classe</Label>
-                        <Input id="class" />
+                        <Label>Classe *</Label>
+                        <Input id="class" required />
                       </div>
                       <div>
-                        <Label>Situação</Label>
-                        <Select defaultValue="active">
+                        <Label>Situação *</Label>
+                        <Select defaultValue="active" required>
                           <SelectTrigger>
                             <SelectValue />
                           </SelectTrigger>
@@ -515,16 +515,16 @@ export default function BrandDetails() {
                         </Select>
                       </div>
                       <div>
-                        <Label>Titular</Label>
-                        <Input id="owner" defaultValue={brand.company} />
+                        <Label>Titular *</Label>
+                        <Input id="owner" defaultValue={brand.company} required />
                       </div>
                       <div>
-                        <Label>Data do Depósito</Label>
-                        <Input type="date" id="filingDate" />
+                        <Label>Data do Depósito *</Label>
+                        <Input type="date" id="filingDate" required />
                       </div>
                       <div>
-                        <Label>Natureza</Label>
-                        <Select defaultValue="product">
+                        <Label>Natureza *</Label>
+                        <Select defaultValue="product" required>
                           <SelectTrigger>
                             <SelectValue />
                           </SelectTrigger>
@@ -538,20 +538,20 @@ export default function BrandDetails() {
                       </div>
                       
                       <div>
-                        <Label>Especificação</Label>
-                        <Textarea id="specification" placeholder="Descreva a especificação da marca" />
+                        <Label>Especificação *</Label>
+                        <Textarea id="specification" placeholder="Descreva a especificação da marca" required />
                       </div>
                       <div>
-                        <Label>NCL</Label>
-                        <Input id="niceClassification" placeholder="Classificação de Nice" />
+                        <Label>NCL *</Label>
+                        <Input id="niceClassification" placeholder="Classificação de Nice" required />
                       </div>
                       <div>
-                        <Label>Vigência</Label>
-                        <Input type="date" id="validUntil" />
+                        <Label>Vigência *</Label>
+                        <Input type="date" id="validUntil" required />
                       </div>
                       <div>
-                        <Label>URL Pública</Label>
-                        <Input id="publicUrl" placeholder="https://" />
+                        <Label>URL Pública *</Label>
+                        <Input id="publicUrl" placeholder="https://" required />
                       </div>
                   </div>
                   <DialogFooter className="mt-4">
