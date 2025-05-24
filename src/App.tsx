@@ -9,8 +9,9 @@ import CaseDetails from '@/pages/CaseDetails'
 import Prospeccao from '@/pages/Prospeccao';
 import Auditoria from './pages/Auditoria';
 import AuditoriaCaseDetails from './pages/AuditoriaCaseDetails';
-import Logistics from './pages/Logistics';
-import LogisticsCaseView from './pages/LogisticsCaseView';
+import Logistics from "./pages/Logistics";
+import LogisticsCaseView from "./pages/LogisticsCaseView";
+import BrandsAndClients from "./pages/BrandsAndClients";
 import IPTools from './pages/IPTools'
 import IPToolsCaseView from './pages/IPToolsCaseView';
 import Atendimento from './pages/Atendimento';
@@ -131,12 +132,8 @@ function AppContent() {
               </RouteGuard>
             } />
               <Route path="/admin/users" element={<AdminUsers />} />
-              <Route path="/admin/permissions" element={<AdminPermissions />} />
-              <Route path="/admin/audit" element={
-                <RouteGuard requiredDepartment="admin">
-                  <Audit />
-                </RouteGuard>
-              } />
+              <Route path="/admin/permissions" element={<RouteGuard requiredDepartment="admin"><AdminPermissions /></RouteGuard>} />
+            <Route path="/admin/brands" element={<RouteGuard><BrandsAndClients /></RouteGuard>} />
               <Route path="/case-history/:id" element={<CaseHistoryDetails />} />
           </Routes>
         </main>
