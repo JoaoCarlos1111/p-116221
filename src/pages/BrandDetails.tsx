@@ -58,7 +58,7 @@ export default function BrandDetails() {
     { id: '1', name: 'Analista 1' },
     { id: '2', name: 'Analista 2' },
   ]);
-  
+
   const [clientUsers, setClientUsers] = useState([
     { id: '1', name: 'Cliente 1' },
     { id: '2', name: 'Cliente 2' },
@@ -330,7 +330,7 @@ export default function BrandDetails() {
                     onChange={(e) => handleChange('classification', e.target.value)}
                   />
                 </div>
-                
+
                 <div>
                   <p className="text-sm text-muted-foreground">Status</p>
                   <Select 
@@ -671,7 +671,7 @@ export default function BrandDetails() {
                           </SelectContent>
                         </Select>
                       </div>
-                      
+
                       <div>
                         <Label>Especificação *</Label>
                         <Textarea id="specification" placeholder="Descreva a especificação da marca" required />
@@ -773,7 +773,7 @@ export default function BrandDetails() {
                                 <p className="font-medium mb-1">Natureza</p>
                                 <p>{reg.nature || 'Marca de Produto'}</p>
                               </div>
-                              
+
                               <div>
                                 <p className="font-medium mb-1">Especificação</p>
                                 <p className="text-sm">{reg.specification || 'N/A'}</p>
@@ -846,7 +846,7 @@ export default function BrandDetails() {
                               <Input 
                                 type="date"
                                 value={reg.filingDate}
-                                onChange={(e) => {
+                                                               onChange={(e) => {
                                   const newRegistrations = [...brand.inpiRegistrations];
                                   newRegistrations[index] = { ...reg, filingDate: e.target.value };
                                   handleChange('inpiRegistrations', newRegistrations);
@@ -874,7 +874,7 @@ export default function BrandDetails() {
                                 </SelectContent>
                               </Select>
                             </div>
-                            
+
                             <div>
                               <Label>Especificação</Label>
                               <Textarea 
