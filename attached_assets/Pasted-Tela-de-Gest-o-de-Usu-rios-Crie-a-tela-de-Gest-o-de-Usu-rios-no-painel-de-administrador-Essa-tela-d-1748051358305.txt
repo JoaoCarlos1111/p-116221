@@ -1,0 +1,61 @@
+Tela de Gestão de Usuários
+Crie a tela de Gestão de Usuários no painel de administrador. Essa tela deve seguir o design do sistema atual e será usada para gerenciar tanto operadores internos (Analistas) quanto Clientes (representantes das marcas protegidas).
+
+Estrutura da Tela
+🟦 Header (topo da tela)
+Título: Gestão de Usuários
+
+Botão no canto superior direito: [+ Novo Usuário] que abre um modal ou página separada para criação de novos usuários.
+
+🟧 Filtros (acima da tabela)
+Adicione filtros para facilitar a visualização dos usuários:
+
+Campo de busca por nome ou e-mail
+
+Filtro por tipo de usuário: Todos | Analista | Cliente
+
+Filtro por status: Todos | Ativo | Inativo
+
+Filtro por setor (apenas para analistas): Prospecção, Verificação, IP Tools, Atendimento, Financeiro, etc.
+
+Filtro por marca vinculada (apenas para clientes)
+
+🟨 Tabela com Lista de Usuários
+Exiba uma tabela com as seguintes colunas:
+
+Nome	E-mail	Tipo	Setor / Marca Associada	Status	Último Acesso	Ações
+João Silva	joao@empresa.com	Analista	IP Tools	Ativo	20/05/2025	Editar, Redefinir Senha, Desativar
+Maria Cliente	maria@cliente.com	Cliente	Marca XYZ	Ativo	19/05/2025	Editar, Redefinir Senha, Desativar
+
+🟥 Ações por usuário
+Editar usuário (abre página ou modal para edição de dados)
+
+Redefinir senha (gera senha temporária e envia por e-mail)
+
+Desativar conta (solicita confirmação antes)
+
+🟩 Página ou Modal: Criar Novo Usuário
+Formulário com os seguintes campos:
+
+Nome completo (obrigatório)
+
+E-mail (obrigatório)
+
+Tipo de usuário: Analista ou Cliente (obrigatório)
+
+Senha ou botão "Gerar senha temporária"
+
+Se for Analista: escolher setor e perfil de acesso
+
+Se for Cliente: selecionar empresa/marca(s) associada(s)
+
+Opção para enviar convite por e-mail ou criar e ativar imediatamente
+
+Extras opcionais (se possível incluir)
+Exibir indicador de “nunca acessou”
+
+Adicionar coluna de última modificação
+
+Adicionar filtro por data de criação
+
+Essa tela deve ser acessível apenas a usuários com perfil Administrador e manter a identidade visual do sistema.
