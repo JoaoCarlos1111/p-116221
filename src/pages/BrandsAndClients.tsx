@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Search, Plus } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface Brand {
   id: string;
@@ -20,12 +20,19 @@ interface Brand {
 
 export default function BrandsAndClients() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    if (location.state?.newBrand) {
+      setBrands(prev => [...prev, location.state.newBrand]);
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, navigate]);
   const [statusFilter, setStatusFilter] = useState<string>("");
   const [processFilter, setProcessFilter] = useState<string>("");
 
-  // Mock data - replace with API data later
-  const brands: Brand[] = [
+  const [brands, setBrands] = useState<Brand[]>([
     {
       id: "1",
       name: "Nike",
@@ -42,7 +49,11 @@ export default function BrandsAndClients() {
       activeCases: 8,
       status: "active"
     }
-  ];
+  ]);
+
+  const addNewBrand = (brand: Brand) => {
+    setBrands(prev => [...prev, brand]);
+  };
 
   const filteredBrands = brands.filter(brand => {
     const matchesSearch = brand.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
