@@ -17,11 +17,6 @@ const analyticsData = [
 const Analytics = () => {
   return (
     <div className="space-y-8">
-      <header>
-        <h1 className="text-4xl font-bold text-primary">Analytics Overview</h1>
-        <p className="text-secondary-foreground">Track your performance</p>
-      </header>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="p-4 glass-card hover:shadow-lg transition-all">
           <div className="flex items-center gap-4">
@@ -31,6 +26,7 @@ const Analytics = () => {
             <div>
               <p className="text-sm text-muted-foreground">Usuários ativos</p>
               <p className="text-2xl font-bold">128</p>
+              <p className="text-sm text-green-600">+12% em relação ao mês anterior</p>
             </div>
           </div>
         </Card>
@@ -43,6 +39,7 @@ const Analytics = () => {
             <div>
               <p className="text-sm text-muted-foreground">Marcas protegidas</p>
               <p className="text-2xl font-bold">52</p>
+              <p className="text-sm text-green-600">+8% em relação ao mês anterior</p>
             </div>
           </div>
         </Card>
@@ -55,6 +52,7 @@ const Analytics = () => {
             <div>
               <p className="text-sm text-muted-foreground">Casos ativos</p>
               <p className="text-2xl font-bold">1.247</p>
+              <p className="text-sm text-red-600">-3% em relação ao mês anterior</p>
             </div>
           </div>
         </Card>
