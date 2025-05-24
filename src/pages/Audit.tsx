@@ -186,8 +186,7 @@ export default function Audit() {
                     key={log.id}
                     className="cursor-pointer hover:bg-muted/50"
                     onClick={() => {
-                      // Navigate to case details when implemented
-                      console.log('Viewing case details:', log);
+                      navigate(`/case-history/${log.target}`);
                     }}
                   >
                     <TableCell>{format(new Date(log.timestamp), 'dd/MM/yyyy HH:mm')}</TableCell>

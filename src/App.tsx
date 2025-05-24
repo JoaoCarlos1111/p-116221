@@ -22,6 +22,7 @@ import Analytics from "@/pages/Analytics";
 import AdminPermissions from './pages/AdminPermissions';
 import AdminUsers from './pages/AdminUsers';
 import Audit from './pages/Audit';
+import CaseHistoryDetails from './pages/CaseHistoryDetails';
 import TopBar from "@/components/TopBar";
 import InternalLogin from "@/pages/InternalLogin";
 import RouteGuard from "@/components/RouteGuard";
@@ -136,6 +137,7 @@ function AppContent() {
                   <Audit />
                 </RouteGuard>
               } />
+              <Route path="/case-history/:id" element={<CaseHistoryDetails />} />
           </Routes>
         </main>
       </div>
