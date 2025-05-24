@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -371,15 +372,203 @@ const AdminUsers = () => {
                 </TableCell>
                 <TableCell>{user.lastAccess}</TableCell>
                 <TableCell className="text-right">
-                  <Button variant="ghost" size="icon">
-                    <Edit2 className="h-4 w-4" />
-                  </Button>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <Edit2 className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[600px]">
+                      <DialogHeader>
+                        <DialogTitle>Editar Usuário</DialogTitle>
+                      </DialogHeader>
+                      <form onSubmit={(e) => {
+                        e.preventDefault();
+                        // TODO: Implement edit user
+                      }} className="space-y-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="edit-name">Nome completo</Label>
+                          <Input
+                            id="edit-name"
+                            defaultValue={user.name}
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="edit-email">E-mail</Label>
+                          <Input
+                            id="edit-email"
+                            value={user.email}
+                            disabled
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="edit-type">Tipo de usuário</Label>
+                          <Select defaultValue={user.type}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione o tipo" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="analyst">Analista</SelectItem>
+                              <SelectItem value="client">Cliente</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="edit-status">Status</Label>
+                          <Select defaultValue={user.status}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione o status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="active">Ativo</SelectItem>
+                              <SelectItem value="inactive">Inativo</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {user.type === 'analyst' && (
+                          <>
+                            <div className="space-y-2">
+                              <Label htmlFor="edit-department">Setor</Label>
+                              <Select defaultValue={user.department}>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Selecione o setor" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="prospection">Prospecção</SelectItem>
+                                  <SelectItem value="verification">Verificação</SelectItem>
+                                  <SelectItem value="ip_tools">IP Tools</SelectItem>
+                                  <SelectItem value="service">Atendimento</SelectItem>
+                                  <SelectItem value="financial">Financeiro</SelectItem>
+                                  <SelectItem value="admin">Administração</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor="edit-role">Perfil de acesso</Label>
+                              <Select defaultValue={user.role}>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Selecione o perfil" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="admin">Administrador</SelectItem>
+                                  <SelectItem value="manager">Gerente</SelectItem>
+                                  <SelectItem value="analyst">Analista</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </>
+                        )}
+
+                        {user.type === 'client' && (
+                          <>
+                            <div className="space-y-2">
+                              <Label htmlFor="edit-brands">Marcas associadas</Label>
+                              <Select defaultValue={user.brands} multiple>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Selecione as marcas" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {availableBrands.map(brand => (
+                                    <SelectItem key={brand.id} value={brand.id}>{brand.name}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor="edit-company">Empresa</Label>
+                              <Select defaultValue={user.company}>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Selecione a empresa" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {availableCompanies.map(company => (
+                                    <SelectItem key={company.id} value={company.id}>{company.name}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </>
+                        )}
+
+                        <div className="flex justify-between items-center pt-4">
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button type="button" variant="outline">
+                                Redefinir senha
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Redefinir senha</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Isso irá gerar uma nova senha para o usuário. Deseja continuar?
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => {
+                                  // TODO: Implement password reset
+                                  toast({
+                                    title: "Senha redefinida",
+                                    description: "Uma nova senha foi gerada e enviada por e-mail.",
+                                  });
+                                }}>
+                                  Continuar
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+
+                          <div className="flex gap-2">
+                            <Button type="button" variant="outline" onClick={() => {
+                              // TODO: Implement cancel
+                            }}>
+                              Cancelar
+                            </Button>
+                            <Button type="submit">
+                              Salvar alterações
+                            </Button>
+                          </div>
+                        </div>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
                   <Button variant="ghost" size="icon">
                     <Key className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="icon">
-                    <Power className="h-4 w-4" />
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <Power className="h-4 w-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Desativar usuário</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Isso irá desativar o acesso do usuário ao sistema. Deseja continuar?
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => {
+                          // TODO: Implement user deactivation
+                          toast({
+                            title: "Usuário desativado",
+                            description: "O usuário foi desativado com sucesso.",
+                          });
+                        }}>
+                          Continuar
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </TableCell>
               </TableRow>
             ))}
