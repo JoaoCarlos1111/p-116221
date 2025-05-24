@@ -132,6 +132,11 @@ function AppContent() {
             } />
               <Route path="/admin/users" element={<AdminUsers />} />
               <Route path="/admin/permissions" element={<AdminPermissions />} />
+              <Route path="/admin/brands" element={
+                <RouteGuard requiredDepartment={["admin", "analyst"]}>
+                  <BrandsAndClients />
+                </RouteGuard>
+              } />
               <Route path="/admin/audit" element={
                 <RouteGuard requiredDepartment="admin">
                   <Audit />
