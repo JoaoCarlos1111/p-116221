@@ -194,9 +194,8 @@ const AdminUsers = () => {
                 <div className="space-y-2">
                   <Label htmlFor="brands">Marcas vinculadas</Label>
                   <Select 
-                    value={newUser.brands} 
-                    onValueChange={(value) => setNewUser({ ...newUser, brands: Array.isArray(value) ? value : [value] })}
-                    multiple
+                    value={newUser.brands}
+                    onValueChange={(value) => setNewUser({ ...newUser, brands: [value] })}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione as marcas" />
@@ -542,7 +541,7 @@ const AdminUsers = () => {
                           <>
                             <div className="space-y-2">
                               <Label htmlFor="edit-brands">Marcas associadas</Label>
-                              <Select defaultValue={user.brands} multiple>
+                              <Select defaultValue={user.brands?.[0] || ''}>
                                 <SelectTrigger>
                                   <SelectValue placeholder="Selecione as marcas" />
                                 </SelectTrigger>
