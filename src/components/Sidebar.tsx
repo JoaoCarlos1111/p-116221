@@ -15,7 +15,7 @@ import {
   CheckCircle,
   Scroll,
   Truck,
-  Tool,
+  Wrench,
   Headset,
   DollarSign,
   Lock
@@ -36,7 +36,7 @@ export default function Sidebar() {
     { path: '/verificacao', label: 'Verificação', icon: CheckCircle, department: 'verificacao' },
     { path: '/auditoria', label: 'Auditoria', icon: Scroll, department: 'auditoria' },
     { path: '/logistica', label: 'Logística', icon: Truck, department: 'logistica' },
-    { path: '/iptools', label: 'IP Tools', icon: Tool, department: 'ip_tools' },
+    { path: '/iptools', label: 'IP Tools', icon: Wrench, department: 'ip_tools' },
     { path: '/atendimento', label: 'Atendimento', icon: Headset, department: 'atendimento' },
     { path: '/financeiro', label: 'Financeiro', icon: DollarSign, department: 'financeiro' },
     { path: '/admin/users', label: 'Usuários', icon: Users, department: 'admin' },
