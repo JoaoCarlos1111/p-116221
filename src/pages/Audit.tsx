@@ -112,7 +112,7 @@ export default function Audit() {
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Buscar por usuário, marca ou número do caso..."
-                className="pl-8"
+                className="pl-8 w-full"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -165,19 +165,6 @@ export default function Audit() {
                 <SelectItem value="financeiro">Financeiro</SelectItem>
               </SelectContent>
             </Select>
-
-            <Select value={selectedAction} onValueChange={setSelectedAction}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Tipo de Ação" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="create">Criação</SelectItem>
-                <SelectItem value="edit">Edição</SelectItem>
-                <SelectItem value="delete">Exclusão</SelectItem>
-                <SelectItem value="view">Visualização</SelectItem>
-                <SelectItem value="login">Login</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
 
           <div className="rounded-lg border">
@@ -189,13 +176,20 @@ export default function Audit() {
                   <TableHead>Setor</TableHead>
                   <TableHead>Ação</TableHead>
                   <TableHead>Descrição</TableHead>
-                  <TableHead>Alvo</TableHead>
+                  <TableHead>Caso</TableHead>
                   <TableHead className="text-right">Detalhes</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {auditLogs.map((log) => (
-                  <TableRow key={log.id}>
+                  <TableRow 
+                    key={log.id}
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={() => {
+                      // Navigate to case details when implemented
+                      console.log('Viewing case details:', log);
+                    }}
+                  >
                     <TableCell>{format(new Date(log.timestamp), 'dd/MM/yyyy HH:mm')}</TableCell>
                     <TableCell>
                       {log.userName}
