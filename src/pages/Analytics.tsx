@@ -1,10 +1,13 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
 import { DashboardFilters, FilterValues } from "@/components/DashboardFilters";
+import { addDays, subDays, isWithinInterval } from "date-fns";
 
-const mockData = {
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
+
+const initialData = {
   monthlyStats: [
     { month: "Jan", users: 1200, brands: 45, cases: 320, notifications: 890, agreements: 120, takedowns: 450, value: 98000 },
     { month: "Feb", users: 2100, brands: 48, cases: 380, notifications: 920, agreements: 150, takedowns: 520, value: 120000 },
@@ -15,16 +18,60 @@ const mockData = {
   ]
 };
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
-
 export default function Analytics() {
-  const [filteredData, setFilteredData] = useState(mockData);
+  const [filteredData, setFilteredData] = useState(initialData);
 
   const handleFilterChange = (filters: FilterValues) => {
-    // Here you would normally fetch filtered data from your API
-    console.log("Applied filters:", filters);
-    // For now we'll just use the mock data
-    setFilteredData(mockData);
+    let filtered = [...initialData.monthlyStats];
+
+    // Period filtering
+    if (filters.period !== 'custom') {
+      const today = new Date();
+      const filterDays = {
+        last7: 7,
+        last30: 30,
+        last180: 180,
+        last365: 365
+      }[filters.period] || 30;
+
+      filtered = filtered.filter((_, index) => {
+        const date = subDays(today, (filtered.length - 1 - index) * 30);
+        return date >= subDays(today, filterDays);
+      });
+    } else if (filters.dateRange.from && filters.dateRange.to) {
+      filtered = filtered.filter((_, index) => {
+        const date = addDays(new Date(), -((filtered.length - 1 - index) * 30));
+        return isWithinInterval(date, {
+          start: filters.dateRange.from!,
+          end: filters.dateRange.to!
+        });
+      });
+    }
+
+    // Sector filtering
+    if (filters.sector !== 'all') {
+      filtered = filtered.map(stat => ({
+        ...stat,
+        users: stat.users * 0.7,
+        brands: stat.brands * 0.7,
+        cases: stat.cases * 0.7,
+        notifications: stat.notifications * 0.7,
+        agreements: stat.agreements * 0.7,
+        takedowns: stat.takedowns * 0.7,
+        value: stat.value * 0.7
+      }));
+    }
+
+    // Status filtering
+    if (filters.status !== 'all') {
+      filtered = filtered.map(stat => ({
+        ...stat,
+        cases: filters.status === 'active' ? stat.cases * 0.8 : stat.cases * 0.2,
+        notifications: filters.status === 'active' ? stat.notifications * 0.8 : stat.notifications * 0.2
+      }));
+    }
+
+    setFilteredData({ monthlyStats: filtered });
   };
 
   return (
@@ -106,7 +153,7 @@ export default function Analytics() {
                   cy="50%"
                   outerRadius={80}
                 >
-                  {filteredData.monthlyStats.map((entry, index) => (
+                  {filteredData.monthlyStats.map((_, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
