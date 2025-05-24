@@ -156,6 +156,7 @@ export default function AdminPermissions() {
           <TableHeader>
             <TableRow>
               <TableHead>Perfil</TableHead>
+              <TableHead>Tipo de Acesso</TableHead>
               <TableHead>Usuários</TableHead>
               <TableHead className="w-[100px]">Ações</TableHead>
             </TableRow>
@@ -164,6 +165,7 @@ export default function AdminPermissions() {
             {profiles.map((profile) => (
               <TableRow key={profile.id}>
                 <TableCell className="font-medium">{profile.name}</TableCell>
+                <TableCell>Tipo de Acesso</TableCell>
                 <TableCell>
                   <div className="flex items-center">
                     <Users className="h-4 w-4 mr-2" />
