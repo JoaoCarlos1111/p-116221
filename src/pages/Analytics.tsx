@@ -4,6 +4,7 @@ import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip, BarChart, 
 import { DashboardFilters, FilterValues } from "@/components/DashboardFilters";
 import { addDays, subDays, isWithinInterval } from "date-fns";
 import { Users, Tag, Box, Mail, Handshake, Ban, BanknoteIcon } from "lucide-react";
+import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 
 const analyticsData = [
   { name: "Jan", value: 1200 },
@@ -26,7 +27,10 @@ const Analytics = () => {
             <div>
               <p className="text-sm text-muted-foreground">Usuários ativos</p>
               <p className="text-2xl font-bold">128</p>
-              <p className="text-sm text-green-600">+12% em relação ao mês anterior</p>
+              <div className="flex items-center gap-1 mt-1">
+                <p className="text-sm text-green-600">+12%</p>
+                <ArrowUpRight className="h-4 w-4 text-green-600" />
+              </div>
             </div>
           </div>
         </Card>
@@ -39,7 +43,10 @@ const Analytics = () => {
             <div>
               <p className="text-sm text-muted-foreground">Marcas protegidas</p>
               <p className="text-2xl font-bold">52</p>
-              <p className="text-sm text-green-600">+8% em relação ao mês anterior</p>
+              <div className="flex items-center gap-1 mt-1">
+                <p className="text-sm text-green-600">+8%</p>
+                <ArrowUpRight className="h-4 w-4 text-green-600" />
+              </div>
             </div>
           </div>
         </Card>
@@ -52,7 +59,10 @@ const Analytics = () => {
             <div>
               <p className="text-sm text-muted-foreground">Casos ativos</p>
               <p className="text-2xl font-bold">1.247</p>
-              <p className="text-sm text-red-600">-3% em relação ao mês anterior</p>
+              <div className="flex items-center gap-1 mt-1">
+                <p className="text-sm text-red-600">-3%</p>
+                <ArrowDownRight className="h-4 w-4 text-red-600" />
+              </div>
             </div>
           </div>
         </Card>
@@ -77,6 +87,10 @@ const Analytics = () => {
             <div>
               <p className="text-sm text-muted-foreground">Acordos extrajudiciais</p>
               <p className="text-2xl font-bold">76</p>
+              <div className="flex items-center gap-1 mt-1">
+                <p className="text-sm text-green-600">+12%</p>
+                <ArrowUpRight className="h-4 w-4 text-green-600" />
+              </div>
             </div>
           </div>
         </Card>
@@ -89,6 +103,10 @@ const Analytics = () => {
             <div>
               <p className="text-sm text-muted-foreground">Anúncios desativados</p>
               <p className="text-2xl font-bold">980</p>
+              <div className="flex items-center gap-1 mt-1">
+                <p className="text-sm text-red-600">-3%</p>
+                <ArrowDownRight className="h-4 w-4 text-red-600" />
+              </div>
             </div>
           </div>
         </Card>
