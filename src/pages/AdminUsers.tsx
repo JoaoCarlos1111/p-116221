@@ -372,20 +372,13 @@ const AdminUsers = () => {
                 </TableCell>
                 <TableCell>{user.lastAccess}</TableCell>
                 <TableCell className="text-right">
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <Edit2 className="h-4 w-4" />
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[600px]">
-                      <DialogHeader>
-                        <DialogTitle>Editar Usuário</DialogTitle>
-                      </DialogHeader>
-                      <form onSubmit={(e) => {
-                        e.preventDefault();
-                        // TODO: Implement edit user
-                      }} className="space-y-4">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => navigate(`/admin/users/${index}`)}
+                  >
+                    <Edit2 className="h-4 w-4" />
+                  </Button>
                         <div className="space-y-2">
                           <Label htmlFor="edit-name">Nome completo</Label>
                           <Input

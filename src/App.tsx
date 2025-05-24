@@ -128,6 +128,7 @@ function AppContent() {
               </RouteGuard>
             } />
               <Route path="/admin/users" element={<AdminUsers />} />
+              <Route path="/admin/users/:id" element={<UserDetails />} />
           </Routes>
         </main>
       </div>
