@@ -1,31 +1,37 @@
 
-import { ReactNode } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { permissions } from '@/constants/permissions';
-import { useAuth } from '@/hooks/useAuth';
+import { Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 interface RouteGuardProps {
-  children: ReactNode;
+  children: React.ReactNode;
   requiredDepartment?: string;
 }
 
-export const RouteGuard = ({ children, requiredDepartment }: RouteGuardProps) => {
-  const { user } = useAuth();
-  const location = useLocation();
+export default function RouteGuard({ children, requiredDepartment }: RouteGuardProps) {
+  const token = localStorage.getItem('token');
+  const userStr = localStorage.getItem('user');
 
-  if (!user) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
-  if (requiredDepartment) {
-    const userDepartment = user.mainDepartment;
-    const isAdmin = userDepartment === 'admin';
-    const hasAccess = isAdmin || permissions[userDepartment]?.pages.includes(location.pathname);
-
-    if (!hasAccess) {
-      return <Navigate to="/unauthorized" replace />;
+  useEffect(() => {
+    if (!token || !userStr) {
+      window.location.href = '/login';
     }
+  }, [token, userStr]);
+
+  if (!token || !userStr) {
+    return <Navigate to="/login" replace />;
   }
 
-  return <>{children}</>;
-};
+  try {
+    const user = JSON.parse(userStr);
+
+    if (requiredDepartment && !user.isAdmin && !user.departments.includes(requiredDepartment)) {
+      return <Navigate to="/" replace />;
+    }
+
+    return <>{children}</>;
+  } catch (error) {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    return <Navigate to="/login" replace />;
+  }
+}

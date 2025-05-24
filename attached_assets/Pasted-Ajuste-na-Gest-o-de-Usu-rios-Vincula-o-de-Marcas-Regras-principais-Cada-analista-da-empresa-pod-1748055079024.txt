@@ -1,0 +1,55 @@
+Ajuste na Gestão de Usuários: Vinculação de Marcas
+✅ Regras principais:
+Cada analista da empresa pode ser vinculado a uma ou mais marcas.
+
+Cada caso gerado no sistema será direcionado automaticamente ao analista vinculado à marca daquele caso.
+
+Um analista só poderá visualizar e atuar nos casos das marcas às quais está vinculado.
+
+Clientes (usuários externos) também devem estar vinculados à(s) marca(s) que representam.
+
+🖥️ Ajustes na Tela de Usuários (para Replit)
+Inclua os seguintes campos e funcionalidades ao editar ou criar um usuário analista ou cliente:
+
+➕ Campo: Marcas vinculadas
+Seletor de múltiplas marcas (multiselect dropdown)
+
+Filtro por ordem alfabética e busca por nome
+
+Campo obrigatório para analistas
+
+Visível também para clientes (para que vejam apenas os casos da sua marca)
+
+⚙️ Ajustes no Roteamento de Casos
+Inclua essa lógica no fluxo de trabalho:
+
+Ao criar um novo caso (por prospecção ou outro setor), o sistema verifica a marca do caso.
+
+O sistema busca os analistas do setor atual vinculados àquela marca.
+
+Se houver apenas um analista, o caso é automaticamente atribuído.
+
+Se houver mais de um, usar lógica de rotação ou distribuição equilibrada.
+
+Se não houver nenhum, o caso fica "sem responsável" e entra em um painel de alocação manual.
+
+✍️ Prompt para Replit (completo e objetivo):
+Atualizar a tela de criação e edição de usuários para incluir a vinculação com marcas.
+
+Requisitos:
+
+Adicionar um campo “Marcas vinculadas” que permita selecionar múltiplas marcas por usuário.
+
+Este campo será obrigatório para usuários com função de analista interno.
+
+Clientes também devem estar vinculados às marcas que representam.
+
+No fluxo do sistema, ao criar um novo caso, o sistema deve buscar os usuários do setor atual vinculados à marca do caso e atribuí-lo automaticamente.
+
+Se houver mais de um usuário vinculado, distribuir de forma equilibrada entre eles (round robin).
+
+Se não houver nenhum usuário vinculado àquela marca no setor, o caso entra em um painel separado para alocação manual.
+
+Um usuário só pode visualizar os casos das marcas às quais está vinculado.
+
+O design deve manter o padrão visual do sistema.
