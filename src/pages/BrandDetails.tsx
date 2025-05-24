@@ -220,8 +220,12 @@ export default function BrandDetails() {
             <Users className="h-4 w-4" />
             Empresa / Grupo
           </TabsTrigger>
-          <TabsTrigger value="inpi" className="flex items-center gap-2">
+          <TabsTrigger value="documents" className="flex items-center gap-2">
             <FileText className="h-4 w-4" />
+            Documentos
+          </TabsTrigger>
+          <TabsTrigger value="inpi" className="flex items-center gap-2">
+            <GitBranch className="h-4 w-4" />
             Registros INPI
           </TabsTrigger>
           <TabsTrigger value="cases" className="flex items-center gap-2">
@@ -423,6 +427,51 @@ export default function BrandDetails() {
                   >
                     Adicionar Usuário
                   </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="documents" className="mt-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Documentos</CardTitle>
+              <Button>+ Adicionar Documento</Button>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="grid gap-4">
+                  <div className="flex items-center justify-between p-4 border rounded-lg">
+                    <div className="flex items-center gap-4">
+                      <FileText className="h-5 w-5 text-muted-foreground" />
+                      <div>
+                        <p className="font-medium">Contrato.pdf</p>
+                        <p className="text-sm text-muted-foreground">Adicionado em 15/01/2024</p>
+                      </div>
+                    </div>
+                    <Button variant="ghost">Download</Button>
+                  </div>
+                  <div className="flex items-center justify-between p-4 border rounded-lg">
+                    <div className="flex items-center gap-4">
+                      <FileText className="h-5 w-5 text-muted-foreground" />
+                      <div>
+                        <p className="font-medium">Procuração.pdf</p>
+                        <p className="text-sm text-muted-foreground">Adicionado em 15/01/2024</p>
+                      </div>
+                    </div>
+                    <Button variant="ghost">Download</Button>
+                  </div>
+                  <div className="flex items-center justify-between p-4 border rounded-lg">
+                    <div className="flex items-center gap-4">
+                      <FileText className="h-5 w-5 text-muted-foreground" />
+                      <div>
+                        <p className="font-medium">Certificado.pdf</p>
+                        <p className="text-sm text-muted-foreground">Adicionado em 15/01/2024</p>
+                      </div>
+                    </div>
+                    <Button variant="ghost">Download</Button>
+                  </div>
                 </div>
               </div>
             </CardContent>
