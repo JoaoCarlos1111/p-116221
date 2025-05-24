@@ -1,15 +1,15 @@
 import { NavLink } from "react-router-dom";
 import { 
-  LayoutDashboard, 
-  Kanban, 
-  CheckSquare, 
-  UserCircle,
+  Users,
+  Shield,
+  History,
   Settings as SettingsIcon,
   ChevronLeft,
   ChevronRight,
   LogOut,
-  GitPullRequest,
-  Shield
+  Building2,
+  FileStack,
+  Boxes
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -43,79 +43,53 @@ export default function Sidebar() {
       </div>
 
       <nav className="space-y-2 px-2">
-        <NavLink to="/dashboard" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <LayoutDashboard size={20} />
+        <NavLink to="/admin/users" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+          <Users size={20} />
           <span className={cn(
             "transition-all duration-300",
             isCollapsed && "hidden"
-          )}>Dashboard</span>
+          )}>Usuários</span>
         </NavLink>
 
-        <NavLink to="/kanban/verificacao" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <Kanban size={20} />
+        <NavLink to="/admin/permissions" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+          <Shield size={20} />
           <span className={cn(
             "transition-all duration-300",
             isCollapsed && "hidden"
-          )}>Kanban</span>
+          )}>Permissões</span>
         </NavLink>
 
-        <NavLink to="/prospeccao" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <GitPullRequest size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Workflow</span>
-        </NavLink>
-
-        <NavLink to="/auditoria" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <CheckSquare size={20} />
+        <NavLink to="/admin/audit" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+          <History size={20} />
           <span className={cn(
             "transition-all duration-300",
             isCollapsed && "hidden"
           )}>Auditoria</span>
         </NavLink>
 
-        <NavLink to="/approvals" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <CheckSquare size={20} />
+        <NavLink to="/admin/brands" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+          <Building2 size={20} />
           <span className={cn(
             "transition-all duration-300",
             isCollapsed && "hidden"
-          )}>Aprovações</span>
+          )}>Marcas</span>
         </NavLink>
 
-        <NavLink to="/logistica" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <Kanban size={20} />
+        <NavLink to="/admin/templates" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+          <FileStack size={20} />
           <span className={cn(
             "transition-all duration-300",
             isCollapsed && "hidden"
-          )}>Logística</span>
+          )}>Templates</span>
         </NavLink>
 
-        <NavLink to="/iptools" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <Shield size={20} />
+        <NavLink to="/admin/settings" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+          <Boxes size={20} />
           <span className={cn(
             "transition-all duration-300",
             isCollapsed && "hidden"
-          )}>IP Tools</span>
+          )}>Configurações</span>
         </NavLink>
-
-        <NavLink to="/financeiro" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <Kanban size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Financeiro</span>
-        </NavLink>
-
-        <NavLink to="/atendimento" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-          <UserCircle size={20} />
-          <span className={cn(
-            "transition-all duration-300",
-            isCollapsed && "hidden"
-          )}>Atendimento</span>
-        </NavLink>
-
-        
 
         <div className="absolute bottom-4 left-0 right-0 px-2">
           <button
