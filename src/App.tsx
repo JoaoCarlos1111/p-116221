@@ -19,6 +19,7 @@ import AtendimentoCaseDetails from "@/pages/AtendimentoCaseDetails";
 import Approvals from "@/pages/Approvals";
 import Financeiro from "@/pages/Financeiro";
 import FinanceiroDetails from "@/pages/FinanceiroDetails";
+import Analytics from "@/pages/Analytics";
 import TopBar from "@/components/TopBar";
 import InternalLogin from "@/pages/InternalLogin";
 import RouteGuard from "@/components/RouteGuard";
@@ -119,6 +120,11 @@ function AppContent() {
             <Route path="/financeiro/:id" element={
               <RouteGuard requiredDepartment={departments.FINANCEIRO}>
                 <FinanceiroDetails />
+              </RouteGuard>
+            } />
+            <Route path="/analytics" element={
+              <RouteGuard>
+                <Analytics />
               </RouteGuard>
             } />
           </Routes>
