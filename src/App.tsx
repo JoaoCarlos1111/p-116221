@@ -24,6 +24,7 @@ import TopBar from "@/components/TopBar";
 import InternalLogin from "@/pages/InternalLogin";
 import RouteGuard from "@/components/RouteGuard";
 import { departments } from './constants';
+import AdminPermissions from './pages/AdminPermissions';
 
 function AppContent() {
   const location = useLocation();
@@ -128,7 +129,8 @@ function AppContent() {
               </RouteGuard>
             } />
               <Route path="/admin/users" element={<AdminUsers />} />
-          </Routes>
+          <Route path="/admin/permissions" element={<AdminPermissions />} />
+        </Routes>
         </main>
       </div>
     </div>
