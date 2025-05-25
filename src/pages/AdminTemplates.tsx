@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -73,73 +74,9 @@ export default function AdminTemplates() {
           <h1 className="text-3xl font-bold">Templates de Documentos e Mensagens</h1>
           <p className="text-muted-foreground">Gerencie os modelos de documentos do sistema</p>
         </div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button><Plus className="mr-2 h-4 w-4" /> Novo Template</Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>Criar Novo Template</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Nome do Template</Label>
-                  <Input id="name" placeholder="Digite o nome" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="type">Tipo</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o tipo" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {templateTypes.map(type => (
-                        <SelectItem key={type} value={type}>{type}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="content">Conteúdo</Label>
-                <Textarea 
-                  id="content" 
-                  className="min-h-[200px]" 
-                  placeholder="Digite o conteúdo do template..."
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="notes">Observações Internas</Label>
-                <Textarea 
-                  id="notes" 
-                  placeholder="Notas visíveis apenas para administradores..."
-                />
-              </div>
-
-              <div className="flex items-center space-x-4">
-                <div className="flex-1">
-                  <Label htmlFor="version">Versão</Label>
-                  <Input id="version" defaultValue="1.0" />
-                </div>
-                <div className="flex-1">
-                  <Label>Permissão</Label>
-                  <Select defaultValue="global">
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="global">Global</SelectItem>
-                      <SelectItem value="brand">Específico por Marca</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <Button onClick={() => navigate('/admin/templates/new')}>
+          <Plus className="mr-2 h-4 w-4" /> Novo Template
+        </Button>
       </div>
 
       <Card className="p-6">

@@ -150,6 +150,11 @@ function AppContent() {
                   <Audit />
                 </RouteGuard>
               } />
+              <Route path="/admin/templates/new" element={
+                <RouteGuard requiredDepartment="admin">
+                  <NewTemplate />
+                </RouteGuard>
+              } />
               <Route path="/admin/templates" element={
                 <RouteGuard requiredDepartment="admin">
                   <AdminTemplates />
