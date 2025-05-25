@@ -29,7 +29,6 @@ import TopBar from "@/components/TopBar";
 import InternalLogin from "@/pages/InternalLogin";
 import RouteGuard from "@/components/RouteGuard";
 import { departments } from './constants';
-import NewTemplate from './pages/NewTemplate';
 import AdminTemplates from './pages/AdminTemplates';
 
 function AppContent() {
@@ -151,17 +150,12 @@ function AppContent() {
                   <Audit />
                 </RouteGuard>
               } />
-              <Route path="/case-history/:id" element={<CaseHistoryDetails />} />
-               <Route path="/admin/templates" element={
+              <Route path="/admin/templates" element={
                 <RouteGuard requiredDepartment="admin">
                   <AdminTemplates />
                 </RouteGuard>
               } />
-              <Route path="/admin/templates/new" element={
-                <RouteGuard requiredDepartment="admin">
-                  <NewTemplate />
-                </RouteGuard>
-              } />
+              <Route path="/case-history/:id" element={<CaseHistoryDetails />} />
           </Routes>
         </main>
       </div>
