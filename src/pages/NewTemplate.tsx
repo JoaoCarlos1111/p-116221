@@ -99,16 +99,24 @@ const NewTemplate = () => {
       formData.append('name', templateData.name);
       formData.append('type', templateData.type);
       formData.append('brand', templateData.brand);
-      formData.append('file', templateData.file);
+      if (templateData.file instanceof File) {
+        formData.append('file', templateData.file);
+      } else {
+        throw new Error('Arquivo inválido');
+      }
 
-      const response = await fetch('/api/templates', {
+      const response = await fetch('http://0.0.0.0:8080/api/templates', {
         method: 'POST',
         body: formData,
       });
 
       if (!response.ok) {
-        throw new Error('Erro ao criar template');
+        const error = await response.json();
+        throw new Error(error.message || 'Erro ao criar template');
       }
+
+      const data = await response.json();
+      console.log('Template criado:', data);
 
       navigate('/admin/templates');
     } catch (error) {
