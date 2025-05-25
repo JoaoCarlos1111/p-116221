@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -51,11 +50,11 @@ const mockTemplates = [
 const availableBrands = ["Nike", "Adidas", "Louis Vuitton", "Gucci", "Prada"];
 
 export default function AdminTemplates() {
+  const navigate = useNavigate();
   const [templates, setTemplates] = useState(mockTemplates);
   const [filterType, setFilterType] = useState("all");
   const [filterBrand, setFilterBrand] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [editingTemplate, setEditingTemplate] = useState(null);
 
   const filteredTemplates = templates.filter(template => {
     const matchesType = filterType === "all" || template.type === filterType;
@@ -63,7 +62,7 @@ export default function AdminTemplates() {
     const matchesSearch = template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          template.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          template.client.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     return matchesType && matchesBrand && matchesSearch;
   });
 
