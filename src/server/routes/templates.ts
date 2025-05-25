@@ -1,4 +1,3 @@
-
 import { Router } from 'express';
 import multer from 'multer';
 import fs from 'fs';
@@ -123,11 +122,11 @@ router.get('/:id', async (req, res) => {
   try {
     const templates = loadTemplates();
     const template = templates.find(t => t.id === req.params.id);
-    
+
     if (!template) {
       return res.status(404).json({ error: 'Template não encontrado' });
     }
-    
+
     res.json(template);
   } catch (error) {
     console.error('Erro ao obter template:', error);

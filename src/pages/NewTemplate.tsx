@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDropzone } from 'react-dropzone';
@@ -60,7 +59,7 @@ const NewTemplate = () => {
       setTemplateData(prev => ({ ...prev, file }));
       setUploadProgress(0);
       setIsLoading(true);
-      
+
       try {
         const reader = new FileReader();
         reader.onloadend = async () => {
@@ -74,7 +73,7 @@ const NewTemplate = () => {
             ]
           });
           setDocContent(result.value);
-          
+
           // Identificar campos dinâmicos no conteúdo
           const matches = result.value.match(/{{[^}]+}}/g) || [];
           const uniqueFields = [...new Set(matches)];
@@ -86,7 +85,7 @@ const NewTemplate = () => {
       } finally {
         setIsLoading(false);
       }
-      
+
       // Simular progresso do upload
       const interval = setInterval(() => {
         setUploadProgress(prev => {
@@ -111,21 +110,21 @@ const NewTemplate = () => {
 
   const insertField = (fieldId: string) => {
     const fieldTag = `{{${fieldId}}}`;
-    
+
     // Inserir campo na posição do cursor
     const selection = window.getSelection();
     if (selection && selection.rangeCount > 0) {
       const range = selection.getRangeAt(0);
       range.deleteContents();
-      
+
       const fieldNode = document.createTextNode(fieldTag);
       range.insertNode(fieldNode);
-      
+
       // Atualizar o conteúdo
       const editorElement = document.querySelector('[contenteditable]') as HTMLDivElement;
       if (editorElement) {
         setDocContent(editorElement.innerHTML);
-        
+
         // Atualizar campos reconhecidos
         const matches = editorElement.innerHTML.match(/{{[^}]+}}/g) || [];
         const uniqueFields = [...new Set(matches)];
@@ -138,19 +137,19 @@ const NewTemplate = () => {
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    
+
     if (!templateData.name.trim()) {
       newErrors.name = 'Nome do template é obrigatório';
     }
-    
+
     if (!templateData.type) {
       newErrors.type = 'Tipo do template é obrigatório';
     }
-    
+
     if (!templateData.brand) {
       newErrors.brand = 'Marca é obrigatória';
     }
-    
+
     if (!templateData.file) {
       newErrors.file = 'Arquivo é obrigatório';
     }
@@ -160,7 +159,8 @@ const NewTemplate = () => {
   };
 
   const handleSave = async () => {
-    if (!validateForm()) {
+    if (!templateData.name.trim()) {
+      alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
 
@@ -171,14 +171,14 @@ const NewTemplate = () => {
       formData.append('brand', templateData.brand);
       formData.append('content', docContent);
       formData.append('recognizedFields', JSON.stringify(recognizedFields));
-      
+
       if (templateData.file instanceof File) {
         formData.append('file', templateData.file);
       } else {
         throw new Error('Arquivo inválido');
       }
 
-      const response = await fetch('/api/templates', {
+      const response = await fetch('http://localhost:5000/api/templates', {
         method: 'POST',
         body: formData,
       });
@@ -312,7 +312,7 @@ const NewTemplate = () => {
                   onInput={(e) => {
                     const target = e.target as HTMLDivElement;
                     setDocContent(target.innerHTML);
-                    
+
                     // Atualizar campos reconhecidos
                     const matches = target.innerHTML.match(/{{[^}]+}}/g) || [];
                     const uniqueFields = [...new Set(matches)];
