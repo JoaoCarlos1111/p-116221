@@ -1,0 +1,87 @@
+Tela de Criação de Template (.docx → PDF)
+📍 Rota
+/admin/templates/new
+
+🧱 Estrutura da Tela
+Título da página:
+Novo Template de Documento
+
+🖋️ Formulário
+Campo	Tipo	Observações
+Nome do Template	Input text	Ex: “Notificação Extrajudicial”
+Tipo do Template	Select	Opções: Notificação Extrajudicial, Acordo Extrajudicial, Outros
+Upload do .docx	File Upload	Aceita apenas arquivos .docx
+Campos dinâmicos	Lista lateral ou colapsável	Exibe os campos suportados
+Barra de busca de campos	Search input	Busca entre campos dinâmicos suportados
+Visualização do modelo	PDF preview (readonly)	Mostra uma renderização do template
+
+🧠 Regras de Substituição de Campos
+Ao fazer o upload do .docx, o sistema deve:
+
+Identificar automaticamente os campos dinâmicos no formato {{campo}}
+
+Exibir um preview do PDF com marcações substituíveis
+
+Exibir uma lista com os campos reconhecidos (colapsável à direita ou abaixo)
+
+🔄 Ações
+Botão	Ação
+Salvar Template	Salva o template e o ativa para uso
+
+📌 Regras de Negócio Importantes
+Se o tipo do template for Notificação Extrajudicial, o sistema deve gerar automaticamente o documento em PDF quando o caso for aprovado pelo cliente.
+
+Se for Acordo Extrajudicial, o sistema deve gerar automaticamente o documento quando o caso for movido para "Proposta aceita" no setor Atendimento.
+
+🧩 Campos Dinâmicos Suportados
+Campos que podem ser usados no .docx:
+
+{{nome_cliente}}
+
+{{nome_marca}}
+
+{{numero_processo}}
+
+{{endereco_infrator}}
+
+{{data}}
+
+{{nome_advogado}}
+
+{{codigo_caso}}
+
+{{tipo_infracao}}
+
+{{link_arquivo}} (para casos com links ou URLs associados)
+
+🛠️ Tecnologias Recomendadas
+Etapa	Tecnologia
+Upload de .docx	react-dropzone, input type=file
+Leitura e Parse do .docx	mammoth.js (frontend) ou python-docx (backend)
+Geração de PDF	docx-pdf, LibreOffice headless, ou docx2pdf
+Visualização do PDF	react-pdf (baseado em PDF.js)
+
+🔧 Backend – Lógica Técnica (Resumo)
+Salvar o .docx como modelo com metadados (nome, tipo, campos reconhecidos)
+
+Armazenar o arquivo original
+
+Ao acionar o gatilho (por fluxo do caso), substituir os {{campos}} com os dados reais
+
+Gerar PDF
+
+Armazenar PDF gerado vinculado ao caso
+
+Permitir download e visualização na interface do caso
+
+✨ Futuro (não obrigatório agora)
+Controle de versão de templates
+
+Opção de duplicar template
+
+Marcar como inativo
+
+Templates de texto puro (sem PDF)
+
+Agrupamento por tipo de uso
+
