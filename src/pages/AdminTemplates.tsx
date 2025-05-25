@@ -29,7 +29,9 @@ const mockTemplates = [
     version: "1.2",
     isGlobal: true,
     content: "Conteúdo da notificação...",
-    internalNotes: "Template usado para casos de phishing"
+    internalNotes: "Template usado para casos de phishing",
+    brand: "Nike",
+    client: "Nike Inc."
   },
   {
     id: 2,
@@ -39,18 +41,30 @@ const mockTemplates = [
     version: "2.0",
     isGlobal: false,
     content: "Conteúdo do termo...",
-    internalNotes: "Acordo padrão para resolução amigável"
+    internalNotes: "Acordo padrão para resolução amigável",
+    brand: "Adidas",
+    client: "Adidas Group"
   }
 ];
+
+const availableBrands = ["Nike", "Adidas", "Louis Vuitton", "Gucci", "Prada"];
 
 export default function AdminTemplates() {
   const [templates, setTemplates] = useState(mockTemplates);
   const [filterType, setFilterType] = useState("all");
+  const [filterBrand, setFilterBrand] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [editingTemplate, setEditingTemplate] = useState(null);
 
-  const filteredTemplates = filterType === "all" 
-    ? templates 
-    : templates.filter(template => template.type === filterType);
+  const filteredTemplates = templates.filter(template => {
+    const matchesType = filterType === "all" || template.type === filterType;
+    const matchesBrand = filterBrand === "all" || template.brand === filterBrand;
+    const matchesSearch = template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         template.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         template.client.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    return matchesType && matchesBrand && matchesSearch;
+  });
 
   return (
     <div className="space-y-6">
@@ -129,7 +143,13 @@ export default function AdminTemplates() {
       </div>
 
       <Card className="p-6">
-        <div className="flex gap-4 mb-6">
+        <div className="flex gap-4 mb-6 items-center">
+          <Input
+            placeholder="Buscar templates..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-[300px]"
+          />
           <Select value={filterType} onValueChange={setFilterType}>
             <SelectTrigger className="w-[200px]">
               <SelectValue placeholder="Filtrar por tipo" />
@@ -141,6 +161,17 @@ export default function AdminTemplates() {
               ))}
             </SelectContent>
           </Select>
+          <Select value={filterBrand} onValueChange={setFilterBrand}>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Filtrar por marca" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todas as marcas</SelectItem>
+              {availableBrands.map(brand => (
+                <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <Table>
@@ -148,6 +179,7 @@ export default function AdminTemplates() {
             <TableRow>
               <TableHead>Nome do Template</TableHead>
               <TableHead>Tipo</TableHead>
+              <TableHead>Cliente</TableHead>
               <TableHead>Última Atualização</TableHead>
               <TableHead>Versão</TableHead>
               <TableHead className="text-right">Ações</TableHead>
@@ -158,6 +190,7 @@ export default function AdminTemplates() {
               <TableRow key={template.id}>
                 <TableCell className="font-medium">{template.name}</TableCell>
                 <TableCell>{template.type}</TableCell>
+                <TableCell>{template.client}</TableCell>
                 <TableCell>{template.lastUpdate}</TableCell>
                 <TableCell>v{template.version}</TableCell>
                 <TableCell className="text-right space-x-2">
