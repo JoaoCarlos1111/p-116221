@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import { PrismaClient } from '@prisma/client';
 import dotenv from 'dotenv';
+import templatesRouter from './routes/templates';
 
 dotenv.config();
 
@@ -166,6 +167,9 @@ app.post('/api/cases/batch', async (req, res) => {
     res.status(500).json({ error: 'Erro ao criar casos em lote', details: error.message });
   }
 });
+
+// Rotas de Templates
+app.use('/api/templates', templatesRouter);
 
 // Rotas de Pagamentos
 app.get('/api/payments', async (req, res) => {

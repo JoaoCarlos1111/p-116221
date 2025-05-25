@@ -45,3 +45,22 @@ model Payment {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model Template {
+  id              String   @id @default(cuid())
+  name            String
+  type            String
+  brand           String
+  recognizedFields String[]
+  docxUrl         String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model GeneratedDocument {
+  id          String   @id @default(cuid())
+  templateId  String
+  caseId      String
+  pdfUrl      String
+  createdAt   DateTime @default(now())
+}
