@@ -44,7 +44,8 @@ const NewTemplate = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [searchField, setSearchField] = useState('');
   const [recognizedFields, setRecognizedFields] = useState([]);
-  const [docPreview, setDocPreview] = useState<string | null>(null);
+  const [docContent, setDocContent] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -55,10 +56,25 @@ const NewTemplate = () => {
       const file = acceptedFiles[0];
       setTemplateData(prev => ({ ...prev, file }));
       setUploadProgress(0);
+      setIsLoading(true);
       
-      // Criar URL para preview do arquivo
-      const fileUrl = URL.createObjectURL(file);
-      setDocPreview(fileUrl);
+      try {
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          const arrayBuffer = reader.result as ArrayBuffer;
+          const result = await mammoth.convertToHtml({ arrayBuffer });
+          setDocContent(result.value);
+          
+          // Identificar campos dinâmicos no conteúdo
+          const matches = result.value.match(/{{[^}]+}}/g) || [];
+          setRecognizedFields(matches);
+        };
+        reader.readAsArrayBuffer(file);
+      } catch (error) {
+        console.error('Erro ao processar arquivo:', error);
+      } finally {
+        setIsLoading(false);
+      }
       
       // Simular progresso do upload
       const interval = setInterval(() => {
@@ -229,15 +245,20 @@ const NewTemplate = () => {
 
           <Card className="p-6">
             <h3 className="text-lg font-semibold mb-4">Visualização do Template</h3>
-            <div className="h-[400px] bg-muted rounded-lg flex items-center justify-center">
-              {docPreview ? (
-                <iframe 
-                  src={docPreview}
-                  className="w-full h-full rounded-lg"
-                  title="Document preview"
+            <div className="h-[400px] bg-white rounded-lg overflow-auto">
+              {isLoading ? (
+                <div className="flex items-center justify-center h-full">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                </div>
+              ) : docContent ? (
+                <div 
+                  className="p-6 prose max-w-none"
+                  dangerouslySetInnerHTML={{ __html: docContent }}
                 />
               ) : (
-                <p className="text-muted-foreground">Faça upload de um arquivo para visualizar o preview</p>
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-muted-foreground">Faça upload de um arquivo para visualizar o preview</p>
+                </div>
               )}
             </div>
           </Card>
