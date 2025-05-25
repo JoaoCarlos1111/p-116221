@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { Toaster } from "@/components/ui/toaster"
-import NewTemplate from '@/pages/NewTemplate'
 import Sidebar from '@/components/Sidebar'
 import Dashboard from '@/pages/Dashboard'
 import KanbanBoard from '@/pages/KanbanBoard'
@@ -30,7 +29,6 @@ import TopBar from "@/components/TopBar";
 import InternalLogin from "@/pages/InternalLogin";
 import RouteGuard from "@/components/RouteGuard";
 import { departments } from './constants';
-import AdminTemplates from './pages/AdminTemplates';
 
 function AppContent() {
   const location = useLocation();
@@ -149,16 +147,6 @@ function AppContent() {
               <Route path="/admin/audit" element={
                 <RouteGuard requiredDepartment="admin">
                   <Audit />
-                </RouteGuard>
-              } />
-              <Route path="/admin/templates" element={
-                <RouteGuard requiredDepartment="admin">
-                  <AdminTemplates />
-                </RouteGuard>
-              } />
-              <Route path="/admin/templates/new" element={
-                <RouteGuard requiredDepartment="admin">
-                  <NewTemplate />
                 </RouteGuard>
               } />
               <Route path="/case-history/:id" element={<CaseHistoryDetails />} />
