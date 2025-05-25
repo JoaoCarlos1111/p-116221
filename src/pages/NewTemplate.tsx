@@ -44,7 +44,7 @@ const NewTemplate = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [searchField, setSearchField] = useState('');
   const [recognizedFields, setRecognizedFields] = useState([]);
-  const [pdfPreview, setPdfPreview] = useState(null);
+  const [docPreview, setDocPreview] = useState<string | null>(null);
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -55,6 +55,10 @@ const NewTemplate = () => {
       const file = acceptedFiles[0];
       setTemplateData(prev => ({ ...prev, file }));
       setUploadProgress(0);
+      
+      // Criar URL para preview do arquivo
+      const fileUrl = URL.createObjectURL(file);
+      setDocPreview(fileUrl);
       
       // Simular progresso do upload
       const interval = setInterval(() => {
@@ -226,8 +230,12 @@ const NewTemplate = () => {
           <Card className="p-6">
             <h3 className="text-lg font-semibold mb-4">Visualização do Template</h3>
             <div className="h-[400px] bg-muted rounded-lg flex items-center justify-center">
-              {pdfPreview ? (
-                <div>Preview do PDF aqui</div>
+              {docPreview ? (
+                <iframe 
+                  src={docPreview}
+                  className="w-full h-full rounded-lg"
+                  title="Document preview"
+                />
               ) : (
                 <p className="text-muted-foreground">Faça upload de um arquivo para visualizar o preview</p>
               )}
