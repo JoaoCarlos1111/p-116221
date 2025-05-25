@@ -1,0 +1,92 @@
+Objetivo
+Implementar a lógica de backend para permitir que usuários da plataforma possam:
+
+Fazer upload de arquivos .docx com campos dinâmicos no formato {{nome_campo}}
+
+Salvar esses arquivos como templates
+
+Gerar documentos personalizados em PDF com base nesses templates, preenchendo os campos com os dados reais de um caso
+
+Exibir e permitir o download do PDF gerado
+
+🔄 Fluxo Backend (Lógica Técnica Detalhada)
+Upload do Template
+
+Recebe arquivo .docx via formulário
+
+Extrai os campos dinâmicos no padrão {{nome_campo}} (ex: {{nome_cliente}}, {{endereco_infrator}}, etc.)
+
+Armazena no banco:
+
+Nome do template
+
+Tipo do template (Notificação, Acordo, etc.)
+
+Lista dos campos reconhecidos
+
+Arquivo original .docx
+
+Data de criação
+
+Retorna para o frontend os campos reconhecidos e uma confirmação de que o template foi salvo
+
+Geração de Documento a partir de um Caso
+
+Disparado por eventos automáticos no sistema:
+
+Se tipo = Notificação Extrajudicial → gerar após caso aprovado pelo cliente
+
+Se tipo = Acordo Extrajudicial → gerar após caso mover para “Proposta aceita”
+
+Carrega o template correspondente
+
+Substitui os campos {{...}} por dados do caso (ex: nome do cliente, endereço, número do processo, etc.)
+
+Gera um novo arquivo PDF com base no .docx preenchido
+
+Armazena o PDF vinculado ao caso
+
+Disponibiliza o link de visualização e download no frontend do caso
+
+🧩 Exemplo de Campos Dinâmicos Suportados
+O backend deve substituir:
+
+txt
+Copiar
+Editar
+{{nome_cliente}}, {{nome_marca}}, {{numero_processo}}, {{endereco_infrator}}, {{data}}, {{nome_advogado}}, {{codigo_caso}}, {{tipo_infracao}}, {{link_arquivo}}
+📂 Estrutura de Banco Recomendada (sugestão)
+Tabela: templates
+
+id
+
+nome
+
+tipo (enum: notificacao, acordo, outros)
+
+campos_reconhecidos (array de strings)
+
+arquivo_docx_url
+
+criado_em
+
+Tabela: documentos_gerados
+
+id
+
+template_id
+
+caso_id
+
+arquivo_pdf_url
+
+gerado_em
+
+🛠️ Tecnologias sugeridas (dependendo do stack)
+.docx parsing: python-docx ou docxtpl
+
+PDF rendering: docx2pdf, LibreOffice headless, ou integração com serviço externo
+
+Armazenamento: S3, Cloudinary ou local
+
+API: FastAPI, Flask, Node.js (com multer, etc.)
