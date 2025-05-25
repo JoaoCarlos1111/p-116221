@@ -29,6 +29,7 @@ import TopBar from "@/components/TopBar";
 import InternalLogin from "@/pages/InternalLogin";
 import RouteGuard from "@/components/RouteGuard";
 import { departments } from './constants';
+import NewTemplate from './pages/NewTemplate'; // Assuming NewTemplate.tsx is in the pages directory
 
 function AppContent() {
   const location = useLocation();
@@ -150,6 +151,7 @@ function AppContent() {
                 </RouteGuard>
               } />
               <Route path="/case-history/:id" element={<CaseHistoryDetails />} />
+               <Route path="/admin/templates/new" element={<NewTemplate />} />
           </Routes>
         </main>
       </div>
