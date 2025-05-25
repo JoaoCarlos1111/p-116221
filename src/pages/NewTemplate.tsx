@@ -169,6 +169,9 @@ const NewTemplate = () => {
       formData.append('name', templateData.name);
       formData.append('type', templateData.type);
       formData.append('brand', templateData.brand);
+      formData.append('content', docContent);
+      formData.append('recognizedFields', JSON.stringify(recognizedFields));
+      
       if (templateData.file instanceof File) {
         formData.append('file', templateData.file);
       } else {
@@ -181,8 +184,14 @@ const NewTemplate = () => {
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Erro ao criar template');
+        const errorText = await response.text();
+        console.error('Response error:', errorText);
+        throw new Error(`Erro do servidor: ${response.status}`);
+      }
+
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Resposta não é JSON válido');
       }
 
       const data = await response.json();
@@ -191,6 +200,7 @@ const NewTemplate = () => {
       navigate('/admin/templates');
     } catch (error) {
       console.error('Erro ao salvar template:', error);
+      alert(`Erro ao salvar template: ${error.message}`);
     }
   };
 
