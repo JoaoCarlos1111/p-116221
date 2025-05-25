@@ -1,10 +1,13 @@
+
 import { Router } from 'express';
 import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
 import mammoth from 'mammoth';
+import { PrismaClient } from '@prisma/client';
 
 const router = Router();
+const prisma = new PrismaClient();
 
 // Configurar multer para upload de arquivos
 const storage = multer.diskStorage({
@@ -37,29 +40,6 @@ if (!fs.existsSync(templatesDir)) {
   fs.mkdirSync(templatesDir, { recursive: true });
 }
 
-// Mock database (arquivo JSON)
-const dbFile = './uploads/templates/templates.json';
-
-const loadTemplates = () => {
-  try {
-    if (fs.existsSync(dbFile)) {
-      const data = fs.readFileSync(dbFile, 'utf8');
-      return JSON.parse(data);
-    }
-  } catch (error) {
-    console.error('Erro ao carregar templates:', error);
-  }
-  return [];
-};
-
-const saveTemplates = (templates: any[]) => {
-  try {
-    fs.writeFileSync(dbFile, JSON.stringify(templates, null, 2));
-  } catch (error) {
-    console.error('Erro ao salvar templates:', error);
-  }
-};
-
 // Rota para upload de template
 router.post('/', upload.single('file'), async (req, res) => {
   try {
@@ -81,22 +61,17 @@ router.post('/', upload.single('file'), async (req, res) => {
     const fieldRegex = /{{([^}]+)}}/g;
     const recognizedFields = [...new Set(htmlContent.match(fieldRegex) || [])];
 
-    // Criar template
-    const templates = loadTemplates();
-    const newTemplate = {
-      id: Date.now().toString(),
-      name: req.body.name,
-      type: req.body.type,
-      brand: req.body.brand,
-      content: req.body.content || htmlContent,
-      recognizedFields: req.body.recognizedFields ? JSON.parse(req.body.recognizedFields) : recognizedFields,
-      docxUrl: file.path,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-
-    templates.push(newTemplate);
-    saveTemplates(templates);
+    // Criar template usando Prisma
+    const newTemplate = await prisma.template.create({
+      data: {
+        name: req.body.name,
+        type: req.body.type,
+        brand: req.body.brand,
+        content: req.body.content || htmlContent,
+        recognizedFields: req.body.recognizedFields ? JSON.parse(req.body.recognizedFields) : recognizedFields,
+        docxUrl: file.path
+      }
+    });
 
     console.log('Template criado com sucesso:', newTemplate.id);
     res.json(newTemplate);
@@ -109,7 +84,11 @@ router.post('/', upload.single('file'), async (req, res) => {
 // Listar templates
 router.get('/', async (req, res) => {
   try {
-    const templates = loadTemplates();
+    const templates = await prisma.template.findMany({
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
     res.json(templates);
   } catch (error) {
     console.error('Erro ao listar templates:', error);
@@ -120,8 +99,11 @@ router.get('/', async (req, res) => {
 // Obter template por ID
 router.get('/:id', async (req, res) => {
   try {
-    const templates = loadTemplates();
-    const template = templates.find(t => t.id === req.params.id);
+    const template = await prisma.template.findUnique({
+      where: {
+        id: req.params.id
+      }
+    });
 
     if (!template) {
       return res.status(404).json({ error: 'Template não encontrado' });
@@ -131,6 +113,81 @@ router.get('/:id', async (req, res) => {
   } catch (error) {
     console.error('Erro ao obter template:', error);
     res.status(500).json({ error: 'Erro ao obter template', message: error.message });
+  }
+});
+
+// Atualizar template
+router.put('/:id', upload.single('file'), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const file = req.file;
+
+    let updateData: any = {
+      name: req.body.name,
+      type: req.body.type,
+      brand: req.body.brand,
+    };
+
+    // Se um novo arquivo foi enviado, processar
+    if (file) {
+      const buffer = fs.readFileSync(file.path);
+      const result = await mammoth.convertToHtml({ buffer });
+      const htmlContent = result.value;
+
+      const fieldRegex = /{{([^}]+)}}/g;
+      const recognizedFields = [...new Set(htmlContent.match(fieldRegex) || [])];
+
+      updateData.content = req.body.content || htmlContent;
+      updateData.recognizedFields = req.body.recognizedFields ? JSON.parse(req.body.recognizedFields) : recognizedFields;
+      updateData.docxUrl = file.path;
+    } else if (req.body.content) {
+      updateData.content = req.body.content;
+    }
+
+    if (req.body.recognizedFields) {
+      updateData.recognizedFields = JSON.parse(req.body.recognizedFields);
+    }
+
+    const updatedTemplate = await prisma.template.update({
+      where: { id },
+      data: updateData
+    });
+
+    res.json(updatedTemplate);
+  } catch (error) {
+    console.error('Erro ao atualizar template:', error);
+    res.status(500).json({ error: 'Erro ao atualizar template', message: error.message });
+  }
+});
+
+// Deletar template
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Buscar template para obter o caminho do arquivo
+    const template = await prisma.template.findUnique({
+      where: { id }
+    });
+
+    if (!template) {
+      return res.status(404).json({ error: 'Template não encontrado' });
+    }
+
+    // Deletar arquivo físico se existir
+    if (template.docxUrl && fs.existsSync(template.docxUrl)) {
+      fs.unlinkSync(template.docxUrl);
+    }
+
+    // Deletar do banco de dados
+    await prisma.template.delete({
+      where: { id }
+    });
+
+    res.json({ message: 'Template deletado com sucesso' });
+  } catch (error) {
+    console.error('Erro ao deletar template:', error);
+    res.status(500).json({ error: 'Erro ao deletar template', message: error.message });
   }
 });
 

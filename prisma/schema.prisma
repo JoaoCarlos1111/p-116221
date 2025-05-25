@@ -51,6 +51,7 @@ model Template {
   name            String
   type            String
   brand           String
+  content         String?
   recognizedFields String[]
   docxUrl         String
   createdAt       DateTime @default(now())
