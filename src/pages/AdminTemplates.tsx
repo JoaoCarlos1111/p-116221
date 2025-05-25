@@ -1,14 +1,10 @@
-
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Plus, FileEdit, Download, History } from "lucide-react";
 
 const templateTypes = [
@@ -50,11 +46,11 @@ const mockTemplates = [
 const availableBrands = ["Nike", "Adidas", "Louis Vuitton", "Gucci", "Prada"];
 
 export default function AdminTemplates() {
+  const navigate = useNavigate();
   const [templates, setTemplates] = useState(mockTemplates);
   const [filterType, setFilterType] = useState("all");
   const [filterBrand, setFilterBrand] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [editingTemplate, setEditingTemplate] = useState(null);
 
   const filteredTemplates = templates.filter(template => {
     const matchesType = filterType === "all" || template.type === filterType;
@@ -62,7 +58,7 @@ export default function AdminTemplates() {
     const matchesSearch = template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          template.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          template.client.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     return matchesType && matchesBrand && matchesSearch;
   });
 
@@ -76,68 +72,6 @@ export default function AdminTemplates() {
         <Button onClick={() => navigate("/admin/templates/new")}>
           <Plus className="mr-2 h-4 w-4" /> Novo Template
         </Button>
-            <DialogHeader>
-              <DialogTitle>Criar Novo Template</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Nome do Template</Label>
-                  <Input id="name" placeholder="Digite o nome" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="type">Tipo</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o tipo" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {templateTypes.map(type => (
-                        <SelectItem key={type} value={type}>{type}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="content">Conteúdo</Label>
-                <Textarea 
-                  id="content" 
-                  className="min-h-[200px]" 
-                  placeholder="Digite o conteúdo do template..."
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="notes">Observações Internas</Label>
-                <Textarea 
-                  id="notes" 
-                  placeholder="Notas visíveis apenas para administradores..."
-                />
-              </div>
-
-              <div className="flex items-center space-x-4">
-                <div className="flex-1">
-                  <Label htmlFor="version">Versão</Label>
-                  <Input id="version" defaultValue="1.0" />
-                </div>
-                <div className="flex-1">
-                  <Label>Permissão</Label>
-                  <Select defaultValue="global">
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="global">Global</SelectItem>
-                      <SelectItem value="brand">Específico por Marca</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
       </div>
 
       <Card className="p-6">
