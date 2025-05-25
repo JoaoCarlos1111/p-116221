@@ -44,6 +44,8 @@ const NewTemplate = () => {
   const [recognizedFields, setRecognizedFields] = useState([]);
   const [pdfPreview, setPdfPreview] = useState(null);
 
+  const [docxPreview, setDocxPreview] = useState('');
+
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx']
@@ -53,10 +55,25 @@ const NewTemplate = () => {
       const file = acceptedFiles[0];
       setTemplateData(prev => ({ ...prev, file }));
       
-      // Aqui seria implementada a lógica de parsing do arquivo .docx
-      // e identificação dos campos dinâmicos
-      const mockRecognizedFields = ['{{nome_cliente}}', '{{data}}'];
-      setRecognizedFields(mockRecognizedFields);
+      // Converter DOCX para HTML para preview
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const arrayBuffer = e.target?.result;
+        const mammoth = require('mammoth');
+        
+        try {
+          const result = await mammoth.convertToHtml({arrayBuffer});
+          setDocxPreview(result.value);
+          
+          // Identificar campos dinâmicos usando regex
+          const matches = result.value.match(/{{[^}]+}}/g) || [];
+          const uniqueFields = [...new Set(matches)];
+          setRecognizedFields(uniqueFields);
+        } catch (error) {
+          console.error('Erro ao converter arquivo:', error);
+        }
+      };
+      reader.readAsArrayBuffer(file);
     }
   });
 
@@ -144,8 +161,8 @@ const NewTemplate = () => {
           <Card className="p-6">
             <h3 className="text-lg font-semibold mb-4">Visualização do Template</h3>
             <div className="h-[400px] bg-muted rounded-lg flex items-center justify-center">
-              {pdfPreview ? (
-                <div>Preview do PDF aqui</div>
+              {docxPreview ? (
+                <div className="prose max-w-full" dangerouslySetInnerHTML={{ __html: docxPreview }} />
               ) : (
                 <p className="text-muted-foreground">Faça upload de um arquivo para visualizar o preview</p>
               )}
