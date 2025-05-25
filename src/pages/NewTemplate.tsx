@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ChevronLeft, Eye, FileUp, Save } from "lucide-react";
 
 // Import the RichTextEditor component (assuming it's in the components directory)
-import RichTextEditor from "@/components/ui/RichTextEditor"; // Adjust the path if necessary
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
 
 const templateTypes = [
