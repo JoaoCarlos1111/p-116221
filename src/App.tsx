@@ -155,6 +155,11 @@ function AppContent() {
                   <AdminTemplates />
                 </RouteGuard>
               } />
+              <Route path="/admin/templates/new" element={
+                <RouteGuard requiredDepartment="admin">
+                  <NewTemplate />
+                </RouteGuard>
+              } />
               <Route path="/case-history/:id" element={<CaseHistoryDetails />} />
           </Routes>
         </main>

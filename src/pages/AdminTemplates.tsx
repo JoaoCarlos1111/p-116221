@@ -73,11 +73,9 @@ export default function AdminTemplates() {
           <h1 className="text-3xl font-bold">Templates de Documentos e Mensagens</h1>
           <p className="text-muted-foreground">Gerencie os modelos de documentos do sistema</p>
         </div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button><Plus className="mr-2 h-4 w-4" /> Novo Template</Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+        <Button onClick={() => navigate("/admin/templates/new")}>
+          <Plus className="mr-2 h-4 w-4" /> Novo Template
+        </Button>
             <DialogHeader>
               <DialogTitle>Criar Novo Template</DialogTitle>
             </DialogHeader>
