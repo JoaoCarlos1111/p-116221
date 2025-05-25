@@ -64,9 +64,56 @@ const NewTemplate = () => {
     field.label.toLowerCase().includes(searchField.toLowerCase())
   );
 
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    
+    if (!templateData.name.trim()) {
+      newErrors.name = 'Nome do template é obrigatório';
+    }
+    
+    if (!templateData.type) {
+      newErrors.type = 'Tipo do template é obrigatório';
+    }
+    
+    if (!templateData.brand) {
+      newErrors.brand = 'Marca é obrigatória';
+    }
+    
+    if (!templateData.file) {
+      newErrors.file = 'Arquivo é obrigatório';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSave = async () => {
-    // Implementar lógica de salvamento
-    navigate('/admin/templates');
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('name', templateData.name);
+      formData.append('type', templateData.type);
+      formData.append('brand', templateData.brand);
+      formData.append('file', templateData.file);
+
+      const response = await fetch('/api/templates', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao criar template');
+      }
+
+      navigate('/admin/templates');
+    } catch (error) {
+      console.error('Erro ao salvar template:', error);
+    }
   };
 
   return (
@@ -92,14 +139,18 @@ const NewTemplate = () => {
                 placeholder="Ex: Notificação Extrajudicial" 
                 value={templateData.name}
                 onChange={(e) => setTemplateData(prev => ({ ...prev, name: e.target.value }))}
+                className={errors.name ? 'border-red-500' : ''}
               />
+              {errors.name && <p className="text-sm text-red-500 mt-1">{errors.name}</p>}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="type">Tipo do Template</Label>
               <Select 
                 value={templateData.type}
-                onValueChange={(value) => setTemplateData(prev => ({ ...prev, type: value }))}>
+                onValueChange={(value) => setTemplateData(prev => ({ ...prev, type: value }))}
+                className={errors.type ? 'border-red-500' : ''}>
+              {errors.type && <p className="text-sm text-red-500 mt-1">{errors.type}</p>}
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o tipo" />
                 </SelectTrigger>
@@ -115,7 +166,9 @@ const NewTemplate = () => {
               <Label htmlFor="brand">Marca</Label>
               <Select 
                 value={templateData.brand}
-                onValueChange={(value) => setTemplateData(prev => ({ ...prev, brand: value }))}>
+                onValueChange={(value) => setTemplateData(prev => ({ ...prev, brand: value }))}
+                className={errors.brand ? 'border-red-500' : ''}>
+              {errors.brand && <p className="text-sm text-red-500 mt-1">{errors.brand}</p>}
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione a marca" />
                 </SelectTrigger>
@@ -131,7 +184,7 @@ const NewTemplate = () => {
               <Label>Upload do Arquivo</Label>
               <div 
                 {...getRootProps()} 
-                className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:border-primary"
+                className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:border-primary ${errors.file ? 'border-red-500' : ''}`}
               >
                 <input {...getInputProps()} />
                 <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
