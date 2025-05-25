@@ -40,6 +40,7 @@ const NewTemplate = () => {
     brand: '',
     file: null,
   });
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [searchField, setSearchField] = useState('');
   const [recognizedFields, setRecognizedFields] = useState([]);
   const [pdfPreview, setPdfPreview] = useState(null);
@@ -52,7 +53,19 @@ const NewTemplate = () => {
     onDrop: async (acceptedFiles) => {
       const file = acceptedFiles[0];
       setTemplateData(prev => ({ ...prev, file }));
+      setUploadProgress(0);
       
+      // Simular progresso do upload
+      const interval = setInterval(() => {
+        setUploadProgress(prev => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            return 100;
+          }
+          return prev + 10;
+        });
+      }, 100);
+
       // Aqui seria implementada a lógica de parsing do arquivo .docx
       // e identificação dos campos dinâmicos
       const mockRecognizedFields = ['{{nome_cliente}}', '{{data}}'];
@@ -198,6 +211,13 @@ const NewTemplate = () => {
                 <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                 <p>Arraste um arquivo .docx ou clique para selecionar</p>
                 <p className="text-sm text-muted-foreground">Apenas arquivos .docx são aceitos</p>
+                {templateData.file && (
+                  <div className="mt-4">
+                    <p className="text-sm font-medium mb-2">{templateData.file.name}</p>
+                    <Progress value={uploadProgress} className="h-2" />
+                    <p className="text-sm text-muted-foreground mt-1">{uploadProgress}% carregado</p>
+                  </div>
+                )}
               </div>
             </div>
           </Card>
