@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDropzone } from 'react-dropzone';
+import mammoth from 'mammoth';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -46,6 +47,8 @@ const NewTemplate = () => {
   const [recognizedFields, setRecognizedFields] = useState([]);
   const [docContent, setDocContent] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedField, setSelectedField] = useState<string>('');
+  const [cursorPosition, setCursorPosition] = useState<number>(0);
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -62,12 +65,20 @@ const NewTemplate = () => {
         const reader = new FileReader();
         reader.onloadend = async () => {
           const arrayBuffer = reader.result as ArrayBuffer;
-          const result = await mammoth.convertToHtml({ arrayBuffer });
+          const result = await mammoth.convertToHtml({ 
+            arrayBuffer,
+            styleMap: [
+              "p[style-name='Normal'] => p:fresh",
+              "b => strong",
+              "i => em"
+            ]
+          });
           setDocContent(result.value);
           
           // Identificar campos dinâmicos no conteúdo
           const matches = result.value.match(/{{[^}]+}}/g) || [];
-          setRecognizedFields(matches);
+          const uniqueFields = [...new Set(matches)];
+          setRecognizedFields(uniqueFields);
         };
         reader.readAsArrayBuffer(file);
       } catch (error) {
@@ -97,6 +108,31 @@ const NewTemplate = () => {
   const filteredFields = supportedFields.filter(field => 
     field.label.toLowerCase().includes(searchField.toLowerCase())
   );
+
+  const insertField = (fieldId: string) => {
+    const fieldTag = `{{${fieldId}}}`;
+    
+    // Inserir campo na posição do cursor
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      range.deleteContents();
+      
+      const fieldNode = document.createTextNode(fieldTag);
+      range.insertNode(fieldNode);
+      
+      // Atualizar o conteúdo
+      const editorElement = document.querySelector('[contenteditable]') as HTMLDivElement;
+      if (editorElement) {
+        setDocContent(editorElement.innerHTML);
+        
+        // Atualizar campos reconhecidos
+        const matches = editorElement.innerHTML.match(/{{[^}]+}}/g) || [];
+        const uniqueFields = [...new Set(matches)];
+        setRecognizedFields(uniqueFields);
+      }
+    }
+  };
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -244,16 +280,45 @@ const NewTemplate = () => {
           </Card>
 
           <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Visualização do Template</h3>
-            <div className="h-[400px] bg-white rounded-lg overflow-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">Editor do Template</h3>
+              {docContent && (
+                <div className="text-sm text-muted-foreground">
+                  Clique no texto para posicionar o cursor e inserir campos
+                </div>
+              )}
+            </div>
+            <div className="h-[400px] bg-white rounded-lg overflow-auto border">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                 </div>
               ) : docContent ? (
                 <div 
-                  className="p-6 prose max-w-none"
+                  className="p-6 prose max-w-none cursor-text"
+                  contentEditable
+                  suppressContentEditableWarning={true}
                   dangerouslySetInnerHTML={{ __html: docContent }}
+                  onInput={(e) => {
+                    const target = e.target as HTMLDivElement;
+                    setDocContent(target.innerHTML);
+                    
+                    // Atualizar campos reconhecidos
+                    const matches = target.innerHTML.match(/{{[^}]+}}/g) || [];
+                    const uniqueFields = [...new Set(matches)];
+                    setRecognizedFields(uniqueFields);
+                  }}
+                  onClick={(e) => {
+                    const selection = window.getSelection();
+                    if (selection) {
+                      setCursorPosition(selection.anchorOffset);
+                    }
+                  }}
+                  style={{
+                    minHeight: '300px',
+                    lineHeight: '1.6',
+                    fontFamily: 'system-ui, -apple-system, sans-serif'
+                  }}
                 />
               ) : (
                 <div className="flex items-center justify-center h-full">
@@ -277,26 +342,40 @@ const NewTemplate = () => {
               />
             </div>
 
-            <ScrollArea className="h-[500px]">
+            <ScrollArea className="h-[400px]">
               <div className="space-y-2">
                 {filteredFields.map(field => (
                   <div 
                     key={field.id}
-                    className="p-2 rounded hover:bg-accent flex items-center justify-between"
+                    className="p-3 rounded border hover:bg-accent cursor-pointer transition-colors"
+                    onClick={() => insertField(field.id)}
                   >
-                    <span>{field.label}</span>
-                    <code className="text-sm text-muted-foreground">{'{{' + field.id + '}}'}</code>
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">{field.label}</span>
+                      <Button size="sm" variant="outline">
+                        Inserir
+                      </Button>
+                    </div>
+                    <code className="text-xs text-muted-foreground block mt-1">
+                      {'{{' + field.id + '}}'}
+                    </code>
                   </div>
                 ))}
               </div>
             </ScrollArea>
 
             {recognizedFields.length > 0 && (
-              <div className="mt-6">
-                <h4 className="font-medium mb-2">Campos Reconhecidos no Arquivo</h4>
-                <div className="space-y-1">
+              <div className="mt-6 p-4 bg-muted rounded-lg">
+                <h4 className="font-medium mb-3 flex items-center gap-2">
+                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                  Campos Detectados ({recognizedFields.length})
+                </h4>
+                <div className="space-y-2">
                   {recognizedFields.map((field, index) => (
-                    <div key={index} className="text-sm text-muted-foreground">
+                    <div 
+                      key={index} 
+                      className="text-sm font-mono bg-background p-2 rounded border"
+                    >
                       {field}
                     </div>
                   ))}
