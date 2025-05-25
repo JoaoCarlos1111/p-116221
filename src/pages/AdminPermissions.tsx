@@ -156,7 +156,7 @@ export default function AdminPermissions() {
           <TableHeader>
             <TableRow>
               <TableHead>Perfil</TableHead>
-              <TableHead>Tipo de Acesso</TableHead>
+              <TableHead>Tipo de Usuário</TableHead>
               <TableHead>Usuários</TableHead>
               <TableHead className="w-[100px]">Ações</TableHead>
             </TableRow>
