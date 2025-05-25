@@ -1,0 +1,24 @@
+Erro ao salvar template: 
+TypeError {}
+
+at t.value (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Failed to fetch
+at window.fetch (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:218642)
+at window.fetch (https://cdn.gpteng.co/gptengineer.js:1:1945)
+at handleSave (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/src/pages/NewTemplate.tsx:197:36)
+at HTMLUnknownElement.callCallback2 (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-RY6NLCXT.js?v=6b37e161:3674:22)
+at Object.invokeGuardedCallbackDev (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-RY6NLCXT.js?v=6b37e161:3699:24)
+at invokeGuardedCallback (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-RY6NLCXT.js?v=6b37e161:3733:39)
+at invokeGuardedCallbackAndCatchFirstError (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-RY6NLCXT.js?v=6b37e161:3736:33)
+at executeDispatch (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-RY6NLCXT.js?v=6b37e161:7014:11)
+at processDispatchQueueItemsInOrder (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-RY6NLCXT.js?v=6b37e161:7034:15)
+at processDispatchQueue (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-RY6NLCXT.js?v=6b37e161:7043:13)
+at dispatchEventsForPlugins (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-RY6NLCXT.js?v=6b37e161:7051:11)
+at https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-RY6NLCXT.js?v=6b37e161:7174:20
+at batchedUpdates$1 (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-RY6NLCXT.js?v=6b37e161:18913:20)
+at batchedUpdates (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-RY6NLCXT.js?v=6b37e161:3579:20)
+at dispatchEventForPluginEventSystem (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/node_modules/.vite/deps/chunk-RY6NLCXT.js?v=6b37e161:7173:11)
+at dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.rep
