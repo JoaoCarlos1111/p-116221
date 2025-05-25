@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,10 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ChevronLeft, Eye, FileUp, Save } from "lucide-react";
+
+// Import the RichTextEditor component (assuming it's in the components directory)
+import RichTextEditor from "@/components/ui/RichTextEditor"; // Adjust the path if necessary
+
 
 const templateTypes = [
   "Notificação extrajudicial",
@@ -27,6 +30,9 @@ export default function NewTemplate() {
     letterhead: null as File | null,
     isGlobal: true,
   });
+
+  // State for the rich text editor content
+  const [content, setContent] = useState("");
 
   return (
     <div className="space-y-6">
@@ -88,12 +94,11 @@ export default function NewTemplate() {
 
           <div className="space-y-2">
             <Label>Conteúdo do Template</Label>
-            <Textarea 
-              className="min-h-[400px] font-mono"
-              value={template.content}
-              onChange={(e) => setTemplate({ ...template, content: e.target.value })}
-              placeholder="Digite o conteúdo do template. Use {{campo}} para campos dinâmicos."
-            />
+            <RichTextEditor
+                value={content}
+                onChange={setContent}
+                placeholder="Digite o conteúdo do template..."
+              />
           </div>
         </Card>
 
