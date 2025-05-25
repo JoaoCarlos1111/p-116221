@@ -105,7 +105,7 @@ const NewTemplate = () => {
         throw new Error('Arquivo inválido');
       }
 
-      const response = await fetch('http://0.0.0.0:8080/api/templates', {
+      const response = await fetch('/api/templates', {
         method: 'POST',
         body: formData,
       });
