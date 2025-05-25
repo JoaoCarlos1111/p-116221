@@ -30,6 +30,7 @@ import InternalLogin from "@/pages/InternalLogin";
 import RouteGuard from "@/components/RouteGuard";
 import { departments } from './constants';
 import AdminTemplates from './pages/AdminTemplates';
+import NewTemplate from './pages/NewTemplate';
 
 function AppContent() {
   const location = useLocation();
