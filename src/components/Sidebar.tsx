@@ -88,7 +88,7 @@ export default function Sidebar() {
             </NavLink>
 
             <NavLink to="/admin/settings" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <SettingsIcon size={20} />
+              <Settings size={20} />
               <span className={cn(
                 "transition-all duration-300",
                 isCollapsed && "hidden"
