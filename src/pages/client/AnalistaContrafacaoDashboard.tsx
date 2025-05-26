@@ -501,7 +501,7 @@ const AnalistaContrafacaoDashboard = () => {
       <div>
         <h2 className="text-xl font-semibold mb-4">Ações Rápidas</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/client/analista/historico')}>
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/client/casos/historico')}>
             <CardContent className="p-6 text-center">
               <History className="h-8 w-8 mx-auto mb-2 text-blue-600" />
               <h3 className="font-medium">Meu Histórico</h3>
