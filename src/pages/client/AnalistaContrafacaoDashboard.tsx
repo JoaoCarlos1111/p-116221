@@ -326,47 +326,72 @@ const AnalistaContrafacaoDashboard = () => {
               <CardTitle>Mapa de Ações por Estado</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="relative h-80 bg-gradient-to-br from-blue-50 to-green-50 rounded-lg overflow-hidden">
+              <div className="relative h-80 bg-gradient-to-br from-blue-50 to-green-50 rounded-lg overflow-hidden border border-gray-200">
                 <svg 
-                  viewBox="0 0 400 300" 
+                  viewBox="0 0 500 400" 
                   className="w-full h-full"
                   style={{ background: 'linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 100%)' }}
                 >
+                  {/* Contorno do Brasil */}
+                  <defs>
+                    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                      <feDropShadow dx="2" dy="2" stdDeviation="3" floodColor="#000" floodOpacity="0.1"/>
+                    </filter>
+                  </defs>
+                  
+                  {/* Fundo do território brasileiro */}
+                  <path
+                    d="M120,50 Q150,40 180,50 L220,45 Q250,40 280,50 L320,55 Q340,60 350,80 L360,100 Q365,120 360,140 L355,160 Q350,180 340,200 L330,220 Q320,240 300,260 L280,280 Q260,300 240,310 L220,320 Q200,330 180,325 L160,320 Q140,315 120,300 L100,280 Q80,260 75,240 L70,220 Q65,200 70,180 L75,160 Q80,140 85,120 L90,100 Q95,80 105,65 L115,55 Q120,50 120,50 Z"
+                    fill="rgba(59, 130, 246, 0.1)"
+                    stroke="rgba(59, 130, 246, 0.3)"
+                    strokeWidth="2"
+                    filter="url(#shadow)"
+                  />
+
                   {/* Estados do Brasil com cores baseadas na intensidade de casos */}
                   {mapaStats.estadosRanking.map((estado, index) => {
                     const totalCasos = estado.notificacoes + estado.acordos + estado.desativacoes;
                     const intensity = Math.min(totalCasos / 250, 1); // Normaliza para 0-1
-                    const color = `rgba(59, 130, 246, ${0.3 + intensity * 0.7})`; // Azul com intensidade variável
+                    const color = `rgba(59, 130, 246, ${0.4 + intensity * 0.6})`; // Azul com intensidade variável
                     
-                    // Posições simplificadas dos estados (aproximadas)
-                    const statePositions: { [key: string]: { x: number; y: number; width: number; height: number } } = {
-                      'SP': { x: 220, y: 180, width: 30, height: 25 },
-                      'RJ': { x: 250, y: 190, width: 20, height: 15 },
-                      'MG': { x: 200, y: 160, width: 35, height: 30 },
-                      'RS': { x: 180, y: 220, width: 25, height: 30 },
-                      'PR': { x: 190, y: 200, width: 25, height: 20 },
-                      'SC': { x: 200, y: 210, width: 20, height: 15 },
-                      'BA': { x: 230, y: 120, width: 40, height: 45 },
-                      'GO': { x: 170, y: 140, width: 30, height: 25 },
-                      'PE': { x: 280, y: 100, width: 25, height: 20 },
-                      'CE': { x: 290, y: 80, width: 30, height: 20 },
-                      'DF': { x: 175, y: 150, width: 8, height: 8 },
-                      'ES': { x: 270, y: 170, width: 15, height: 20 },
-                      'PB': { x: 305, y: 95, width: 15, height: 15 },
-                      'RN': { x: 315, y: 85, width: 20, height: 15 },
-                      'AL': { x: 295, y: 110, width: 15, height: 15 },
-                      'MT': { x: 130, y: 140, width: 35, height: 40 },
-                      'MS': { x: 150, y: 180, width: 25, height: 30 },
-                      'SE': { x: 285, y: 115, width: 12, height: 12 },
-                      'PI': { x: 270, y: 95, width: 25, height: 25 },
-                      'TO': { x: 200, y: 110, width: 25, height: 30 },
-                      'MA': { x: 250, y: 80, width: 35, height: 25 },
-                      'PA': { x: 200, y: 60, width: 50, height: 40 },
-                      'AM': { x: 100, y: 70, width: 60, height: 50 },
-                      'RO': { x: 120, y: 120, width: 20, height: 25 },
-                      'AC': { x: 80, y: 120, width: 25, height: 20 },
-                      'RR': { x: 150, y: 30, width: 30, height: 25 },
-                      'AP': { x: 220, y: 40, width: 20, height: 25 }
+                    // Posições mais precisas dos estados
+                    const statePositions: { [key: string]: { x: number; y: number; width: number; height: number; shape?: string } } = {
+                      // Região Norte
+                      'AM': { x: 120, y: 80, width: 80, height: 60 },
+                      'RR': { x: 160, y: 40, width: 40, height: 30 },
+                      'AP': { x: 240, y: 50, width: 30, height: 35 },
+                      'PA': { x: 200, y: 70, width: 70, height: 50 },
+                      'TO': { x: 230, y: 120, width: 40, height: 50 },
+                      'RO': { x: 140, y: 140, width: 30, height: 40 },
+                      'AC': { x: 100, y: 140, width: 40, height: 30 },
+                      
+                      // Região Nordeste
+                      'MA': { x: 270, y: 90, width: 50, height: 40 },
+                      'PI': { x: 290, y: 130, width: 40, height: 45 },
+                      'CE': { x: 330, y: 100, width: 40, height: 30 },
+                      'RN': { x: 360, y: 105, width: 30, height: 25 },
+                      'PB': { x: 370, y: 125, width: 25, height: 20 },
+                      'PE': { x: 350, y: 140, width: 35, height: 30 },
+                      'AL': { x: 365, y: 165, width: 20, height: 25 },
+                      'SE': { x: 350, y: 180, width: 20, height: 20 },
+                      'BA': { x: 300, y: 150, width: 60, height: 80 },
+                      
+                      // Região Centro-Oeste
+                      'MT': { x: 170, y: 180, width: 60, height: 70 },
+                      'MS': { x: 200, y: 240, width: 40, height: 50 },
+                      'GO': { x: 230, y: 200, width: 50, height: 50 },
+                      'DF': { x: 245, y: 215, width: 12, height: 12 },
+                      
+                      // Região Sudeste
+                      'MG': { x: 280, y: 230, width: 55, height: 60 },
+                      'ES': { x: 330, y: 250, width: 25, height: 30 },
+                      'RJ': { x: 320, y: 280, width: 30, height: 25 },
+                      'SP': { x: 270, y: 290, width: 50, height: 40 },
+                      
+                      // Região Sul
+                      'PR': { x: 250, y: 320, width: 40, height: 35 },
+                      'SC': { x: 270, y: 350, width: 35, height: 25 },
+                      'RS': { x: 230, y: 360, width: 50, height: 55 }
                     };
 
                     const position = statePositions[estado.estado];
@@ -380,32 +405,54 @@ const AnalistaContrafacaoDashboard = () => {
                           width={position.width}
                           height={position.height}
                           fill={color}
-                          stroke="#3b82f6"
-                          strokeWidth="1"
-                          className="hover:stroke-2 cursor-pointer transition-all"
-                          rx="2"
+                          stroke="#2563eb"
+                          strokeWidth="1.5"
+                          className="hover:stroke-2 cursor-pointer transition-all hover:fill-opacity-80"
+                          rx="3"
+                          filter="url(#shadow)"
                         />
                         <text
                           x={position.x + position.width / 2}
-                          y={position.y + position.height / 2 + 3}
+                          y={position.y + position.height / 2 + 4}
                           textAnchor="middle"
-                          className="text-xs font-medium fill-current text-gray-700"
-                          style={{ fontSize: '8px' }}
+                          className="text-xs font-bold fill-white drop-shadow-sm"
+                          style={{ fontSize: '10px', fontWeight: 'bold' }}
                         >
                           {estado.estado}
                         </text>
-                        {/* Tooltip simplificado */}
+                        
+                        {/* Indicador de volume de casos */}
+                        {totalCasos > 100 && (
+                          <circle
+                            cx={position.x + position.width - 8}
+                            cy={position.y + 8}
+                            r="6"
+                            fill="#ef4444"
+                            stroke="white"
+                            strokeWidth="2"
+                            className="animate-pulse"
+                          />
+                        )}
+                        
+                        {/* Tooltip */}
                         <title>
-                          {`${estado.estado}: ${totalCasos} casos (${estado.notificacoes}N, ${estado.acordos}A, ${estado.desativacoes}D)`}
+                          {`${estado.estado}: ${totalCasos} casos\nNotificações: ${estado.notificacoes}\nAcordos: ${estado.acordos}\nDesativações: ${estado.desativacoes}`}
                         </title>
                       </g>
                     );
                   })}
                   
                   {/* Título do mapa */}
-                  <text x="200" y="20" textAnchor="middle" className="text-lg font-bold fill-current text-gray-700">
-                    Brasil - Distribuição de Casos
+                  <text x="250" y="25" textAnchor="middle" className="text-lg font-bold fill-gray-800">
+                    Brasil - Distribuição de Casos por Estado
                   </text>
+                  
+                  {/* Indicadores de regiões */}
+                  <text x="150" y="60" textAnchor="middle" className="text-xs fill-gray-600 font-medium">Norte</text>
+                  <text x="340" y="120" textAnchor="middle" className="text-xs fill-gray-600 font-medium">Nordeste</text>
+                  <text x="220" y="210" textAnchor="middle" className="text-xs fill-gray-600 font-medium">Centro-Oeste</text>
+                  <text x="310" y="270" textAnchor="middle" className="text-xs fill-gray-600 font-medium">Sudeste</text>
+                  <text x="260" y="370" textAnchor="middle" className="text-xs fill-gray-600 font-medium">Sul</text>
                 </svg>
               </div>
               
