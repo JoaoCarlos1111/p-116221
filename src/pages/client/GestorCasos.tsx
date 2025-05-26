@@ -11,7 +11,7 @@ import {
   Search, 
   Filter, 
   Download, 
-  Eye, 
+  Edit, 
   MessageSquare, 
   AlertTriangle,
   Calendar,
@@ -366,7 +366,7 @@ export default function GestorCasos() {
                       variant="ghost"
                       onClick={() => navigate(`/client/casos/${caso.id}`)}
                     >
-                      <Eye className="h-4 w-4" />
+                      <Edit className="h-4 w-4" />
                     </Button>
                   </TableCell>
                 </TableRow>
