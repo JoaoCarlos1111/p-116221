@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { CalendarIcon, Download, Filter, FileText, ArrowLeft, Eye } from 'lucide-react';
+import { CalendarIcon, Download, Filter, ArrowLeft, Eye } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useNavigate } from 'react-router-dom';
@@ -26,7 +25,7 @@ interface HistoryCase {
   observacoes: string;
 }
 
-export default function CasesHistory() {
+const CasesHistory: React.FC = () => {
   const navigate = useNavigate();
   const [selectedCase, setSelectedCase] = useState<HistoryCase | null>(null);
   const [filteredCases, setFilteredCases] = useState<HistoryCase[]>([]);
@@ -40,7 +39,7 @@ export default function CasesHistory() {
     dataFim: null as Date | null,
   });
 
-  // Mock data - substituir por dados reais da API
+  // Mock data
   const historyCases: HistoryCase[] = [
     {
       id: '12345',
@@ -103,34 +102,26 @@ export default function CasesHistory() {
   const marcasOptions = ['Nike', 'Adidas', 'Puma'];
   const tipoInfracaoOptions = ['Venda de falsificados', 'Phishing', 'Uso indevido de marca'];
 
-  // Inicializar dados
   useEffect(() => {
-    const loadData = async () => {
+    const loadData = () => {
       try {
         setLoading(true);
         setError(null);
-        
-        // Simular carregamento da API
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        setFilteredCases(historyCases);
+        setTimeout(() => {
+          setFilteredCases(historyCases);
+          setLoading(false);
+        }, 500);
       } catch (err) {
         console.error('Erro ao carregar dados:', err);
         setError('Erro ao carregar histórico de casos');
         setFilteredCases([]);
-      } finally {
         setLoading(false);
       }
     };
 
-    loadData().catch(err => {
-      console.error('Erro não tratado:', err);
-      setError('Erro inesperado ao carregar dados');
-      setLoading(false);
-    });
+    loadData();
   }, []);
 
-  // Aplicar filtros
   useEffect(() => {
     try {
       let filtered = [...historyCases];
@@ -146,13 +137,12 @@ export default function CasesHistory() {
       if (filters.tipoInfracao) {
         filtered = filtered.filter(caso => caso.tipoInfracao === filters.tipoInfracao);
       }
-
       if (filters.dataInicio && filters.dataFim) {
-        filtered = filtered.filter(caso => {
-          const dataDecisao = new Date(caso.dataDecisao);
-          return dataDecisao >= filters.dataInicio! && dataDecisao <= filters.dataFim!;
-        });
-      }
+          filtered = filtered.filter(caso => {
+            const dataDecisao = new Date(caso.dataDecisao);
+            return dataDecisao >= filters.dataInicio! && dataDecisao <= filters.dataFim!;
+          });
+        }
 
       setFilteredCases(filtered);
     } catch (err) {
@@ -162,28 +152,24 @@ export default function CasesHistory() {
   }, [filters]);
 
   const getStatusBadge = (status: string) => {
-    const colors = {
+    const colors: Record<string, string> = {
       'Resolvido': 'bg-green-500',
       'Acordo fechado': 'bg-blue-500',
       'Página desativada': 'bg-purple-500',
       'Sem retorno': 'bg-orange-500',
       'Reprovado': 'bg-red-500'
     };
-    return colors[status as keyof typeof colors] || 'bg-gray-500';
+    return colors[status] || 'bg-gray-500';
   };
 
   const clearFilters = () => {
-    try {
-      setFilters({
-        status: '',
-        marca: '',
-        tipoInfracao: '',
-        dataInicio: null,
-        dataFim: null,
-      });
-    } catch (err) {
-      console.error('Erro ao limpar filtros:', err);
-    }
+    setFilters({
+      status: '',
+      marca: '',
+      tipoInfracao: '',
+      dataInicio: null,
+      dataFim: null,
+    });
   };
 
   const exportToCSV = () => {
@@ -208,21 +194,20 @@ export default function CasesHistory() {
       a.download = 'historico-casos.csv';
       a.click();
       window.URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error('Erro ao exportar CSV:', err);
+    } catch (error) {
+      console.error('Erro ao exportar CSV:', error);
       setError('Erro ao exportar arquivo CSV');
     }
   };
 
   const handleNavigateBack = () => {
-    try {
+    try{
       navigate('/client/dashboard');
     } catch (err) {
       console.error('Erro ao navegar:', err);
       window.history.back();
     }
   };
-
   const handleOpenLink = (link: string) => {
     try {
       window.open(link, '_blank', 'noopener,noreferrer');
@@ -230,8 +215,6 @@ export default function CasesHistory() {
       console.error('Erro ao abrir link:', err);
     }
   };
-
-  // Dados para o gráfico resumo
   const statusSummary = statusOptions.reduce((acc, status) => {
     acc[status] = filteredCases.filter(caso => caso.statusFinal === status).length;
     return acc;
@@ -357,7 +340,6 @@ export default function CasesHistory() {
                 </SelectContent>
               </Select>
             </div>
-
             {/* Data Início */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Data Início</label>
@@ -414,9 +396,8 @@ export default function CasesHistory() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Gráfico de Resumo */}
-      <Card>
+       {/* Gráfico de Resumo */}
+       <Card>
         <CardHeader>
           <CardTitle>Resumo por Status</CardTitle>
         </CardHeader>
@@ -566,4 +547,6 @@ export default function CasesHistory() {
       </Card>
     </div>
   );
-}
+};
+
+export default CasesHistory;
