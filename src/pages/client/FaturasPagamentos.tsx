@@ -7,10 +7,12 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { 
   FileText, 
   Download, 
-  Calendar,
+  Calendar as CalendarIcon,
   DollarSign,
   AlertCircle,
   CheckCircle,
@@ -18,11 +20,15 @@ import {
   MessageSquare
 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
+import { format, subMonths, subDays, isWithinInterval, startOfDay, endOfDay } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 const FaturasPagamentos = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [periodoFilter, setPeriodoFilter] = useState('todos');
+  const [dateRange, setDateRange] = useState({ from: undefined, to: undefined });
   const [observacoes, setObservacoes] = useState({});
 
   const parcelamentos = [
@@ -77,12 +83,44 @@ const FaturasPagamentos = () => {
     }
   };
 
+  const getDateRangeForFilter = () => {
+    const now = new Date();
+    switch (periodoFilter) {
+      case 'ultimo_mes':
+        return { from: subMonths(now, 1), to: now };
+      case 'ultimos_3_meses':
+        return { from: subMonths(now, 3), to: now };
+      case 'ultimos_6_meses':
+        return { from: subMonths(now, 6), to: now };
+      case 'ultimo_ano':
+        return { from: subMonths(now, 12), to: now };
+      case 'personalizado':
+        return dateRange;
+      default:
+        return null;
+    }
+  };
+
   const filteredParcelamentos = parcelamentos.filter(parc => {
     const matchesSearch = parc.caso.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          parc.contrafator.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || 
                          parc.parcelas.some(p => p.status.toLowerCase() === statusFilter);
-    return matchesSearch && matchesStatus;
+    
+    // Filtro de período baseado na data de vencimento das parcelas
+    let matchesPeriod = true;
+    const filterDateRange = getDateRangeForFilter();
+    if (filterDateRange && filterDateRange.from && filterDateRange.to) {
+      matchesPeriod = parc.parcelas.some(parcela => {
+        const vencimento = new Date(parcela.vencimento);
+        return isWithinInterval(vencimento, {
+          start: startOfDay(filterDateRange.from),
+          end: endOfDay(filterDateRange.to)
+        });
+      });
+    }
+    
+    return matchesSearch && matchesStatus && matchesPeriod;
   });
 
   const handleObservacaoChange = (parcId, value) => {
@@ -106,13 +144,14 @@ const FaturasPagamentos = () => {
       </div>
 
       {/* Filtros */}
-      <div className="flex gap-4 mb-6">
+      <div className="flex flex-wrap gap-4 mb-6">
         <Input
           placeholder="Buscar por caso ou contrafator..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="max-w-sm"
         />
+        
         <Select value={statusFilter} onValueChange={setStatusFilter}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Status da parcela" />
@@ -124,6 +163,56 @@ const FaturasPagamentos = () => {
             <SelectItem value="vencido">Vencido</SelectItem>
           </SelectContent>
         </Select>
+
+        <Select value={periodoFilter} onValueChange={(value) => {
+          setPeriodoFilter(value);
+          if (value !== 'personalizado') {
+            setDateRange({ from: undefined, to: undefined });
+          }
+        }}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Período" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="todos">Todos os períodos</SelectItem>
+            <SelectItem value="ultimo_mes">Último mês</SelectItem>
+            <SelectItem value="ultimos_3_meses">Últimos 3 meses</SelectItem>
+            <SelectItem value="ultimos_6_meses">Últimos 6 meses</SelectItem>
+            <SelectItem value="ultimo_ano">Último ano</SelectItem>
+            <SelectItem value="personalizado">Período personalizado</SelectItem>
+          </SelectContent>
+        </Select>
+
+        {periodoFilter === 'personalizado' && (
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-[280px] justify-start text-left font-normal">
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {dateRange?.from ? (
+                  dateRange.to ? (
+                    <>
+                      {format(dateRange.from, "dd/MM/yyyy", { locale: ptBR })} -{" "}
+                      {format(dateRange.to, "dd/MM/yyyy", { locale: ptBR })}
+                    </>
+                  ) : (
+                    format(dateRange.from, "dd/MM/yyyy", { locale: ptBR })
+                  )
+                ) : (
+                  <span>Selecionar período</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <CalendarComponent
+                mode="range"
+                selected={dateRange}
+                onSelect={setDateRange}
+                locale={ptBR}
+                numberOfMonths={2}
+              />
+            </PopoverContent>
+          </Popover>
+        )}
       </div>
 
       {/* Lista de Parcelamentos */}
