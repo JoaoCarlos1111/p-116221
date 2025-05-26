@@ -248,7 +248,7 @@ export default function Approvals() {
                   <TableHead>Certificação do Anúncio</TableHead>
                   <TableHead>Data de Entrada</TableHead>
                   <TableHead className="text-center">Prioritário</TableHead>
-                  <TableHead className="text-right">Ações</TableHead>
+                  <TableHead className="text-center">Ações</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -296,8 +296,8 @@ export default function Approvals() {
                         />
                       </Button>
                     </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
+                    <TableCell className="text-center">
+                      <div className="flex justify-center gap-2">
                         <Button
                           variant="ghost"
                           size="icon"
