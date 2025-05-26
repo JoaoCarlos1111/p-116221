@@ -319,9 +319,9 @@ const AnalistaContrafacaoDashboard = () => {
           <MapPin className="h-5 w-5 text-green-600" />
           Distribuição por Estados
         </h2>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           {/* Mapa do Brasil */}
-          <Card className="lg:col-span-2">
+          <Card className="lg:col-span-3">
             <CardHeader>
               <CardTitle>Mapa de Ações por Estado</CardTitle>
             </CardHeader>
@@ -483,7 +483,7 @@ const AnalistaContrafacaoDashboard = () => {
           </Card>
 
           {/* Ranking de Estados */}
-          <Card>
+          <Card className="lg:col-span-2">
             <CardHeader>
               <div className="flex justify-between items-center">
                 <CardTitle>{showAllStates ? 'Ranking Completo' : 'Top 5 Estados'}</CardTitle>
