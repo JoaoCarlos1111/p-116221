@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -316,7 +315,6 @@ export default function GestorCasos() {
                   />
                 </TableHead>
                 <TableHead>Código</TableHead>
-                <TableHead>Título</TableHead>
                 <TableHead>Marca</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Prioridade</TableHead>
@@ -337,12 +335,6 @@ export default function GestorCasos() {
                     />
                   </TableCell>
                   <TableCell className="font-medium">{caso.code}</TableCell>
-                  <TableCell>
-                    <div>
-                      <p className="font-medium">{caso.title}</p>
-                      <p className="text-sm text-muted-foreground">{caso.infringement}</p>
-                    </div>
-                  </TableCell>
                   <TableCell>
                     <Badge variant="outline">{caso.brand}</Badge>
                   </TableCell>
