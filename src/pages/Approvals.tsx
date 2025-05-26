@@ -382,17 +382,17 @@ export default function Approvals() {
           <DialogHeader>
             <DialogTitle>Enviar para Avaliação Interna</DialogTitle>
             <DialogDescription>
-              Por favor, informe a justificativa para enviar este caso para avaliação interna.
+              Nos ajude a evoluir nosso modelo algorítmico! Compartilhe informações que podem melhorar a análise automática para casos similares.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="evaluation-reason">Justificativa</Label>
+              <Label htmlFor="evaluation-reason">Informações para evolução do modelo</Label>
               <Textarea
                 id="evaluation-reason"
                 value={internalEvaluationReason}
                 onChange={(e) => setInternalEvaluationReason(e.target.value)}
-                placeholder="Descreva por que este caso precisa de avaliação interna..."
+                placeholder="Compartilhe detalhes que podem ajudar a melhorar nossa análise automática..."
               />
             </div>
           </div>
