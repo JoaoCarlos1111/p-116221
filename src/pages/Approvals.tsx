@@ -264,7 +264,7 @@ export default function Approvals() {
                         className={cn(
                           "h-8 w-8 p-0",
                           approval.clientPriority === 'priority' 
-                            ? "text-black border border-black hover:text-black hover:border-black" 
+                            ? "text-black hover:text-black" 
                             : "text-gray-300 hover:text-red-400"
                         )}
                       >
