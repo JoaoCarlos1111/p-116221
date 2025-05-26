@@ -44,7 +44,7 @@ export default function Sidebar() {
           "text-lg font-bold transition-all duration-300",
           isCollapsed && "opacity-0"
         )}>
-          Total Brand Protection
+          Totall Brand Protection
         </h2>
       </div>
 
