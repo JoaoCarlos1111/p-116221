@@ -332,90 +332,171 @@ const AnalistaContrafacaoDashboard = () => {
                   className="w-full h-full"
                   style={{ background: 'linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 100%)' }}
                 >
-                  {/* Contorno do Brasil */}
                   <defs>
                     <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
                       <feDropShadow dx="2" dy="2" stdDeviation="3" floodColor="#000" floodOpacity="0.1"/>
                     </filter>
+                    <pattern id="waterPattern" patternUnits="userSpaceOnUse" width="4" height="4">
+                      <rect width="4" height="4" fill="#e0f2fe"/>
+                      <circle cx="2" cy="2" r="0.5" fill="#0284c7" opacity="0.3"/>
+                    </pattern>
                   </defs>
                   
-                  {/* Fundo do território brasileiro */}
+                  {/* Contorno do Brasil mais realista */}
                   <path
-                    d="M120,50 Q150,40 180,50 L220,45 Q250,40 280,50 L320,55 Q340,60 350,80 L360,100 Q365,120 360,140 L355,160 Q350,180 340,200 L330,220 Q320,240 300,260 L280,280 Q260,300 240,310 L220,320 Q200,330 180,325 L160,320 Q140,315 120,300 L100,280 Q80,260 75,240 L70,220 Q65,200 70,180 L75,160 Q80,140 85,120 L90,100 Q95,80 105,65 L115,55 Q120,50 120,50 Z"
-                    fill="rgba(59, 130, 246, 0.1)"
-                    stroke="rgba(59, 130, 246, 0.3)"
-                    strokeWidth="2"
+                    d="M140,60 Q160,45 185,50 Q210,45 240,50 Q270,48 300,55 Q330,60 350,75 Q365,90 370,110 Q375,130 380,150 Q385,170 385,190 Q380,210 375,230 Q370,250 360,270 Q350,290 335,305 Q320,320 300,330 Q280,340 260,345 Q240,350 220,348 Q200,346 180,340 Q160,334 145,325 Q130,316 120,300 Q110,284 105,265 Q100,246 98,225 Q96,204 100,185 Q104,166 112,148 Q120,130 130,115 Q135,90 140,60 Z"
+                    fill="url(#waterPattern)"
+                    stroke="rgba(59, 130, 246, 0.4)"
+                    strokeWidth="3"
                     filter="url(#shadow)"
+                    opacity="0.3"
                   />
 
-                  {/* Estados do Brasil com cores baseadas na intensidade de casos */}
+                  {/* Estados do Brasil com formas mais realistas */}
                   {mapaStats.estadosRanking.map((estado, index) => {
                     const totalCasos = estado.notificacoes + estado.acordos + estado.desativacoes;
-                    const intensity = Math.min(totalCasos / 250, 1); // Normaliza para 0-1
-                    const color = `rgba(59, 130, 246, ${0.4 + intensity * 0.6})`; // Azul com intensidade variável
+                    const intensity = Math.min(totalCasos / 250, 1);
+                    const color = `rgba(59, 130, 246, ${0.5 + intensity * 0.4})`;
                     
-                    // Posições mais precisas dos estados
-                    const statePositions: { [key: string]: { x: number; y: number; width: number; height: number; shape?: string } } = {
+                    // Definindo formas específicas dos estados com paths SVG
+                    const statePaths: { [key: string]: { path: string; textX: number; textY: number } } = {
                       // Região Norte
-                      'AM': { x: 120, y: 80, width: 80, height: 60 },
-                      'RR': { x: 160, y: 40, width: 40, height: 30 },
-                      'AP': { x: 240, y: 50, width: 30, height: 35 },
-                      'PA': { x: 200, y: 70, width: 70, height: 50 },
-                      'TO': { x: 230, y: 120, width: 40, height: 50 },
-                      'RO': { x: 140, y: 140, width: 30, height: 40 },
-                      'AC': { x: 100, y: 140, width: 40, height: 30 },
+                      'AM': { 
+                        path: "M120,80 Q140,75 165,80 Q185,85 200,95 Q205,110 200,125 Q195,140 185,150 Q170,155 155,150 Q140,145 130,135 Q120,125 118,110 Q118,95 120,80 Z", 
+                        textX: 160, textY: 120 
+                      },
+                      'RR': { 
+                        path: "M160,40 Q180,38 195,45 Q200,55 195,65 Q190,75 180,80 Q170,82 160,80 Q150,78 145,70 Q140,62 142,52 Q144,42 160,40 Z", 
+                        textX: 170, textY: 60 
+                      },
+                      'AP': { 
+                        path: "M240,50 Q255,48 265,55 Q270,65 268,75 Q266,85 255,90 Q245,92 240,85 Q235,78 237,68 Q239,58 240,50 Z", 
+                        textX: 250, textY: 70 
+                      },
+                      'PA': { 
+                        path: "M200,70 Q220,68 245,75 Q265,80 270,95 Q268,110 260,120 Q250,125 235,122 Q220,120 210,115 Q200,110 195,100 Q190,90 195,80 Q198,75 200,70 Z", 
+                        textX: 235, textY: 95 
+                      },
+                      'TO': { 
+                        path: "M230,120 Q245,118 255,125 Q260,135 258,145 Q256,155 250,165 Q240,170 235,160 Q230,150 232,140 Q234,130 230,120 Z", 
+                        textX: 245, textY: 145 
+                      },
+                      'RO': { 
+                        path: "M140,140 Q155,138 165,145 Q170,155 168,165 Q166,175 155,180 Q145,182 140,175 Q135,168 137,158 Q139,148 140,140 Z", 
+                        textX: 152, textY: 160 
+                      },
+                      'AC': { 
+                        path: "M100,140 Q120,138 135,145 Q140,155 138,165 Q136,175 125,180 Q115,182 105,175 Q95,168 97,158 Q99,148 100,140 Z", 
+                        textX: 118, textY: 160 
+                      },
                       
                       // Região Nordeste
-                      'MA': { x: 270, y: 90, width: 50, height: 40 },
-                      'PI': { x: 290, y: 130, width: 40, height: 45 },
-                      'CE': { x: 330, y: 100, width: 40, height: 30 },
-                      'RN': { x: 360, y: 105, width: 30, height: 25 },
-                      'PB': { x: 370, y: 125, width: 25, height: 20 },
-                      'PE': { x: 350, y: 140, width: 35, height: 30 },
-                      'AL': { x: 365, y: 165, width: 20, height: 25 },
-                      'SE': { x: 350, y: 180, width: 20, height: 20 },
-                      'BA': { x: 300, y: 150, width: 60, height: 80 },
+                      'MA': { 
+                        path: "M270,90 Q290,88 310,95 Q320,105 318,115 Q316,125 305,130 Q290,132 280,127 Q270,122 268,112 Q266,102 270,90 Z", 
+                        textX: 290, textY: 112 
+                      },
+                      'PI': { 
+                        path: "M290,130 Q305,128 320,135 Q325,145 323,155 Q321,165 315,170 Q305,172 295,167 Q285,162 287,152 Q289,142 290,130 Z", 
+                        textX: 305, textY: 152 
+                      },
+                      'CE': { 
+                        path: "M330,100 Q350,98 365,105 Q370,115 368,125 Q366,135 355,140 Q345,142 335,137 Q325,132 327,122 Q329,112 330,100 Z", 
+                        textX: 347, textY: 122 
+                      },
+                      'RN': { 
+                        path: "M360,105 Q375,103 385,110 Q390,120 388,130 Q386,140 375,145 Q365,147 360,140 Q355,133 357,123 Q359,113 360,105 Z", 
+                        textX: 372, textY: 125 
+                      },
+                      'PB': { 
+                        path: "M370,125 Q385,123 390,130 Q395,140 393,150 Q391,160 380,165 Q370,167 365,160 Q360,153 362,143 Q364,133 370,125 Z", 
+                        textX: 377, textY: 145 
+                      },
+                      'PE': { 
+                        path: "M350,140 Q370,138 380,145 Q385,155 383,165 Q381,175 370,180 Q360,182 350,177 Q340,172 342,162 Q344,152 350,140 Z", 
+                        textX: 365, textY: 162 
+                      },
+                      'AL': { 
+                        path: "M365,165 Q375,163 380,170 Q385,180 383,190 Q381,200 375,205 Q365,207 360,200 Q355,193 357,183 Q359,173 365,165 Z", 
+                        textX: 372, textY: 185 
+                      },
+                      'SE': { 
+                        path: "M350,180 Q360,178 365,185 Q370,195 368,205 Q366,215 360,220 Q350,222 345,215 Q340,208 342,198 Q344,188 350,180 Z", 
+                        textX: 355, textY: 200 
+                      },
+                      'BA': { 
+                        path: "M300,150 Q330,148 350,155 Q360,165 358,180 Q356,195 350,210 Q340,225 325,230 Q310,232 300,227 Q290,222 288,207 Q286,192 290,177 Q294,162 300,150 Z", 
+                        textX: 325, textY: 190 
+                      },
                       
                       // Região Centro-Oeste
-                      'MT': { x: 170, y: 180, width: 60, height: 70 },
-                      'MS': { x: 200, y: 240, width: 40, height: 50 },
-                      'GO': { x: 230, y: 200, width: 50, height: 50 },
-                      'DF': { x: 245, y: 215, width: 12, height: 12 },
+                      'MT': { 
+                        path: "M170,180 Q200,178 225,185 Q235,195 233,210 Q231,225 225,240 Q215,250 200,245 Q185,240 175,230 Q165,220 167,205 Q169,190 170,180 Z", 
+                        textX: 200, textY: 212 
+                      },
+                      'MS': { 
+                        path: "M200,240 Q220,238 235,245 Q240,255 238,270 Q236,285 230,295 Q220,300 210,295 Q200,290 198,275 Q196,260 200,240 Z", 
+                        textX: 218, textY: 267 
+                      },
+                      'GO': { 
+                        path: "M230,200 Q255,198 275,205 Q285,215 283,230 Q281,245 275,255 Q265,260 250,255 Q235,250 230,235 Q225,220 230,200 Z", 
+                        textX: 252, textY: 227 
+                      },
+                      'DF': { 
+                        path: "M245,215 Q255,213 260,220 Q265,230 263,240 Q261,250 255,255 Q245,257 240,250 Q235,243 237,233 Q239,223 245,215 Z", 
+                        textX: 250, textY: 235 
+                      },
                       
                       // Região Sudeste
-                      'MG': { x: 280, y: 230, width: 55, height: 60 },
-                      'ES': { x: 330, y: 250, width: 25, height: 30 },
-                      'RJ': { x: 320, y: 280, width: 30, height: 25 },
-                      'SP': { x: 270, y: 290, width: 50, height: 40 },
+                      'MG': { 
+                        path: "M280,230 Q310,228 330,235 Q340,245 338,260 Q336,275 330,285 Q320,290 305,285 Q290,280 280,270 Q270,260 272,245 Q274,235 280,230 Z", 
+                        textX: 305, textY: 257 
+                      },
+                      'ES': { 
+                        path: "M330,250 Q345,248 355,255 Q360,265 358,275 Q356,285 350,290 Q340,292 335,285 Q330,278 332,268 Q334,258 330,250 Z", 
+                        textX: 342, textY: 270 
+                      },
+                      'RJ': { 
+                        path: "M320,280 Q340,278 350,285 Q355,295 353,305 Q351,315 345,320 Q335,322 325,317 Q315,312 317,302 Q319,292 320,280 Z", 
+                        textX: 335, textY: 300 
+                      },
+                      'SP': { 
+                        path: "M270,290 Q300,288 320,295 Q330,305 328,320 Q326,335 320,345 Q310,350 295,345 Q280,340 270,330 Q260,320 262,305 Q264,295 270,290 Z", 
+                        textX: 295, textY: 317 
+                      },
                       
                       // Região Sul
-                      'PR': { x: 250, y: 320, width: 40, height: 35 },
-                      'SC': { x: 270, y: 350, width: 35, height: 25 },
-                      'RS': { x: 230, y: 360, width: 50, height: 55 }
+                      'PR': { 
+                        path: "M250,320 Q270,318 285,325 Q290,335 288,350 Q286,365 280,370 Q270,372 260,367 Q250,362 248,347 Q246,332 250,320 Z", 
+                        textX: 268, textY: 345 
+                      },
+                      'SC': { 
+                        path: "M270,350 Q290,348 305,355 Q310,365 308,375 Q306,385 300,390 Q290,392 280,387 Q270,382 272,372 Q274,362 270,350 Z", 
+                        textX: 287, textY: 372 
+                      },
+                      'RS': { 
+                        path: "M230,360 Q260,358 275,365 Q285,375 283,390 Q281,405 275,415 Q265,420 250,415 Q235,410 225,400 Q215,390 217,375 Q219,365 230,360 Z", 
+                        textX: 250, textY: 387 
+                      }
                     };
 
-                    const position = statePositions[estado.estado];
-                    if (!position) return null;
+                    const stateData = statePaths[estado.estado];
+                    if (!stateData) return null;
 
                     return (
                       <g key={estado.estado}>
-                        <rect
-                          x={position.x}
-                          y={position.y}
-                          width={position.width}
-                          height={position.height}
+                        <path
+                          d={stateData.path}
                           fill={color}
-                          stroke="#2563eb"
+                          stroke="#1e40af"
                           strokeWidth="1.5"
                           className="hover:stroke-2 cursor-pointer transition-all hover:fill-opacity-80"
-                          rx="3"
                           filter="url(#shadow)"
                         />
                         <text
-                          x={position.x + position.width / 2}
-                          y={position.y + position.height / 2 + 4}
+                          x={stateData.textX}
+                          y={stateData.textY}
                           textAnchor="middle"
-                          className="text-xs font-bold fill-white drop-shadow-sm"
+                          className="text-xs font-bold fill-white drop-shadow-md pointer-events-none"
                           style={{ fontSize: '10px', fontWeight: 'bold' }}
                         >
                           {estado.estado}
@@ -424,12 +505,12 @@ const AnalistaContrafacaoDashboard = () => {
                         {/* Indicador de volume de casos */}
                         {totalCasos > 100 && (
                           <circle
-                            cx={position.x + position.width - 8}
-                            cy={position.y + 8}
-                            r="6"
-                            fill="#ef4444"
+                            cx={stateData.textX + 15}
+                            cy={stateData.textY - 10}
+                            r="4"
+                            fill="#dc2626"
                             stroke="white"
-                            strokeWidth="2"
+                            strokeWidth="1.5"
                             className="animate-pulse"
                           />
                         )}
@@ -448,11 +529,11 @@ const AnalistaContrafacaoDashboard = () => {
                   </text>
                   
                   {/* Indicadores de regiões */}
-                  <text x="150" y="60" textAnchor="middle" className="text-xs fill-gray-600 font-medium">Norte</text>
-                  <text x="340" y="120" textAnchor="middle" className="text-xs fill-gray-600 font-medium">Nordeste</text>
-                  <text x="220" y="210" textAnchor="middle" className="text-xs fill-gray-600 font-medium">Centro-Oeste</text>
-                  <text x="310" y="270" textAnchor="middle" className="text-xs fill-gray-600 font-medium">Sudeste</text>
-                  <text x="260" y="370" textAnchor="middle" className="text-xs fill-gray-600 font-medium">Sul</text>
+                  <text x="160" y="65" textAnchor="middle" className="text-xs fill-gray-600 font-medium">Norte</text>
+                  <text x="350" y="115" textAnchor="middle" className="text-xs fill-gray-600 font-medium">Nordeste</text>
+                  <text x="220" y="200" textAnchor="middle" className="text-xs fill-gray-600 font-medium">Centro-Oeste</text>
+                  <text x="315" y="265" textAnchor="middle" className="text-xs fill-gray-600 font-medium">Sudeste</text>
+                  <text x="265" y="375" textAnchor="middle" className="text-xs fill-gray-600 font-medium">Sul</text>
                 </svg>
               </div>
               
