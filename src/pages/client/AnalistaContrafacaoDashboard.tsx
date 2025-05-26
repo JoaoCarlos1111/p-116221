@@ -496,12 +496,12 @@ const AnalistaContrafacaoDashboard = () => {
                 </Button>
               </div>
             </CardHeader>
-            <CardContent className="px-2">
-              <div className={`space-y-2 ${showAllStates ? 'max-h-96 overflow-y-auto' : ''}`}>
+            <CardContent>
+              <div className={`space-y-3 ${showAllStates ? 'max-h-96 overflow-y-auto' : ''}`}>
                 {(showAllStates ? mapaStats.estadosRanking : mapaStats.estadosRanking.slice(0, 5)).map((estado, index) => (
-                  <div key={estado.estado} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-muted/70 transition-colors mx-1">
-                    <div className="flex items-center gap-4 flex-1">
-                      <div className={`flex items-center justify-center w-10 h-10 rounded-full text-sm font-bold ${
+                  <div key={estado.estado} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted/70 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${
                         index < 3 
                           ? 'bg-gradient-to-r from-yellow-400 to-yellow-600 text-white' 
                           : index < 5 
@@ -510,39 +510,24 @@ const AnalistaContrafacaoDashboard = () => {
                       }`}>
                         {index + 1}
                       </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <p className="font-semibold text-lg">{estado.estado}</p>
-                          <p className="text-sm font-medium text-muted-foreground">
-                            {estado.notificacoes + estado.acordos + estado.desativacoes} casos
-                          </p>
-                        </div>
-                        <div className="flex justify-between items-center mt-2">
-                          <div className="flex gap-2 flex-wrap">
-                            <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200 px-2 py-1">
-                              {estado.notificacoes} Notificações
-                            </Badge>
-                            <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200 px-2 py-1">
-                              {estado.acordos} Acordos
-                            </Badge>
-                            <Badge variant="outline" className="text-xs bg-red-50 text-red-700 border-red-200 px-2 py-1">
-                              {estado.desativacoes} Desativações
-                            </Badge>
-                          </div>
-                          <div className="text-right">
-                            <div className="w-16 bg-gray-200 rounded-full h-2">
-                              <div 
-                                className="bg-blue-600 h-2 rounded-full" 
-                                style={{ 
-                                  width: `${Math.min((estado.notificacoes + estado.acordos + estado.desativacoes) / 250 * 100, 100)}%` 
-                                }}
-                              ></div>
-                            </div>
-                            <p className="text-xs text-muted-foreground mt-1">
-                              {((estado.notificacoes + estado.acordos + estado.desativacoes) / 250 * 100).toFixed(0)}%
-                            </p>
-                          </div>
-                        </div>
+                      <div>
+                        <p className="font-medium">{estado.estado}</p>
+                        <p className="text-xs text-muted-foreground">
+                          Total: {estado.notificacoes + estado.acordos + estado.desativacoes} casos
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right text-sm">
+                      <div className="flex gap-1 flex-wrap">
+                        <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
+                          {estado.notificacoes} N
+                        </Badge>
+                        <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                          {estado.acordos} A
+                        </Badge>
+                        <Badge variant="outline" className="text-xs bg-red-50 text-red-700 border-red-200">
+                          {estado.desativacoes} D
+                        </Badge>
                       </div>
                     </div>
                   </div>
@@ -550,28 +535,28 @@ const AnalistaContrafacaoDashboard = () => {
               </div>
               
               {showAllStates && (
-                <div className="mt-4 mx-1 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
                   <div className="text-sm text-blue-800">
-                    <div className="flex justify-between items-center mb-3">
-                      <span className="font-semibold text-base">Resumo Nacional:</span>
-                      <span className="font-medium">{mapaStats.estadosRanking.length} estados</span>
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-medium">Resumo Nacional:</span>
+                      <span>{mapaStats.estadosRanking.length} estados</span>
                     </div>
-                    <div className="grid grid-cols-1 gap-3 text-sm">
-                      <div className="flex justify-between items-center p-2 bg-white rounded border">
-                        <span className="text-blue-600 font-medium">Total Notificações:</span>
-                        <span className="font-bold text-lg">
+                    <div className="grid grid-cols-3 gap-4 text-xs">
+                      <div>
+                        <span className="text-blue-600">Total Notificações:</span>
+                        <span className="font-bold ml-1">
                           {mapaStats.estadosRanking.reduce((sum, estado) => sum + estado.notificacoes, 0)}
                         </span>
                       </div>
-                      <div className="flex justify-between items-center p-2 bg-white rounded border">
-                        <span className="text-green-600 font-medium">Total Acordos:</span>
-                        <span className="font-bold text-lg">
+                      <div>
+                        <span className="text-green-600">Total Acordos:</span>
+                        <span className="font-bold ml-1">
                           {mapaStats.estadosRanking.reduce((sum, estado) => sum + estado.acordos, 0)}
                         </span>
                       </div>
-                      <div className="flex justify-between items-center p-2 bg-white rounded border">
-                        <span className="text-red-600 font-medium">Total Desativações:</span>
-                        <span className="font-bold text-lg">
+                      <div>
+                        <span className="text-red-600">Total Desativações:</span>
+                        <span className="font-bold ml-1">
                           {mapaStats.estadosRanking.reduce((sum, estado) => sum + estado.desativacoes, 0)}
                         </span>
                       </div>
