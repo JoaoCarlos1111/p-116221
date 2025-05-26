@@ -15,7 +15,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { CalendarIcon, CheckCircle, FileText, Search, Star, X, XCircle } from 'lucide-react';
+import { CalendarIcon, CheckCircle, FileText, Search, AlertTriangle, X, XCircle } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import confetti from 'canvas-confetti';
 
@@ -227,7 +227,7 @@ export default function Approvals() {
                   <TableHead>Código do Caso</TableHead>
                   <TableHead>Certificação do Anúncio</TableHead>
                   <TableHead>Data de Entrada</TableHead>
-                  <TableHead>Prioridade Cliente</TableHead>
+                  <TableHead>Prioritário</TableHead>
                   <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
               </TableHeader>
@@ -264,11 +264,11 @@ export default function Approvals() {
                         className={cn(
                           "h-8 w-8 p-0",
                           approval.clientPriority === 'priority' 
-                            ? "text-yellow-500 hover:text-yellow-600" 
-                            : "text-gray-300 hover:text-yellow-400"
+                            ? "text-red-500 hover:text-red-600" 
+                            : "text-gray-300 hover:text-red-400"
                         )}
                       >
-                        <Star 
+                        <AlertTriangle 
                           className={cn(
                             "h-4 w-4",
                             approval.clientPriority === 'priority' && "fill-current"
