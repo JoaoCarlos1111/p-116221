@@ -123,7 +123,23 @@ export default function Sidebar() {
               <span className={cn(
                 "transition-all duration-300",
                 isCollapsed && "hidden"
-              )}>Meu Dashboard</span>
+              )}>Dashboard Gestor</span>
+            </NavLink>
+            
+            <NavLink to="/client/analista" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <Shield size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Analista Contrafação</span>
+            </NavLink>
+            
+            <NavLink to="/client/financeiro" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <LayoutDashboard size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Dashboard Financeiro</span>
             </NavLink>
           </>
         )}

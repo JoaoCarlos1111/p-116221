@@ -32,6 +32,8 @@ import { departments } from './constants';
 import AdminTemplates from './pages/AdminTemplates';
 import AdminSettings from './pages/AdminSettings';
 import ClientDashboard from './pages/ClientDashboard';
+import AnalistaContrafacaoDashboard from './pages/AnalistaContrafacaoDashboard';
+import FinanceiroDashboard from './pages/FinanceiroDashboard';
 import NewTemplate from './pages/NewTemplate';
 
 function AppContent() {
@@ -161,6 +163,16 @@ function AppContent() {
             <Route path="/client/dashboard" element={
               <RouteGuard requiredDepartment={['client']}>
                 <ClientDashboard />
+              </RouteGuard>
+            } />
+            <Route path="/client/analista" element={
+              <RouteGuard requiredDepartment={['client']}>
+                <AnalistaContrafacaoDashboard />
+              </RouteGuard>
+            } />
+            <Route path="/client/financeiro" element={
+              <RouteGuard requiredDepartment={['client']}>
+                <FinanceiroDashboard />
               </RouteGuard>
             } />
               <Route path="/admin/templates/new" element={
