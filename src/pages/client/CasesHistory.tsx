@@ -313,6 +313,29 @@ const CasesHistory: React.FC = () => {
         </Button>
       </div>
 
+      {/* Resumo por Status */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Resumo por Status</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            {Object.entries(statusSummary).map(([status, count]) => {
+              const statusInfo = getStatusIcon(status);
+              return (
+                <div key={status} className={`text-center p-4 rounded-lg border-2 ${statusInfo.bgColor}`}>
+                  <div className={`flex justify-center mb-2 ${statusInfo.color}`}>
+                    {statusInfo.icon}
+                  </div>
+                  <p className="text-2xl font-bold">{count}</p>
+                  <p className="text-xs text-center leading-tight mt-1">{status}</p>
+                </div>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Filtros */}
       <Card>
         <CardHeader>
@@ -438,29 +461,6 @@ const CasesHistory: React.FC = () => {
                 </PopoverContent>
               </Popover>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Gráfico de Resumo */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Resumo por Status</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            {Object.entries(statusSummary).map(([status, count]) => {
-              const statusInfo = getStatusIcon(status);
-              return (
-                <div key={status} className={`text-center p-4 rounded-lg border-2 ${statusInfo.bgColor}`}>
-                  <div className={`flex justify-center mb-2 ${statusInfo.color}`}>
-                    {statusInfo.icon}
-                  </div>
-                  <p className="text-2xl font-bold">{count}</p>
-                  <p className="text-xs text-center leading-tight mt-1">{status}</p>
-                </div>
-              );
-            })}
           </div>
         </CardContent>
       </Card>
