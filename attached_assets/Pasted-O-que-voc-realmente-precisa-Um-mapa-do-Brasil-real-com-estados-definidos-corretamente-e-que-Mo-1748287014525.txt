@@ -1,0 +1,109 @@
+O que você realmente precisa:
+Um mapa do Brasil real, com estados definidos corretamente, e que:
+
+Mostre os contornos reais do país e de cada estado.
+
+Permita interatividade (hover, clique, tooltip etc.).
+
+Exiba estatísticas por estado (notificações, acordos, desativações etc.).
+
+🧩 Solução recomendada (real e robusta):
+Use a biblioteca react-simple-maps com um arquivo GeoJSON do Brasil. Isso vai te dar:
+
+Um mapa real e responsivo.
+
+Estados com contornos reais.
+
+Facilidade para exibir tooltips e dados ao passar o mouse.
+
+Suporte total a interatividade com React.
+
+🔧 Passo a passo para usar react-simple-maps
+1. Instale as dependências:
+bash
+Copiar
+Editar
+npm install react-simple-maps d3-geo
+2. Baixe o mapa GeoJSON do Brasil
+Você pode usar este arquivo pronto:
+📁 https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson
+
+Salve como:
+
+bash
+Copiar
+Editar
+/src/data/brazil-states.json
+3. Crie o componente BrazilMap.tsx:
+tsx
+Copiar
+Editar
+import React, { useState } from "react";
+import { ComposableMap, Geographies, Geography } from "react-simple-maps";
+import geoData from "../data/brazil-states.json";
+
+const BrazilMap = ({ dataByState }) => {
+  const [tooltipContent, setTooltipContent] = useState("");
+
+  return (
+    <div>
+      <ComposableMap projection="geoMercator" projectionConfig={{ scale: 850, center: [-55, -15] }}>
+        <Geographies geography={geoData}>
+          {({ geographies }) =>
+            geographies.map((geo) => {
+              const uf = geo.properties.name; // ou sigla, depende do JSON
+              const stateData = dataByState[uf] || {};
+              const total = (stateData.notificacoes || 0) + (stateData.acordos || 0) + (stateData.desativacoes || 0);
+
+              const color = total > 100 ? "#003f5c" : total > 50 ? "#2f4b7c" : total > 10 ? "#a05195" : "#d45087";
+
+              return (
+                <Geography
+                  key={geo.rsmKey}
+                  geography={geo}
+                  fill={color}
+                  onMouseEnter={() => {
+                    setTooltipContent(`${uf}\nNotificações: ${stateData.notificacoes || 0}\nAcordos: ${stateData.acordos || 0}\nDesativações: ${stateData.desativacoes || 0}`);
+                  }}
+                  onMouseLeave={() => {
+                    setTooltipContent("");
+                  }}
+                  style={{
+                    default: { outline: "none" },
+                    hover: { fill: "#f0f0f0", outline: "none" },
+                    pressed: { outline: "none" },
+                  }}
+                />
+              );
+            })
+          }
+        </Geographies>
+      </ComposableMap>
+
+      {tooltipContent && (
+        <div style={{ position: "absolute", background: "white", padding: "8px", borderRadius: "4px", top: 10, right: 10, boxShadow: "0px 2px 6px rgba(0,0,0,0.2)" }}>
+          <pre>{tooltipContent}</pre>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default BrazilMap;
+4. Exemplo de dados que você pode passar:
+tsx
+Copiar
+Editar
+const dataByState = {
+  "São Paulo": { notificacoes: 200, acordos: 50, desativacoes: 30 },
+  "Rio de Janeiro": { notificacoes: 100, acordos: 20, desativacoes: 10 },
+  // ...
+};
+5. Use no seu Dashboard
+tsx
+Copiar
+Editar
+<BrazilMap dataByState={dataByState} />
+✅ Resultado
+Você terá um mapa real do Brasil com estados definidos, interativos, com tooltips automáticos, cores baseadas em volume de ações, e a capacidade de ir muito além (como clicar e ver detalhes, ranking por estado etc.).
+
