@@ -257,9 +257,9 @@ const ClientDashboard = () => {
               <CheckCircle className="h-6 w-6 mb-2" />
               Revisar Aprovações
             </Button>
-            <Button variant="outline" className="h-20 flex flex-col items-center justify-center" onClick={() => navigate('/reports')}>
+            <Button variant="outline" className="h-20 flex flex-col items-center justify-center" onClick={() => navigate('/client/casos/historico')}>
               <Download className="h-6 w-6 mb-2" />
-              Baixar Relatórios
+              Histórico de Casos
             </Button>
           </div>
         </CardContent>
