@@ -337,23 +337,42 @@ export default function GestorDashboard() {
           </CardContent>
         </Card>
 
-        {/* Performance por Marca */}
+        {/* Ranking de Estados */}
         <Card>
           <CardHeader>
-            <CardTitle>Performance por Marca</CardTitle>
+            <CardTitle>Ranking de Estados</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {dashboardData.brandStats?.map((brand) => (
-              <div key={brand.brand} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="font-medium">{brand.brand}</span>
-                    <span className="text-sm text-green-600 font-medium">{brand.success}%</span>
+          <CardContent className="space-y-3">
+            {dashboardData.estadosRanking?.slice(0, 10).map((estado, index) => (
+              <div key={estado.estado} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                <div className="flex items-center gap-3">
+                  <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${
+                    index < 3 
+                      ? 'bg-gradient-to-r from-yellow-400 to-yellow-600 text-white' 
+                      : index < 5 
+                      ? 'bg-gradient-to-r from-gray-400 to-gray-600 text-white'
+                      : 'bg-primary text-primary-foreground'
+                  }`}>
+                    {index + 1}
                   </div>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <span>{brand.cases} casos</span>
-                    <span>{brand.resolved} resolvidos</span>
-                    <span>{brand.pending} pendentes</span>
+                  <div>
+                    <p className="font-medium">{estado.estado}</p>
+                    <span className="text-sm text-muted-foreground">
+                      Total Ações: {estado.notificacoes + estado.acordos}
+                    </span>
+                  </div>
+                </div>
+                <div className="text-right text-sm">
+                  <div className="flex gap-1 flex-wrap">
+                    <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
+                      {estado.notificacoes} N
+                    </Badge>
+                    <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                      {estado.acordos} A
+                    </Badge>
+                    <Badge variant="outline" className="text-xs bg-red-50 text-red-700 border-red-200">
+                      {estado.desativacoes} D
+                    </Badge>
                   </div>
                 </div>
               </div>
