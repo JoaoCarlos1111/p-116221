@@ -10,7 +10,8 @@ import {
   Building2,
   FileStack,
   LayoutDashboard,
-  Boxes
+  Boxes,
+  CheckCircle
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -140,6 +141,14 @@ export default function Sidebar() {
                 "transition-all duration-300",
                 isCollapsed && "hidden"
               )}>Dashboard Financeiro</span>
+            </NavLink>
+            
+            <NavLink to="/client/approvals" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <CheckCircle size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Aprovações</span>
             </NavLink>
           </>
         )}

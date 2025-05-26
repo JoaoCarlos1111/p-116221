@@ -196,7 +196,7 @@ const AnalistaContrafacaoDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
-              <Button variant="outline" className="h-16 flex flex-col items-center justify-center" onClick={() => navigate('/approvals')}>
+              <Button variant="outline" className="h-16 flex flex-col items-center justify-center" onClick={() => navigate('/client/approvals')}>
                 <CheckCircle className="h-5 w-5 mb-1" />
                 <span className="text-xs">Revisar Aprovações</span>
               </Button>

@@ -175,6 +175,11 @@ function AppContent() {
                 <FinanceiroDashboard />
               </RouteGuard>
             } />
+            <Route path="/client/approvals" element={
+              <RouteGuard requiredDepartment={['client']}>
+                <Approvals />
+              </RouteGuard>
+            } />
               <Route path="/admin/templates/new" element={
                 <RouteGuard requiredDepartment="admin">
                   <NewTemplate />
