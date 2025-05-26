@@ -393,114 +393,111 @@ export default function CasesHistory() {
           
           {!loading && !error && (
             <div className="rounded-md border">
-              <Table></div>
-          )}
-        </CardContent>
-      </Card>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>ID do Caso</TableHead>
-                  <TableHead>Marca</TableHead>
-                  <TableHead>Tipo de Infração</TableHead>
-                  <TableHead>Status Final</TableHead>
-                  <TableHead>Data da Decisão</TableHead>
-                  <TableHead>Analisado por</TableHead>
-                  <TableHead>Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredCases.map((caso) => (
-                  <TableRow key={caso.id}>
-                    <TableCell className="font-medium">#{caso.id}</TableCell>
-                    <TableCell>{caso.marca}</TableCell>
-                    <TableCell>{caso.tipoInfracao}</TableCell>
-                    <TableCell>
-                      <Badge className={`${getStatusBadge(caso.statusFinal)} text-white`}>
-                        {caso.statusFinal}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      {format(new Date(caso.dataDecisao), 'dd/MM/yyyy', { locale: ptBR })}
-                    </TableCell>
-                    <TableCell>{caso.analisadoPor}</TableCell>
-                    <TableCell>
-                      <Sheet>
-                        <SheetTrigger asChild>
-                          <Button variant="ghost" size="sm" onClick={() => setSelectedCase(caso)}>
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </SheetTrigger>
-                        <SheetContent className="min-w-[500px]">
-                          <SheetHeader>
-                            <SheetTitle>Detalhes do Caso #{selectedCase?.id}</SheetTitle>
-                          </SheetHeader>
-                          {selectedCase && (
-                            <div className="space-y-6 mt-6">
-                              <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <label className="text-sm font-medium text-muted-foreground">Marca</label>
-                                  <p className="font-medium">{selectedCase.marca}</p>
-                                </div>
-                                <div>
-                                  <label className="text-sm font-medium text-muted-foreground">Status Final</label>
-                                  <Badge className={`${getStatusBadge(selectedCase.statusFinal)} text-white`}>
-                                    {selectedCase.statusFinal}
-                                  </Badge>
-                                </div>
-                                <div>
-                                  <label className="text-sm font-medium text-muted-foreground">Tipo de Infração</label>
-                                  <p className="font-medium">{selectedCase.tipoInfracao}</p>
-                                </div>
-                                <div>
-                                  <label className="text-sm font-medium text-muted-foreground">Valor Potencial</label>
-                                  <p className="font-medium text-green-600">
-                                    {new Intl.NumberFormat('pt-BR', { 
-                                      style: 'currency', 
-                                      currency: 'BRL' 
-                                    }).format(selectedCase.valorPotencial)}
-                                  </p>
-                                </div>
-                                <div>
-                                  <label className="text-sm font-medium text-muted-foreground">Data da Decisão</label>
-                                  <p className="font-medium">
-                                    {format(new Date(selectedCase.dataDecisao), 'dd/MM/yyyy', { locale: ptBR })}
-                                  </p>
-                                </div>
-                                <div>
-                                  <label className="text-sm font-medium text-muted-foreground">Analisado por</label>
-                                  <p className="font-medium">{selectedCase.analisadoPor}</p>
-                                </div>
-                              </div>
-
-                              <div>
-                                <label className="text-sm font-medium text-muted-foreground">Links Suspeitos</label>
-                                <div className="space-y-2 mt-2">
-                                  {selectedCase.links.map((link, index) => (
-                                    <div key={index} className="p-2 bg-muted rounded flex items-center justify-between">
-                                      <span className="text-sm truncate">{link}</span>
-                                      <Button variant="ghost" size="sm" onClick={() => window.open(link, '_blank')}>
-                                        <FileText className="h-4 w-4" />
-                                      </Button>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-
-                              <div>
-                                <label className="text-sm font-medium text-muted-foreground">Observações</label>
-                                <div className="mt-2 p-3 bg-muted rounded-lg">
-                                  <p className="text-sm">{selectedCase.observacoes}</p>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </SheetContent>
-                      </Sheet>
-                    </TableCell>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>ID do Caso</TableHead>
+                    <TableHead>Marca</TableHead>
+                    <TableHead>Tipo de Infração</TableHead>
+                    <TableHead>Status Final</TableHead>
+                    <TableHead>Data da Decisão</TableHead>
+                    <TableHead>Analisado por</TableHead>
+                    <TableHead>Ações</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {filteredCases.map((caso) => (
+                    <TableRow key={caso.id}>
+                      <TableCell className="font-medium">#{caso.id}</TableCell>
+                      <TableCell>{caso.marca}</TableCell>
+                      <TableCell>{caso.tipoInfracao}</TableCell>
+                      <TableCell>
+                        <Badge className={`${getStatusBadge(caso.statusFinal)} text-white`}>
+                          {caso.statusFinal}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        {format(new Date(caso.dataDecisao), 'dd/MM/yyyy', { locale: ptBR })}
+                      </TableCell>
+                      <TableCell>{caso.analisadoPor}</TableCell>
+                      <TableCell>
+                        <Sheet>
+                          <SheetTrigger asChild>
+                            <Button variant="ghost" size="sm" onClick={() => setSelectedCase(caso)}>
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                          </SheetTrigger>
+                          <SheetContent className="min-w-[500px]">
+                            <SheetHeader>
+                              <SheetTitle>Detalhes do Caso #{selectedCase?.id}</SheetTitle>
+                            </SheetHeader>
+                            {selectedCase && (
+                              <div className="space-y-6 mt-6">
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <label className="text-sm font-medium text-muted-foreground">Marca</label>
+                                    <p className="font-medium">{selectedCase.marca}</p>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium text-muted-foreground">Status Final</label>
+                                    <Badge className={`${getStatusBadge(selectedCase.statusFinal)} text-white`}>
+                                      {selectedCase.statusFinal}
+                                    </Badge>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium text-muted-foreground">Tipo de Infração</label>
+                                    <p className="font-medium">{selectedCase.tipoInfracao}</p>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium text-muted-foreground">Valor Potencial</label>
+                                    <p className="font-medium text-green-600">
+                                      {new Intl.NumberFormat('pt-BR', { 
+                                        style: 'currency', 
+                                        currency: 'BRL' 
+                                      }).format(selectedCase.valorPotencial)}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium text-muted-foreground">Data da Decisão</label>
+                                    <p className="font-medium">
+                                      {format(new Date(selectedCase.dataDecisao), 'dd/MM/yyyy', { locale: ptBR })}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium text-muted-foreground">Analisado por</label>
+                                    <p className="font-medium">{selectedCase.analisadoPor}</p>
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <label className="text-sm font-medium text-muted-foreground">Links Suspeitos</label>
+                                  <div className="space-y-2 mt-2">
+                                    {selectedCase.links.map((link, index) => (
+                                      <div key={index} className="p-2 bg-muted rounded flex items-center justify-between">
+                                        <span className="text-sm truncate">{link}</span>
+                                        <Button variant="ghost" size="sm" onClick={() => window.open(link, '_blank')}>
+                                          <FileText className="h-4 w-4" />
+                                        </Button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <label className="text-sm font-medium text-muted-foreground">Observações</label>
+                                  <div className="mt-2 p-3 bg-muted rounded-lg">
+                                    <p className="text-sm">{selectedCase.observacoes}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </SheetContent>
+                        </Sheet>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
           )}
         </CardContent>
