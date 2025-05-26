@@ -163,18 +163,20 @@ export const AuthService = {
     // Simula delay da rede
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    // Verifica credenciais
+    // Verifica credenciais (case insensitive para email)
     const match = Object.values(testCredentials).find(
-      cred => cred.email === email && cred.password === password
+      cred => cred.email.toLowerCase() === email.toLowerCase() && cred.password === password
     );
 
     if (match) {
+      console.log('Login successful for:', match.user.name);
       return {
         token: 'test-jwt-token-' + match.user.id,
         user: match.user
       };
     }
 
+    console.log('Login failed for email:', email);
     throw new Error('Credenciais inválidas');
   }
 };
