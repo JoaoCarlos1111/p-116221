@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { CalendarIcon, Download, Filter, ArrowLeft, Eye } from 'lucide-react';
+import { CalendarIcon, Download, Filter, ArrowLeft, Eye, FileText } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useNavigate } from 'react-router-dom';
@@ -103,23 +104,29 @@ const CasesHistory: React.FC = () => {
   const tipoInfracaoOptions = ['Venda de falsificados', 'Phishing', 'Uso indevido de marca'];
 
   useEffect(() => {
-    const loadData = () => {
+    const loadData = async () => {
       try {
         setLoading(true);
         setError(null);
-        setTimeout(() => {
-          setFilteredCases(historyCases);
-          setLoading(false);
-        }, 500);
+        
+        // Simular carregamento
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        setFilteredCases(historyCases);
       } catch (err) {
         console.error('Erro ao carregar dados:', err);
         setError('Erro ao carregar histórico de casos');
         setFilteredCases([]);
+      } finally {
         setLoading(false);
       }
     };
 
-    loadData();
+    loadData().catch(err => {
+      console.error('Erro no loadData:', err);
+      setError('Erro ao carregar dados');
+      setLoading(false);
+    });
   }, []);
 
   useEffect(() => {
@@ -137,12 +144,13 @@ const CasesHistory: React.FC = () => {
       if (filters.tipoInfracao) {
         filtered = filtered.filter(caso => caso.tipoInfracao === filters.tipoInfracao);
       }
+
       if (filters.dataInicio && filters.dataFim) {
-          filtered = filtered.filter(caso => {
-            const dataDecisao = new Date(caso.dataDecisao);
-            return dataDecisao >= filters.dataInicio! && dataDecisao <= filters.dataFim!;
-          });
-        }
+        filtered = filtered.filter(caso => {
+          const dataDecisao = new Date(caso.dataDecisao);
+          return dataDecisao >= filters.dataInicio! && dataDecisao <= filters.dataFim!;
+        });
+      }
 
       setFilteredCases(filtered);
     } catch (err) {
@@ -163,13 +171,17 @@ const CasesHistory: React.FC = () => {
   };
 
   const clearFilters = () => {
-    setFilters({
-      status: '',
-      marca: '',
-      tipoInfracao: '',
-      dataInicio: null,
-      dataFim: null,
-    });
+    try {
+      setFilters({
+        status: '',
+        marca: '',
+        tipoInfracao: '',
+        dataInicio: null,
+        dataFim: null,
+      });
+    } catch (err) {
+      console.error('Erro ao limpar filtros:', err);
+    }
   };
 
   const exportToCSV = () => {
@@ -201,13 +213,14 @@ const CasesHistory: React.FC = () => {
   };
 
   const handleNavigateBack = () => {
-    try{
+    try {
       navigate('/client/dashboard');
     } catch (err) {
       console.error('Erro ao navegar:', err);
       window.history.back();
     }
   };
+
   const handleOpenLink = (link: string) => {
     try {
       window.open(link, '_blank', 'noopener,noreferrer');
@@ -215,6 +228,7 @@ const CasesHistory: React.FC = () => {
       console.error('Erro ao abrir link:', err);
     }
   };
+
   const statusSummary = statusOptions.reduce((acc, status) => {
     acc[status] = filteredCases.filter(caso => caso.statusFinal === status).length;
     return acc;
@@ -340,6 +354,7 @@ const CasesHistory: React.FC = () => {
                 </SelectContent>
               </Select>
             </div>
+
             {/* Data Início */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Data Início</label>
@@ -396,8 +411,9 @@ const CasesHistory: React.FC = () => {
           </div>
         </CardContent>
       </Card>
-       {/* Gráfico de Resumo */}
-       <Card>
+
+      {/* Gráfico de Resumo */}
+      <Card>
         <CardHeader>
           <CardTitle>Resumo por Status</CardTitle>
         </CardHeader>
