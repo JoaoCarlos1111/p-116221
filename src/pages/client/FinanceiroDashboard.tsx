@@ -144,84 +144,7 @@ const FinanceiroDashboard = () => {
         </Card>
       </div>
 
-      {/* Card de Inadimplência */}
-      {inadimplencia.parcelasVencidas > 0 && (
-        <Card className="border-l-4 border-l-red-500 bg-red-50">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-lg font-bold text-red-800 flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5" />
-                📍 Inadimplência Atual
-              </CardTitle>
-              <Button 
-                variant="outline" 
-                size="sm"
-                className="border-red-300 text-red-700 hover:bg-red-100"
-                onClick={() => navigate('/client/financeiro/faturas')}
-              >
-                Ver Detalhes
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-red-600">
-                  {inadimplencia.parcelasVencidas}
-                </div>
-                <p className="text-sm text-red-700">Parcela(s) vencida(s)</p>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-red-600">
-                  {inadimplencia.valorTotalInadimplente.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                </div>
-                <p className="text-sm text-red-700">Total inadimplente</p>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-red-600 flex items-center justify-center gap-1">
-                  <Users className="h-6 w-6" />
-                  {inadimplencia.clientesImpactados}
-                </div>
-                <p className="text-sm text-red-700">Clientes impactados</p>
-              </div>
-            </div>
-            
-            <div className="space-y-2">
-              <h4 className="font-medium text-gray-800 flex items-center gap-2">
-                <Clock className="h-4 w-4" />
-                Vencimentos Recentes e Próximos:
-              </h4>
-              <div className="space-y-2">
-                {inadimplencia.proximosVencimentos.map((item, index) => (
-                  <div 
-                    key={index} 
-                    className={`flex justify-between items-center p-2 rounded text-sm ${
-                      item.diasVencido > 0 
-                        ? 'bg-red-100 border border-red-200' 
-                        : item.diasVencido >= -7 
-                        ? 'bg-yellow-100 border border-yellow-200'
-                        : 'bg-gray-100 border border-gray-200'
-                    }`}
-                  >
-                    <span className="font-medium">{item.contrafator}</span>
-                    <div className="flex items-center gap-2">
-                      <span>{item.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
-                      <span className="text-xs">
-                        {item.diasVencido > 0 
-                          ? `${item.diasVencido} dias em atraso`
-                          : item.diasVencido === 0
-                          ? 'Vence hoje'
-                          : `Vence em ${Math.abs(item.diasVencido)} dias`
-                        }
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      
 
       {/* Resumo Trimestral e Anual */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -332,6 +255,85 @@ const FinanceiroDashboard = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Card de Inadimplência */}
+      {inadimplencia.parcelasVencidas > 0 && (
+        <Card className="border-l-4 border-l-red-500 bg-red-50">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg font-bold text-red-800 flex items-center gap-2">
+                <AlertTriangle className="h-5 w-5" />
+                📍 Inadimplência Atual
+              </CardTitle>
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="border-red-300 text-red-700 hover:bg-red-100"
+                onClick={() => navigate('/client/financeiro/faturas')}
+              >
+                Ver Detalhes
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-red-600">
+                  {inadimplencia.parcelasVencidas}
+                </div>
+                <p className="text-sm text-red-700">Parcela(s) vencida(s)</p>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-red-600">
+                  {inadimplencia.valorTotalInadimplente.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                </div>
+                <p className="text-sm text-red-700">Total inadimplente</p>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-red-600 flex items-center justify-center gap-1">
+                  <Users className="h-6 w-6" />
+                  {inadimplencia.clientesImpactados}
+                </div>
+                <p className="text-sm text-red-700">Clientes impactados</p>
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <h4 className="font-medium text-gray-800 flex items-center gap-2">
+                <Clock className="h-4 w-4" />
+                Vencimentos Recentes e Próximos:
+              </h4>
+              <div className="space-y-2">
+                {inadimplencia.proximosVencimentos.map((item, index) => (
+                  <div 
+                    key={index} 
+                    className={`flex justify-between items-center p-2 rounded text-sm ${
+                      item.diasVencido > 0 
+                        ? 'bg-red-100 border border-red-200' 
+                        : item.diasVencido >= -7 
+                        ? 'bg-yellow-100 border border-yellow-200'
+                        : 'bg-gray-100 border border-gray-200'
+                    }`}
+                  >
+                    <span className="font-medium">{item.contrafator}</span>
+                    <div className="flex items-center gap-2">
+                      <span>{item.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                      <span className="text-xs">
+                        {item.diasVencido > 0 
+                          ? `${item.diasVencido} dias em atraso`
+                          : item.diasVencido === 0
+                          ? 'Vence hoje'
+                          : `Vence em ${Math.abs(item.diasVencido)} dias`
+                        }
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Serviços por Tipo */}
       <Card>

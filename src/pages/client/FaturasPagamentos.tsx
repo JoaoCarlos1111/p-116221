@@ -20,7 +20,8 @@ import {
   MessageSquare,
   TrendingDown,
   Mail,
-  FileBarChart
+  FileBarChart,
+  AlertTriangle
 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import { format, subMonths, subDays, isWithinInterval, startOfDay, endOfDay } from "date-fns";
