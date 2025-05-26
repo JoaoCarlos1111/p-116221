@@ -1,411 +1,573 @@
+
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Progress } from "@/components/ui/progress";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { CalendarIcon, CheckCircle, FileText, Search, AlertTriangle, X, XCircle, Clock } from 'lucide-react';
-import { cn } from "@/lib/utils";
-import confetti from 'canvas-confetti';
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useToast } from "@/components/ui/use-toast";
+import { 
+  Search, 
+  Filter, 
+  CheckCircle, 
+  XCircle, 
+  Clock, 
+  AlertTriangle,
+  Eye,
+  MessageSquare,
+  History,
+  Paperclip,
+  Download,
+  ExternalLink,
+  User,
+  Calendar,
+  Tag,
+  FileText,
+  Zap,
+  Share
+} from "lucide-react";
 
-interface Approval {
+interface CaseData {
   id: string;
-  proofUrl: string;
-  entryDate: string;
-  status: 'pending' | 'approved' | 'rejected';
-  title?: string;
-  description?: string;
-  platform?: string;
-  brand?: string;
-  rejectionReason?: string;
-  clientPriority?: 'normal' | 'priority';
+  title: string;
+  brand: string;
+  infractor: string;
+  type: string;
+  status: string;
+  urgent: boolean;
+  sector: string;
+  analyst: string;
+  submissionDate: string;
+  lastUpdate: string;
+  description: string;
+  proofs: Array<{
+    id: string;
+    name: string;
+    type: 'image' | 'video' | 'document';
+    url: string;
+    uploadDate: string;
+  }>;
+  comments: Array<{
+    id: string;
+    author: string;
+    message: string;
+    timestamp: string;
+    internal: boolean;
+  }>;
+  history: Array<{
+    id: string;
+    action: string;
+    author: string;
+    timestamp: string;
+    details: string;
+  }>;
 }
 
-export default function Approvals() {
-  const [selectedCases, setSelectedCases] = useState<string[]>([]);
-  const [rejectReason, setRejectReason] = useState('');
-  const [showRejectDialog, setShowRejectDialog] = useState(false);
-  const [rejectingId, setRejectingId] = useState<string | null>(null);
-  const [showInternalEvaluationDialog, setShowInternalEvaluationDialog] = useState(false);
-  const [internalEvaluationReason, setInternalEvaluationReason] = useState('');
-  const [evaluatingId, setEvaluatingId] = useState<string | null>(null);
-  
-  const [approvals, setApprovals] = useState<Approval[]>([
-    { id: 'APROV-001', proofUrl: '/proofs/nike_store.pdf', entryDate: '2024-03-21', status: 'pending', title: 'Nike Store BR', description: 'Loja não autorizada vendendo produtos Nike', platform: 'Shopee', brand: 'Nike', clientPriority: 'priority' },
-    { id: 'APROV-002', proofUrl: '/proofs/adidas_outlet.pdf', entryDate: '2024-03-21', status: 'pending', title: 'Adidas Outlet', description: 'Produtos falsificados Adidas', platform: 'Mercado Livre', brand: 'Adidas', clientPriority: 'normal' },
-    { id: 'APROV-003', proofUrl: '/proofs/lv_bags.pdf', entryDate: '2024-03-21', status: 'pending', title: 'LV Bags Store', description: 'Bolsas Louis Vuitton falsificadas', platform: 'Instagram', brand: 'Louis Vuitton', clientPriority: 'priority' },
-    { id: 'APROV-004', proofUrl: '/proofs/gucci_shoes.pdf', entryDate: '2024-03-21', status: 'pending', title: 'Gucci Shoes BR', description: 'Calçados Gucci não autorizados', platform: 'Facebook', brand: 'Gucci', clientPriority: 'normal' },
-    { id: 'APROV-005', proofUrl: '/proofs/prada_store.pdf', entryDate: '2024-03-21', status: 'pending', title: 'Prada Store', description: 'Produtos Prada falsificados', platform: 'TikTok', brand: 'Prada', clientPriority: 'priority' },
-    { id: 'APROV-006', proofUrl: '/proofs/nike_outlet.pdf', entryDate: '2024-03-20', status: 'pending', title: 'Nike Outlet BR', description: 'Outlet não autorizado Nike', platform: 'Facebook', brand: 'Nike', clientPriority: 'normal' },
-    { id: 'APROV-007', proofUrl: '/proofs/adidas_store.pdf', entryDate: '2024-03-20', status: 'pending', title: 'Adidas Store', description: 'Loja não autorizada Adidas', platform: 'Instagram', brand: 'Adidas', clientPriority: 'priority' },
-    { id: 'APROV-008', proofUrl: '/proofs/lv_accessories.pdf', entryDate: '2024-03-20', status: 'pending', title: 'LV Accessories', description: 'Acessórios LV falsificados', platform: 'Shopee', brand: 'Louis Vuitton', clientPriority: 'normal' },
-    { id: 'APROV-009', proofUrl: '/proofs/gucci_bags.pdf', entryDate: '2024-03-20', status: 'pending', title: 'Gucci Bags', description: 'Bolsas Gucci falsificadas', platform: 'Mercado Livre', brand: 'Gucci', clientPriority: 'priority' },
-    { id: 'APROV-010', proofUrl: '/proofs/prada_outlet.pdf', entryDate: '2024-03-20', status: 'pending', title: 'Prada Outlet', description: 'Outlet falso Prada', platform: 'TikTok', brand: 'Prada', clientPriority: 'normal' },
-    { id: 'APROV-011', proofUrl: '/proofs/nike_shoes.pdf', entryDate: '2024-03-19', status: 'pending', title: 'Nike Shoes BR', description: 'Tênis Nike falsificados', platform: 'Shopee', brand: 'Nike', clientPriority: 'normal' },
-    { id: 'APROV-012', proofUrl: '/proofs/adidas_shoes.pdf', entryDate: '2024-03-19', status: 'pending', title: 'Adidas Shoes', description: 'Tênis Adidas não autorizados', platform: 'Facebook', brand: 'Adidas', clientPriority: 'priority' },
-    { id: 'APROV-013', proofUrl: '/proofs/lv_store.pdf', entryDate: '2024-03-19', status: 'pending', title: 'LV Store BR', description: 'Loja não autorizada LV', platform: 'Instagram', brand: 'Louis Vuitton', clientPriority: 'normal' },
-    { id: 'APROV-014', proofUrl: '/proofs/gucci_outlet.pdf', entryDate: '2024-03-19', status: 'pending', title: 'Gucci Outlet', description: 'Outlet falso Gucci', platform: 'Mercado Livre', brand: 'Gucci', clientPriority: 'normal' },
-    { id: 'APROV-015', proofUrl: '/proofs/prada_bags.pdf', entryDate: '2024-03-19', status: 'pending', title: 'Prada Bags', description: 'Bolsas Prada falsificadas', platform: 'TikTok', brand: 'Prada', clientPriority: 'priority' },
-    { id: 'APROV-016', proofUrl: '/proofs/nike_accessories.pdf', entryDate: '2024-03-18', status: 'pending', title: 'Nike Accessories', description: 'Acessórios Nike falsificados', platform: 'Instagram', brand: 'Nike', clientPriority: 'normal' },
-    { id: 'APROV-017', proofUrl: '/proofs/adidas_bags.pdf', entryDate: '2024-03-18', status: 'pending', title: 'Adidas Bags', description: 'Bolsas Adidas não autorizadas', platform: 'Shopee', brand: 'Adidas', clientPriority: 'normal' },
-    { id: 'APROV-018', proofUrl: '/proofs/lv_shoes.pdf', entryDate: '2024-03-18', status: 'pending', title: 'LV Shoes BR', description: 'Calçados LV falsificados', platform: 'Facebook', brand: 'Louis Vuitton', clientPriority: 'priority' },
-    { id: 'APROV-019', proofUrl: '/proofs/gucci_store.pdf', entryDate: '2024-03-18', status: 'pending', title: 'Gucci Store BR', description: 'Loja não autorizada Gucci', platform: 'TikTok', brand: 'Gucci', clientPriority: 'normal' },
-    { id: 'APROV-020', proofUrl: '/proofs/prada_shoes.pdf', entryDate: '2024-03-18', status: 'pending', title: 'Prada Shoes', description: 'Calçados Prada não autorizados', platform: 'Mercado Livre', brand: 'Prada', clientPriority: 'normal' },
-    { id: 'APROV-021', proofUrl: '/proofs/nike_clothing.pdf', entryDate: '2024-03-17', status: 'pending', title: 'Nike Clothing', description: 'Roupas Nike falsificadas', platform: 'TikTok', brand: 'Nike', clientPriority: 'priority' },
-    { id: 'APROV-022', proofUrl: '/proofs/adidas_accessories.pdf', entryDate: '2024-03-17', status: 'pending', title: 'Adidas Accessories', description: 'Acessórios Adidas falsificados', platform: 'Mercado Livre', brand: 'Adidas', clientPriority: 'normal' },
-    { id: 'APROV-023', proofUrl: '/proofs/lv_outlet.pdf', entryDate: '2024-03-17', status: 'pending', title: 'LV Outlet BR', description: 'Outlet não autorizado LV', platform: 'Shopee', brand: 'Louis Vuitton', clientPriority: 'normal' },
-    { id: 'APROV-024', proofUrl: '/proofs/gucci_clothing.pdf', entryDate: '2024-03-17', status: 'pending', title: 'Gucci Clothing', description: 'Roupas Gucci falsificadas', platform: 'Instagram', brand: 'Gucci', clientPriority: 'priority' },
-    { id: 'APROV-025', proofUrl: '/proofs/prada_accessories.pdf', entryDate: '2024-03-17', status: 'pending', title: 'Prada Accessories', description: 'Acessórios Prada não autorizados', platform: 'Facebook', brand: 'Prada', clientPriority: 'normal' },
-    { id: 'APROV-026', proofUrl: '/proofs/nike_bags.pdf', entryDate: '2024-03-16', status: 'pending', title: 'Nike Bags BR', description: 'Bolsas Nike falsificadas', platform: 'Mercado Livre', brand: 'Nike', clientPriority: 'normal' },
-    { id: 'APROV-027', proofUrl: '/proofs/adidas_clothing.pdf', entryDate: '2024-03-16', status: 'pending', title: 'Adidas Clothing', description: 'Roupas Adidas não autorizadas', platform: 'TikTok', brand: 'Adidas', clientPriority: 'normal' },
-    { id: 'APROV-028', proofUrl: '/proofs/lv_clothing.pdf', entryDate: '2024-03-16', status: 'pending', title: 'LV Clothing BR', description: 'Roupas LV falsificadas', platform: 'Facebook', brand: 'Louis Vuitton', clientPriority: 'priority' },
-    { id: 'APROV-029', proofUrl: '/proofs/gucci_accessories.pdf', entryDate: '2024-03-16', status: 'pending', title: 'Gucci Accessories', description: 'Acessórios Gucci não autorizados', platform: 'Shopee', brand: 'Gucci', clientPriority: 'normal' },
-    { id: 'APROV-030', proofUrl: '/proofs/prada_clothing.pdf', entryDate: '2024-03-16', status: 'pending', title: 'Prada Clothing', description: 'Roupas Prada falsificadas', platform: 'Instagram', brand: 'Prada', clientPriority: 'normal' }
-  ]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedDate, setSelectedDate] = useState<Date>();
-  const [showConfettiAt, setShowConfettiAt] = useState<number[]>([50, 75, 100]);
-  const [dialogCase, setDialogCase] = useState<{id: string, action: 'approve' | 'reject'} | null>(null);
-  const [page, setPage] = useState(1);
-  const itemsPerPage = 25;
+const Approvals = () => {
+  const { toast } = useToast();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedSector, setSelectedSector] = useState('all');
+  const [selectedCase, setSelectedCase] = useState<CaseData | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [newComment, setNewComment] = useState('');
 
-  useEffect(() => {
-    console.log("Casos de aprovação:", approvals);
-  }, [approvals]);
-
-  const totalCases = approvals.length;
-  const processedCases = approvals.filter(a => a.status !== 'pending').length;
-  const progress = totalCases ? (processedCases / totalCases) * 100 : 0;
-
-  useEffect(() => {
-    if (showConfettiAt.includes(Math.round(progress))) {
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
-      setShowConfettiAt(prev => prev.filter(p => p !== Math.round(progress)));
+  // Mock data - casos pendentes de aprovação
+  const [cases, setCases] = useState<CaseData[]>([
+    {
+      id: "12345",
+      title: "Site falsificado da marca Adidas",
+      brand: "Adidas",
+      infractor: "dominiofalso.com",
+      type: "Venda de produtos falsos",
+      status: "Aguardando aprovação",
+      urgent: true,
+      sector: "Verificação",
+      analyst: "João Silva",
+      submissionDate: "2024-01-24",
+      lastUpdate: "2024-01-26",
+      description: "Site vendendo produtos falsificados da marca Adidas com preços muito abaixo do mercado. Domínio registrado recentemente e sem informações de contato válidas.",
+      proofs: [
+        { id: "1", name: "print_homepage.jpg", type: "image", url: "#", uploadDate: "2024-01-24" },
+        { id: "2", name: "video_navegacao.mp4", type: "video", url: "#", uploadDate: "2024-01-24" },
+        { id: "3", name: "whois_domain.pdf", type: "document", url: "#", uploadDate: "2024-01-25" }
+      ],
+      comments: [
+        { id: "1", author: "João Silva", message: "Revisado, precisa de aprovação do coordenador", timestamp: "2024-01-25 14:30", internal: true },
+        { id: "2", author: "Carla Santos", message: "Verifiquei CNPJ do domínio - não existe", timestamp: "2024-01-25 16:45", internal: true }
+      ],
+      history: [
+        { id: "1", action: "Caso criado", author: "João Silva", timestamp: "2024-01-24 09:00", details: "Caso criado no setor de Verificação" },
+        { id: "2", action: "Provas adicionadas", author: "João Silva", timestamp: "2024-01-24 14:30", details: "3 arquivos de prova enviados" },
+        { id: "3", action: "Marcado como urgente", author: "Cliente", timestamp: "2024-01-26 08:15", details: "Cliente marcou o caso como prioritário" }
+      ]
+    },
+    {
+      id: "12346",
+      title: "Perfil fake no Instagram - Nike",
+      brand: "Nike",
+      infractor: "@nike_oficial_br",
+      type: "Perfil falso",
+      status: "Em análise",
+      urgent: false,
+      sector: "Verificação",
+      analyst: "Maria Costa",
+      submissionDate: "2024-01-23",
+      lastUpdate: "2024-01-25",
+      description: "Perfil no Instagram se passando pela Nike Brasil, vendendo produtos falsificados através de direct.",
+      proofs: [
+        { id: "1", name: "perfil_instagram.jpg", type: "image", url: "#", uploadDate: "2024-01-23" },
+        { id: "2", name: "conversas_direct.pdf", type: "document", url: "#", uploadDate: "2024-01-23" }
+      ],
+      comments: [
+        { id: "1", author: "Maria Costa", message: "Perfil verificado como falso, preparando relatório", timestamp: "2024-01-25 11:20", internal: true }
+      ],
+      history: [
+        { id: "1", action: "Caso criado", author: "Maria Costa", timestamp: "2024-01-23 10:30", details: "Caso criado no setor de Verificação" },
+        { id: "2", action: "Investigação iniciada", author: "Maria Costa", timestamp: "2024-01-24 09:00", details: "Análise do perfil iniciada" }
+      ]
     }
-  }, [progress]);
+  ]);
 
-  const handleApprove = (id: string) => {
-    setApprovals(prev => prev.map(approval => 
-      approval.id === id ? { ...approval, status: 'approved' } : approval
+  const filteredCases = cases.filter(caseItem => {
+    const matchesSearch = caseItem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         caseItem.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         caseItem.infractor.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSector = selectedSector === 'all' || caseItem.sector === selectedSector;
+    return matchesSearch && matchesSector;
+  });
+
+  const openCaseDrawer = (caseData: CaseData) => {
+    setSelectedCase(caseData);
+    setIsDrawerOpen(true);
+  };
+
+  const handleApproveCase = (caseId: string) => {
+    setCases(cases.filter(c => c.id !== caseId));
+    toast({
+      title: "Caso Aprovado",
+      description: "O caso foi aprovado e seguirá para a próxima etapa.",
+    });
+    setIsDrawerOpen(false);
+  };
+
+  const handleRejectCase = (caseId: string) => {
+    setCases(cases.filter(c => c.id !== caseId));
+    toast({
+      title: "Caso Devolvido",
+      description: "O caso foi devolvido para revisão.",
+      variant: "destructive",
+    });
+    setIsDrawerOpen(false);
+  };
+
+  const handleToggleUrgent = (caseId: string) => {
+    setCases(cases.map(c => 
+      c.id === caseId ? { ...c, urgent: !c.urgent } : c
     ));
+    if (selectedCase && selectedCase.id === caseId) {
+      setSelectedCase({ ...selectedCase, urgent: !selectedCase.urgent });
+    }
   };
 
-  const handleReject = (id: string) => {
-    setRejectingId(id);
-    setShowRejectDialog(true);
+  const handleAddComment = () => {
+    if (!newComment.trim() || !selectedCase) return;
+
+    const comment = {
+      id: Date.now().toString(),
+      author: "Coordenador", // seria o usuário logado
+      message: newComment,
+      timestamp: new Date().toLocaleString('pt-BR'),
+      internal: true
+    };
+
+    const updatedCase = {
+      ...selectedCase,
+      comments: [...selectedCase.comments, comment]
+    };
+
+    setCases(cases.map(c => c.id === selectedCase.id ? updatedCase : c));
+    setSelectedCase(updatedCase);
+    setNewComment('');
+
+    toast({
+      title: "Comentário adicionado",
+      description: "Seu comentário foi registrado no caso.",
+    });
   };
 
-  const toggleClientPriority = (id: string) => {
-    setApprovals(prev => prev.map(approval => 
-      approval.id === id 
-        ? { 
-            ...approval, 
-            clientPriority: approval.clientPriority === 'priority' ? 'normal' : 'priority' 
-          }
-        : approval
-    ));
+  const getStatusBadge = (status: string, urgent: boolean) => {
+    let variant: "default" | "secondary" | "destructive" | "outline" = "secondary";
+    let color = "";
+
+    switch (status) {
+      case "Aguardando aprovação":
+        variant = "outline";
+        color = "border-yellow-300 text-yellow-700 bg-yellow-50";
+        break;
+      case "Em análise":
+        variant = "secondary";
+        color = "border-blue-300 text-blue-700 bg-blue-50";
+        break;
+      default:
+        variant = "secondary";
+    }
+
+    return (
+      <div className="flex items-center gap-2">
+        <Badge variant={variant} className={color}>
+          {status}
+        </Badge>
+        {urgent && (
+          <Badge variant="destructive" className="bg-red-100 text-red-700 border-red-300">
+            <AlertTriangle className="h-3 w-3 mr-1" />
+            Urgente
+          </Badge>
+        )}
+      </div>
+    );
   };
-
-  const confirmReject = () => {
-    if (!rejectingId || !rejectReason) return;
-
-    setApprovals(prev => prev.map(approval => 
-      approval.id === rejectingId 
-        ? { ...approval, status: 'rejected', rejectionReason: rejectReason }
-        : approval
-    ));
-
-    setShowRejectDialog(false);
-    setRejectingId(null);
-    setRejectReason('');
-  };
-
-  const handleInternalEvaluation = (id: string) => {
-    setEvaluatingId(id);
-    setShowInternalEvaluationDialog(true);
-  };
-
-  const confirmInternalEvaluation = () => {
-    if (!evaluatingId || !internalEvaluationReason) return;
-
-    // Aqui você pode adicionar a lógica para marcar o caso como "em avaliação interna"
-    // Por exemplo, adicionar um novo status ou campo no objeto approval
-    console.log(`Caso ${evaluatingId} enviado para avaliação interna: ${internalEvaluationReason}`);
-
-    setShowInternalEvaluationDialog(false);
-    setEvaluatingId(null);
-    setInternalEvaluationReason('');
-  };
-
-  const handleBulkApprove = () => {
-    setApprovals(prev => prev.map(approval => 
-      selectedCases.includes(approval.id) ? { ...approval, status: 'approved' } : approval
-    ));
-    setSelectedCases([]);
-  };
-
-  const filteredApprovals = approvals
-    .filter(approval => 
-      approval.id.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (!selectedDate || format(new Date(approval.entryDate), 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd'))
-    )
-    .slice((page - 1) * itemsPerPage, page * itemsPerPage);
-
-  const totalPages = Math.ceil(approvals.length / itemsPerPage);
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex flex-col gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Progresso das Aprovações</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span>Notificações pendentes: {processedCases} de {totalCases}</span>
-                <span className="font-bold">{Math.round(progress)}% concluído</span>
-              </div>
-              <Progress value={progress} className="h-2" />
-              <Alert className="bg-green-50 border-green-200">
-                <AlertDescription>
-                  Média de tempo por aprovação: 2.5 minutos
-                </AlertDescription>
-              </Alert>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="flex items-center gap-4">
-          <div className="flex-1">
-            <div className="flex gap-2">
-              <div className="relative flex-1">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Buscar por código do caso..."
-                  className="pl-8"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-[240px] justify-start text-left font-normal">
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {selectedDate ? format(selectedDate, 'PPP', { locale: ptBR }) : <span>Filtrar por data</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={selectedDate}
-                    onSelect={setSelectedDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <Button onClick={handleBulkApprove}>Aprovar Todos</Button>
-            </div>
-          </div>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-primary">Aprovações Pendentes</h1>
+          <p className="text-muted-foreground">
+            {filteredCases.length} casos aguardando sua aprovação
+          </p>
         </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Casos Pendentes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[50px]">
-                    <Checkbox 
-                      checked={selectedCases.length === filteredApprovals.length}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          setSelectedCases(filteredApprovals.map(a => a.id));
-                        } else {
-                          setSelectedCases([]);
-                        }
-                      }}
-                    />
-                  </TableHead>
-                  <TableHead>Código do Caso</TableHead>
-                  <TableHead>Certificação do Anúncio</TableHead>
-                  <TableHead>Data de Entrada</TableHead>
-                  <TableHead className="text-center">Prioritário</TableHead>
-                  <TableHead className="text-center">Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredApprovals.map((approval) => (
-                  <TableRow key={approval.id}>
-                    <TableCell>
-                      <Checkbox 
-                        checked={selectedCases.includes(approval.id)}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            setSelectedCases([...selectedCases, approval.id]);
-                          } else {
-                            setSelectedCases(selectedCases.filter(id => id !== approval.id));
-                          }
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell>{approval.id}</TableCell>
-                    <TableCell>
-                      <Button variant="ghost" size="sm" className="gap-2">
-                        <FileText className="h-4 w-4" />
-                        Visualizar PDF
-                      </Button>
-                    </TableCell>
-                    <TableCell>
-                      {format(new Date(approval.entryDate), 'dd/MM/yyyy')}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => toggleClientPriority(approval.id)}
-                        className={cn(
-                          "h-8 w-8 p-0",
-                          approval.clientPriority === 'priority' 
-                            ? "text-black hover:text-black" 
-                            : "text-gray-300 hover:text-red-400"
-                        )}
-                      >
-                        <AlertTriangle 
-                          className={cn(
-                            "h-4 w-4",
-                            approval.clientPriority === 'priority' ? "fill-red-500 stroke-black" : ""
-                          )}
-                        />
-                      </Button>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <div className="flex justify-center gap-2">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleApprove(approval.id)}
-                          className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50"
-                        >
-                          <CheckCircle className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleInternalEvaluation(approval.id)}
-                          className="h-8 w-8 text-yellow-600 hover:text-yellow-700 hover:bg-yellow-50"
-                        >
-                          <Clock className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleReject(approval.id)}
-                          className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50"
-                        >
-                          <XCircle className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-
-            {totalPages > 1 && (
-              <div className="flex justify-center gap-2 mt-4">
-                {Array.from({ length: totalPages }, (_, i) => (
-                  <Button
-                    key={i + 1}
-                    variant={page === i + 1 ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setPage(i + 1)}
-                  >
-                    {i + 1}
-                  </Button>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
       </div>
 
-      <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Motivo da Rejeição</DialogTitle>
-            <DialogDescription>
-              Por favor, informe o motivo da rejeição para ajudar a otimizar análises futuras.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="reason">Motivo</Label>
-              <Textarea
-                id="reason"
-                value={rejectReason}
-                onChange={(e) => setRejectReason(e.target.value)}
-                placeholder="Descreva o motivo da rejeição..."
+      {/* Filtros */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Buscar por marca, infrator ou título..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
               />
             </div>
+            <Select value={selectedSector} onValueChange={setSelectedSector}>
+              <SelectTrigger className="w-48">
+                <Filter className="h-4 w-4 mr-2" />
+                <SelectValue placeholder="Filtrar por setor" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos os setores</SelectItem>
+                <SelectItem value="Verificação">Verificação</SelectItem>
+                <SelectItem value="Auditoria">Auditoria</SelectItem>
+                <SelectItem value="Logística">Logística</SelectItem>
+                <SelectItem value="IP Tools">IP Tools</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowRejectDialog(false)}>
-              Cancelar
-            </Button>
-            <Button onClick={confirmReject} disabled={!rejectReason}>
-              Confirmar Rejeição
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        </CardContent>
+      </Card>
 
-      <Dialog open={showInternalEvaluationDialog} onOpenChange={setShowInternalEvaluationDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Enviar para Avaliação Interna</DialogTitle>
-            <DialogDescription>
-              Nos ajude a evoluir nosso modelo algorítmico! Compartilhe informações que podem melhorar a análise automática para casos similares.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="evaluation-reason">Informações para evolução do modelo</Label>
-              <Textarea
-                id="evaluation-reason"
-                value={internalEvaluationReason}
-                onChange={(e) => setInternalEvaluationReason(e.target.value)}
-                placeholder="Compartilhe detalhes que podem ajudar a melhorar nossa análise automática..."
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowInternalEvaluationDialog(false)}>
-              Cancelar
-            </Button>
-            <Button onClick={confirmInternalEvaluation} disabled={!internalEvaluationReason}>
-              Enviar para Avaliação
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* Lista de Casos */}
+      <div className="space-y-4">
+        {filteredCases.map((caseItem) => (
+          <Card key={caseItem.id} className="hover:shadow-md transition-shadow cursor-pointer">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex-1 min-w-0" onClick={() => openCaseDrawer(caseItem)}>
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className="text-lg font-semibold truncate">
+                      Caso #{caseItem.id} - {caseItem.title}
+                    </h3>
+                    {getStatusBadge(caseItem.status, caseItem.urgent)}
+                  </div>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <Tag className="h-4 w-4" />
+                      <span><strong>Marca:</strong> {caseItem.brand}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <ExternalLink className="h-4 w-4" />
+                      <span><strong>Infrator:</strong> {caseItem.infractor}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <User className="h-4 w-4" />
+                      <span><strong>Analista:</strong> {caseItem.analyst}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Calendar className="h-4 w-4" />
+                      <span><strong>Atualizado:</strong> {new Date(caseItem.lastUpdate).toLocaleDateString('pt-BR')}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 ml-4">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openCaseDrawer(caseItem);
+                    }}
+                  >
+                    <Eye className="h-4 w-4 mr-2" />
+                    Ver Detalhes
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleApproveCase(caseItem.id);
+                    }}
+                  >
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    Aprovar
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRejectCase(caseItem.id);
+                    }}
+                  >
+                    <XCircle className="h-4 w-4 mr-2" />
+                    Devolver
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+
+        {filteredCases.length === 0 && (
+          <Card>
+            <CardContent className="text-center py-12">
+              <CheckCircle className="h-12 w-12 mx-auto text-green-500 mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Nenhum caso pendente</h3>
+              <p className="text-muted-foreground">
+                Todos os casos foram processados ou não há casos que correspondam aos filtros aplicados.
+              </p>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      {/* Drawer lateral para visualização do caso */}
+      <Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+        <SheetContent className="w-[600px] sm:w-[700px] max-w-[90vw]">
+          <SheetHeader>
+            <SheetTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              Caso #{selectedCase?.id} - {selectedCase?.title}
+            </SheetTitle>
+          </SheetHeader>
+
+          {selectedCase && (
+            <ScrollArea className="h-[calc(100vh-120px)] mt-6">
+              <div className="space-y-6">
+                {/* Informações principais */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Informações do Caso</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">Marca</label>
+                        <p className="font-medium">{selectedCase.brand}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">Infrator</label>
+                        <p className="font-medium">{selectedCase.infractor}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">Tipo</label>
+                        <p className="font-medium">{selectedCase.type}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">Analista</label>
+                        <p className="font-medium">{selectedCase.analyst}</p>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label className="text-sm font-medium text-muted-foreground">Status</label>
+                      <div className="mt-1">
+                        {getStatusBadge(selectedCase.status, selectedCase.urgent)}
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium text-muted-foreground">Descrição</label>
+                      <p className="text-sm mt-1">{selectedCase.description}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Ações rápidas */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Zap className="h-5 w-5" />
+                      Ações Rápidas
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        variant={selectedCase.urgent ? "destructive" : "outline"}
+                        size="sm"
+                        onClick={() => handleToggleUrgent(selectedCase.id)}
+                      >
+                        <AlertTriangle className="h-4 w-4 mr-2" />
+                        {selectedCase.urgent ? "Remover urgência" : "Marcar como urgente"}
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Share className="h-4 w-4 mr-2" />
+                        Compartilhar
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        Abrir em nova aba
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Provas e arquivos */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Paperclip className="h-5 w-5" />
+                      Provas e Arquivos ({selectedCase.proofs.length})
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {selectedCase.proofs.map((proof) => (
+                        <div key={proof.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <div className="h-10 w-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                              {proof.type === 'image' && <Eye className="h-5 w-5 text-primary" />}
+                              {proof.type === 'video' && <Eye className="h-5 w-5 text-primary" />}
+                              {proof.type === 'document' && <FileText className="h-5 w-5 text-primary" />}
+                            </div>
+                            <div>
+                              <p className="font-medium">{proof.name}</p>
+                              <p className="text-sm text-muted-foreground">
+                                Enviado em {new Date(proof.uploadDate).toLocaleDateString('pt-BR')}
+                              </p>
+                            </div>
+                          </div>
+                          <Button variant="outline" size="sm">
+                            <Download className="h-4 w-4 mr-2" />
+                            Baixar
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Comentários internos */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <MessageSquare className="h-5 w-5" />
+                      Comentários Internos
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-3">
+                      {selectedCase.comments.map((comment) => (
+                        <div key={comment.id} className="p-3 bg-muted/50 rounded-lg">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="font-medium text-sm">{comment.author}</span>
+                            <span className="text-xs text-muted-foreground">{comment.timestamp}</span>
+                          </div>
+                          <p className="text-sm">{comment.message}</p>
+                        </div>
+                      ))}
+                    </div>
+
+                    <Separator />
+
+                    <div className="space-y-3">
+                      <Textarea
+                        placeholder="Adicionar comentário interno..."
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        rows={3}
+                      />
+                      <Button onClick={handleAddComment} disabled={!newComment.trim()}>
+                        <MessageSquare className="h-4 w-4 mr-2" />
+                        Adicionar Comentário
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Histórico */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <History className="h-5 w-5" />
+                      Histórico do Caso
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {selectedCase.history.map((event, index) => (
+                        <div key={event.id} className="flex gap-3">
+                          <div className={`w-2 h-2 rounded-full mt-2 ${index === 0 ? 'bg-primary' : 'bg-muted-foreground'}`} />
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              <span className="font-medium text-sm">{event.action}</span>
+                              <span className="text-xs text-muted-foreground">{event.timestamp}</span>
+                            </div>
+                            <p className="text-sm text-muted-foreground">{event.details}</p>
+                            <p className="text-xs text-muted-foreground">por {event.author}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Botões de ação principais */}
+                <div className="sticky bottom-0 bg-background pt-4 border-t">
+                  <div className="flex gap-3">
+                    <Button 
+                      className="flex-1"
+                      onClick={() => handleApproveCase(selectedCase.id)}
+                    >
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                      Aprovar Caso
+                    </Button>
+                    <Button 
+                      variant="destructive"
+                      className="flex-1"
+                      onClick={() => handleRejectCase(selectedCase.id)}
+                    >
+                      <XCircle className="h-4 w-4 mr-2" />
+                      Devolver para Revisão
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </ScrollArea>
+          )}
+        </SheetContent>
+      </Sheet>
     </div>
   );
-}
+};
+
+export default Approvals;
