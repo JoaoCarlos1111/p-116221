@@ -1,0 +1,95 @@
+👤 Perfis de Acesso do Cliente
+1. 🧠 Gestor (Admin Cliente)
+Acesso completo ao painel da empresa
+
+Funcionalidades:
+Dashboard geral com visão consolidada dos casos
+
+Visualização e filtro de todos os casos por status, data, marca, etc.
+
+Acompanhamento de indicadores de desempenho (casos resolvidos, tempo médio, etc.)
+
+Acesso ao painel financeiro (faturas, pagamentos, contratos)
+
+Aprovação de notificações e acordos
+
+Download de documentos gerados
+
+Gerenciamento de usuários (criar novos analistas/financeiros e definir permissões)
+
+Consulta e filtro por marca
+
+Exportação de relatórios em .xlsx ou PDF
+
+Histórico de notificações e decisões
+
+Painel de integrações (ex: Correios, INPI, API de rastreio de ações)
+
+2. 🕵️‍♂️ Analista de Contrafação
+Responsável por acompanhar e validar casos operacionais
+
+Funcionalidades:
+Dashboard de casos com filtros rápidos por status (ex: “Aguardando aprovação”)
+
+Visualização detalhada dos casos e suas provas
+
+Aprovação ou reprovação de notificações extrajudiciais
+
+Sugestões de resposta automática com IA para aprovação
+
+Comentários internos ou direcionados à equipe da plataforma
+
+Upload de arquivos ou novas provas em casos abertos
+
+Histórico de ações por caso (log)
+
+Marcação de urgência/prioridade
+
+Possibilidade de marcar status manuais (“aguardando cliente”, “em análise interna” etc.)
+
+3. 💰 Financeiro
+Voltado para acompanhamento de custos, pagamentos e documentos fiscais
+
+Funcionalidades:
+Dashboard financeiro (casos por status e custo)
+
+Acesso às faturas mensais
+
+Baixa de boletos e comprovantes
+
+Histórico de pagamentos
+
+Exportação financeira (planilhas .csv / .xlsx)
+
+Visualização de valores por tipo de serviço (notificações, acordos, etc.)
+
+Download de contratos e documentos fiscais
+
+Alertas de vencimento ou cobrança
+
+Solicitação de segunda via / renegociação
+
+Integração com sistemas ERP (API futura)
+
+🔒 Funcionalidades Transversais (com permissão por perfil)
+Essas funcionalidades podem estar disponíveis em diferentes níveis, conforme o perfil:
+
+🔍 Busca inteligente: busca rápida por número de processo, nome do infrator, marca, etc.
+
+📁 Central de documentos: repositório com todos os PDFs gerados por marca ou por tipo
+
+🧾 Relatórios automáticos: envio semanal/mensal por e-mail com resumo de desempenho
+
+🛠️ Suporte ou Chat interno: contato direto com o time da plataforma
+
+🔔 Notificações e alertas: eventos relevantes (caso aprovado, documento pronto, fatura emitida)
+
+📊 Indicadores personalizados por marca ou setor
+
+🤖 Insights com IA (se ativado):
+
+Análise de reincidência por infrator
+
+Detecção de padrões de fraude
+
+Sugestão de melhorias operacionais com base no histórico
