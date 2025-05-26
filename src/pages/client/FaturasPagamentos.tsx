@@ -17,7 +17,10 @@ import {
   AlertCircle,
   CheckCircle,
   Clock,
-  MessageSquare
+  MessageSquare,
+  TrendingDown,
+  Mail,
+  FileBarChart
 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import { format, subMonths, subDays, isWithinInterval, startOfDay, endOfDay } from "date-fns";
@@ -30,6 +33,29 @@ const FaturasPagamentos = () => {
   const [periodoFilter, setPeriodoFilter] = useState('todos');
   const [dateRange, setDateRange] = useState({ from: undefined, to: undefined });
   const [observacoes, setObservacoes] = useState({});
+  const [showInadimplenciaReport, setShowInadimplenciaReport] = useState(false);
+
+  // Dados de inadimplência agrupados por contrafator
+  const inadimplenciaReport = [
+    {
+      contrafator: 'Tech Solutions Inc',
+      parcelasVencidas: 2,
+      valorTotal: 4500,
+      ultimoPagamento: '2024-01-15',
+      proximaAcao: 'Reenvio de boleto',
+      diasAtraso: 15,
+      casos: ['CASO-2024-002']
+    },
+    {
+      contrafator: 'MKT Falsos Corp',
+      parcelasVencidas: 1,
+      valorTotal: 2300,
+      ultimoPagamento: '2024-02-01',
+      proximaAcao: 'Cobrança extrajudicial',
+      diasAtraso: 8,
+      casos: ['CASO-2024-005']
+    }
+  ];
 
   const parcelamentos = [
     {
@@ -138,9 +164,18 @@ const FaturasPagamentos = () => {
           <h1 className="text-3xl font-bold text-primary">Faturas e Pagamentos</h1>
           <p className="text-muted-foreground">Gestão de indenizações parceladas</p>
         </div>
-        <Button onClick={() => navigate('/client/financeiro/dashboard')}>
-          Voltar ao Dashboard
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            variant={showInadimplenciaReport ? "default" : "outline"}
+            onClick={() => setShowInadimplenciaReport(!showInadimplenciaReport)}
+          >
+            <TrendingDown className="h-4 w-4 mr-2" />
+            {showInadimplenciaReport ? "Ocultar" : "Ver"} Inadimplência
+          </Button>
+          <Button onClick={() => navigate('/client/financeiro/dashboard')}>
+            Voltar ao Dashboard
+          </Button>
+        </div>
       </div>
 
       {/* Filtros */}
@@ -214,6 +249,114 @@ const FaturasPagamentos = () => {
           </Popover>
         )}
       </div>
+
+      {/* Relatório de Inadimplência */}
+      {showInadimplenciaReport && (
+        <Card className="border-l-4 border-l-red-500">
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle className="flex items-center gap-2 text-red-800">
+                <FileBarChart className="h-5 w-5" />
+                Relatório de Inadimplência por Contrafator
+              </CardTitle>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm">
+                  <Download className="h-4 w-4 mr-1" />
+                  Exportar CSV
+                </Button>
+                <Button variant="outline" size="sm">
+                  <Mail className="h-4 w-4 mr-1" />
+                  Enviar Lembretes
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b-2 border-red-200">
+                    <th className="text-left p-3 font-semibold">Contrafator</th>
+                    <th className="text-center p-3 font-semibold">Parcelas Vencidas</th>
+                    <th className="text-right p-3 font-semibold">Valor Total</th>
+                    <th className="text-center p-3 font-semibold">Último Pagamento</th>
+                    <th className="text-center p-3 font-semibold">Dias em Atraso</th>
+                    <th className="text-center p-3 font-semibold">Próxima Ação</th>
+                    <th className="text-center p-3 font-semibold">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {inadimplenciaReport.map((item, index) => (
+                    <tr key={index} className="border-b hover:bg-red-50">
+                      <td className="p-3">
+                        <div>
+                          <div className="font-medium">{item.contrafator}</div>
+                          <div className="text-xs text-gray-500">
+                            Casos: {item.casos.join(', ')}
+                          </div>
+                        </div>
+                      </td>
+                      <td className="p-3 text-center">
+                        <Badge className="bg-red-100 text-red-800">
+                          {item.parcelasVencidas} parcela(s)
+                        </Badge>
+                      </td>
+                      <td className="p-3 text-right font-bold text-red-600">
+                        {item.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                      </td>
+                      <td className="p-3 text-center">
+                        {new Date(item.ultimoPagamento).toLocaleDateString('pt-BR')}
+                      </td>
+                      <td className="p-3 text-center">
+                        <Badge variant="destructive">
+                          {item.diasAtraso} dias
+                        </Badge>
+                      </td>
+                      <td className="p-3 text-center">
+                        <span className="text-sm bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+                          {item.proximaAcao}
+                        </span>
+                      </td>
+                      <td className="p-3 text-center">
+                        <div className="flex gap-1 justify-center">
+                          <Button variant="ghost" size="sm" title="Enviar lembrete">
+                            <Mail className="h-3 w-3" />
+                          </Button>
+                          <Button variant="ghost" size="sm" title="Ver detalhes">
+                            <FileText className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            
+            <div className="mt-4 p-4 bg-red-50 rounded-lg">
+              <h4 className="font-semibold text-red-800 mb-2">Resumo da Inadimplência:</h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div>
+                  <span className="text-gray-600">Total de Contrafatores:</span>
+                  <span className="font-bold ml-2">{inadimplenciaReport.length}</span>
+                </div>
+                <div>
+                  <span className="text-gray-600">Parcelas em Atraso:</span>
+                  <span className="font-bold ml-2">
+                    {inadimplenciaReport.reduce((acc, item) => acc + item.parcelasVencidas, 0)}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-gray-600">Valor Total Inadimplente:</span>
+                  <span className="font-bold ml-2 text-red-600">
+                    {inadimplenciaReport.reduce((acc, item) => acc + item.valorTotal, 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Lista de Parcelamentos */}
       <div className="space-y-6">
@@ -337,10 +480,12 @@ const FaturasPagamentos = () => {
               <p className="text-sm text-muted-foreground">Parcelamentos Ativos</p>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-red-600">
+              <div className="text-2xl font-bold text-red-600 flex items-center justify-center gap-1">
+                <AlertTriangle className="h-6 w-6" />
                 {filteredParcelamentos.reduce((acc, p) => acc + p.parcelas.filter(parc => parc.status === 'Vencido').length, 0)}
               </div>
               <p className="text-sm text-muted-foreground">Parcelas Vencidas</p>
+              <p className="text-xs text-red-600 font-medium">Requer atenção urgente</p>
             </div>
           </div>
         </CardContent>
