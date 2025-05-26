@@ -31,44 +31,44 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
     return acc;
   }, {} as Record<string, EstadoData>);
 
-  // Definindo formas específicas dos estados com paths SVG mais precisos
+  // Paths SVG mais precisos dos estados brasileiros
   const statePaths: { [key: string]: string } = {
     // Região Norte
-    'AM': "M120,120 L160,110 L195,125 L220,140 L240,160 L235,185 L220,200 L195,210 L170,205 L145,195 L125,180 L115,155 L120,120 Z",
-    'RR': "M160,45 L190,40 L210,50 L215,65 L210,80 L190,85 L170,85 L155,75 L150,60 L160,45 Z",
-    'AP': "M245,55 L270,50 L285,60 L290,75 L285,90 L270,95 L255,95 L245,85 L240,70 L245,55 Z",
-    'PA': "M195,75 L235,70 L270,80 L290,95 L285,120 L275,140 L255,145 L235,140 L215,130 L200,115 L190,95 L195,75 Z",
-    'TO': "M235,125 L260,120 L275,135 L280,150 L275,170 L265,180 L250,185 L235,180 L230,165 L230,145 L235,125 Z",
-    'RO': "M140,145 L170,140 L185,155 L190,170 L185,185 L170,190 L155,190 L140,185 L135,170 L135,155 L140,145 Z",
-    'AC': "M95,145 L125,140 L140,155 L145,170 L140,185 L125,190 L110,190 L95,185 L90,170 L90,155 L95,145 Z",
+    'AM': "M50,80 L120,75 L140,90 L160,100 L180,110 L190,130 L185,150 L175,165 L160,170 L140,165 L120,160 L100,150 L80,140 L60,125 L50,105 Z",
+    'RR': "M80,20 L110,15 L130,25 L135,40 L130,55 L110,60 L90,60 L75,50 L70,35 Z",
+    'AP': "M180,30 L205,25 L220,35 L225,50 L220,65 L205,70 L190,70 L180,60 L175,45 Z",
+    'PA': "M120,50 L170,45 L200,55 L220,70 L215,95 L205,115 L185,120 L165,115 L145,105 L130,90 L120,70 Z",
+    'TO': "M170,100 L195,95 L210,110 L215,125 L210,145 L200,155 L185,160 L170,155 L165,140 L165,120 Z",
+    'RO': "M75,115 L105,110 L120,125 L125,140 L120,155 L105,160 L90,160 L75,155 L70,140 L70,125 Z",
+    'AC': "M30,115 L60,110 L75,125 L80,140 L75,155 L60,160 L45,160 L30,155 L25,140 L25,125 Z",
     
     // Região Nordeste
-    'MA': "M275,95 L305,90 L325,105 L330,120 L325,135 L305,140 L285,140 L275,125 L270,110 L275,95 Z",
-    'PI': "M295,135 L320,130 L335,145 L340,160 L335,175 L320,180 L305,180 L295,165 L290,150 L295,135 Z",
-    'CE': "M335,105 L365,100 L380,115 L385,130 L380,145 L365,150 L350,150 L335,135 L330,120 L335,105 Z",
-    'RN': "M365,110 L385,105 L395,120 L400,135 L395,150 L385,155 L375,155 L365,140 L360,125 L365,110 Z",
-    'PB': "M375,130 L390,125 L400,140 L405,155 L400,170 L390,175 L380,175 L375,160 L370,145 L375,130 Z",
-    'PE': "M355,145 L380,140 L395,155 L400,170 L395,185 L380,190 L365,190 L355,175 L350,160 L355,145 Z",
-    'AL': "M370,170 L385,165 L395,180 L400,195 L395,210 L385,215 L375,215 L370,200 L365,185 L370,170 Z",
-    'SE': "M355,185 L375,180 L385,195 L390,210 L385,225 L375,230 L365,230 L355,215 L350,200 L355,185 Z",
-    'BA': "M305,155 L345,150 L365,165 L375,180 L370,205 L365,230 L350,245 L330,250 L310,245 L295,230 L290,205 L295,180 L305,155 Z",
+    'MA': "M210,70 L240,65 L260,80 L265,95 L260,110 L240,115 L220,115 L210,100 L205,85 Z",
+    'PI': "M230,110 L255,105 L270,120 L275,135 L270,150 L255,155 L240,155 L230,140 L225,125 Z",
+    'CE': "M270,80 L300,75 L315,90 L320,105 L315,120 L300,125 L285,125 L270,110 L265,95 Z",
+    'RN': "M300,85 L320,80 L330,95 L335,110 L330,125 L320,130 L310,130 L300,115 L295,100 Z",
+    'PB': "M310,105 L325,100 L335,115 L340,130 L335,145 L325,150 L315,150 L310,135 L305,120 Z",
+    'PE': "M290,120 L315,115 L330,130 L335,145 L330,160 L315,165 L300,165 L290,150 L285,135 Z",
+    'AL': "M305,145 L320,140 L330,155 L335,170 L330,185 L320,190 L310,190 L305,175 L300,160 Z",
+    'SE': "M290,165 L310,160 L320,175 L325,190 L320,205 L310,210 L300,210 L290,195 L285,180 Z",
+    'BA': "M240,130 L280,125 L300,140 L310,155 L305,180 L300,205 L285,220 L265,225 L245,220 L230,205 L225,180 L230,155 Z",
     
     // Região Centro-Oeste
-    'MT': "M175,185 L215,180 L240,195 L250,210 L245,235 L235,255 L220,265 L200,260 L180,250 L165,235 L160,210 L170,190 L175,185 Z",
-    'MS': "M205,245 L230,240 L245,255 L250,270 L245,290 L235,305 L220,310 L205,305 L195,290 L190,275 L195,260 L205,245 Z",
-    'GO': "M235,205 L270,200 L290,215 L300,230 L295,250 L285,265 L270,270 L255,265 L240,250 L230,235 L230,220 L235,205 Z",
-    'DF': "M250,220 L265,215 L275,230 L280,245 L275,260 L265,265 L255,265 L250,250 L245,235 L250,220 Z",
+    'MT': "M110,155 L150,150 L175,165 L185,180 L180,205 L170,225 L155,235 L135,230 L115,220 L100,205 L95,180 L105,165 Z",
+    'MS': "M140,220 L165,215 L180,230 L185,245 L180,265 L170,280 L155,285 L140,280 L130,265 L125,250 L130,235 Z",
+    'GO': "M170,175 L205,170 L225,185 L235,200 L230,220 L220,235 L205,240 L190,235 L175,220 L165,205 L165,190 Z",
+    'DF': "M185,195 L200,190 L210,205 L215,220 L210,235 L200,240 L190,240 L185,225 L180,210 Z",
     
     // Região Sudeste
-    'MG': "M285,235 L320,230 L345,245 L355,260 L350,285 L340,305 L325,315 L305,315 L285,305 L270,290 L265,270 L270,250 L285,235 Z",
-    'ES': "M335,255 L355,250 L365,265 L370,280 L365,295 L355,305 L345,305 L335,290 L330,275 L335,255 Z",
-    'RJ': "M325,285 L345,280 L360,295 L365,310 L360,325 L345,335 L330,335 L325,320 L320,305 L320,295 L325,285 Z",
-    'SP': "M275,295 L310,290 L330,305 L340,320 L335,345 L325,365 L310,375 L290,375 L270,365 L255,350 L250,330 L255,310 L275,295 Z",
+    'MG': "M220,210 L255,205 L280,220 L290,235 L285,260 L275,280 L260,290 L240,290 L220,280 L205,265 L200,245 L205,225 Z",
+    'ES': "M270,230 L290,225 L300,240 L305,255 L300,270 L290,280 L280,280 L270,265 L265,250 Z",
+    'RJ': "M260,260 L280,255 L295,270 L300,285 L295,300 L280,310 L265,310 L260,295 L255,280 L255,270 Z",
+    'SP': "M210,270 L245,265 L265,280 L275,295 L270,320 L260,340 L245,350 L225,350 L205,340 L190,325 L185,305 L190,285 Z",
     
     // Região Sul
-    'PR': "M255,325 L285,320 L300,335 L305,350 L300,370 L285,380 L270,380 L255,370 L245,355 L245,340 L255,325 Z",
-    'SC': "M275,355 L300,350 L315,365 L320,380 L315,395 L300,405 L285,405 L275,390 L270,375 L275,355 Z",
-    'RS': "M235,365 L270,360 L290,375 L300,390 L295,415 L285,435 L270,445 L250,445 L230,435 L215,420 L210,400 L215,380 L235,365 Z"
+    'PR': "M190,300 L220,295 L235,310 L240,325 L235,345 L220,355 L205,355 L190,345 L180,330 L180,315 Z",
+    'SC': "M210,330 L235,325 L250,340 L255,355 L250,370 L235,380 L220,380 L210,365 L205,350 Z",
+    'RS': "M170,340 L205,335 L225,350 L235,365 L230,390 L220,410 L205,420 L185,420 L165,410 L150,395 L145,375 L150,355 Z"
   };
 
   const handleMouseEnter = (event: React.MouseEvent, estado: EstadoData) => {
@@ -104,11 +104,22 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
     }
   };
 
+  // Função para calcular a posição do texto baseada no centroide do path
+  const getTextPosition = (pathData: string) => {
+    const coords = pathData.match(/\d+/g);
+    if (coords && coords.length >= 2) {
+      const x = parseInt(coords[0]);
+      const y = parseInt(coords[1]);
+      return { x: x + 15, y: y + 15 };
+    }
+    return { x: 200, y: 200 };
+  };
+
   return (
     <div className="relative">
-      <div className="relative h-80 bg-gradient-to-br from-blue-50 to-green-50 rounded-lg overflow-hidden border border-gray-200">
+      <div className="relative h-96 bg-gradient-to-br from-blue-50 to-green-50 rounded-lg overflow-hidden border border-gray-200">
         <svg 
-          viewBox="0 0 500 450" 
+          viewBox="0 0 400 450" 
           className="w-full h-full cursor-pointer"
           style={{ background: 'linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 100%)' }}
           onMouseMove={handleMouseMove}
@@ -127,7 +138,7 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
           </defs>
           
           {/* Título do mapa */}
-          <text x="250" y="25" textAnchor="middle" className="text-lg font-bold fill-gray-800">
+          <text x="200" y="25" textAnchor="middle" className="text-lg font-bold fill-gray-800">
             Brasil - Distribuição de Casos por Estado
           </text>
           
@@ -141,7 +152,11 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
             
             // Cor baseada na intensidade dos casos
             const intensity = Math.min(totalCasos / 300, 1);
-            const baseColor = isHovered ? 'rgba(59, 130, 246, 0.8)' : `rgba(59, 130, 246, ${0.4 + intensity * 0.4})`;
+            const baseColor = isHovered 
+              ? 'rgba(59, 130, 246, 0.9)' 
+              : `rgba(59, 130, 246, ${0.3 + intensity * 0.5})`;
+
+            const textPos = getTextPosition(pathData);
 
             return (
               <g key={estado.estado}>
@@ -158,16 +173,14 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
                 
                 {/* Sigla do estado */}
                 <text
-                  x={pathData.includes('L') ? 
-                    (pathData.split('L')[1]?.split(',')[0] || '250') : '250'}
-                  y={pathData.includes('L') ? 
-                    (parseInt(pathData.split('L')[1]?.split(',')[1]?.split(' ')[0] || '225') + 5) : 225}
+                  x={textPos.x}
+                  y={textPos.y}
                   textAnchor="middle"
                   className={`text-xs font-bold pointer-events-none transition-all duration-200 ${
-                    isHovered ? 'fill-white text-shadow' : 'fill-gray-700'
+                    isHovered ? 'fill-white' : 'fill-gray-700'
                   }`}
                   style={{ 
-                    fontSize: isHovered ? '11px' : '10px',
+                    fontSize: isHovered ? '12px' : '10px',
                     fontWeight: 'bold',
                     textShadow: isHovered ? '1px 1px 2px rgba(0,0,0,0.8)' : '1px 1px 1px rgba(0,0,0,0.5)'
                   }}
@@ -178,8 +191,8 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
                 {/* Indicador de alta atividade */}
                 {totalCasos > 150 && (
                   <circle
-                    cx={parseInt(pathData.split('L')[1]?.split(',')[0] || '250') + 12}
-                    cy={parseInt(pathData.split('L')[1]?.split(',')[1]?.split(' ')[0] || '225') - 8}
+                    cx={textPos.x + 15}
+                    cy={textPos.y - 10}
                     r="3"
                     fill="#dc2626"
                     stroke="white"
@@ -192,11 +205,11 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
           })}
           
           {/* Indicadores de regiões */}
-          <text x="160" y="80" textAnchor="middle" className="text-xs fill-gray-600 font-medium pointer-events-none">Norte</text>
-          <text x="360" y="125" textAnchor="middle" className="text-xs fill-gray-600 font-medium pointer-events-none">Nordeste</text>
-          <text x="230" y="210" textAnchor="middle" className="text-xs fill-gray-600 font-medium pointer-events-none">Centro-Oeste</text>
-          <text x="325" y="275" textAnchor="middle" className="text-xs fill-gray-600 font-medium pointer-events-none">Sudeste</text>
-          <text x="275" y="385" textAnchor="middle" className="text-xs fill-gray-600 font-medium pointer-events-none">Sul</text>
+          <text x="100" y="60" textAnchor="middle" className="text-xs fill-gray-600 font-medium pointer-events-none">Norte</text>
+          <text x="300" y="100" textAnchor="middle" className="text-xs fill-gray-600 font-medium pointer-events-none">Nordeste</text>
+          <text x="170" y="180" textAnchor="middle" className="text-xs fill-gray-600 font-medium pointer-events-none">Centro-Oeste</text>
+          <text x="260" y="250" textAnchor="middle" className="text-xs fill-gray-600 font-medium pointer-events-none">Sudeste</text>
+          <text x="210" y="360" textAnchor="middle" className="text-xs fill-gray-600 font-medium pointer-events-none">Sul</text>
         </svg>
 
         {/* Tooltip customizado */}
@@ -204,7 +217,7 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
           <div
             className="absolute z-10 bg-white rounded-lg shadow-xl border border-gray-200 p-4 pointer-events-none transition-all duration-200"
             style={{
-              left: Math.min(tooltip.x + 10, 400),
+              left: Math.min(tooltip.x + 10, 300),
               top: Math.max(tooltip.y - 120, 10),
               minWidth: '220px'
             }}
