@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 
 interface EstadoData {
@@ -254,59 +255,7 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
           </Geographies>
         </ComposableMap>
 
-        {/* Tooltip customizado */}
-        {tooltip && (
-          <div
-            className="fixed bg-white rounded-lg shadow-xl border border-gray-200 p-4 pointer-events-none transition-all duration-200"
-            style={{
-              left: Math.min(tooltip.x + 10, window.innerWidth - 240),
-              top: Math.max(tooltip.y - 120, 10),
-              zIndex: 999999,
-              minWidth: '220px'
-            }}
-          >
-            <div className="space-y-2">
-              <h4 className="font-bold text-gray-800 text-lg border-b border-gray-200 pb-2">
-                {tooltip.estado}
-              </h4>
-
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-blue-500 rounded-sm"></div>
-                    <span className="text-sm text-gray-700">Notificações</span>
-                  </div>
-                  <span className="font-semibold text-blue-600">{tooltip.notificacoes}</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-green-500 rounded-sm"></div>
-                    <span className="text-sm text-gray-700">Acordos</span>
-                  </div>
-                  <span className="font-semibold text-green-600">{tooltip.acordos}</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-red-500 rounded-sm"></div>
-                    <span className="text-sm text-gray-700">Desativações</span>
-                  </div>
-                  <span className="font-semibold text-red-600">{tooltip.desativacoes}</span>
-                </div>
-              </div>
-
-              <div className="border-t border-gray-200 pt-2 mt-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Total de Ações:</span>
-                  <span className="font-bold text-gray-800">
-                    {tooltip.notificacoes + tooltip.acordos}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        
       </div>
 
       {/* Legenda */}
@@ -332,6 +281,61 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
           <span className="text-sm">Alta atividade</span>
         </div>
       </div>
+
+      {/* Tooltip usando Portal para aparecer acima de tudo */}
+      {tooltip && createPortal(
+        <div
+          className="fixed bg-white rounded-lg shadow-xl border border-gray-200 p-4 pointer-events-none transition-all duration-200"
+          style={{
+            left: Math.min(tooltip.x + 10, window.innerWidth - 240),
+            top: Math.max(tooltip.y - 120, 10),
+            zIndex: 999999,
+            minWidth: '220px'
+          }}
+        >
+          <div className="space-y-2">
+            <h4 className="font-bold text-gray-800 text-lg border-b border-gray-200 pb-2">
+              {tooltip.estado}
+            </h4>
+
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-blue-500 rounded-sm"></div>
+                  <span className="text-sm text-gray-700">Notificações</span>
+                </div>
+                <span className="font-semibold text-blue-600">{tooltip.notificacoes}</span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-sm"></div>
+                  <span className="text-sm text-gray-700">Acordos</span>
+                </div>
+                <span className="font-semibold text-green-600">{tooltip.acordos}</span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-red-500 rounded-sm"></div>
+                  <span className="text-sm text-gray-700">Desativações</span>
+                </div>
+                <span className="font-semibold text-red-600">{tooltip.desativacoes}</span>
+              </div>
+            </div>
+
+            <div className="border-t border-gray-200 pt-2 mt-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-700">Total de Ações:</span>
+                <span className="font-bold text-gray-800">
+                  {tooltip.notificacoes + tooltip.acordos}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 };
