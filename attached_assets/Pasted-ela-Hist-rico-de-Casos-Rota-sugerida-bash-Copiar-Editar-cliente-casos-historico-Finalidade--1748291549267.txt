@@ -1,0 +1,56 @@
+ela: Histórico de Casos
+📍 Rota sugerida:
+bash
+Copiar
+Editar
+/cliente/casos/historico
+✅ Finalidade:
+Permitir ao cliente ou analista visualizar todos os casos encerrados ou com status final, com filtros eficientes e dados relevantes para auditoria, consulta e tomada de decisão.
+
+🔎 Filtros (no topo da tela):
+Status (dropdown) — exemplo: Resolvido, Reprovado, Acordo fechado, Página desativada, Sem retorno, etc.
+
+Data de criação (intervalo com calendário)
+
+Marca (autocomplete ou multiseleção, se o cliente trabalhar com várias)
+
+Tipo de infração (dropdown) — exemplo: Phishing, Venda de falsificados, Uso indevido de marca, etc.
+
+📋 Tabela (colunas):
+ID do Caso	Marca	Tipo de Infração	Status Final	Data da Decisão	Analisado por
+#12345	Nike	Venda de falsos	Resolvido	20/05/2025	João Silva
+
+Observações:
+
+A coluna "Status Final" pode ter badges coloridas para facilitar a leitura.
+
+A coluna "Data da Decisão" refere-se à data em que o caso foi encerrado (última ação relevante).
+
+A coluna "Analisado por" mostra o nome do analista interno responsável pela condução final.
+
+O ID do caso deve ser clicável para abrir um modal ou drawer com os detalhes, se necessário.
+
+✨ Recursos adicionais (opcional):
+Exportação da tabela (CSV / Excel)
+
+Gráfico no topo (ex: barra com número de casos por status ou por marca)
+
+Botão “Voltar para Dashboard” no topo
+
+Indicador com total de casos no período filtrado
+
+🧱 Estrutura sugerida de layout:
+txt
+Copiar
+Editar
+────────────────────────────────────────────
+📆 Filtros: [Status ▾] [Data 📅] [Marca 🔍] [Tipo ▾]
+
+📊 (opcional) Gráfico com volume de casos por status
+
+📋 Tabela:
+┌─────────┬───────┬─────────────────┬─────────────┬──────────────┬───────────────┐
+│ ID      │ Marca│ Tipo de Infração│ Status Final│ Data Decisão │ Analisado por │
+├─────────┼───────┼─────────────────┼─────────────┼──────────────┼───────────────┤
+│ #12345  │ Nike │ Venda de falsos │ Resolvido   │ 20/05/2025   │ João Silva    │
+└─────────┴───────┴─────────────────┴─────────────┴──────────────┴───────────────┘
