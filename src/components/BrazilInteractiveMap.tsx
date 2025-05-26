@@ -34,8 +34,9 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
     return acc;
   }, {} as Record<string, EstadoData>);
 
-  // Mapeamento de nomes dos estados para siglas (caso necessário)
+  // Mapeamento de nomes dos estados para siglas (incluindo variações)
   const stateNameToAbbr: { [key: string]: string } = {
+    // Nomes completos padrão
     'Acre': 'AC',
     'Alagoas': 'AL',
     'Amapá': 'AP',
@@ -62,12 +63,79 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
     'Santa Catarina': 'SC',
     'São Paulo': 'SP',
     'Sergipe': 'SE',
-    'Tocantins': 'TO'
+    'Tocantins': 'TO',
+    // Variações possíveis nos dados GeoJSON
+    'acre': 'AC',
+    'alagoas': 'AL',
+    'amapa': 'AP',
+    'amapá': 'AP',
+    'amazonas': 'AM',
+    'bahia': 'BA',
+    'ceara': 'CE',
+    'ceará': 'CE',
+    'distrito federal': 'DF',
+    'espirito santo': 'ES',
+    'espírito santo': 'ES',
+    'goias': 'GO',
+    'goiás': 'GO',
+    'maranhao': 'MA',
+    'maranhão': 'MA',
+    'mato grosso': 'MT',
+    'mato grosso do sul': 'MS',
+    'minas gerais': 'MG',
+    'para': 'PA',
+    'pará': 'PA',
+    'paraiba': 'PB',
+    'paraíba': 'PB',
+    'parana': 'PR',
+    'paraná': 'PR',
+    'pernambuco': 'PE',
+    'piaui': 'PI',
+    'piauí': 'PI',
+    'rio de janeiro': 'RJ',
+    'rio grande do norte': 'RN',
+    'rio grande do sul': 'RS',
+    'rondonia': 'RO',
+    'rondônia': 'RO',
+    'roraima': 'RR',
+    'santa catarina': 'SC',
+    'sao paulo': 'SP',
+    'são paulo': 'SP',
+    'sergipe': 'SE',
+    'tocantins': 'TO',
+    // Siglas como fallback
+    'AC': 'AC',
+    'AL': 'AL',
+    'AP': 'AP',
+    'AM': 'AM',
+    'BA': 'BA',
+    'CE': 'CE',
+    'DF': 'DF',
+    'ES': 'ES',
+    'GO': 'GO',
+    'MA': 'MA',
+    'MT': 'MT',
+    'MS': 'MS',
+    'MG': 'MG',
+    'PA': 'PA',
+    'PB': 'PB',
+    'PR': 'PR',
+    'PE': 'PE',
+    'PI': 'PI',
+    'RJ': 'RJ',
+    'RN': 'RN',
+    'RS': 'RS',
+    'RO': 'RO',
+    'RR': 'RR',
+    'SC': 'SC',
+    'SP': 'SP',
+    'SE': 'SE',
+    'TO': 'TO'
   };
 
   const handleMouseEnter = (event: React.MouseEvent, geo: any) => {
-    const stateName = geo.properties.name || geo.properties.NAME;
-    const stateAbbr = stateNameToAbbr[stateName] || stateName;
+    const stateName = geo.properties.name || geo.properties.NAME || geo.properties.Name || geo.properties.ESTADO || geo.properties.estado;
+    const stateAbbr = stateNameToAbbr[stateName] || stateNameToAbbr[stateName?.toLowerCase()] || stateName;
     const stateData = estadosData[stateAbbr];
 
     if (stateData) {
@@ -107,8 +175,8 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
   };
 
   const getStateColor = (geo: any) => {
-    const stateName = geo.properties.name || geo.properties.NAME;
-    const stateAbbr = stateNameToAbbr[stateName] || stateName;
+    const stateName = geo.properties.name || geo.properties.NAME || geo.properties.Name || geo.properties.ESTADO || geo.properties.estado;
+    const stateAbbr = stateNameToAbbr[stateName] || stateNameToAbbr[stateName?.toLowerCase()] || stateName;
     const stateData = estadosData[stateAbbr];
 
     if (!stateData) {
@@ -159,8 +227,8 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
           <Geographies geography={geoUrl}>
             {({ geographies }) =>
               geographies.map((geo) => {
-                const stateName = geo.properties.name || geo.properties.NAME;
-                const stateAbbr = stateNameToAbbr[stateName] || stateName;
+                const stateName = geo.properties.name || geo.properties.NAME || geo.properties.Name || geo.properties.ESTADO || geo.properties.estado;
+                const stateAbbr = stateNameToAbbr[stateName] || stateNameToAbbr[stateName?.toLowerCase()] || stateName;
                 const stateData = estadosData[stateAbbr];
 
                 return (

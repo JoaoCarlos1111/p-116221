@@ -105,7 +105,15 @@ export default function GestorDashboard() {
       { estado: 'MT', notificacoes: 19, acordos: 3, desativacoes: 6 },
       { estado: 'MS', notificacoes: 16, acordos: 2, desativacoes: 5 },
       { estado: 'SE', notificacoes: 14, acordos: 2, desativacoes: 4 },
-      { estado: 'PI', notificacoes: 12, acordos: 2, desativacoes: 4 }
+      { estado: 'PI', notificacoes: 12, acordos: 2, desativacoes: 4 },
+      { estado: 'MA', notificacoes: 10, acordos: 1, desativacoes: 3 },
+      { estado: 'PA', notificacoes: 9, acordos: 1, desativacoes: 2 },
+      { estado: 'TO', notificacoes: 8, acordos: 1, desativacoes: 2 },
+      { estado: 'AC', notificacoes: 5, acordos: 1, desativacoes: 1 },
+      { estado: 'AM', notificacoes: 7, acordos: 1, desativacoes: 2 },
+      { estado: 'AP', notificacoes: 3, acordos: 0, desativacoes: 1 },
+      { estado: 'RO', notificacoes: 6, acordos: 1, desativacoes: 1 },
+      { estado: 'RR', notificacoes: 2, acordos: 0, desativacoes: 1 }
     ]
   });
 
