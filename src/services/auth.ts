@@ -157,6 +157,22 @@ export const AuthService = {
           brands: ['Nike', 'Adidas'],
           company: 'Empresa Cliente Teste'
         }
+      },
+      gestorCliente: {
+        email: 'gestor.cliente@teste.com',
+        password: 'gestor123',
+        user: {
+          id: '12',
+          name: 'Carlos Gestor',
+          email: 'gestor.cliente@teste.com',
+          departments: [],
+          mainDepartment: 'client',
+          isAdmin: false,
+          isClient: true,
+          clientProfile: 'gestor',
+          brands: ['Nike', 'Adidas', 'Puma', 'Louis Vuitton'],
+          company: 'Empresa Cliente Teste'
+        }
       }
     };
 

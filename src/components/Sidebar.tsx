@@ -181,6 +181,79 @@ export default function Sidebar() {
           </>
         )}
 
+        {/* Menu Cliente - Gestor */}
+        {user?.isClient && user?.clientProfile === 'gestor' && (
+          <>
+            <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Gestão Executiva
+            </div>
+
+            <NavLink to="/client/gestor/dashboard" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <LayoutDashboard size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Dashboard Executivo</span>
+            </NavLink>
+
+            <NavLink to="/client/gestor/casos" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <FileText size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Gestão de Casos</span>
+            </NavLink>
+
+            <NavLink to="/client/gestor/aprovacoes" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <CheckCircle size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Aprovações</span>
+            </NavLink>
+
+            <NavLink to="/client/gestor/financeiro" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <DollarSign size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Painel Financeiro</span>
+            </NavLink>
+
+            <NavLink to="/client/gestor/usuarios" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <Users size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Gerenciar Usuários</span>
+            </NavLink>
+
+            <NavLink to="/client/gestor/marcas" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <Building size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Consulta por Marca</span>
+            </NavLink>
+
+            <NavLink to="/client/gestor/relatorios" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <BarChart3 size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Relatórios</span>
+            </NavLink>
+
+            <NavLink to="/client/casos/historico" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <History size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Histórico</span>
+            </NavLink>
+          </>
+        )}
+
         {/* Menu Cliente - Analista de Contrafação */}
           {user?.isClient && user?.clientProfile === 'analista_contrafacao' && (
             <>

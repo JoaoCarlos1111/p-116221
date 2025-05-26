@@ -10,10 +10,19 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if user is a client and redirect to client dashboard
+    // Check if user is a client and redirect to appropriate dashboard
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     if (user.isClient || user.mainDepartment === 'client') {
-      navigate('/client/dashboard', { replace: true });
+      // Redirect based on client profile
+      if (user.clientProfile === 'gestor') {
+        navigate('/client/gestor/dashboard', { replace: true });
+      } else if (user.clientProfile === 'analista_contrafacao') {
+        navigate('/client/analista/dashboard', { replace: true });
+      } else if (user.clientProfile === 'financeiro') {
+        navigate('/client/financeiro/dashboard', { replace: true });
+      } else {
+        navigate('/client/dashboard', { replace: true });
+      }
       return;
     }
   }, [navigate]);

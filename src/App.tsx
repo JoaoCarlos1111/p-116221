@@ -38,6 +38,9 @@ import HistoricoPagamentos from './pages/client/HistoricoPagamentos';
 import DetalhesServicos from './pages/client/DetalhesServicos';
 import ContratosDocumentos from './pages/client/ContratosDocumentos';
 import Solicitacoes from './pages/client/Solicitacoes';
+import GestorDashboard from './pages/client/GestorDashboard';
+import GestorCasos from './pages/client/GestorCasos';
+import GestorUsuarios from './pages/client/GestorUsuarios';
 import FinanceiroDashboard from './pages/client/FinanceiroDashboard';
 import NewTemplate from './pages/NewTemplate';
 import CasesHistory from './pages/client/CasesHistory';
@@ -199,6 +202,41 @@ function AppContent() {
              <Route path="/client/financeiro/servicos" element={
               <RouteGuard requiredDepartment={['client']}>
                 <DetalhesServicos />
+              </RouteGuard>
+            } />
+            <Route path="/client/gestor/dashboard" element={
+              <RouteGuard requiredDepartment={['client']}>
+                <GestorDashboard />
+              </RouteGuard>
+            } />
+            <Route path="/client/gestor/casos" element={
+              <RouteGuard requiredDepartment={['client']}>
+                <GestorCasos />
+              </RouteGuard>
+            } />
+            <Route path="/client/gestor/usuarios" element={
+              <RouteGuard requiredDepartment={['client']}>
+                <GestorUsuarios />
+              </RouteGuard>
+            } />
+            <Route path="/client/gestor/aprovacoes" element={
+              <RouteGuard requiredDepartment={['client']}>
+                <Approvals />
+              </RouteGuard>
+            } />
+            <Route path="/client/gestor/financeiro" element={
+              <RouteGuard requiredDepartment={['client']}>
+                <FinanceiroDashboard />
+              </RouteGuard>
+            } />
+            <Route path="/client/gestor/marcas" element={
+              <RouteGuard requiredDepartment={['client']}>
+                <BrandsAndClients />
+              </RouteGuard>
+            } />
+            <Route path="/client/gestor/relatorios" element={
+              <RouteGuard requiredDepartment={['client']}>
+                <Analytics />
               </RouteGuard>
             } />
              <Route path="/client/financeiro/documentos" element={
