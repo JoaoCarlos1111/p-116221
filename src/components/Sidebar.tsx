@@ -1,18 +1,22 @@
 import { NavLink } from "react-router-dom";
 import { 
-  Users,
-  Shield,
-  History,
-  Settings as SettingsIcon,
+  LayoutDashboard, 
+  Users, 
+  Building, 
+  FileText, 
+  Settings, 
+  BarChart3, 
+  Shield, 
+  CheckCircle, 
+  DollarSign,
+  Menu,
+  X,
   ChevronLeft,
   ChevronRight,
   LogOut,
-  Building2,
-  FileStack,
-  LayoutDashboard,
-  Boxes,
-  CheckCircle
-} from "lucide-react";
+  Target,
+  MessageSquare
+} from 'lucide-react';
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -126,7 +130,7 @@ export default function Sidebar() {
                 isCollapsed && "hidden"
               )}>Dashboard Gestor</span>
             </NavLink>
-            
+
             <NavLink to="/client/analista" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
               <Shield size={20} />
               <span className={cn(
@@ -134,7 +138,7 @@ export default function Sidebar() {
                 isCollapsed && "hidden"
               )}>Analista Contrafação</span>
             </NavLink>
-            
+
             <NavLink to="/client/financeiro" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
               <LayoutDashboard size={20} />
               <span className={cn(
@@ -142,7 +146,7 @@ export default function Sidebar() {
                 isCollapsed && "hidden"
               )}>Dashboard Financeiro</span>
             </NavLink>
-            
+
             <NavLink to="/client/approvals" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
               <CheckCircle size={20} />
               <span className={cn(

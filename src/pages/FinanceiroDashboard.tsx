@@ -96,9 +96,9 @@ const FinanceiroDashboard = () => {
           <h1 className="text-3xl font-bold text-primary">Dashboard Financeiro</h1>
           <p className="text-muted-foreground">Gestão de pagamentos e documentos fiscais</p>
         </div>
-        <Button size="lg" className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg" onClick={() => navigate('/cases/new')}>
+        <Button size="lg" className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg" onClick={() => navigate('/client/financeiro/faturas')}>
           <Plus className="h-5 w-5 mr-2" />
-          Novo Caso
+          Ver Faturas
         </Button>
       </div>
 
