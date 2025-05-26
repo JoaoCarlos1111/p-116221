@@ -1,0 +1,74 @@
+Prompt: Tela de Ajustes de Sistema (Admin Only)
+🧭 Rota
+bash
+Copiar
+Editar
+/admin/settings
+🧱 Layout Geral
+Elemento	Tipo	Detalhes
+Título da página	h1	"Ajustes de Sistema"
+Seções organizadas por aba ou accordion	Tabs ou Accordion	Dividir configurações por categoria: Geral, Notificações, Integrações, Institucional, Inteligência Artificial
+Botão Salvar	Button (Primário)	Salva todas as alterações da tela
+
+📂 Seção 1: Configurações Gerais
+Campo	Tipo	Placeholder / Exemplo
+Prazo padrão para movimentação entre setores	Input (number) + Select (dias úteis ou corridos)	Ex: 3 dias úteis
+Tempo limite para resposta do cliente	Input (number) + Select	Ex: 5 dias corridos
+Ativar geração automática de documentos	Toggle (on/off)	Gera PDFs com base em templates automaticamente
+Tipo de geração padrão	Select	Notificação, Acordo, Ambos
+
+📩 Seção 2: E-mails e Notificações
+Campo	Tipo	Detalhes
+Remetente padrão (SMTP ou serviço externo)	Select	SMTP, SendGrid, Amazon SES
+E-mail remetente	Input	Ex: notificacoes@sistema.com.br
+Modelos de e-mail por etapa	Accordion com cada etapa	Editor de texto com campos dinâmicos como {{nome_cliente}}, {{nome_marca}}, etc.
+Ativar e-mail automático para:	Checkboxes	Novo Caso, Caso Aprovado, Documento Gerado, Acordo Criado
+
+🔌 Seção 3: Integrações
+🔹 Correios
+Campo	Tipo	Detalhes
+Token da API Correios	Input (password)	Usado para rastreamento e status
+Ativar rastreamento automático	Toggle	On/Off
+
+🔹 INPI
+Campo	Tipo	Detalhes
+Token de acesso INPI (se houver API pública)	Input	Para consulta de registros vinculados
+Intervalo de atualização automática	Input (dias)	Ex: 7 dias
+
+🤖 Integrações com IA
+Campo	Tipo	Detalhes
+Habilitar sugestões com IA	Toggle	Sugestões de preenchimento, alertas, priorização de casos
+Tipo de IA usada	Select	OpenAI, Claude, HuggingFace, Outro
+Chave de API da IA	Input (password)	Chave segura
+Ativar IA em:	Checkboxes	Geração de texto padrão, Resumo automático de casos, Sugerir ações por etapa
+
+🏢 Seção 4: Informações Institucionais
+Campo	Tipo	Exemplo
+Nome da empresa operadora	Input	Ex: "Plataforma XYZ Proteção Digital"
+E-mail de contato	Input	Ex: suporte@xyz.com.br
+Telefone	Input	Ex: (11) 99999-9999
+Texto rodapé	Textarea	Ex: "© 2025 Plataforma XYZ. Todos os direitos reservados."
+Política de privacidade	Editor ou RichText	Editável diretamente na plataforma
+Termos de uso	Editor	Pode ser salvo em HTML ou Markdown
+
+🎨 Seção (futura): Personalização Visual
+Campo	Tipo	Detalhes
+Upload de logo do sistema	File Upload	PNG, JPG
+Cores principais do painel	Color Pickers	Para temas customizados
+Nome da plataforma (branding)	Input	Ex: “Painel XYZ”
+
+🔐 Permissões
+Apenas usuários com perfil Super Admin podem acessar /admin/settings
+
+Deve ter middleware de proteção na rota
+
+✅ Requisitos Técnicos Backend
+Armazenar todas as configurações em uma coleção/tabela system_settings
+
+Salvar como chave/valor ou schema organizado (ex: emails.novo_caso.texto)
+
+Suporte a atualização sem reiniciar servidor
+
+Endpoint GET e PUT /api/admin/system-settings
+
+Para IA: armazenar API_KEY com criptografia
