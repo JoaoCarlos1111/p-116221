@@ -33,9 +33,9 @@ const CasesHistory: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState({
-    status: '',
-    marca: '',
-    tipoInfracao: '',
+    status: 'all',
+    marca: 'all',
+    tipoInfracao: 'all',
     dataInicio: null as Date | null,
     dataFim: null as Date | null,
   });
@@ -133,15 +133,15 @@ const CasesHistory: React.FC = () => {
     try {
       let filtered = [...historyCases];
 
-      if (filters.status) {
+      if (filters.status && filters.status !== 'all') {
         filtered = filtered.filter(caso => caso.statusFinal === filters.status);
       }
 
-      if (filters.marca) {
+      if (filters.marca && filters.marca !== 'all') {
         filtered = filtered.filter(caso => caso.marca === filters.marca);
       }
 
-      if (filters.tipoInfracao) {
+      if (filters.tipoInfracao && filters.tipoInfracao !== 'all') {
         filtered = filtered.filter(caso => caso.tipoInfracao === filters.tipoInfracao);
       }
 
@@ -173,9 +173,9 @@ const CasesHistory: React.FC = () => {
   const clearFilters = () => {
     try {
       setFilters({
-        status: '',
-        marca: '',
-        tipoInfracao: '',
+        status: 'all',
+        marca: 'all',
+        tipoInfracao: 'all',
         dataInicio: null,
         dataFim: null,
       });
@@ -309,7 +309,7 @@ const CasesHistory: React.FC = () => {
                   <SelectValue placeholder="Todos os status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todos os status</SelectItem>
+                  <SelectItem value="all">Todos os status</SelectItem>
                   {statusOptions.map(status => (
                     <SelectItem key={status} value={status}>{status}</SelectItem>
                   ))}
@@ -328,7 +328,7 @@ const CasesHistory: React.FC = () => {
                   <SelectValue placeholder="Todas as marcas" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todas as marcas</SelectItem>
+                  <SelectItem value="all">Todas as marcas</SelectItem>
                   {marcasOptions.map(marca => (
                     <SelectItem key={marca} value={marca}>{marca}</SelectItem>
                   ))}
@@ -347,7 +347,7 @@ const CasesHistory: React.FC = () => {
                   <SelectValue placeholder="Todos os tipos" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todos os tipos</SelectItem>
+                  <SelectItem value="all">Todos os tipos</SelectItem>
                   {tipoInfracaoOptions.map(tipo => (
                     <SelectItem key={tipo} value={tipo}>{tipo}</SelectItem>
                   ))}
