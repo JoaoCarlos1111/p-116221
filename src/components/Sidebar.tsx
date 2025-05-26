@@ -143,13 +143,45 @@ export default function Sidebar() {
               )}>Analista Contrafação</span>
             </NavLink>
 
-            <NavLink to="/client/financeiro/dashboard" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <DollarSign size={20} />
-              <span className={cn(
-                "transition-all duration-300",
-                isCollapsed && "hidden"
-              )}>Dashboard Financeiro</span>
-            </NavLink>
+            {/* Menu Financeiro com submenu */}
+            <div className="space-y-1">
+              <NavLink to="/client/financeiro/dashboard" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+                <DollarSign size={20} />
+                <span className={cn(
+                  "transition-all duration-300",
+                  isCollapsed && "hidden"
+                )}>Financeiro</span>
+              </NavLink>
+              
+              {!isCollapsed && (
+                <div className="ml-6 space-y-1">
+                  <NavLink to="/client/financeiro/dashboard" className="flex items-center gap-2 p-1 rounded text-sm hover:bg-accent">
+                    <BarChart3 size={16} />
+                    <span>Dashboard</span>
+                  </NavLink>
+                  <NavLink to="/client/financeiro/faturas" className="flex items-center gap-2 p-1 rounded text-sm hover:bg-accent">
+                    <FileText size={16} />
+                    <span>Faturas e Pagamentos</span>
+                  </NavLink>
+                  <NavLink to="/client/financeiro/historico" className="flex items-center gap-2 p-1 rounded text-sm hover:bg-accent">
+                    <History size={16} />
+                    <span>Histórico</span>
+                  </NavLink>
+                  <NavLink to="/client/financeiro/servicos" className="flex items-center gap-2 p-1 rounded text-sm hover:bg-accent">
+                    <Target size={16} />
+                    <span>Detalhes de Serviços</span>
+                  </NavLink>
+                  <NavLink to="/client/financeiro/documentos" className="flex items-center gap-2 p-1 rounded text-sm hover:bg-accent">
+                    <FileStack size={16} />
+                    <span>Documentos</span>
+                  </NavLink>
+                  <NavLink to="/client/financeiro/solicitacoes" className="flex items-center gap-2 p-1 rounded text-sm hover:bg-accent">
+                    <MessageSquare size={16} />
+                    <span>Solicitações</span>
+                  </NavLink>
+                </div>
+              )}
+            </div>
 
             <NavLink to="/client/approvals" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
               <CheckCircle size={20} />

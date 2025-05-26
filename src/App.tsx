@@ -33,12 +33,12 @@ import AdminTemplates from './pages/AdminTemplates';
 import AdminSettings from './pages/AdminSettings';
 import ClientDashboard from './pages/ClientDashboard';
 import AnalistaContrafacaoDashboard from './pages/AnalistaContrafacaoDashboard';
-import FinanceiroDashboard from './pages/FinanceiroDashboard';
 import FaturasPagamentos from './pages/client/FaturasPagamentos';
 import HistoricoPagamentos from './pages/client/HistoricoPagamentos';
 import DetalhesServicos from './pages/client/DetalhesServicos';
 import ContratosDocumentos from './pages/client/ContratosDocumentos';
 import Solicitacoes from './pages/client/Solicitacoes';
+import FinanceiroDashboard from './pages/client/FinanceiroDashboard';
 import NewTemplate from './pages/NewTemplate';
 
 function AppContent() {
@@ -198,6 +198,11 @@ function AppContent() {
              <Route path="/client/financeiro/documentos" element={
               <RouteGuard requiredDepartment={['client']}>
                 <ContratosDocumentos />
+              </RouteGuard>
+            } />
+             <Route path="/client/financeiro/solicitacoes" element={
+              <RouteGuard requiredDepartment={['client']}>
+                <Solicitacoes />
               </RouteGuard>
             } />
               <Route path="/client/financeiro/solicitacoes" element={
