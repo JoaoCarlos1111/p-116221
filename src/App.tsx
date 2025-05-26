@@ -30,7 +30,8 @@ import InternalLogin from "@/pages/InternalLogin";
 import RouteGuard from "@/components/RouteGuard";
 import { departments } from './constants';
 import AdminTemplates from './pages/AdminTemplates';
-import AdminSettings from "./pages/AdminSettings";
+import AdminSettings from './pages/AdminSettings';
+import ClientDashboard from './pages/ClientDashboard';
 import NewTemplate from './pages/NewTemplate';
 
 function AppContent() {
@@ -153,8 +154,13 @@ function AppContent() {
                 </RouteGuard>
               } />
             <Route path="/admin/settings" element={
-              <RouteGuard requiredDepartment="admin">
+              <RouteGuard requiredDepartment={['admin']}>
                 <AdminSettings />
+              </RouteGuard>
+            } />
+            <Route path="/client/dashboard" element={
+              <RouteGuard requiredDepartment={['client']}>
+                <ClientDashboard />
               </RouteGuard>
             } />
               <Route path="/admin/templates/new" element={

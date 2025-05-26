@@ -1,4 +1,3 @@
-
 import { Navigate } from 'react-router-dom';
 import { useMemo } from 'react';
 
@@ -11,7 +10,7 @@ export default function RouteGuard({ children, requiredDepartment }: RouteGuardP
   const auth = useMemo(() => {
     const token = localStorage.getItem('token');
     const userStr = localStorage.getItem('user');
-    
+
     if (!token || !userStr) {
       return { isAuthenticated: false, user: null };
     }
@@ -32,9 +31,12 @@ export default function RouteGuard({ children, requiredDepartment }: RouteGuardP
 
   if (requiredDepartment && !auth.user.isAdmin) {
     const departments = Array.isArray(requiredDepartment) ? requiredDepartment : [requiredDepartment];
-    const hasAccess = departments.some(dept => auth.user.departments.includes(dept));
-    
-    if (!hasAccess) {
+    // Check if user has access
+    const hasAccess = auth.user?.isAdmin ||
+      auth.user?.departments?.some(dept => departments.includes(dept)) ||
+      (auth.user?.isClient && departments.includes('client'));
+
+    if (!auth.user || !hasAccess) {
       return <Navigate to="/dashboard" replace />;
     }
   }

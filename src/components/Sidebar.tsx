@@ -1,4 +1,3 @@
-
 import { NavLink } from "react-router-dom";
 import { 
   Users,
@@ -21,6 +20,7 @@ export default function Sidebar() {
   const userStr = localStorage.getItem('user');
   const user = userStr ? JSON.parse(userStr) : null;
   const isAdmin = user?.isAdmin;
+  const isClient = user?.isClient || user?.mainDepartment === 'client';
 
   return (
     <div className={cn(
@@ -112,6 +112,18 @@ export default function Sidebar() {
                 "transition-all duration-300",
                 isCollapsed && "hidden"
               )}>Configurações</span>
+            </NavLink>
+          </>
+        )}
+        
+        {isClient && (
+          <>
+            <NavLink to="/client/dashboard" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <LayoutDashboard size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Meu Dashboard</span>
             </NavLink>
           </>
         )}

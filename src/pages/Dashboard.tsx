@@ -1,7 +1,23 @@
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Activity, Users, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from 'react-router-dom';
 
-import { Card } from "@/components/ui/card";
+const Dashboard = () => {
+  const navigate = useNavigate();
 
-export default function Dashboard() {
+  useEffect(() => {
+    // Check if user is a client and redirect to client dashboard
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (user.isClient || user.mainDepartment === 'client') {
+      navigate('/client/dashboard', { replace: true });
+      return;
+    }
+  }, [navigate]);
+
   return (
     <div className="space-y-8">
       <header>
@@ -14,7 +30,7 @@ export default function Dashboard() {
           <h3 className="font-semibold mb-2">Casos Ativos</h3>
           <p className="text-3xl font-bold">0</p>
         </Card>
-        
+
         <Card className="p-6">
           <h3 className="font-semibold mb-2">Notificações Pendentes</h3>
           <p className="text-3xl font-bold">0</p>
@@ -28,3 +44,5 @@ export default function Dashboard() {
     </div>
   );
 }
+
+export default Dashboard;

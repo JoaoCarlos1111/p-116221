@@ -7,7 +7,8 @@ export const departments = {
   LOGISTICA: 'logistica',
   IP_TOOLS: 'ip_tools',
   ATENDIMENTO: 'atendimento',
-  FINANCEIRO: 'financeiro'
+  FINANCEIRO: 'financeiro',
+  CLIENT: 'client'
 };
 
 export const AuthService = {
@@ -96,6 +97,21 @@ export const AuthService = {
           departments: [departments.FINANCEIRO],
           mainDepartment: departments.FINANCEIRO,
           isAdmin: false
+        }
+      },
+      cliente: {
+        email: 'cliente@teste.com',
+        password: 'cliente123',
+        user: {
+          id: '8',
+          name: 'Cliente Teste',
+          email: 'cliente@teste.com',
+          departments: [],
+          mainDepartment: 'client',
+          isAdmin: false,
+          isClient: true,
+          brands: ['Nike', 'Adidas'],
+          company: 'Empresa Cliente Teste'
         }
       }
     };
