@@ -22,12 +22,14 @@ import {
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-import BrazilInteractiveMap from '@/components/BrazilInteractiveMap';
+// import BrazilInteractiveMap from '@/components/BrazilInteractiveMap';
 
 export default function GestorDashboard() {
   const navigate = useNavigate();
   const [timeFilter, setTimeFilter] = useState('30');
   const [selectedBrand, setSelectedBrand] = useState('all');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Dados mock - em produção virão da API
   const [dashboardData, setDashboardData] = useState({
@@ -114,6 +116,26 @@ export default function GestorDashboard() {
         return 'bg-gray-500';
     }
   };
+
+  // Tratamento de erro
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="text-red-500 mb-4">
+            <p className="text-lg font-semibold">Erro ao carregar dashboard</p>
+            <p>{error}</p>
+          </div>
+          <Button onClick={() => {
+            setError(null);
+            window.location.reload();
+          }}>
+            Tentar novamente
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -273,7 +295,7 @@ export default function GestorDashboard() {
       </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Mapa do Brasil */}
+        {/* Distribuição Geográfica */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -282,7 +304,12 @@ export default function GestorDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <BrazilInteractiveMap />
+            <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
+              <div className="text-center">
+                <MapPin className="h-8 w-8 mx-auto mb-2 text-gray-400" />
+                <p className="text-gray-500">Mapa interativo em desenvolvimento</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
@@ -292,7 +319,7 @@ export default function GestorDashboard() {
             <CardTitle>Performance por Marca</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {dashboardData.brandStats.map((brand) => (
+            {dashboardData.brandStats?.map((brand) => (
               <div key={brand.brand} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-1">
@@ -323,7 +350,7 @@ export default function GestorDashboard() {
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
-            {dashboardData.recentCases.map((caso) => (
+            {dashboardData.recentCases?.map((caso) => (
               <div key={caso.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 cursor-pointer"
                    onClick={() => navigate(`/client/casos/${caso.id}`)}>
                 <div className="flex-1">
@@ -352,7 +379,7 @@ export default function GestorDashboard() {
             <CardTitle>Ranking de Analistas</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {dashboardData.topAnalysts.map((analyst, index) => (
+            {dashboardData.topAnalysts?.map((analyst, index) => (
               <div key={analyst.name} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className="flex items-center justify-center w-8 h-8 bg-blue-100 text-blue-600 rounded-full font-semibold">

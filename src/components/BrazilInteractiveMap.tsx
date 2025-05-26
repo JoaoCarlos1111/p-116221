@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 
@@ -70,11 +69,11 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
     const stateName = geo.properties.name || geo.properties.NAME;
     const stateAbbr = stateNameToAbbr[stateName] || stateName;
     const stateData = estadosData[stateAbbr];
-    
+
     if (stateData) {
       const rect = event.currentTarget.getBoundingClientRect();
       const containerRect = (event.currentTarget as SVGPathElement).closest('.map-container')?.getBoundingClientRect();
-      
+
       if (containerRect) {
         setTooltip({
           estado: stateAbbr,
@@ -111,7 +110,7 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
     const stateName = geo.properties.name || geo.properties.NAME;
     const stateAbbr = stateNameToAbbr[stateName] || stateName;
     const stateData = estadosData[stateAbbr];
-    
+
     if (!stateData) {
       return "#f3f4f6"; // Cor padrão para estados sem dados
     }
@@ -119,11 +118,11 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
     // Total considerando apenas notificações + acordos (desativações não entram na soma)
     const total = stateData.notificacoes + stateData.acordos;
     const isHovered = hoveredState === stateAbbr;
-    
+
     if (isHovered) {
       return "#1e40af"; // Azul escuro para hover
     }
-    
+
     // Cores baseadas na intensidade dos casos
     if (total > 200) return "#003f5c";      // Muito alto
     if (total > 100) return "#2f4b7c";      // Alto
@@ -132,6 +131,17 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
     if (total > 0) return "#d45087";        // Baixo
     return "#f95d6a";                       // Muito baixo
   };
+  const [error, setError] = useState<string | null>(null);
+
+  if (error) {
+    return (
+      <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-500">Erro ao carregar mapa</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative map-container" onMouseMove={handleMouseMove}>
@@ -152,7 +162,7 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
                 const stateName = geo.properties.name || geo.properties.NAME;
                 const stateAbbr = stateNameToAbbr[stateName] || stateName;
                 const stateData = estadosData[stateAbbr];
-                
+
                 return (
                   <Geography
                     key={geo.rsmKey}
@@ -198,7 +208,7 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
               <h4 className="font-bold text-gray-800 text-lg border-b border-gray-200 pb-2">
                 {tooltip.estado}
               </h4>
-              
+
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -207,7 +217,7 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
                   </div>
                   <span className="font-semibold text-blue-600">{tooltip.notificacoes}</span>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-green-500 rounded-sm"></div>
@@ -215,7 +225,7 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
                   </div>
                   <span className="font-semibold text-green-600">{tooltip.acordos}</span>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-red-500 rounded-sm"></div>
@@ -224,7 +234,7 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
                   <span className="font-semibold text-red-600">{tooltip.desativacoes}</span>
                 </div>
               </div>
-              
+
               <div className="border-t border-gray-200 pt-2 mt-2">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-700">Total de Ações:</span>
@@ -237,7 +247,7 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
           </div>
         )}
       </div>
-      
+
       {/* Legenda */}
       <div className="flex justify-center gap-6 mt-4">
         <div className="flex items-center gap-2">
