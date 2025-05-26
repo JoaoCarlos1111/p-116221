@@ -125,6 +125,38 @@ export const AuthService = {
           brands: ['Nike', 'Adidas'],
           company: 'Empresa Cliente Teste'
         }
+      },
+      analistaCliente: {
+        email: 'analista.cliente@teste.com',
+        password: 'analista123',
+        user: {
+          id: '10',
+          name: 'João Analista',
+          email: 'analista.cliente@teste.com',
+          departments: [],
+          mainDepartment: 'client',
+          isAdmin: false,
+          isClient: true,
+          clientProfile: 'analista_contrafacao',
+          brands: ['Nike', 'Adidas'],
+          company: 'Empresa Cliente Teste'
+        }
+      },
+      financeiroCliente: {
+        email: 'financeiro.cliente@teste.com',
+        password: 'financeiro123',
+        user: {
+          id: '11',
+          name: 'Maria Financeiro',
+          email: 'financeiro.cliente@teste.com',
+          departments: [],
+          mainDepartment: 'client',
+          isAdmin: false,
+          isClient: true,
+          clientProfile: 'financeiro',
+          brands: ['Nike', 'Adidas'],
+          company: 'Empresa Cliente Teste'
+        }
       }
     };
 
