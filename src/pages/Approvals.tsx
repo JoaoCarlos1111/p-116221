@@ -227,7 +227,7 @@ export default function Approvals() {
                   <TableHead>Código do Caso</TableHead>
                   <TableHead>Certificação do Anúncio</TableHead>
                   <TableHead>Data de Entrada</TableHead>
-                  <TableHead>Prioritário</TableHead>
+                  <TableHead className="text-center">Prioritário</TableHead>
                   <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
               </TableHeader>
@@ -256,7 +256,7 @@ export default function Approvals() {
                     <TableCell>
                       {format(new Date(approval.entryDate), 'dd/MM/yyyy')}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-center">
                       <Button
                         variant="ghost"
                         size="sm"
@@ -264,14 +264,14 @@ export default function Approvals() {
                         className={cn(
                           "h-8 w-8 p-0",
                           approval.clientPriority === 'priority' 
-                            ? "text-red-500 hover:text-red-600" 
+                            ? "text-black border border-black hover:text-black hover:border-black" 
                             : "text-gray-300 hover:text-red-400"
                         )}
                       >
                         <AlertTriangle 
                           className={cn(
                             "h-4 w-4",
-                            approval.clientPriority === 'priority' && "fill-current"
+                            approval.clientPriority === 'priority' ? "fill-red-500 stroke-black" : ""
                           )}
                         />
                       </Button>
