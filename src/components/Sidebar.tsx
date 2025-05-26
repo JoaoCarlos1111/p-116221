@@ -3,6 +3,7 @@ import {
   LayoutDashboard, 
   Users, 
   Building, 
+  Building2,
   FileText, 
   Settings, 
   BarChart3, 
@@ -15,7 +16,10 @@ import {
   ChevronRight,
   LogOut,
   Target,
-  MessageSquare
+  MessageSquare,
+  History,
+  FileStack,
+  Boxes
 } from 'lucide-react';
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -139,8 +143,8 @@ export default function Sidebar() {
               )}>Analista Contrafação</span>
             </NavLink>
 
-            <NavLink to="/client/financeiro" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <LayoutDashboard size={20} />
+            <NavLink to="/client/financeiro/dashboard" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <DollarSign size={20} />
               <span className={cn(
                 "transition-all duration-300",
                 isCollapsed && "hidden"
