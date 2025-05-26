@@ -257,7 +257,7 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
         {/* Tooltip customizado */}
         {tooltip && (
           <div
-            className="fixed z-50 bg-white rounded-lg shadow-xl border border-gray-200 p-4 pointer-events-none transition-all duration-200"
+            className="fixed z-[9999] bg-white rounded-lg shadow-xl border border-gray-200 p-4 pointer-events-none transition-all duration-200"
             style={{
               left: Math.min(tooltip.x + 10, window.innerWidth - 240),
               top: Math.max(tooltip.y - 120, 10),
