@@ -459,7 +459,7 @@ const AnalistaContrafacaoDashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/approvals')}>
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/client/analista/approvals')}>
             <CardContent className="p-6 text-center">
               <Clock className="h-8 w-8 mx-auto mb-2 text-yellow-600" />
               <h3 className="font-medium">Análises Pendentes</h3>

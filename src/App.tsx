@@ -170,9 +170,14 @@ function AppContent() {
                 <ClientDashboard />
               </RouteGuard>
             } />
-            <Route path="/client/analista" element={
+            <Route path="/client/analista/dashboard" element={
               <RouteGuard requiredDepartment={['client']}>
                 <AnalistaContrafacaoDashboard />
+              </RouteGuard>
+            } />
+            <Route path="/client/analista/approvals" element={
+              <RouteGuard requiredDepartment={['client']}>
+                <Approvals />
               </RouteGuard>
             } />
             <Route path="/client/financeiro/dashboard" element={

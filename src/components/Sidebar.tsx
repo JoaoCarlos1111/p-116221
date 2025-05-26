@@ -196,7 +196,7 @@ export default function Sidebar() {
                 )}>Dashboard</span>
               </NavLink>
 
-              <NavLink to="/approvals" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <NavLink to="/client/analista/approvals" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
                 <CheckCircle size={20} />
                 <span className={cn(
                   "transition-all duration-300",
