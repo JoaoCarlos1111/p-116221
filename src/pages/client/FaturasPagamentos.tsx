@@ -179,6 +179,43 @@ const FaturasPagamentos = () => {
         </div>
       </div>
 
+      {/* Resumo Geral */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Resumo Geral</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">
+                {filteredParcelamentos.reduce((acc, p) => acc + p.totalRecebido, 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+              </div>
+              <p className="text-sm text-muted-foreground">Total Recebido</p>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-yellow-600">
+                {filteredParcelamentos.reduce((acc, p) => acc + (p.valorTotal - p.totalRecebido), 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+              </div>
+              <p className="text-sm text-muted-foreground">A Receber</p>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600">
+                {filteredParcelamentos.length}
+              </div>
+              <p className="text-sm text-muted-foreground">Parcelamentos Ativos</p>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-red-600 flex items-center justify-center gap-1">
+                <AlertTriangle className="h-6 w-6" />
+                {filteredParcelamentos.reduce((acc, p) => acc + p.parcelas.filter(parc => parc.status === 'Vencido').length, 0)}
+              </div>
+              <p className="text-sm text-muted-foreground">Parcelas Vencidas</p>
+              <p className="text-xs text-red-600 font-medium">Requer atenção urgente</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Filtros */}
       <div className="flex flex-wrap gap-4 mb-6">
         <Input
@@ -455,42 +492,7 @@ const FaturasPagamentos = () => {
         ))}
       </div>
 
-      {/* Resumo */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Resumo Geral</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">
-                {filteredParcelamentos.reduce((acc, p) => acc + p.totalRecebido, 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-              </div>
-              <p className="text-sm text-muted-foreground">Total Recebido</p>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-yellow-600">
-                {filteredParcelamentos.reduce((acc, p) => acc + (p.valorTotal - p.totalRecebido), 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-              </div>
-              <p className="text-sm text-muted-foreground">A Receber</p>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">
-                {filteredParcelamentos.length}
-              </div>
-              <p className="text-sm text-muted-foreground">Parcelamentos Ativos</p>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-red-600 flex items-center justify-center gap-1">
-                <AlertTriangle className="h-6 w-6" />
-                {filteredParcelamentos.reduce((acc, p) => acc + p.parcelas.filter(parc => parc.status === 'Vencido').length, 0)}
-              </div>
-              <p className="text-sm text-muted-foreground">Parcelas Vencidas</p>
-              <p className="text-xs text-red-600 font-medium">Requer atenção urgente</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      
     </div>
   );
 };
