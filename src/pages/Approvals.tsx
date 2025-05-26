@@ -199,36 +199,15 @@ const Approvals = () => {
     });
   };
 
-  const getStatusBadge = (status: string, urgent: boolean) => {
-    let variant: "default" | "secondary" | "destructive" | "outline" = "secondary";
-    let color = "";
-
+  const getStatusBadge = (status: string) => {
     switch (status) {
       case "Aguardando aprovação":
-        variant = "outline";
-        color = "border-yellow-300 text-yellow-700 bg-yellow-50";
-        break;
+        return <Badge className="bg-yellow-100 text-yellow-800">Aguardando aprovação</Badge>;
       case "Em análise":
-        variant = "secondary";
-        color = "border-blue-300 text-blue-700 bg-blue-50";
-        break;
+        return <Badge className="bg-blue-100 text-blue-800">Em análise</Badge>;
       default:
-        variant = "secondary";
+        return <Badge variant="secondary">{status}</Badge>;
     }
-
-    return (
-      <div className="flex items-center gap-2">
-        <Badge variant={variant} className={color}>
-          {status}
-        </Badge>
-        {urgent && (
-          <Badge variant="destructive" className="bg-red-100 text-red-700 border-red-300">
-            <AlertTriangle className="h-3 w-3 mr-1" />
-            Urgente
-          </Badge>
-        )}
-      </div>
-    );
   };
 
   return (
@@ -276,55 +255,49 @@ const Approvals = () => {
       {/* Lista de Casos */}
       <div className="space-y-4">
         {filteredCases.map((caseItem) => (
-          <Card key={caseItem.id} className="hover:shadow-md transition-shadow cursor-pointer">
+          <Card key={caseItem.id} className="hover:shadow-md transition-shadow">
             <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex-1 min-w-0" onClick={() => openCaseDrawer(caseItem)}>
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-lg font-semibold truncate">
-                      Caso #{caseItem.id} - {caseItem.title}
+              <div className="flex justify-between items-start">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-3">
+                    <h3 className="text-lg font-semibold">
+                      #{caseItem.id} - {caseItem.title}
                     </h3>
-                    {getStatusBadge(caseItem.status, caseItem.urgent)}
+                    {getStatusBadge(caseItem.status)}
+                    {caseItem.urgent && (
+                      <Badge variant="destructive" className="flex items-center gap-1">
+                        <AlertTriangle className="h-3 w-3" />
+                        Urgente
+                      </Badge>
+                    )}
                   </div>
                   
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <Tag className="h-4 w-4" />
-                      <span><strong>Marca:</strong> {caseItem.brand}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <ExternalLink className="h-4 w-4" />
-                      <span><strong>Infrator:</strong> {caseItem.infractor}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <User className="h-4 w-4" />
-                      <span><strong>Analista:</strong> {caseItem.analyst}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4" />
-                      <span><strong>Atualizado:</strong> {new Date(caseItem.lastUpdate).toLocaleDateString('pt-BR')}</span>
-                    </div>
+                  <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground mb-4">
+                    <div><strong>Marca:</strong> {caseItem.brand}</div>
+                    <div><strong>Infrator:</strong> {caseItem.infractor}</div>
+                    <div><strong>Analista:</strong> {caseItem.analyst}</div>
+                    <div><strong>Data:</strong> {new Date(caseItem.lastUpdate).toLocaleDateString('pt-BR')}</div>
                   </div>
+
+                  <p className="text-sm text-muted-foreground line-clamp-2">
+                    {caseItem.description}
+                  </p>
                 </div>
 
-                <div className="flex items-center gap-2 ml-4">
+                <div className="flex flex-col gap-2 ml-6">
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      openCaseDrawer(caseItem);
-                    }}
+                    onClick={() => openCaseDrawer(caseItem)}
+                    className="w-full"
                   >
                     <Eye className="h-4 w-4 mr-2" />
                     Ver Detalhes
                   </Button>
                   <Button
                     size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleApproveCase(caseItem.id);
-                    }}
+                    onClick={() => handleApproveCase(caseItem.id)}
+                    className="w-full"
                   >
                     <CheckCircle className="h-4 w-4 mr-2" />
                     Aprovar
@@ -332,10 +305,8 @@ const Approvals = () => {
                   <Button
                     variant="destructive"
                     size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleRejectCase(caseItem.id);
-                    }}
+                    onClick={() => handleRejectCase(caseItem.id)}
+                    className="w-full"
                   >
                     <XCircle className="h-4 w-4 mr-2" />
                     Devolver
@@ -399,8 +370,14 @@ const Approvals = () => {
                     
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Status</label>
-                      <div className="mt-1">
-                        {getStatusBadge(selectedCase.status, selectedCase.urgent)}
+                      <div className="mt-1 flex items-center gap-2">
+                        {getStatusBadge(selectedCase.status)}
+                        {selectedCase.urgent && (
+                          <Badge variant="destructive" className="flex items-center gap-1">
+                            <AlertTriangle className="h-3 w-3" />
+                            Urgente
+                          </Badge>
+                        )}
                       </div>
                     </div>
 
