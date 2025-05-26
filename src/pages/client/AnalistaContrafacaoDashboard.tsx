@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -361,9 +360,9 @@ const AnalistaContrafacaoDashboard = () => {
                       </div>
                       <div>
                         <p className="font-medium">{estado.estado}</p>
-                        <p className="text-xs text-muted-foreground">
-                          Total: {estado.notificacoes + estado.acordos + estado.desativacoes} casos
-                        </p>
+                        <span className="text-sm text-muted-foreground">
+                          Total Ações: {estado.notificacoes + estado.acordos}
+                        </span>
                       </div>
                     </div>
                     <div className="text-right text-sm">
@@ -382,7 +381,7 @@ const AnalistaContrafacaoDashboard = () => {
                   </div>
                 ))}
               </div>
-              
+
               {showAllStates && (
                 <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
                   <div className="text-sm text-blue-800">

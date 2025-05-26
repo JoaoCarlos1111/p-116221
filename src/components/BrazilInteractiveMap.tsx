@@ -116,7 +116,8 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
       return "#f3f4f6"; // Cor padrão para estados sem dados
     }
 
-    const total = stateData.notificacoes + stateData.acordos + stateData.desativacoes;
+    // Total considerando apenas notificações + acordos (desativações não entram na soma)
+    const total = stateData.notificacoes + stateData.acordos;
     const isHovered = hoveredState === stateAbbr;
     
     if (isHovered) {
@@ -226,9 +227,9 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
               
               <div className="border-t border-gray-200 pt-2 mt-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Total de Casos:</span>
+                  <span className="text-sm font-medium text-gray-700">Total de Ações:</span>
                   <span className="font-bold text-gray-800">
-                    {tooltip.notificacoes + tooltip.acordos + tooltip.desativacoes}
+                    {tooltip.notificacoes + tooltip.acordos}
                   </span>
                 </div>
               </div>
