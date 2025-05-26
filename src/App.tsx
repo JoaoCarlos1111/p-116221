@@ -32,7 +32,7 @@ import { departments } from './constants';
 import AdminTemplates from './pages/AdminTemplates';
 import AdminSettings from './pages/AdminSettings';
 import ClientDashboard from './pages/ClientDashboard';
-import AnalistaContrafacaoDashboard from './pages/AnalistaContrafacaoDashboard';
+import AnalistaContrafacaoDashboard from './pages/client/AnalistaContrafacaoDashboard';
 import FaturasPagamentos from './pages/client/FaturasPagamentos';
 import HistoricoPagamentos from './pages/client/HistoricoPagamentos';
 import DetalhesServicos from './pages/client/DetalhesServicos';
