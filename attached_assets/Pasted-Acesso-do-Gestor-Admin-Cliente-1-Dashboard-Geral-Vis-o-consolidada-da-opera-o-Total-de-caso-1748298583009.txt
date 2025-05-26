@@ -1,0 +1,134 @@
+Acesso do Gestor (Admin Cliente)
+📊 1. Dashboard Geral
+Visão consolidada da operação:
+
+Total de casos abertos, resolvidos, inadimplentes
+
+Gráficos por status, marca, data, tipo de infração
+
+Tempo médio de resolução
+
+Indicadores de performance por analista
+
+Mapa interativo do Brasil com volume por estado
+
+Cards resumidos com:
+
+Casos ativos
+
+Casos urgentes
+
+Acordos fechados
+
+Notificações pendentes
+
+Valor total de indenizações
+
+📁 2. Gestão de Casos
+Visualização e filtro de todos os casos da empresa:
+
+Filtros por:
+
+Status
+
+Marca
+
+Data de criação
+
+Tipo de infração
+
+Analisado por
+
+Ações em massa:
+
+Baixar provas
+
+Exportar relatórios
+
+Marcar como urgente
+
+Acesso à visualização detalhada de cada caso
+
+Comentários e logs internos visíveis
+
+Download de documentos gerados (.pdf)
+
+📈 3. Indicadores de Desempenho
+Tempo médio de aprovação
+
+Tempo médio de resolução
+
+% de casos resolvidos com sucesso
+
+% de inadimplência
+
+Ranking de analistas (por eficiência ou volume)
+
+Categorias mais recorrentes de falsificação
+
+💵 4. Painel Financeiro
+Visualização de faturas geradas
+
+Status de pagamentos (pagos, pendentes, inadimplentes)
+
+Histórico financeiro de indenizações:
+
+Valor bruto, deduções, valor líquido
+
+Parcelamentos e vencimentos
+
+Exportar dados financeiros (.xlsx / .pdf)
+
+Visualização do contrato de prestação de serviço
+
+✅ 5. Aprovações de Notificações
+Acesso à tela de aprovações (como os analistas)
+
+Pode revisar e aprovar diretamente notificações extrajudiciais
+
+Visualização de provas e histórico de cada caso
+
+👥 6. Gerenciamento de Usuários
+Criar e editar usuários (analistas, financeiro)
+
+Definir permissões por função:
+
+Acesso financeiro
+
+Aprovação de notificações
+
+Visualização apenas leitura
+
+Reset de senhas e status de acesso
+
+🔍 7. Consulta por Marca
+Filtro dedicado para navegar por todas as marcas vinculadas à conta
+
+Visualização dos casos e indicadores por marca
+
+Permite auditoria por marca/franquia específica
+
+📤 8. Exportação de Relatórios
+Relatórios em Excel e PDF:
+
+Histórico de casos
+
+Relatórios financeiros
+
+Performance por período
+
+Acordos fechados por marca
+
+📜 9. Histórico de Notificações e Decisões
+Registro de todas as notificações enviadas
+
+Decisões associadas: aprovadas, reprovadas, aguardando retorno
+
+Log de ações administrativas (quem fez o quê e quando)
+
+🔐 Regras de Negócio
+O Gestor é o único com acesso total ao painel da empresa
+
+Pode visualizar, editar e exportar tudo, mas não atua como analista operacional
+
+Toda ação relevante é logada (criação, edição, exportação etc.)
