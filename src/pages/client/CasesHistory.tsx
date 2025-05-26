@@ -31,6 +31,8 @@ export default function CasesHistory() {
   const navigate = useNavigate();
   const [selectedCase, setSelectedCase] = useState<HistoryCase | null>(null);
   const [filteredCases, setFilteredCases] = useState<HistoryCase[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState({
     status: '',
     marca: '',
@@ -103,32 +105,52 @@ export default function CasesHistory() {
   const tipoInfracaoOptions = ['Venda de falsificados', 'Phishing', 'Uso indevido de marca'];
 
   useEffect(() => {
-    let filtered = [...historyCases];
+    try {
+      let filtered = [...historyCases];
 
-    if (filters.status) {
-      filtered = filtered.filter(caso => caso.statusFinal === filters.status);
+      if (filters.status) {
+        filtered = filtered.filter(caso => caso.statusFinal === filters.status);
+      }
+
+      if (filters.marca) {
+        filtered = filtered.filter(caso => caso.marca === filters.marca);
+      }
+
+      if (filters.tipoInfracao) {
+        filtered = filtered.filter(caso => caso.tipoInfracao === filters.tipoInfracao);
+      }
+
+      if (filters.dataInicio && filters.dataFim) {
+        filtered = filtered.filter(caso => {
+          const dataDecisao = new Date(caso.dataDecisao);
+          return dataDecisao >= filters.dataInicio! && dataDecisao <= filters.dataFim!;
+        });
+      }
+
+      setFilteredCases(filtered);
+    } catch (error) {
+      console.error('Erro ao filtrar casos:', error);
+      setFilteredCases(historyCases);
     }
-
-    if (filters.marca) {
-      filtered = filtered.filter(caso => caso.marca === filters.marca);
-    }
-
-    if (filters.tipoInfracao) {
-      filtered = filtered.filter(caso => caso.tipoInfracao === filters.tipoInfracao);
-    }
-
-    if (filters.dataInicio && filters.dataFim) {
-      filtered = filtered.filter(caso => {
-        const dataDecisao = new Date(caso.dataDecisao);
-        return dataDecisao >= filters.dataInicio! && dataDecisao <= filters.dataFim!;
-      });
-    }
-
-    setFilteredCases(filtered);
   }, [filters]);
 
   useEffect(() => {
-    setFilteredCases(historyCases);
+    try {
+      console.log('Carregando histórico de casos...');
+      setLoading(true);
+      setError(null);
+      
+      // Simular carregamento assíncrono
+      setTimeout(() => {
+        setFilteredCases(historyCases);
+        setLoading(false);
+        console.log('Casos carregados:', historyCases.length);
+      }, 500);
+    } catch (error) {
+      console.error('Erro ao carregar histórico:', error);
+      setError('Erro ao carregar histórico de casos');
+      setLoading(false);
+    }
   }, []);
 
   const getStatusBadge = (status: string) => {
@@ -347,8 +369,34 @@ export default function CasesHistory() {
           <CardTitle>Casos Encerrados</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border">
-            <Table>
+          {loading && (
+            <div className="flex items-center justify-center p-8">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+                <p>Carregando histórico de casos...</p>
+              </div>
+            </div>
+          )}
+          
+          {error && (
+            <div className="text-center p-8">
+              <p className="text-red-600">{error}</p>
+              <Button 
+                variant="outline" 
+                onClick={() => window.location.reload()}
+                className="mt-4"
+              >
+                Tentar novamente
+              </Button>
+            </div>
+          )}
+          
+          {!loading && !error && (
+            <div className="rounded-md border">
+              <Table></div>
+          )}
+        </CardContent>
+      </Card>
               <TableHeader>
                 <TableRow>
                   <TableHead>ID do Caso</TableHead>
@@ -453,7 +501,8 @@ export default function CasesHistory() {
                 ))}
               </TableBody>
             </Table>
-          </div>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

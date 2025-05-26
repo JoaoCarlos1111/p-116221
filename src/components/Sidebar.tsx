@@ -200,7 +200,7 @@ export default function Sidebar() {
                 )}>Aprovações</span>
               </NavLink>
 
-              <NavLink to="/client/analista/casos/historico" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <NavLink to="/client/casos/historico" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
                 <FileText size={20} />
                 <span className={cn(
                   "transition-all duration-300",
