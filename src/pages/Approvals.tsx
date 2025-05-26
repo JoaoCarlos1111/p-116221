@@ -87,6 +87,7 @@ export default function Approvals() {
   const [dialogCase, setDialogCase] = useState<{id: string, action: 'approve' | 'reject'} | null>(null);
   const [page, setPage] = useState(1);
   const itemsPerPage = 25;
+  const [approvingIds, setApprovingIds] = useState<string[]>([]);
 
   useEffect(() => {
     console.log("Casos de aprovação:", approvals);
@@ -94,6 +95,7 @@ export default function Approvals() {
 
   const totalCases = approvals.length;
   const processedCases = approvals.filter(a => a.status !== 'pending').length;
+  const pendingCases = approvals.filter(a => a.status === 'pending').length;
   const progress = totalCases ? (processedCases / totalCases) * 100 : 0;
 
   useEffect(() => {
@@ -108,9 +110,18 @@ export default function Approvals() {
   }, [progress]);
 
   const handleApprove = (id: string) => {
+    // Add to approving list for animation
+    setApprovingIds(prev => [...prev, id]);
+    
+    // Update status immediately
     setApprovals(prev => prev.map(approval => 
       approval.id === id ? { ...approval, status: 'approved' } : approval
     ));
+    
+    // Remove from list after animation completes
+    setTimeout(() => {
+      setApprovingIds(prev => prev.filter(approvingId => approvingId !== id));
+    }, 1500);
   };
 
   const handleReject = (id: string) => {
@@ -207,6 +218,7 @@ export default function Approvals() {
 
   const filteredApprovals = approvals
     .filter(approval => 
+      approval.status === 'pending' &&
       approval.id.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (!selectedDate || format(new Date(approval.entryDate), 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd'))
     )
@@ -298,12 +310,21 @@ export default function Approvals() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredApprovals.map((approval) => (
-                  <TableRow 
-                    key={approval.id}
-                    className="cursor-pointer hover:bg-gray-50"
-                    onClick={() => handleRowClick(approval)}
-                  >
+                {filteredApprovals.map((approval) => {
+                  const isApproving = approvingIds.includes(approval.id);
+                  return (
+                    <TableRow 
+                      key={approval.id}
+                      className={cn(
+                        "cursor-pointer hover:bg-gray-50 transition-all duration-500",
+                        isApproving && "animate-pulse bg-green-100 border-green-300"
+                      )}
+                      onClick={() => handleRowClick(approval)}
+                      style={{
+                        opacity: isApproving ? 0.8 : 1,
+                        transform: isApproving ? 'scale(0.98)' : 'scale(1)',
+                      }}
+                    >
                     <TableCell onClick={(e) => e.stopPropagation()}>
                       <Checkbox 
                         checked={selectedCases.includes(approval.id)}
@@ -392,23 +413,36 @@ export default function Approvals() {
                       </div>
                     </TableCell>
                   </TableRow>
-                ))}
+                );
+                })}
               </TableBody>
             </Table>
 
-            {totalPages > 1 && (
-              <div className="flex justify-center gap-2 mt-4">
-                {Array.from({ length: totalPages }, (_, i) => (
-                  <Button
-                    key={i + 1}
-                    variant={page === i + 1 ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setPage(i + 1)}
-                  >
-                    {i + 1}
-                  </Button>
-                ))}
+            {pendingCases === 0 ? (
+              <div className="text-center py-8">
+                <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  🎉 Parabéns! Todos os casos foram processados!
+                </h3>
+                <p className="text-gray-600">
+                  Não há mais casos pendentes de aprovação no momento.
+                </p>
               </div>
+            ) : (
+              totalPages > 1 && (
+                <div className="flex justify-center gap-2 mt-4">
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <Button
+                      key={i + 1}
+                      variant={page === i + 1 ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setPage(i + 1)}
+                    >
+                      {i + 1}
+                    </Button>
+                  ))}
+                </div>
+              )
             )}
           </CardContent>
         </Card>
