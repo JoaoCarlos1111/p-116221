@@ -73,7 +73,7 @@ export default function InternalLogin() {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-[400px] p-6 space-y-6">
         <div className="space-y-2 text-center">
-          <h1 className="text-2xl font-bold">Total Brand Protection</h1>
+          <h1 className="text-2xl font-bold">Totall Brand Protection</h1>
           <p className="text-muted-foreground">Faça login para acessar o sistema</p>
         </div>
         
