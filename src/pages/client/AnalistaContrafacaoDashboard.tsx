@@ -329,31 +329,6 @@ const AnalistaContrafacaoDashboard = () => {
             <CardContent>
               <BrazilInteractiveMap estadosRanking={mapaStats.estadosRanking} />
             </CardContent>
-              
-              {/* Legenda */}
-              <div className="flex justify-center gap-6 mt-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-blue-500 rounded"></div>
-                  <span className="text-sm">Notificações</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-green-500 rounded"></div>
-                  <span className="text-sm">Acordos</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-red-500 rounded"></div>
-                  <span className="text-sm">Desativações</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-blue-200 border border-blue-400 rounded"></div>
-                  <span className="text-sm">Baixa atividade</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-blue-600 border border-blue-800 rounded"></div>
-                  <span className="text-sm">Alta atividade</span>
-                </div>
-              </div>
-            </CardContent>
           </Card>
 
           {/* Ranking de Estados */}
