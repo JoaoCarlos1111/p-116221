@@ -60,9 +60,33 @@ const AnalistaContrafacaoDashboard = () => {
       { estado: 'RJ', notificacoes: 187, acordos: 32, desativacoes: 67 },
       { estado: 'MG', notificacoes: 156, acordos: 28, desativacoes: 54 },
       { estado: 'RS', notificacoes: 98, acordos: 19, desativacoes: 32 },
-      { estado: 'PR', notificacoes: 87, acordos: 15, desativacoes: 28 }
+      { estado: 'PR', notificacoes: 87, acordos: 15, desativacoes: 28 },
+      { estado: 'SC', notificacoes: 76, acordos: 12, desativacoes: 24 },
+      { estado: 'BA', notificacoes: 65, acordos: 11, desativacoes: 22 },
+      { estado: 'GO', notificacoes: 54, acordos: 9, desativacoes: 18 },
+      { estado: 'PE', notificacoes: 48, acordos: 8, desativacoes: 16 },
+      { estado: 'CE', notificacoes: 42, acordos: 7, desativacoes: 14 },
+      { estado: 'DF', notificacoes: 38, acordos: 6, desativacoes: 12 },
+      { estado: 'ES', notificacoes: 34, acordos: 5, desativacoes: 11 },
+      { estado: 'PB', notificacoes: 28, acordos: 4, desativacoes: 9 },
+      { estado: 'RN', notificacoes: 25, acordos: 4, desativacoes: 8 },
+      { estado: 'AL', notificacoes: 22, acordos: 3, desativacoes: 7 },
+      { estado: 'MT', notificacoes: 19, acordos: 3, desativacoes: 6 },
+      { estado: 'MS', notificacoes: 16, acordos: 2, desativacoes: 5 },
+      { estado: 'SE', notificacoes: 14, acordos: 2, desativacoes: 4 },
+      { estado: 'PI', notificacoes: 12, acordos: 2, desativacoes: 4 },
+      { estado: 'TO', notificacoes: 10, acordos: 1, desativacoes: 3 },
+      { estado: 'MA', notificacoes: 9, acordos: 1, desativacoes: 3 },
+      { estado: 'PA', notificacoes: 8, acordos: 1, desativacoes: 2 },
+      { estado: 'AM', notificacoes: 6, acordos: 1, desativacoes: 2 },
+      { estado: 'RO', notificacoes: 5, acordos: 1, desativacoes: 2 },
+      { estado: 'AC', notificacoes: 4, acordos: 0, desativacoes: 1 },
+      { estado: 'RR', notificacoes: 3, acordos: 0, desativacoes: 1 },
+      { estado: 'AP', notificacoes: 2, acordos: 0, desativacoes: 1 }
     ]
   });
+
+  const [showAllStates, setShowAllStates] = useState(false);
 
   // Dados para gráficos
   const evolucaoMensal = [
@@ -331,37 +355,85 @@ const AnalistaContrafacaoDashboard = () => {
           {/* Ranking de Estados */}
           <Card>
             <CardHeader>
-              <CardTitle>Top 5 Estados</CardTitle>
+              <div className="flex justify-between items-center">
+                <CardTitle>{showAllStates ? 'Ranking Completo' : 'Top 5 Estados'}</CardTitle>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setShowAllStates(!showAllStates)}
+                >
+                  {showAllStates ? 'Ver Menos' : 'Ver Todos'}
+                </Button>
+              </div>
             </CardHeader>
-            <CardContent className="space-y-4">
-              {mapaStats.estadosRanking.map((estado, index) => (
-                <div key={estado.estado} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center w-8 h-8 bg-primary text-primary-foreground rounded-full text-sm font-bold">
-                      {index + 1}
+            <CardContent>
+              <div className={`space-y-3 ${showAllStates ? 'max-h-96 overflow-y-auto' : ''}`}>
+                {(showAllStates ? mapaStats.estadosRanking : mapaStats.estadosRanking.slice(0, 5)).map((estado, index) => (
+                  <div key={estado.estado} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted/70 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${
+                        index < 3 
+                          ? 'bg-gradient-to-r from-yellow-400 to-yellow-600 text-white' 
+                          : index < 5 
+                          ? 'bg-gradient-to-r from-gray-400 to-gray-600 text-white'
+                          : 'bg-primary text-primary-foreground'
+                      }`}>
+                        {index + 1}
+                      </div>
+                      <div>
+                        <p className="font-medium">{estado.estado}</p>
+                        <p className="text-xs text-muted-foreground">
+                          Total: {estado.notificacoes + estado.acordos + estado.desativacoes} casos
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-medium">{estado.estado}</p>
-                      <p className="text-xs text-muted-foreground">
-                        Total: {estado.notificacoes + estado.acordos + estado.desativacoes}
-                      </p>
+                    <div className="text-right text-sm">
+                      <div className="flex gap-1 flex-wrap">
+                        <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
+                          {estado.notificacoes} N
+                        </Badge>
+                        <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                          {estado.acordos} A
+                        </Badge>
+                        <Badge variant="outline" className="text-xs bg-red-50 text-red-700 border-red-200">
+                          {estado.desativacoes} D
+                        </Badge>
+                      </div>
                     </div>
                   </div>
-                  <div className="text-right text-sm">
-                    <div className="flex gap-1">
-                      <Badge variant="outline" className="text-xs">
-                        {estado.notificacoes} N
-                      </Badge>
-                      <Badge variant="outline" className="text-xs">
-                        {estado.acordos} A
-                      </Badge>
-                      <Badge variant="outline" className="text-xs">
-                        {estado.desativacoes} D
-                      </Badge>
+                ))}
+              </div>
+              
+              {showAllStates && (
+                <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="text-sm text-blue-800">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-medium">Resumo Nacional:</span>
+                      <span>{mapaStats.estadosRanking.length} estados</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 text-xs">
+                      <div>
+                        <span className="text-blue-600">Total Notificações:</span>
+                        <span className="font-bold ml-1">
+                          {mapaStats.estadosRanking.reduce((sum, estado) => sum + estado.notificacoes, 0)}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-green-600">Total Acordos:</span>
+                        <span className="font-bold ml-1">
+                          {mapaStats.estadosRanking.reduce((sum, estado) => sum + estado.acordos, 0)}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-red-600">Total Desativações:</span>
+                        <span className="font-bold ml-1">
+                          {mapaStats.estadosRanking.reduce((sum, estado) => sum + estado.desativacoes, 0)}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              ))}
+              )}
             </CardContent>
           </Card>
         </div>
