@@ -26,7 +26,7 @@ import {
   Activity
 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
-import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip, BarChart, Bar, PieChart as RechartsPieChart, Cell } from "recharts";
+import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip, BarChart, Bar, PieChart as RechartsPieChart, Cell, Pie } from "recharts";
 
 const AnalistaContrafacaoDashboard = () => {
   const navigate = useNavigate();
