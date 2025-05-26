@@ -30,6 +30,7 @@ export default function GestorDashboard() {
   const [selectedBrand, setSelectedBrand] = useState('all');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showAllStates, setShowAllStates] = useState(false);
 
   // Dados mock - em produção virão da API
   const [dashboardData, setDashboardData] = useState({
@@ -340,43 +341,85 @@ export default function GestorDashboard() {
         {/* Ranking de Estados */}
         <Card>
           <CardHeader>
-            <CardTitle>Ranking de Estados</CardTitle>
+            <div className="flex justify-between items-center">
+              <CardTitle>{showAllStates ? 'Ranking Completo' : 'Top 5 Estados'}</CardTitle>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setShowAllStates(!showAllStates)}
+              >
+                {showAllStates ? 'Ver Menos' : 'Ver Todos'}
+              </Button>
+            </div>
           </CardHeader>
-          <CardContent className="space-y-3">
-            {dashboardData.estadosRanking?.slice(0, 10).map((estado, index) => (
-              <div key={estado.estado} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                <div className="flex items-center gap-3">
-                  <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${
-                    index < 3 
-                      ? 'bg-gradient-to-r from-yellow-400 to-yellow-600 text-white' 
-                      : index < 5 
-                      ? 'bg-gradient-to-r from-gray-400 to-gray-600 text-white'
-                      : 'bg-primary text-primary-foreground'
-                  }`}>
-                    {index + 1}
+          <CardContent>
+            <div className={`space-y-3 ${showAllStates ? 'max-h-96 overflow-y-auto' : ''}`}>
+              {(showAllStates ? dashboardData.estadosRanking : dashboardData.estadosRanking.slice(0, 5)).map((estado, index) => (
+                <div key={estado.estado} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${
+                      index < 3 
+                        ? 'bg-gradient-to-r from-yellow-400 to-yellow-600 text-white' 
+                        : index < 5 
+                        ? 'bg-gradient-to-r from-gray-400 to-gray-600 text-white'
+                        : 'bg-primary text-primary-foreground'
+                    }`}>
+                      {index + 1}
+                    </div>
+                    <div>
+                      <p className="font-medium">{estado.estado}</p>
+                      <span className="text-sm text-muted-foreground">
+                        Total Ações: {estado.notificacoes + estado.acordos}
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium">{estado.estado}</p>
-                    <span className="text-sm text-muted-foreground">
-                      Total Ações: {estado.notificacoes + estado.acordos}
-                    </span>
+                  <div className="text-right text-sm">
+                    <div className="flex gap-1 flex-wrap">
+                      <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
+                        {estado.notificacoes} N
+                      </Badge>
+                      <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                        {estado.acordos} A
+                      </Badge>
+                      <Badge variant="outline" className="text-xs bg-red-50 text-red-700 border-red-200">
+                        {estado.desativacoes} D
+                      </Badge>
+                    </div>
                   </div>
                 </div>
-                <div className="text-right text-sm">
-                  <div className="flex gap-1 flex-wrap">
-                    <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
-                      {estado.notificacoes} N
-                    </Badge>
-                    <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
-                      {estado.acordos} A
-                    </Badge>
-                    <Badge variant="outline" className="text-xs bg-red-50 text-red-700 border-red-200">
-                      {estado.desativacoes} D
-                    </Badge>
+              ))}
+            </div>
+
+            {showAllStates && (
+              <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="text-sm text-blue-800">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-medium">Resumo Nacional:</span>
+                    <span>{dashboardData.estadosRanking.length} estados</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-4 text-xs">
+                    <div>
+                      <span className="text-blue-600">Total Notificações:</span>
+                      <span className="font-bold ml-1">
+                        {dashboardData.estadosRanking.reduce((sum, estado) => sum + estado.notificacoes, 0)}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-green-600">Total Acordos:</span>
+                      <span className="font-bold ml-1">
+                        {dashboardData.estadosRanking.reduce((sum, estado) => sum + estado.acordos, 0)}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-red-600">Total Desativações:</span>
+                      <span className="font-bold ml-1">
+                        {dashboardData.estadosRanking.reduce((sum, estado) => sum + estado.desativacoes, 0)}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-            ))}
+            )}
           </CardContent>
         </Card>
       </div>
