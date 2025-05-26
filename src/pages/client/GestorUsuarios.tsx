@@ -410,7 +410,6 @@ export default function GestorUsuarios() {
                   <TableCell>
                     <div>
                       <p className="font-medium">{user.name}</p>
-                      <p className="text-sm text-muted-foreground">{user.email}</p>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -479,13 +478,7 @@ export default function GestorUsuarios() {
                           <UserCheck className="h-4 w-4" />
                         )}
                       </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => handleResetPassword(user.id)}
-                      >
-                        <Key className="h-4 w-4" />
-                      </Button>
+                      
                       <Button
                         size="sm"
                         variant="ghost"
