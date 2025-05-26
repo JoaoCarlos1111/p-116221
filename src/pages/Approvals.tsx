@@ -317,8 +317,13 @@ export default function Approvals() {
                       />
                     </TableCell>
                     <TableCell>{approval.id}</TableCell>
-                    <TableCell>
-                      <Button variant="ghost" size="sm" className="gap-2">
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="gap-2"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <FileText className="h-4 w-4" />
                         Visualizar PDF
                       </Button>
@@ -326,11 +331,14 @@ export default function Approvals() {
                     <TableCell>
                       {format(new Date(approval.entryDate), 'dd/MM/yyyy')}
                     </TableCell>
-                    <TableCell className="text-center">
+                    <TableCell className="text-center" onClick={(e) => e.stopPropagation()}>
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => toggleClientPriority(approval.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleClientPriority(approval.id);
+                        }}
                         className={cn(
                           "h-8 w-8 p-0",
                           approval.clientPriority === 'priority' 
