@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => ({
     allowedHosts: "all",
     strictPort: true,
     hmr: {
+      port: 443,
       clientPort: 443,
     },
   },
