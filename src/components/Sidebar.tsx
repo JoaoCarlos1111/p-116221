@@ -115,7 +115,7 @@ export default function Sidebar() {
             </NavLink>
           </>
         )}
-        
+
         {isClient && (
           <>
             <NavLink to="/client/dashboard" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">

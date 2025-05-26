@@ -1,8 +1,8 @@
-
 export const departments = {
   ADMIN: 'admin',
   PROSPECCAO: 'prospeccao',
   VERIFICACAO: 'verificacao',
+  AUDITORIA: 'auditoria',
   APROVACAO: 'aprovacao',
   LOGISTICA: 'logistica',
   IP_TOOLS: 'ip_tools',
@@ -48,6 +48,18 @@ export const AuthService = {
           email: 'verificacao@tbp.com',
           departments: [departments.VERIFICACAO],
           mainDepartment: departments.VERIFICACAO,
+          isAdmin: false
+        }
+      },
+      auditoria: {
+        email: 'auditoria@tbp.com',
+        password: 'tbp123',
+        user: {
+          id: '9',
+          name: 'Equipe Auditoria',
+          email: 'auditoria@tbp.com',
+          departments: [departments.AUDITORIA],
+          mainDepartment: departments.AUDITORIA,
           isAdmin: false
         }
       },
