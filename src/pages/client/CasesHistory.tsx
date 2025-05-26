@@ -31,6 +31,7 @@ export default function CasesHistory() {
   const [selectedCase, setSelectedCase] = useState<HistoryCase | null>(null);
   const [filteredCases, setFilteredCases] = useState<HistoryCase[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState({
     status: '',
     marca: '',
@@ -107,18 +108,26 @@ export default function CasesHistory() {
     const loadData = async () => {
       try {
         setLoading(true);
-        // Simular carregamento
+        setError(null);
+        
+        // Simular carregamento da API
         await new Promise(resolve => setTimeout(resolve, 500));
+        
         setFilteredCases(historyCases);
-      } catch (error) {
-        console.error('Erro ao carregar dados:', error);
+      } catch (err) {
+        console.error('Erro ao carregar dados:', err);
+        setError('Erro ao carregar histórico de casos');
         setFilteredCases([]);
       } finally {
         setLoading(false);
       }
     };
 
-    loadData();
+    loadData().catch(err => {
+      console.error('Erro não tratado:', err);
+      setError('Erro inesperado ao carregar dados');
+      setLoading(false);
+    });
   }, []);
 
   // Aplicar filtros
@@ -146,8 +155,9 @@ export default function CasesHistory() {
       }
 
       setFilteredCases(filtered);
-    } catch (error) {
-      console.error('Erro ao filtrar casos:', error);
+    } catch (err) {
+      console.error('Erro ao filtrar casos:', err);
+      setError('Erro ao aplicar filtros');
     }
   }, [filters]);
 
@@ -163,13 +173,17 @@ export default function CasesHistory() {
   };
 
   const clearFilters = () => {
-    setFilters({
-      status: '',
-      marca: '',
-      tipoInfracao: '',
-      dataInicio: null,
-      dataFim: null,
-    });
+    try {
+      setFilters({
+        status: '',
+        marca: '',
+        tipoInfracao: '',
+        dataInicio: null,
+        dataFim: null,
+      });
+    } catch (err) {
+      console.error('Erro ao limpar filtros:', err);
+    }
   };
 
   const exportToCSV = () => {
@@ -194,8 +208,26 @@ export default function CasesHistory() {
       a.download = 'historico-casos.csv';
       a.click();
       window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Erro ao exportar CSV:', error);
+    } catch (err) {
+      console.error('Erro ao exportar CSV:', err);
+      setError('Erro ao exportar arquivo CSV');
+    }
+  };
+
+  const handleNavigateBack = () => {
+    try {
+      navigate('/client/dashboard');
+    } catch (err) {
+      console.error('Erro ao navegar:', err);
+      window.history.back();
+    }
+  };
+
+  const handleOpenLink = (link: string) => {
+    try {
+      window.open(link, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+      console.error('Erro ao abrir link:', err);
     }
   };
 
@@ -204,6 +236,22 @@ export default function CasesHistory() {
     acc[status] = filteredCases.filter(caso => caso.statusFinal === status).length;
     return acc;
   }, {} as Record<string, number>);
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="text-red-500 mb-4">
+            <p className="text-lg font-semibold">Erro</p>
+            <p>{error}</p>
+          </div>
+          <Button onClick={() => window.location.reload()}>
+            Tentar novamente
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -221,7 +269,7 @@ export default function CasesHistory() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => navigate('/client/dashboard')}>
+          <Button variant="ghost" onClick={handleNavigateBack}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Voltar para Dashboard
           </Button>
@@ -256,7 +304,10 @@ export default function CasesHistory() {
             {/* Status */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Status</label>
-              <Select value={filters.status} onValueChange={(value) => setFilters(prev => ({ ...prev, status: value }))}>
+              <Select 
+                value={filters.status} 
+                onValueChange={(value) => setFilters(prev => ({ ...prev, status: value }))}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Todos os status" />
                 </SelectTrigger>
@@ -272,7 +323,10 @@ export default function CasesHistory() {
             {/* Marca */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Marca</label>
-              <Select value={filters.marca} onValueChange={(value) => setFilters(prev => ({ ...prev, marca: value }))}>
+              <Select 
+                value={filters.marca} 
+                onValueChange={(value) => setFilters(prev => ({ ...prev, marca: value }))}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Todas as marcas" />
                 </SelectTrigger>
@@ -288,7 +342,10 @@ export default function CasesHistory() {
             {/* Tipo de Infração */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Tipo de Infração</label>
-              <Select value={filters.tipoInfracao} onValueChange={(value) => setFilters(prev => ({ ...prev, tipoInfracao: value }))}>
+              <Select 
+                value={filters.tipoInfracao} 
+                onValueChange={(value) => setFilters(prev => ({ ...prev, tipoInfracao: value }))}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Todos os tipos" />
                 </SelectTrigger>
@@ -396,96 +453,112 @@ export default function CasesHistory() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredCases.map((caso) => (
-                  <TableRow key={caso.id}>
-                    <TableCell className="font-medium">#{caso.id}</TableCell>
-                    <TableCell>{caso.marca}</TableCell>
-                    <TableCell>{caso.tipoInfracao}</TableCell>
-                    <TableCell>
-                      <Badge className={`${getStatusBadge(caso.statusFinal)} text-white`}>
-                        {caso.statusFinal}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      {format(new Date(caso.dataDecisao), 'dd/MM/yyyy', { locale: ptBR })}
-                    </TableCell>
-                    <TableCell>{caso.analisadoPor}</TableCell>
-                    <TableCell>
-                      <Sheet>
-                        <SheetTrigger asChild>
-                          <Button variant="ghost" size="sm" onClick={() => setSelectedCase(caso)}>
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </SheetTrigger>
-                        <SheetContent className="min-w-[500px]">
-                          <SheetHeader>
-                            <SheetTitle>Detalhes do Caso #{selectedCase?.id}</SheetTitle>
-                          </SheetHeader>
-                          {selectedCase && (
-                            <div className="space-y-6 mt-6">
-                              <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <label className="text-sm font-medium text-muted-foreground">Marca</label>
-                                  <p className="font-medium">{selectedCase.marca}</p>
-                                </div>
-                                <div>
-                                  <label className="text-sm font-medium text-muted-foreground">Status Final</label>
-                                  <Badge className={`${getStatusBadge(selectedCase.statusFinal)} text-white`}>
-                                    {selectedCase.statusFinal}
-                                  </Badge>
-                                </div>
-                                <div>
-                                  <label className="text-sm font-medium text-muted-foreground">Tipo de Infração</label>
-                                  <p className="font-medium">{selectedCase.tipoInfracao}</p>
-                                </div>
-                                <div>
-                                  <label className="text-sm font-medium text-muted-foreground">Valor Potencial</label>
-                                  <p className="font-medium text-green-600">
-                                    {new Intl.NumberFormat('pt-BR', { 
-                                      style: 'currency', 
-                                      currency: 'BRL' 
-                                    }).format(selectedCase.valorPotencial)}
-                                  </p>
-                                </div>
-                                <div>
-                                  <label className="text-sm font-medium text-muted-foreground">Data da Decisão</label>
-                                  <p className="font-medium">
-                                    {format(new Date(selectedCase.dataDecisao), 'dd/MM/yyyy', { locale: ptBR })}
-                                  </p>
-                                </div>
-                                <div>
-                                  <label className="text-sm font-medium text-muted-foreground">Analisado por</label>
-                                  <p className="font-medium">{selectedCase.analisadoPor}</p>
-                                </div>
-                              </div>
-
-                              <div>
-                                <label className="text-sm font-medium text-muted-foreground">Links Suspeitos</label>
-                                <div className="space-y-2 mt-2">
-                                  {selectedCase.links.map((link, index) => (
-                                    <div key={index} className="p-2 bg-muted rounded flex items-center justify-between">
-                                      <span className="text-sm truncate">{link}</span>
-                                      <Button variant="ghost" size="sm" onClick={() => window.open(link, '_blank')}>
-                                        <FileText className="h-4 w-4" />
-                                      </Button>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-
-                              <div>
-                                <label className="text-sm font-medium text-muted-foreground">Observações</label>
-                                <div className="mt-2 p-3 bg-muted rounded-lg">
-                                  <p className="text-sm">{selectedCase.observacoes}</p>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </SheetContent>
-                      </Sheet>
+                {filteredCases.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-8">
+                      Nenhum caso encontrado com os filtros aplicados
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  filteredCases.map((caso) => (
+                    <TableRow key={caso.id}>
+                      <TableCell className="font-medium">#{caso.id}</TableCell>
+                      <TableCell>{caso.marca}</TableCell>
+                      <TableCell>{caso.tipoInfracao}</TableCell>
+                      <TableCell>
+                        <Badge className={`${getStatusBadge(caso.statusFinal)} text-white`}>
+                          {caso.statusFinal}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        {format(new Date(caso.dataDecisao), 'dd/MM/yyyy', { locale: ptBR })}
+                      </TableCell>
+                      <TableCell>{caso.analisadoPor}</TableCell>
+                      <TableCell>
+                        <Sheet>
+                          <SheetTrigger asChild>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              onClick={() => setSelectedCase(caso)}
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                          </SheetTrigger>
+                          <SheetContent className="min-w-[500px]">
+                            <SheetHeader>
+                              <SheetTitle>Detalhes do Caso #{selectedCase?.id}</SheetTitle>
+                            </SheetHeader>
+                            {selectedCase && (
+                              <div className="space-y-6 mt-6">
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <label className="text-sm font-medium text-muted-foreground">Marca</label>
+                                    <p className="font-medium">{selectedCase.marca}</p>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium text-muted-foreground">Status Final</label>
+                                    <Badge className={`${getStatusBadge(selectedCase.statusFinal)} text-white`}>
+                                      {selectedCase.statusFinal}
+                                    </Badge>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium text-muted-foreground">Tipo de Infração</label>
+                                    <p className="font-medium">{selectedCase.tipoInfracao}</p>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium text-muted-foreground">Valor Potencial</label>
+                                    <p className="font-medium text-green-600">
+                                      {new Intl.NumberFormat('pt-BR', { 
+                                        style: 'currency', 
+                                        currency: 'BRL' 
+                                      }).format(selectedCase.valorPotencial)}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium text-muted-foreground">Data da Decisão</label>
+                                    <p className="font-medium">
+                                      {format(new Date(selectedCase.dataDecisao), 'dd/MM/yyyy', { locale: ptBR })}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium text-muted-foreground">Analisado por</label>
+                                    <p className="font-medium">{selectedCase.analisadoPor}</p>
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <label className="text-sm font-medium text-muted-foreground">Links Suspeitos</label>
+                                  <div className="space-y-2 mt-2">
+                                    {selectedCase.links.map((link, index) => (
+                                      <div key={index} className="p-2 bg-muted rounded flex items-center justify-between">
+                                        <span className="text-sm truncate">{link}</span>
+                                        <Button 
+                                          variant="ghost" 
+                                          size="sm" 
+                                          onClick={() => handleOpenLink(link)}
+                                        >
+                                          <FileText className="h-4 w-4" />
+                                        </Button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <label className="text-sm font-medium text-muted-foreground">Observações</label>
+                                  <div className="mt-2 p-3 bg-muted rounded-lg">
+                                    <p className="text-sm">{selectedCase.observacoes}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </SheetContent>
+                        </Sheet>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </div>
