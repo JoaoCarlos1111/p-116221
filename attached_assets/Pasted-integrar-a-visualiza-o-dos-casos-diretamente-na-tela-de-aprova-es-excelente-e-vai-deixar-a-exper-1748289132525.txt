@@ -1,0 +1,81 @@
+integrar a visualização dos casos diretamente na tela de aprovações é excelente e vai deixar a experiência mais fluida e produtiva. Isso reduz cliques desnecessários e permite que os analistas tomem decisões com mais agilidade, sem sair da linha de raciocínio da tarefa.
+
+✅ Vantagens desse modelo (visualização embutida):
+Velocidade no fluxo de trabalho — análise e aprovação acontecem na mesma tela.
+
+Menos dispersão — o analista não perde o contexto ao navegar entre várias páginas.
+
+Acesso rápido às informações essenciais — provas, prints, dados do infrator, histórico.
+
+Centralização de ações — marcar como urgente, atualizar status, comentários internos etc.
+
+💡 Sugestão de UX/UI: Visualização lateral ou expandida
+Opção 1: Drawer lateral (painel deslizante da direita)
+Ao clicar no caso, abre um painel à direita com os detalhes.
+
+Ideal para não sair da tela principal.
+
+Interface moderna e muito usada em ferramentas como Notion, Slack, Jira, etc.
+
+Opção 2: Expansão inline na própria linha da tabela
+Ao clicar, a linha do caso se expande verticalmente e mostra as informações.
+
+Mais simples, mas visualmente pode ficar poluído se tiver muita informação.
+
+Recomendo o drawer lateral, pois permite manter o layout limpo e organizado.
+
+🧱 Estrutura da visualização do caso (no painel/drawer)
+txt
+Copiar
+Editar
+────────────────────────────────────────────
+|                                            |
+|   Caso #12345 - Site falsificado da Marca |
+|                                            |
+|   Marca: Adidas                           |
+|   Infrator: dominiofalso.com              |
+|   Tipo: Venda de produtos falsos          |
+|   Status: Aguardando cliente              |
+|   Urgente: 🔴 Sim                         |
+|                                            |
+|   📎 Provas e prints                      |
+|   - print_1.jpg                           |
+|   - video_comprovacao.mp4                 |
+|   + Adicionar novas provas                |
+|                                            |
+|   💬 Comentários internos                 |
+|   - João: Revisado, precisa de aprovação  |
+|   - Carla: Verifiquei CNPJ do domínio     |
+|   + Adicionar comentário                  |
+|                                            |
+|   🕓 Histórico do caso                    |
+|   - 24/05: Criado                         |
+|   - 25/05: Provas adicionadas             |
+|   - 26/05: Cliente marcou como urgente    |
+|                                            |
+|   ⚡ Ações rápidas                         |
+|   [ ] Marcar como urgente                 |
+|   [ ] Atualizar status                    |
+|       ⮕ Dropdown com status disponíveis   |
+|                                            |
+────────────────────────────────────────────
+🔧 Ações rápidas (como botões no topo ou rodapé)
+ Marcar como urgente / remover urgência
+
+ Atualizar status manualmente
+
+ Mover para setor / reatribuir analista
+
+ Visualizar e baixar provas
+
+ Copiar link do caso / compartilhar internamente
+
+🛠 Regras de negócio sugeridas
+Comentários internos não são visíveis para o cliente.
+
+Uploads de provas ficam registrados no histórico.
+
+Marcar como “urgente” destaca o caso com ícone/alerta na tabela principal.
+
+Toda ação gera log no histórico.
+
