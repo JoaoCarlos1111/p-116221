@@ -139,19 +139,14 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
     const stateData = estadosData[stateAbbr];
 
     if (stateData) {
-      const rect = event.currentTarget.getBoundingClientRect();
-      const containerRect = (event.currentTarget as SVGPathElement).closest('.map-container')?.getBoundingClientRect();
-
-      if (containerRect) {
-        setTooltip({
-          estado: stateAbbr,
-          notificacoes: stateData.notificacoes,
-          acordos: stateData.acordos,
-          desativacoes: stateData.desativacoes,
-          x: event.clientX - containerRect.left,
-          y: event.clientY - containerRect.top
-        });
-      }
+      setTooltip({
+        estado: stateAbbr,
+        notificacoes: stateData.notificacoes,
+        acordos: stateData.acordos,
+        desativacoes: stateData.desativacoes,
+        x: event.clientX,
+        y: event.clientY
+      });
       setHoveredState(stateAbbr);
     }
   };
@@ -163,14 +158,11 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
 
   const handleMouseMove = (event: React.MouseEvent) => {
     if (tooltip) {
-      const containerRect = (event.currentTarget as HTMLElement).closest('.map-container')?.getBoundingClientRect();
-      if (containerRect) {
-        setTooltip(prev => prev ? {
-          ...prev,
-          x: event.clientX - containerRect.left,
-          y: event.clientY - containerRect.top
-        } : null);
-      }
+      setTooltip(prev => prev ? {
+        ...prev,
+        x: event.clientX,
+        y: event.clientY
+      } : null);
     }
   };
 
@@ -265,9 +257,9 @@ const BrazilInteractiveMap: React.FC<BrazilInteractiveMapProps> = ({ estadosRank
         {/* Tooltip customizado */}
         {tooltip && (
           <div
-            className="absolute z-10 bg-white rounded-lg shadow-xl border border-gray-200 p-4 pointer-events-none transition-all duration-200"
+            className="fixed z-50 bg-white rounded-lg shadow-xl border border-gray-200 p-4 pointer-events-none transition-all duration-200"
             style={{
-              left: Math.min(tooltip.x + 10, 300),
+              left: Math.min(tooltip.x + 10, window.innerWidth - 240),
               top: Math.max(tooltip.y - 120, 10),
               minWidth: '220px'
             }}
