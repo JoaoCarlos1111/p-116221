@@ -361,23 +361,13 @@ export default function GestorCasos() {
                     {format(new Date(caso.createdAt), 'dd/MM/yyyy')}
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => navigate(`/client/casos/${caso.id}`)}
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <div className="flex items-center gap-1 text-muted-foreground">
-                        <MessageSquare className="h-4 w-4" />
-                        <span className="text-xs">{caso.commentsCount}</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-muted-foreground">
-                        <FileText className="h-4 w-4" />
-                        <span className="text-xs">{caso.documentsCount}</span>
-                      </div>
-                    </div>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => navigate(`/client/casos/${caso.id}`)}
+                    >
+                      <Eye className="h-4 w-4" />
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
