@@ -40,6 +40,7 @@ import ContratosDocumentos from './pages/client/ContratosDocumentos';
 import Solicitacoes from './pages/client/Solicitacoes';
 import FinanceiroDashboard from './pages/client/FinanceiroDashboard';
 import NewTemplate from './pages/NewTemplate';
+import CasesHistory from './pages/client/CasesHistory';
 
 function AppContent() {
   const location = useLocation();
@@ -231,6 +232,7 @@ function AppContent() {
                 </RouteGuard>
               } />
               <Route path="/case-history/:id" element={<CaseHistoryDetails />} />
+              <Route path="/client/casos/historico" element={<CasesHistory />} />
           </Routes>
         </main>
       </div>

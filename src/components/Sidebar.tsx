@@ -199,6 +199,14 @@ export default function Sidebar() {
                   isCollapsed && "hidden"
                 )}>Aprovações</span>
               </NavLink>
+
+              <NavLink to="/client/analista/casos/historico" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+                <FileText size={20} />
+                <span className={cn(
+                  "transition-all duration-300",
+                  isCollapsed && "hidden"
+                )}>Histórico de Casos</span>
+              </NavLink>
             </>
           )}
 
