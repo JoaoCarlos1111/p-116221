@@ -320,18 +320,93 @@ const AnalistaContrafacaoDashboard = () => {
           Distribuição por Estados
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Simulação do Mapa do Brasil */}
+          {/* Mapa do Brasil */}
           <Card className="lg:col-span-2">
             <CardHeader>
               <CardTitle>Mapa de Ações por Estado</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center justify-center h-64 bg-gradient-to-br from-blue-50 to-green-50 rounded-lg border-2 border-dashed border-gray-300">
-                <div className="text-center">
-                  <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-                  <p className="text-gray-600">Mapa Interativo do Brasil</p>
-                  <p className="text-sm text-gray-500">Distribuição de casos por estado</p>
-                </div>
+              <div className="relative h-80 bg-gradient-to-br from-blue-50 to-green-50 rounded-lg overflow-hidden">
+                <svg 
+                  viewBox="0 0 400 300" 
+                  className="w-full h-full"
+                  style={{ background: 'linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 100%)' }}
+                >
+                  {/* Estados do Brasil com cores baseadas na intensidade de casos */}
+                  {mapaStats.estadosRanking.map((estado, index) => {
+                    const totalCasos = estado.notificacoes + estado.acordos + estado.desativacoes;
+                    const intensity = Math.min(totalCasos / 250, 1); // Normaliza para 0-1
+                    const color = `rgba(59, 130, 246, ${0.3 + intensity * 0.7})`; // Azul com intensidade variável
+                    
+                    // Posições simplificadas dos estados (aproximadas)
+                    const statePositions: { [key: string]: { x: number; y: number; width: number; height: number } } = {
+                      'SP': { x: 220, y: 180, width: 30, height: 25 },
+                      'RJ': { x: 250, y: 190, width: 20, height: 15 },
+                      'MG': { x: 200, y: 160, width: 35, height: 30 },
+                      'RS': { x: 180, y: 220, width: 25, height: 30 },
+                      'PR': { x: 190, y: 200, width: 25, height: 20 },
+                      'SC': { x: 200, y: 210, width: 20, height: 15 },
+                      'BA': { x: 230, y: 120, width: 40, height: 45 },
+                      'GO': { x: 170, y: 140, width: 30, height: 25 },
+                      'PE': { x: 280, y: 100, width: 25, height: 20 },
+                      'CE': { x: 290, y: 80, width: 30, height: 20 },
+                      'DF': { x: 175, y: 150, width: 8, height: 8 },
+                      'ES': { x: 270, y: 170, width: 15, height: 20 },
+                      'PB': { x: 305, y: 95, width: 15, height: 15 },
+                      'RN': { x: 315, y: 85, width: 20, height: 15 },
+                      'AL': { x: 295, y: 110, width: 15, height: 15 },
+                      'MT': { x: 130, y: 140, width: 35, height: 40 },
+                      'MS': { x: 150, y: 180, width: 25, height: 30 },
+                      'SE': { x: 285, y: 115, width: 12, height: 12 },
+                      'PI': { x: 270, y: 95, width: 25, height: 25 },
+                      'TO': { x: 200, y: 110, width: 25, height: 30 },
+                      'MA': { x: 250, y: 80, width: 35, height: 25 },
+                      'PA': { x: 200, y: 60, width: 50, height: 40 },
+                      'AM': { x: 100, y: 70, width: 60, height: 50 },
+                      'RO': { x: 120, y: 120, width: 20, height: 25 },
+                      'AC': { x: 80, y: 120, width: 25, height: 20 },
+                      'RR': { x: 150, y: 30, width: 30, height: 25 },
+                      'AP': { x: 220, y: 40, width: 20, height: 25 }
+                    };
+
+                    const position = statePositions[estado.estado];
+                    if (!position) return null;
+
+                    return (
+                      <g key={estado.estado}>
+                        <rect
+                          x={position.x}
+                          y={position.y}
+                          width={position.width}
+                          height={position.height}
+                          fill={color}
+                          stroke="#3b82f6"
+                          strokeWidth="1"
+                          className="hover:stroke-2 cursor-pointer transition-all"
+                          rx="2"
+                        />
+                        <text
+                          x={position.x + position.width / 2}
+                          y={position.y + position.height / 2 + 3}
+                          textAnchor="middle"
+                          className="text-xs font-medium fill-current text-gray-700"
+                          style={{ fontSize: '8px' }}
+                        >
+                          {estado.estado}
+                        </text>
+                        {/* Tooltip simplificado */}
+                        <title>
+                          {`${estado.estado}: ${totalCasos} casos (${estado.notificacoes}N, ${estado.acordos}A, ${estado.desativacoes}D)`}
+                        </title>
+                      </g>
+                    );
+                  })}
+                  
+                  {/* Título do mapa */}
+                  <text x="200" y="20" textAnchor="middle" className="text-lg font-bold fill-current text-gray-700">
+                    Brasil - Distribuição de Casos
+                  </text>
+                </svg>
               </div>
               
               {/* Legenda */}
@@ -347,6 +422,14 @@ const AnalistaContrafacaoDashboard = () => {
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-red-500 rounded"></div>
                   <span className="text-sm">Desativações</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-blue-200 border border-blue-400 rounded"></div>
+                  <span className="text-sm">Baixa atividade</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-blue-600 border border-blue-800 rounded"></div>
+                  <span className="text-sm">Alta atividade</span>
                 </div>
               </div>
             </CardContent>

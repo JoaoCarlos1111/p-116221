@@ -184,10 +184,6 @@ export default function Sidebar() {
         {/* Menu Cliente - Analista de Contrafação */}
           {user?.isClient && user?.clientProfile === 'analista_contrafacao' && (
             <>
-              <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Analista Contrafação
-              </div>
-
               <NavLink to="/client/analista/dashboard" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
                 <LayoutDashboard size={20} />
                 <span className={cn(
