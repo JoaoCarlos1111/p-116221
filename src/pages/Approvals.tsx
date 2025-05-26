@@ -15,7 +15,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { CalendarIcon, CheckCircle, FileText, Search, AlertTriangle, X, XCircle } from 'lucide-react';
+import { CalendarIcon, CheckCircle, FileText, Search, AlertTriangle, X, XCircle, Clock } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import confetti from 'canvas-confetti';
 
@@ -37,6 +37,9 @@ export default function Approvals() {
   const [rejectReason, setRejectReason] = useState('');
   const [showRejectDialog, setShowRejectDialog] = useState(false);
   const [rejectingId, setRejectingId] = useState<string | null>(null);
+  const [showInternalEvaluationDialog, setShowInternalEvaluationDialog] = useState(false);
+  const [internalEvaluationReason, setInternalEvaluationReason] = useState('');
+  const [evaluatingId, setEvaluatingId] = useState<string | null>(null);
   
   const [approvals, setApprovals] = useState<Approval[]>([
     { id: 'APROV-001', proofUrl: '/proofs/nike_store.pdf', entryDate: '2024-03-21', status: 'pending', title: 'Nike Store BR', description: 'Loja não autorizada vendendo produtos Nike', platform: 'Shopee', brand: 'Nike', clientPriority: 'priority' },
@@ -130,6 +133,23 @@ export default function Approvals() {
     setShowRejectDialog(false);
     setRejectingId(null);
     setRejectReason('');
+  };
+
+  const handleInternalEvaluation = (id: string) => {
+    setEvaluatingId(id);
+    setShowInternalEvaluationDialog(true);
+  };
+
+  const confirmInternalEvaluation = () => {
+    if (!evaluatingId || !internalEvaluationReason) return;
+
+    // Aqui você pode adicionar a lógica para marcar o caso como "em avaliação interna"
+    // Por exemplo, adicionar um novo status ou campo no objeto approval
+    console.log(`Caso ${evaluatingId} enviado para avaliação interna: ${internalEvaluationReason}`);
+
+    setShowInternalEvaluationDialog(false);
+    setEvaluatingId(null);
+    setInternalEvaluationReason('');
   };
 
   const handleBulkApprove = () => {
@@ -289,6 +309,14 @@ export default function Approvals() {
                         <Button
                           variant="ghost"
                           size="icon"
+                          onClick={() => handleInternalEvaluation(approval.id)}
+                          className="h-8 w-8 text-yellow-600 hover:text-yellow-700 hover:bg-yellow-50"
+                        >
+                          <Clock className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
                           onClick={() => handleReject(approval.id)}
                           className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50"
                         >
@@ -344,6 +372,36 @@ export default function Approvals() {
             </Button>
             <Button onClick={confirmReject} disabled={!rejectReason}>
               Confirmar Rejeição
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showInternalEvaluationDialog} onOpenChange={setShowInternalEvaluationDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Enviar para Avaliação Interna</DialogTitle>
+            <DialogDescription>
+              Por favor, informe a justificativa para enviar este caso para avaliação interna.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="evaluation-reason">Justificativa</Label>
+              <Textarea
+                id="evaluation-reason"
+                value={internalEvaluationReason}
+                onChange={(e) => setInternalEvaluationReason(e.target.value)}
+                placeholder="Descreva por que este caso precisa de avaliação interna..."
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowInternalEvaluationDialog(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={confirmInternalEvaluation} disabled={!internalEvaluationReason}>
+              Enviar para Avaliação
             </Button>
           </DialogFooter>
         </DialogContent>
