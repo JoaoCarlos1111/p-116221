@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { User, Mail, Phone, MapPin, Edit, Save, X } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { User, Mail, Phone, MapPin, Edit, Save, X, Camera } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface UserProfile {
@@ -14,6 +15,7 @@ interface UserProfile {
   phone: string;
   location: string;
   bio: string;
+  avatar: string;
   memberSince: string;
   lastLogin: string;
   status: string;
@@ -28,6 +30,7 @@ const Profile = () => {
     phone: "+1 (555) 123-4567",
     location: "San Francisco, CA",
     bio: "Desenvolvedor Full Stack com experiência em React e Node.js. Apaixonado por tecnologia e inovação.",
+    avatar: "",
     memberSince: "January 2024",
     lastLogin: "2 hours ago",
     status: "Active"
@@ -73,6 +76,27 @@ const Profile = () => {
     }));
   };
 
+  const handleAvatarUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        toast({
+          title: "Arquivo muito grande",
+          description: "A imagem deve ter no máximo 5MB.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        handleInputChange('avatar', result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div className="space-y-8">
       <header className="flex justify-between items-center">
@@ -105,6 +129,41 @@ const Profile = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <Card className="glass-card p-6">
+            {/* Avatar Section */}
+            <div className="flex items-center justify-center mb-8">
+              <div className="relative">
+                <Avatar className="w-32 h-32">
+                  <AvatarImage 
+                    src={isEditing ? editedProfile.avatar : profile.avatar} 
+                    alt="Foto do perfil" 
+                  />
+                  <AvatarFallback className="text-2xl bg-primary text-primary-foreground">
+                    {profile.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                
+                {isEditing && (
+                  <>
+                    <label 
+                      htmlFor="avatar-upload" 
+                      className="absolute bottom-0 right-0 p-2 bg-primary rounded-full cursor-pointer hover:bg-primary/80 transition-colors"
+                    >
+                      <Camera className="h-4 w-4 text-primary-foreground" />
+                    </label>
+                    <input
+                      id="avatar-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleAvatarUpload}
+                      className="hidden"
+                    />
+                  </>
+                )}
+              </div>
+            </div>
+          </Card>
+
+          <Card className="glass-card p-6 mt-6">
             <div className="flex items-center space-x-4 mb-6">
               <div className="p-3 bg-primary rounded-full">
                 <User className="h-6 w-6 text-primary-foreground" />
