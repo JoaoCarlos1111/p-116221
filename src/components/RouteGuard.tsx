@@ -1,37 +1,43 @@
 
 import { Navigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useMemo } from 'react';
 
 interface RouteGuardProps {
   children: React.ReactNode;
-  requiredDepartment?: string;
+  requiredDepartment?: string | string[];
 }
 
 export default function RouteGuard({ children, requiredDepartment }: RouteGuardProps) {
-  const token = localStorage.getItem('token');
-  const userStr = localStorage.getItem('user');
-
-  useEffect(() => {
+  const auth = useMemo(() => {
+    const token = localStorage.getItem('token');
+    const userStr = localStorage.getItem('user');
+    
     if (!token || !userStr) {
-      window.location.href = '/login';
+      return { isAuthenticated: false, user: null };
     }
-  }, [token, userStr]);
 
-  if (!token || !userStr) {
+    try {
+      const user = JSON.parse(userStr);
+      return { isAuthenticated: true, user };
+    } catch (error) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      return { isAuthenticated: false, user: null };
+    }
+  }, []);
+
+  if (!auth.isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  try {
-    const user = JSON.parse(userStr);
-
-    if (requiredDepartment && !user.isAdmin && !user.departments.includes(requiredDepartment)) {
-      return <Navigate to="/" replace />;
+  if (requiredDepartment && !auth.user.isAdmin) {
+    const departments = Array.isArray(requiredDepartment) ? requiredDepartment : [requiredDepartment];
+    const hasAccess = departments.some(dept => auth.user.departments.includes(dept));
+    
+    if (!hasAccess) {
+      return <Navigate to="/dashboard" replace />;
     }
-
-    return <>{children}</>;
-  } catch (error) {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    return <Navigate to="/login" replace />;
   }
+
+  return <>{children}</>;
 }
