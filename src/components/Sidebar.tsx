@@ -127,22 +127,6 @@ export default function Sidebar() {
 
         {isClient && (
           <>
-            <NavLink to="/client/dashboard" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <LayoutDashboard size={20} />
-              <span className={cn(
-                "transition-all duration-300",
-                isCollapsed && "hidden"
-              )}>Dashboard Gestor</span>
-            </NavLink>
-
-            <NavLink to="/client/analista" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <Shield size={20} />
-              <span className={cn(
-                "transition-all duration-300",
-                isCollapsed && "hidden"
-              )}>Analista Contrafação</span>
-            </NavLink>
-
             {/* Menu Financeiro com submenu */}
             <div className="space-y-1">
               <NavLink to="/client/financeiro/dashboard" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
@@ -182,14 +166,6 @@ export default function Sidebar() {
                 </div>
               )}
             </div>
-
-            <NavLink to="/client/approvals" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <CheckCircle size={20} />
-              <span className={cn(
-                "transition-all duration-300",
-                isCollapsed && "hidden"
-              )}>Aprovações</span>
-            </NavLink>
           </>
         )}
 
