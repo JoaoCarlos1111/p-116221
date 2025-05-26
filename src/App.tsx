@@ -30,6 +30,7 @@ import InternalLogin from "@/pages/InternalLogin";
 import RouteGuard from "@/components/RouteGuard";
 import { departments } from './constants';
 import AdminTemplates from './pages/AdminTemplates';
+import AdminSettings from "./pages/AdminSettings";
 import NewTemplate from './pages/NewTemplate';
 
 function AppContent() {
@@ -151,6 +152,11 @@ function AppContent() {
                   <Audit />
                 </RouteGuard>
               } />
+            <Route path="/admin/settings" element={
+              <RouteGuard requiredDepartment="admin">
+                <AdminSettings />
+              </RouteGuard>
+            } />
               <Route path="/admin/templates/new" element={
                 <RouteGuard requiredDepartment="admin">
                   <NewTemplate />

@@ -82,6 +82,14 @@ export default function Sidebar() {
               )}>Auditoria</span>
             </NavLink>
 
+            <NavLink to="/admin/settings" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <SettingsIcon size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Configurações</span>
+            </NavLink>
+
             <NavLink to="/admin/brands" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
               <Building2 size={20} />
               <span className={cn(
