@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { CalendarIcon, Download, Filter, ArrowLeft, Eye, FileText } from 'lucide-react';
+import { CalendarIcon, Download, Filter, ArrowLeft, Eye, FileText, CheckCircle2, AlertTriangle, ShieldCheck, XCircle, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useNavigate } from 'react-router-dom';
@@ -46,40 +46,40 @@ const CasesHistory: React.FC = () => {
       id: '12345',
       marca: 'Nike',
       tipoInfracao: 'Venda de falsificados',
-      statusFinal: 'Resolvido',
+      statusFinal: 'Resolvido com Sucesso',
       dataDecisao: '2024-01-20',
       analisadoPor: 'João Silva',
       valorPotencial: 15000,
       links: ['https://loja-falsa.com/nike-air', 'https://marketplace.com/fake-nike'],
-      observacoes: 'Caso resolvido com acordo extrajudicial. Loja removeu todos os produtos falsificados.'
+      observacoes: 'Acordo cumprido integralmente. Infrator pagou R$ 15.000, removeu todos os produtos falsificados e informou fornecedores.'
     },
     {
       id: '12346',
       marca: 'Adidas',
       tipoInfracao: 'Phishing',
-      statusFinal: 'Página desativada',
+      statusFinal: 'Acordo Negado, Conteúdo Removido',
       dataDecisao: '2024-01-18',
       analisadoPor: 'Maria Santos',
       valorPotencial: 8500,
       links: ['https://fake-adidas.net'],
-      observacoes: 'Site de phishing desativado através de denúncia ao provedor.'
+      observacoes: 'Infrator recusou acordo mas removeu site após notificação extrajudicial.'
     },
     {
       id: '12347',
       marca: 'Nike',
       tipoInfracao: 'Uso indevido de marca',
-      statusFinal: 'Acordo fechado',
+      statusFinal: 'Inadimplente com Acordo',
       dataDecisao: '2024-01-15',
       analisadoPor: 'Pedro Oliveira',
       valorPotencial: 25000,
       links: ['https://loja-replica.com'],
-      observacoes: 'Acordo de R$ 12.000 em 6 parcelas. Empresa se comprometeu a cessar uso da marca.'
+      observacoes: 'Acordo aceito de R$ 12.000 em 6 parcelas, mas infrator está inadimplente há 2 meses.'
     },
     {
       id: '12348',
       marca: 'Puma',
       tipoInfracao: 'Venda de falsificados',
-      statusFinal: 'Sem retorno',
+      statusFinal: 'Sem Retorno',
       dataDecisao: '2024-01-10',
       analisadoPor: 'Ana Costa',
       valorPotencial: 5000,
@@ -90,16 +90,22 @@ const CasesHistory: React.FC = () => {
       id: '12349',
       marca: 'Nike',
       tipoInfracao: 'Venda de falsificados',
-      statusFinal: 'Reprovado',
+      statusFinal: 'Acordo Negado, Sem Ação',
       dataDecisao: '2024-01-05',
       analisadoPor: 'Carlos Santos',
       valorPotencial: 3000,
       links: ['https://pequena-loja.com'],
-      observacoes: 'Caso reprovado na auditoria devido à falta de evidências suficientes.'
+      observacoes: 'Infrator recusou acordo e mantém atividade. Caso escalado para ações legais.'
     }
   ];
 
-  const statusOptions = ['Resolvido', 'Reprovado', 'Acordo fechado', 'Página desativada', 'Sem retorno'];
+  const statusOptions = [
+    'Resolvido com Sucesso', 
+    'Inadimplente com Acordo', 
+    'Acordo Negado, Conteúdo Removido', 
+    'Acordo Negado, Sem Ação',
+    'Sem Retorno'
+  ];
   const marcasOptions = ['Nike', 'Adidas', 'Puma'];
   const tipoInfracaoOptions = ['Venda de falsificados', 'Phishing', 'Uso indevido de marca'];
 
@@ -159,15 +165,39 @@ const CasesHistory: React.FC = () => {
     }
   }, [filters]);
 
-  const getStatusBadge = (status: string) => {
-    const colors: Record<string, string> = {
-      'Resolvido': 'bg-green-500',
-      'Acordo fechado': 'bg-blue-500',
-      'Página desativada': 'bg-purple-500',
-      'Sem retorno': 'bg-orange-500',
-      'Reprovado': 'bg-red-500'
+  const getStatusIcon = (status: string) => {
+    const icons: Record<string, { icon: React.ReactNode; color: string; bgColor: string }> = {
+      'Resolvido com Sucesso': { 
+        icon: <CheckCircle2 className="h-4 w-4" />, 
+        color: 'text-green-700', 
+        bgColor: 'bg-green-100 border-green-200' 
+      },
+      'Inadimplente com Acordo': { 
+        icon: <AlertTriangle className="h-4 w-4" />, 
+        color: 'text-yellow-700', 
+        bgColor: 'bg-yellow-100 border-yellow-200' 
+      },
+      'Acordo Negado, Conteúdo Removido': { 
+        icon: <ShieldCheck className="h-4 w-4" />, 
+        color: 'text-blue-700', 
+        bgColor: 'bg-blue-100 border-blue-200' 
+      },
+      'Acordo Negado, Sem Ação': { 
+        icon: <XCircle className="h-4 w-4" />, 
+        color: 'text-red-700', 
+        bgColor: 'bg-red-100 border-red-200' 
+      },
+      'Sem Retorno': { 
+        icon: <Clock className="h-4 w-4" />, 
+        color: 'text-gray-700', 
+        bgColor: 'bg-gray-100 border-gray-200' 
+      }
     };
-    return colors[status] || 'bg-gray-500';
+    return icons[status] || { 
+      icon: <XCircle className="h-4 w-4" />, 
+      color: 'text-gray-700', 
+      bgColor: 'bg-gray-100 border-gray-200' 
+    };
   };
 
   const clearFilters = () => {
@@ -418,14 +448,19 @@ const CasesHistory: React.FC = () => {
           <CardTitle>Resumo por Status</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {Object.entries(statusSummary).map(([status, count]) => (
-              <div key={status} className="text-center p-4 rounded-lg border">
-                <div className={`w-8 h-8 rounded-full mx-auto mb-2 ${getStatusBadge(status)}`}></div>
-                <p className="text-2xl font-bold">{count}</p>
-                <p className="text-sm text-muted-foreground">{status}</p>
-              </div>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            {Object.entries(statusSummary).map(([status, count]) => {
+              const statusInfo = getStatusIcon(status);
+              return (
+                <div key={status} className={`text-center p-4 rounded-lg border-2 ${statusInfo.bgColor}`}>
+                  <div className={`flex justify-center mb-2 ${statusInfo.color}`}>
+                    {statusInfo.icon}
+                  </div>
+                  <p className="text-2xl font-bold">{count}</p>
+                  <p className="text-xs text-center leading-tight mt-1">{status}</p>
+                </div>
+              );
+            })}
           </div>
         </CardContent>
       </Card>
@@ -463,9 +498,10 @@ const CasesHistory: React.FC = () => {
                       <TableCell>{caso.marca}</TableCell>
                       <TableCell>{caso.tipoInfracao}</TableCell>
                       <TableCell>
-                        <Badge className={`${getStatusBadge(caso.statusFinal)} text-white`}>
-                          {caso.statusFinal}
-                        </Badge>
+                        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 ${getStatusIcon(caso.statusFinal).bgColor} ${getStatusIcon(caso.statusFinal).color}`}>
+                          {getStatusIcon(caso.statusFinal).icon}
+                          <span className="text-xs font-medium">{caso.statusFinal}</span>
+                        </div>
                       </TableCell>
                       <TableCell>
                         {format(new Date(caso.dataDecisao), 'dd/MM/yyyy', { locale: ptBR })}
@@ -495,9 +531,10 @@ const CasesHistory: React.FC = () => {
                                   </div>
                                   <div>
                                     <label className="text-sm font-medium text-muted-foreground">Status Final</label>
-                                    <Badge className={`${getStatusBadge(selectedCase.statusFinal)} text-white`}>
-                                      {selectedCase.statusFinal}
-                                    </Badge>
+                                    <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 ${getStatusIcon(selectedCase.statusFinal).bgColor} ${getStatusIcon(selectedCase.statusFinal).color}`}>
+                                      {getStatusIcon(selectedCase.statusFinal).icon}
+                                      <span className="text-sm font-medium">{selectedCase.statusFinal}</span>
+                                    </div>
                                   </div>
                                   <div>
                                     <label className="text-sm font-medium text-muted-foreground">Tipo de Infração</label>
