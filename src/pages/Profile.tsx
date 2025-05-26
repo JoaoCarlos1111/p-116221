@@ -6,14 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { User, Mail, Phone, MapPin, Edit, Save, X, Camera } from "lucide-react";
+import { User, Mail, Phone, Briefcase, Edit, Save, X, Camera } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface UserProfile {
   name: string;
   email: string;
   phone: string;
-  location: string;
+  position: string;
   bio: string;
   avatar: string;
   memberSince: string;
@@ -28,7 +28,7 @@ const Profile = () => {
     name: "John Doe",
     email: "john.doe@example.com",
     phone: "+1 (555) 123-4567",
-    location: "San Francisco, CA",
+    position: "Desenvolvedor Full Stack",
     bio: "Desenvolvedor Full Stack com experiência em React e Node.js. Apaixonado por tecnologia e inovação.",
     avatar: "",
     memberSince: "January 2024",
@@ -226,17 +226,18 @@ const Profile = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="location">Localização</Label>
+                  <Label htmlFor="position">Cargo</Label>
                   {isEditing ? (
                     <Input
-                      id="location"
-                      value={editedProfile.location}
-                      onChange={(e) => handleInputChange('location', e.target.value)}
+                      id="position"
+                      value={editedProfile.position}
+                      onChange={(e) => handleInputChange('position', e.target.value)}
+                      placeholder="Ex: Desenvolvedor Full Stack, Analista de Marketing..."
                     />
                   ) : (
                     <div className="flex items-center space-x-3 p-2">
-                      <MapPin className="h-5 w-5 text-muted-foreground" />
-                      <span className="font-medium">{profile.location}</span>
+                      <Briefcase className="h-5 w-5 text-muted-foreground" />
+                      <span className="font-medium">{profile.position}</span>
                     </div>
                   )}
                 </div>
