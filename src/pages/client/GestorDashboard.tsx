@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-// import BrazilInteractiveMap from '@/components/BrazilInteractiveMap';
+import BrazilInteractiveMap from '@/components/BrazilInteractiveMap';
 
 export default function GestorDashboard() {
   const navigate = useNavigate();
@@ -85,6 +85,27 @@ export default function GestorDashboard() {
       { brand: 'Adidas', cases: 342, resolved: 298, pending: 44, success: 89.5 },
       { brand: 'Puma', cases: 289, resolved: 245, pending: 44, success: 87.2 },
       { brand: 'Louis Vuitton', cases: 160, resolved: 142, pending: 18, success: 94.7 }
+    ],
+    estadosRanking: [
+      { estado: 'SP', notificacoes: 234, acordos: 45, desativacoes: 89 },
+      { estado: 'RJ', notificacoes: 187, acordos: 32, desativacoes: 67 },
+      { estado: 'MG', notificacoes: 156, acordos: 28, desativacoes: 54 },
+      { estado: 'RS', notificacoes: 98, acordos: 19, desativacoes: 32 },
+      { estado: 'PR', notificacoes: 87, acordos: 15, desativacoes: 28 },
+      { estado: 'SC', notificacoes: 76, acordos: 12, desativacoes: 24 },
+      { estado: 'BA', notificacoes: 65, acordos: 11, desativacoes: 22 },
+      { estado: 'GO', notificacoes: 54, acordos: 9, desativacoes: 18 },
+      { estado: 'PE', notificacoes: 48, acordos: 8, desativacoes: 16 },
+      { estado: 'CE', notificacoes: 42, acordos: 7, desativacoes: 14 },
+      { estado: 'DF', notificacoes: 38, acordos: 6, desativacoes: 12 },
+      { estado: 'ES', notificacoes: 34, acordos: 5, desativacoes: 11 },
+      { estado: 'PB', notificacoes: 28, acordos: 4, desativacoes: 9 },
+      { estado: 'RN', notificacoes: 25, acordos: 4, desativacoes: 8 },
+      { estado: 'AL', notificacoes: 22, acordos: 3, desativacoes: 7 },
+      { estado: 'MT', notificacoes: 19, acordos: 3, desativacoes: 6 },
+      { estado: 'MS', notificacoes: 16, acordos: 2, desativacoes: 5 },
+      { estado: 'SE', notificacoes: 14, acordos: 2, desativacoes: 4 },
+      { estado: 'PI', notificacoes: 12, acordos: 2, desativacoes: 4 }
     ]
   });
 
@@ -304,12 +325,7 @@ export default function GestorDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-              <div className="text-center">
-                <MapPin className="h-8 w-8 mx-auto mb-2 text-gray-400" />
-                <p className="text-gray-500">Mapa interativo em desenvolvimento</p>
-              </div>
-            </div>
+            <BrazilInteractiveMap estadosRanking={dashboardData.estadosRanking} />
           </CardContent>
         </Card>
 
