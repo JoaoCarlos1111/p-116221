@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { 
   MessageSquare, 
   Phone, 
@@ -186,6 +187,15 @@ export default function CentralAtendimento() {
   const [filtroPrioridade, setFiltroPrioridade] = useState('todos');
   const [filtroCanal, setFiltroCanal] = useState('todos');
   const [busca, setBusca] = useState('');
+  const [showFollowUpModal, setShowFollowUpModal] = useState(false);
+  const [followUpData, setFollowUpData] = useState({
+    data: '',
+    hora: '',
+    tipo: '',
+    observacoes: '',
+    notificacao: false
+  });
+  const [showCelebration, setShowCelebration] = useState(false);
 
   useEffect(() => {
     if (atendimentos.length > 0) {
@@ -262,6 +272,99 @@ export default function CentralAtendimento() {
 
   const aplicarTemplate = (template: string) => {
     setNovaMensagem(template);
+  };
+
+  const handlePropostaAceita = (atendimentoId: string) => {
+    // Atualizar status do atendimento para "Proposta Aceita"
+    setAtendimentos(prev => prev.map(atendimento => 
+      atendimento.id === atendimentoId 
+        ? {
+            ...atendimento,
+            status: 'resolvido',
+            ultimaMensagem: 'Proposta aceita pelo cliente',
+            dataUltimaInteracao: new Date().toISOString()
+          }
+        : atendimento
+    ));
+
+    // Simular envio para pipeline de atendimento (etapa "Proposta aceita")
+    console.log(`Caso ${atendimentoId} enviado para etapa "Proposta aceita" no pipeline`);
+    
+    // Mostrar notificação de sucesso
+    alert('✅ Proposta aceita! Caso enviado para a etapa "Proposta aceita" no pipeline.');
+  };
+
+  const handleAcordoAssinado = (atendimentoId: string) => {
+    // Mostrar animação de celebração
+    setShowCelebration(true);
+    
+    // Atualizar status do atendimento
+    setAtendimentos(prev => prev.map(atendimento => 
+      atendimento.id === atendimentoId 
+        ? {
+            ...atendimento,
+            status: 'resolvido',
+            ultimaMensagem: 'Acordo assinado - Enviado para Financeiro',
+            dataUltimaInteracao: new Date().toISOString()
+          }
+        : atendimento
+    ));
+
+    // Simular envio para setor Financeiro
+    console.log(`Caso ${atendimentoId} enviado para Financeiro - etapa "Emitir Pagamento"`);
+    
+    setTimeout(() => {
+      setShowCelebration(false);
+      alert('🎉 Acordo assinado! Caso enviado automaticamente para o Financeiro na etapa "Emitir Pagamento".');
+    }, 2000);
+  };
+
+  const handleAgendarFollowUp = () => {
+    if (!followUpData.data || !followUpData.hora || !followUpData.tipo) {
+      alert('Por favor, preencha todos os campos obrigatórios.');
+      return;
+    }
+
+    // Simular agendamento do follow-up
+    console.log('Follow-up agendado:', {
+      caso: atendimentoSelecionado?.id,
+      ...followUpData
+    });
+
+    // Adicionar mensagem ao histórico
+    if (atendimentoSelecionado) {
+      const novaMensagemObj: Mensagem = {
+        id: `msg-${Date.now()}`,
+        remetente: 'analista',
+        nome: 'Sistema',
+        conteudo: `Follow-up agendado para ${followUpData.data} às ${followUpData.hora} via ${followUpData.tipo}. Observações: ${followUpData.observacoes || 'Nenhuma'}`,
+        timestamp: new Date().toISOString(),
+        lida: true
+      };
+
+      setAtendimentos(prev => prev.map(atendimento => 
+        atendimento.id === atendimentoSelecionado.id 
+          ? {
+              ...atendimento,
+              mensagens: [...atendimento.mensagens, novaMensagemObj],
+              ultimaMensagem: 'Follow-up agendado',
+              dataUltimaInteracao: new Date().toISOString()
+            }
+          : atendimento
+      ));
+    }
+
+    // Resetar formulário e fechar modal
+    setFollowUpData({
+      data: '',
+      hora: '',
+      tipo: '',
+      observacoes: '',
+      notificacao: false
+    });
+    setShowFollowUpModal(false);
+    
+    alert('📅 Follow-up agendado com sucesso!');
   };
 
   const formatarTempo = (timestamp: string) => {
@@ -589,23 +692,33 @@ export default function CentralAtendimento() {
                 <h4 className="font-medium text-sm">Ações Rápidas</h4>
 
                 <div className="space-y-2">
-                  <Button variant="outline" size="sm" className="w-full justify-start">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full justify-start text-green-600 hover:text-green-700 hover:bg-green-50"
+                    onClick={() => handlePropostaAceita(atendimentoSelecionado.id)}
+                  >
                     <CheckCircle className="h-3 w-3 mr-2" />
-                    Marcar como Resolvido
+                    Proposta Aceita
                   </Button>
 
-                  <Button variant="outline" size="sm" className="w-full justify-start">
-                    <AlertTriangle className="h-3 w-3 mr-2" />
-                    Marcar como Urgente
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full justify-start text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                    onClick={() => handleAcordoAssinado(atendimentoSelecionado.id)}
+                  >
+                    <Star className="h-3 w-3 mr-2" />
+                    Acordo Assinado
                   </Button>
 
-                  <Button variant="outline" size="sm" className="w-full justify-start">
-                    <Archive className="h-3 w-3 mr-2" />
-                    Encaminhar para Financeiro
-                  </Button>
-
-                  <Button variant="outline" size="sm" className="w-full justify-start">
-                    <Clock className="h-3 w-3 mr-2" />
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full justify-start"
+                    onClick={() => setShowFollowUpModal(true)}
+                  >
+                    <Calendar className="h-3 w-3 mr-2" />
                     Agendar Follow-up
                   </Button>
                 </div>
@@ -642,6 +755,94 @@ export default function CentralAtendimento() {
           )}
         </div>
       </div>
+
+      {/* Modal de Follow-up */}
+      <Dialog open={showFollowUpModal} onOpenChange={setShowFollowUpModal}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Agendar Follow-up</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="data">Data *</Label>
+                <Input
+                  id="data"
+                  type="date"
+                  value={followUpData.data}
+                  onChange={(e) => setFollowUpData(prev => ({ ...prev, data: e.target.value }))}
+                />
+              </div>
+              <div>
+                <Label htmlFor="hora">Hora *</Label>
+                <Input
+                  id="hora"
+                  type="time"
+                  value={followUpData.hora}
+                  onChange={(e) => setFollowUpData(prev => ({ ...prev, hora: e.target.value }))}
+                />
+              </div>
+            </div>
+            
+            <div>
+              <Label htmlFor="tipo">Tipo de Contato *</Label>
+              <Select value={followUpData.tipo} onValueChange={(value) => setFollowUpData(prev => ({ ...prev, tipo: value }))}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione o tipo de contato" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="email">E-mail</SelectItem>
+                  <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                  <SelectItem value="telefone">Telefone</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="observacoes">Observações Internas</Label>
+              <Textarea
+                id="observacoes"
+                placeholder="Adicione observações sobre o follow-up..."
+                value={followUpData.observacoes}
+                onChange={(e) => setFollowUpData(prev => ({ ...prev, observacoes: e.target.value }))}
+                className="min-h-[80px]"
+              />
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="notificacao"
+                checked={followUpData.notificacao}
+                onCheckedChange={(checked) => setFollowUpData(prev => ({ ...prev, notificacao: checked }))}
+              />
+              <Label htmlFor="notificacao">Receber notificação por e-mail</Label>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowFollowUpModal(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={handleAgendarFollowUp}>
+              Agendar Follow-up
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Animação de Celebração */}
+      {showCelebration && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 pointer-events-none">
+          <div className="text-center space-y-4 animate-pulse">
+            <div className="text-6xl">🎉</div>
+            <div className="text-2xl font-bold text-green-600 bg-white px-6 py-3 rounded-lg shadow-lg">
+              Acordo Assinado!
+            </div>
+            <div className="text-lg text-gray-600 bg-white px-4 py-2 rounded-lg shadow-lg">
+              Enviando para o Financeiro...
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
