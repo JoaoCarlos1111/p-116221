@@ -278,18 +278,6 @@ export default function CentralAtendimento() {
 
   return (
     <div className="h-screen flex flex-col bg-gray-50">
-      {/* Status Header */}
-      <div className="bg-white border-b p-3">
-        <div className="flex items-center justify-end gap-2">
-          <Badge variant="outline" className="text-green-600">
-            {atendimentosFiltrados.filter(a => a.status === 'pendente').length} Pendentes
-          </Badge>
-          <Badge variant="outline" className="text-red-600">
-            {atendimentosFiltrados.filter(a => a.prioridade === 'urgente').length} Urgentes
-          </Badge>
-        </div>
-      </div>
-
       {/* Main Content - 3 Colunas */}
       <div className="flex-1 flex overflow-hidden">
 
