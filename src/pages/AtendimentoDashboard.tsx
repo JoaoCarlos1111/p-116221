@@ -24,7 +24,8 @@ import {
   AlertCircle,
   Flame,
   Lightbulb,
-  Timer
+  Timer,
+  BarChart3
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
