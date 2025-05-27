@@ -286,6 +286,34 @@ export default function Sidebar() {
             </>
           )}
 
+        {/* Menu Analista de Atendimento */}
+        {user?.department === 'atendimento' && (
+          <>
+            <div className={cn(
+              "px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider transition-all duration-300",
+              isCollapsed && "hidden"
+            )}>
+              Atendimento
+            </div>
+
+            <NavLink to="/atendimento/central" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <MessageSquare size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Central de Atendimento</span>
+            </NavLink>
+
+            <NavLink to="/atendimento" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <LayoutDashboard size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Kanban de Casos</span>
+            </NavLink>
+          </>
+        )}
+
         <div className="absolute bottom-4 left-0 right-0 px-2">
           <button
             onClick={() => {

@@ -14,6 +14,7 @@ import LogisticsCaseView from './pages/LogisticsCaseView';
 import IPTools from './pages/IPTools'
 import IPToolsCaseView from './pages/IPToolsCaseView';
 import Atendimento from './pages/Atendimento';
+import CentralAtendimento from './pages/CentralAtendimento';
 import AtendimentoCaseDetails from "@/pages/AtendimentoCaseDetails";
 import Approvals from "@/pages/Approvals";
 import Financeiro from "@/pages/Financeiro";
@@ -120,6 +121,11 @@ function AppContent() {
             <Route path="/atendimento" element={
               <RouteGuard requiredDepartment={departments.ATENDIMENTO}>
                 <Atendimento />
+              </RouteGuard>
+            } />
+            <Route path="/atendimento/central" element={
+              <RouteGuard requiredDepartment={departments.ATENDIMENTO}>
+                <CentralAtendimento />
               </RouteGuard>
             } />
             <Route path="/atendimento/caso/:id" element={
