@@ -1,105 +1,63 @@
-
 import express from 'express';
+import cors from 'cors';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
-import cors from 'cors';
-import integrationRoutes, { initializeIntegrationServices } from './routes/integrations';
-import templateRoutes from './routes/templates';
+import integrationsRoutes from './routes/integrations';
+import templatesRoutes from './routes/templates';
+import WhatsAppService from './services/whatsapp';
 
 const app = express();
 const server = createServer(app);
-
-// Socket.IO setup with proper CORS
 const io = new SocketIOServer(server, {
   cors: {
     origin: "*",
-    methods: ["GET", "POST"],
-    credentials: false
-  },
-  transports: ['websocket', 'polling'],
-  allowEIO3: true,
-  pingTimeout: 60000,
-  pingInterval: 25000
+    methods: ["GET", "POST"]
+  }
 });
+
+// Initialize WhatsApp service with Socket.IO
+const whatsappService = new WhatsAppService(io);
 
 // Middleware
-app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: false
-}));
+app.use(cors());
 app.use(express.json());
 
-// Socket.IO connection handling
-io.on('connection', (socket) => {
-  console.log('🔌 User connected:', socket.id);
-
-  socket.on('join_user', (userId) => {
-    const room = `user_${userId}`;
-    socket.join(room);
-    console.log(`👤 User ${userId} joined room: ${room}`);
-
-    // Send connection confirmation
-    socket.emit('connected', { 
-      userId, 
-      socketId: socket.id,
-      room: room
-    });
-  });
-
-  socket.on('disconnect', (reason) => {
-    console.log('🔌 User disconnected:', socket.id, 'Reason:', reason);
-  });
-
-  socket.on('error', (error) => {
-    console.error('❌ Socket error:', error);
-  });
+// Make services available to routes
+app.use((req, res, next) => {
+  req.whatsappService = whatsappService;
+  req.io = io;
+  next();
 });
 
-// Initialize integration services with Socket.IO
-console.log('🚀 Starting server initialization...');
-initializeIntegrationServices(io);
-
 // Routes
-app.use('/api/integrations', integrationRoutes);
-app.use('/api/templates', templateRoutes);
+app.use('/api/integrations', integrationsRoutes);
+app.use('/api/templates', templatesRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'ok', 
-    timestamp: new Date().toISOString(),
-    server: 'running',
-    socketio: 'active'
-  });
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Error handling middleware
-app.use((error, req, res, next) => {
-  console.error('❌ Server error:', error);
-  res.status(500).json({ 
-    success: false, 
-    error: error.message 
+// Socket.IO connection handling
+io.on('connection', (socket) => {
+  console.log('👤 User connected:', socket.id);
+
+  socket.on('join_user', (userId) => {
+    console.log(`🏠 User ${userId} joined room: user_${userId}`);
+    socket.join(`user_${userId}`);
+    socket.emit('connected', { userId, room: `user_${userId}` });
+  });
+
+  socket.on('disconnect', () => {
+    console.log('👤 User disconnected:', socket.id);
   });
 });
 
 const PORT = process.env.PORT || 3001;
-const HOST = '0.0.0.0';
 
-server.listen(PORT, HOST, () => {
-  console.log(`✅ Server running on http://${HOST}:${PORT}`);
-  console.log(`🔌 Socket.IO server ready`);
-  console.log(`📱 WhatsApp service ready`);
-  console.log(`📧 Email service ready`);
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🔗 Server URL: http://0.0.0.0:${PORT}`);
 });
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('🔄 SIGTERM received, shutting down gracefully');
-  server.close(() => {
-    console.log('✅ Server closed');
-    process.exit(0);
-  });
-});
-
-export default app;
+export { io, whatsappService };
