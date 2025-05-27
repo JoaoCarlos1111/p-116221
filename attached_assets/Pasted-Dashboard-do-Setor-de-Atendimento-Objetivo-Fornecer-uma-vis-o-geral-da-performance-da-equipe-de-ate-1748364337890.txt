@@ -1,0 +1,60 @@
+Dashboard do Setor de Atendimento
+Objetivo: Fornecer uma visão geral da performance da equipe de atendimento, acompanhamento de metas, resultados financeiros esperados e alertas operacionais.
+
+🔹 1. KPIs Operacionais
+Cards com indicadores de acompanhamento diário/mensal:
+
+Indicador	Exemplo
+🧾 Notificações enviadas no mês	112
+📞 Atendimentos realizados (WhatsApp, e-mail, 0800)	86
+💬 Casos com follow-up agendado para hoje	14
+⚠️ Casos marcados como urgentes	5
+🔁 Casos em negociação	9
+
+🧠 Dica: use ícones, cores e números grandes para facilitar a leitura.
+
+🥅 2. Painel de Metas
+Meta	Objetivo Mensal	Realizado	Progresso
+💰 Valor de acordos fechados	R$ 50.000	R$ 38.000	🔵 █████████▒▒ 76%
+📄 Casos resolvidos	40	29	🟢 █████████▒▒ 72%
+🚀 Novas notificações enviadas	100	82	🟡 ██████████░░ 82%
+
+✅ Metas devem ser configuráveis por usuário gestor
+✅ Adicionar alertas visuais quando o ritmo estiver abaixo do esperado
+
+🔮 3. Forecast Financeiro (Projeção de Receita)
+A partir dos casos em status “Proposta aceita”:
+Período	Valor potencial (R$)	Casos ativos
+Hoje	R$ 5.200	7
+Próximos 3 dias	R$ 18.750	19
+Semana atual	R$ 26.480	26
+Mês completo	R$ 71.400	67
+
+🧠 Cálculo: soma dos valores estimados de indenização dos casos com status "Proposta aceita".
+
+💡 Sugestão: adicionar pesos de probabilidade por estágio (ex: "em negociação", "aguardando retorno", etc.) para refinar a projeção.
+
+🚨 4. Alertas Estratégicos
+Cards automáticos com atenção ao time sobre riscos ou oportunidades:
+
+🔥 “5 casos de alto valor parados há mais de 3 dias”
+
+⚠️ “Projeção do mês está 25% abaixo da meta”
+
+⏳ “Casos urgentes aguardando retorno há mais de 24h”
+
+💡 “3 follow-ups vencidos hoje ainda não atualizados”
+
+🎨 5. Sugestão de Layout (UX/UI)
+Cabeçalho com período selecionado (Hoje, Semana, Mês)
+
+Grid de KPIs com ícones e números grandes
+
+Painel de Metas com barras de progresso e ícones
+
+Forecast com gráfico de linha ou barras + cards de valores por período
+
+Alertas e Insights em cards coloridos, sempre visíveis no topo ou lateral
+
+Botão de exportação dos dados (.xlsx ou PDF)
+
