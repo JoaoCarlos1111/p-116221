@@ -472,43 +472,38 @@ export default function CentralAtendimento() {
                   )}
                   onClick={() => setAtendimentoSelecionado(atendimento)}
                 >
-                  <CardContent className="p-3">
-                    <div className="space-y-2">
-                      {/* Header com cliente e status centralizados */}
-                      <div className="flex items-center justify-center">
-                        <div className="flex items-center gap-2 flex-1 justify-center">
+                  <CardContent className="p-2">
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
                           {getIconeCanal(atendimento.canal)}
-                          <span className="font-medium text-sm text-center">{atendimento.cliente}</span>
+                          <span className="font-medium text-sm truncate max-w-[120px]">{atendimento.cliente}</span>
                           {atendimento.mensagensNaoLidas && atendimento.mensagensNaoLidas > 0 && (
-                            <Badge variant="destructive" className="text-xs h-5 w-5 p-0 flex items-center justify-center rounded-full">
+                            <Badge variant="destructive" className="text-xs h-4 w-4 p-0 flex items-center justify-center rounded-full">
                               {atendimento.mensagensNaoLidas}
                             </Badge>
                           )}
                         </div>
+                        <div className="flex items-center gap-1">
+                          <Badge className={cn("text-xs h-4 px-1", getCorStatus(atendimento.status))}>
+                            {atendimento.status === 'pendente' ? 'Pend' : 
+                             atendimento.status === 'respondido' ? 'Resp' :
+                             atendimento.status === 'resolvido' ? 'Resol' : 'Urg'}
+                          </Badge>
+                          {atendimento.prioridade === 'urgente' && (
+                            <AlertTriangle className="h-3 w-3 text-red-500" />
+                          )}
+                        </div>
                       </div>
 
-                      {/* Badges centralizados */}
-                      <div className="flex items-center justify-center gap-2">
-                        <Badge className={cn("text-xs h-5 px-2", getCorStatus(atendimento.status))}>
-                          {atendimento.status === 'pendente' ? 'Pendente' : 
-                           atendimento.status === 'respondido' ? 'Respondido' :
-                           atendimento.status === 'resolvido' ? 'Resolvido' : 'Urgente'}
-                        </Badge>
-                        {atendimento.prioridade === 'urgente' && (
-                          <AlertTriangle className="h-4 w-4 text-red-500" />
-                        )}
-                      </div>
-
-                      {/* Assunto centralizado */}
-                      <p className="text-sm text-muted-foreground text-center truncate">
+                      <p className="text-sm text-muted-foreground truncate">
                         {atendimento.assunto}
                       </p>
 
-                      {/* Footer com tempo e caso vinculado */}
-                      <div className="flex items-center justify-center gap-3 text-xs text-muted-foreground">
+                      <div className="flex items-center justify-between text-xs text-muted-foreground">
                         <span>{formatarTempo(atendimento.dataUltimaInteracao)}</span>
                         {atendimento.casoVinculado && (
-                          <Badge variant="outline" className="text-xs h-4 px-2">
+                          <Badge variant="outline" className="text-xs h-4 px-1">
                             {atendimento.casoVinculado}
                           </Badge>
                         )}
@@ -653,48 +648,41 @@ export default function CentralAtendimento() {
           {atendimentoSelecionado ? (
             <ScrollArea className="flex-1">
               <div className="p-4 border-b">
-                <h3 className="font-semibold mb-4 text-center">Detalhes do Caso</h3>
+                <h3 className="font-semibold mb-3">Detalhes do Caso</h3>
 
                 {atendimentoSelecionado.casoVinculado ? (
-                  <div className="space-y-4">
-                    <div className="text-center">
-                      <span className="text-sm text-muted-foreground block mb-2">Caso vinculado:</span>
-                      <Button variant="ghost" size="sm" className="h-6 p-1 mx-auto">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">Caso vinculado:</span>
+                      <Button variant="ghost" size="sm" className="h-6 p-1">
                         <ExternalLink className="h-3 w-3" />
                       </Button>
                     </div>
 
-                    <Card className="p-4">
-                      <div className="space-y-3">
-                        {/* ID e Status centralizados */}
-                        <div className="text-center space-y-2">
-                          <span className="font-medium text-lg block">{mockCaso.id}</span>
-                          <Badge variant="outline" className="mx-auto">{mockCaso.status}</Badge>
+                    <Card className="p-3">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium">{mockCaso.id}</span>
+                          <Badge variant="outline">{mockCaso.status}</Badge>
                         </div>
 
-                        <Separator />
-
-                        {/* Informações centralizadas */}
-                        <div className="space-y-3 text-sm">
-                          <div className="text-center">
-                            <Building className="h-4 w-4 text-muted-foreground mx-auto mb-1" />
-                            <span className="font-medium block">{mockCaso.marca}</span>
+                        <div className="space-y-1 text-sm">
+                          <div className="flex items-center gap-2">
+                            <Building className="h-3 w-3 text-muted-foreground" />
+                            <span>{mockCaso.marca}</span>
                           </div>
-                          
-                          <div className="text-center">
-                            <User className="h-4 w-4 text-muted-foreground mx-auto mb-1" />
-                            <span className="block">{mockCaso.responsavel}</span>
+                          <div className="flex items-center gap-2">
+                            <User className="h-3 w-3 text-muted-foreground" />
+                            <span>{mockCaso.responsavel}</span>
                           </div>
-                          
-                          <div className="text-center">
-                            <Tag className="h-4 w-4 text-muted-foreground mx-auto mb-1" />
-                            <span className="font-medium block">R$ {mockCaso.valorPotencial.toLocaleString('pt-BR')}</span>
+                          <div className="flex items-center gap-2">
+                            <Tag className="h-3 w-3 text-muted-foreground" />
+                            <span>R$ {mockCaso.valorPotencial.toLocaleString('pt-BR')}</span>
                           </div>
-                          
-                          <div className="text-center">
-                            <span className="text-sm font-medium block mb-2">Status IP Tools:</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-medium">Status IP Tools:</span>
                             <Badge 
-                              className={`text-xs mx-auto ${
+                              className={`text-xs ${
                                 atendimentoSelecionado.ipToolsStatus === 'Ativa' 
                                   ? 'bg-red-100 text-red-800 border-red-200' 
                                   : 'bg-green-100 text-green-800 border-green-200'
@@ -707,8 +695,8 @@ export default function CentralAtendimento() {
 
                         <Separator />
 
-                        <div className="text-center">
-                          <span className="text-sm font-medium block mb-1">Etapa atual:</span>
+                        <div>
+                          <span className="text-sm font-medium">Etapa atual:</span>
                           <p className="text-sm text-muted-foreground">
                             {atendimentoSelecionado.casoVinculado ? 
                               getEtapaAtualPipeline(atendimentoSelecionado.id) : 
@@ -720,12 +708,12 @@ export default function CentralAtendimento() {
                     </Card>
                   </div>
                 ) : (
-                  <div className="text-center py-6">
-                    <p className="text-sm text-muted-foreground mb-4">
+                  <div className="text-center py-4">
+                    <p className="text-sm text-muted-foreground mb-3">
                       Nenhum caso vinculado
                     </p>
-                    <Button size="sm" variant="outline" className="mx-auto">
-                      <Plus className="h-3 w-3 mr-2" />
+                    <Button size="sm" variant="outline">
+                      <Plus className="h-3 w-3 mr-1" />
                       Vincular Caso
                     </Button>
                   </div>
@@ -733,14 +721,14 @@ export default function CentralAtendimento() {
               </div>
 
               {/* Ações Rápidas */}
-              <div className="p-4 space-y-4">
-                <h4 className="font-medium text-sm text-center">Ações Rápidas</h4>
+              <div className="p-4 space-y-3">
+                <h4 className="font-medium text-sm">Ações Rápidas</h4>
 
-                <div className="space-y-3">
+                <div className="space-y-2">
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="w-full justify-center text-green-600 hover:text-green-700 hover:bg-green-50"
+                    className="w-full justify-start text-green-600 hover:text-green-700 hover:bg-green-50"
                     onClick={() => handlePropostaAceita(atendimentoSelecionado.id)}
                   >
                     <CheckCircle className="h-3 w-3 mr-2" />
@@ -750,7 +738,7 @@ export default function CentralAtendimento() {
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="w-full justify-center text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                    className="w-full justify-start text-blue-600 hover:text-blue-700 hover:bg-blue-50"
                     onClick={() => handleAcordoAssinado(atendimentoSelecionado.id)}
                   >
                     <Star className="h-3 w-3 mr-2" />
@@ -760,7 +748,7 @@ export default function CentralAtendimento() {
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="w-full justify-center"
+                    className="w-full justify-start"
                     onClick={() => setShowFollowUpModal(true)}
                   >
                     <Calendar className="h-3 w-3 mr-2" />
@@ -771,33 +759,30 @@ export default function CentralAtendimento() {
 
               {/* Histórico Resumido */}
               <div className="p-4 border-t">
-                <h4 className="font-medium text-sm mb-4 text-center">Histórico Recente</h4>
-                <div className="space-y-3 text-xs">
-                  <div className="flex items-center justify-center gap-3">
+                <h4 className="font-medium text-sm mb-3">Histórico Recente</h4>
+                <div className="space-y-2 text-xs">
+                  <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                    <span className="text-muted-foreground text-center">Atendimento iniciado</span>
+                    <span className="text-muted-foreground">Atendimento iniciado</span>
                   </div>
-                  <div className="flex items-center justify-center gap-3">
+                  <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-muted-foreground text-center">Primeira resposta enviada</span>
+                    <span className="text-muted-foreground">Primeira resposta enviada</span>
                   </div>
-                  <div className="flex items-center justify-center gap-3">
+                  <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                    <span className="text-muted-foreground text-center">Aguardando resposta</span>
+                    <span className="text-muted-foreground">Aguardando resposta do cliente</span>
                   </div>
                 </div>
               </div>
             </ScrollArea>
           ) : (
-            <div className="flex-1 flex items-center justify-center p-6">
-              <div className="text-center space-y-3">
-                <Building className="h-12 w-12 mx-auto text-muted-foreground" />
-                <div>
-                  <h3 className="font-medium text-muted-foreground mb-1">Detalhes do Caso</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Selecione um atendimento para visualizar os detalhes
-                  </p>
-                </div>
+            <div className="flex-1 flex items-center justify-center p-4">
+              <div className="text-center">
+                <Building className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
+                <p className="text-sm text-muted-foreground">
+                  Detalhes aparecerão aqui
+                </p>
               </div>
             </div>
           )}
