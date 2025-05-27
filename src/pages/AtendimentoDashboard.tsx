@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -188,7 +187,7 @@ export default function AtendimentoDashboard() {
           <h1 className="text-3xl font-bold text-primary">Dashboard - Atendimento</h1>
           <p className="text-muted-foreground">Performance da equipe e acompanhamento de metas</p>
         </div>
-        
+
         <div className="flex items-center gap-3">
           <Select value={periodo} onValueChange={setPeriodo}>
             <SelectTrigger className="w-32">
@@ -201,7 +200,7 @@ export default function AtendimentoDashboard() {
               <SelectItem value="trimestre">Trimestre</SelectItem>
             </SelectContent>
           </Select>
-          
+
           <Button 
             variant="outline" 
             onClick={atualizarDados}
@@ -210,7 +209,7 @@ export default function AtendimentoDashboard() {
             <RefreshCw className={cn("h-4 w-4 mr-2", loading && "animate-spin")} />
             Atualizar
           </Button>
-          
+
           <Button>
             <Download className="h-4 w-4 mr-2" />
             Exportar
@@ -325,7 +324,7 @@ export default function AtendimentoDashboard() {
                       {progresso.toFixed(0)}%
                     </Badge>
                   </div>
-                  
+
                   <div className="grid grid-cols-3 gap-4 text-sm">
                     <div>
                       <span className="text-muted-foreground">Objetivo:</span>
@@ -346,7 +345,7 @@ export default function AtendimentoDashboard() {
                       </p>
                     </div>
                   </div>
-                  
+
                   <Progress 
                     value={progresso} 
                     className={cn("h-3",
@@ -354,7 +353,7 @@ export default function AtendimentoDashboard() {
                       progresso >= 60 ? "text-yellow-600" : "text-red-600"
                     )}
                   />
-                  
+
                   <div className="flex items-center gap-2 text-xs">
                     {progresso >= 80 ? (
                       <>
@@ -406,7 +405,7 @@ export default function AtendimentoDashboard() {
                   </div>
                 </div>
               ))}
-              
+
               <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
                 <div className="flex items-center gap-2 mb-2">
                   <DollarSign className="h-4 w-4 text-blue-600" />
@@ -437,7 +436,7 @@ export default function AtendimentoDashboard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="h-5 w-5" />
-            👥 Performance da Equipe
+            Performance da Equipe
           </CardTitle>
         </CardHeader>
         <CardContent>
