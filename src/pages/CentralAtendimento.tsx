@@ -409,12 +409,12 @@ export default function CentralAtendimento() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50">
+    <div className="h-screen flex bg-gray-50 overflow-hidden">
       {/* Main Content - 3 Colunas */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex"  ></div>
 
         {/* Coluna 1: Lista de Atendimentos */}
-        <div className="w-80 bg-white border-r flex flex-col">
+        <div className="w-80 bg-white border-r flex flex-col overflow-hidden">
           {/* Filtros */}
           <div className="p-4 border-b space-y-3">
             <div className="relative">
@@ -517,7 +517,7 @@ export default function CentralAtendimento() {
         </div>
 
         {/* Coluna 2: Conversa Ativa */}
-        <div className="flex-1 flex flex-col bg-white">
+        <div className="flex-1 flex flex-col bg-white overflow-hidden">
           {atendimentoSelecionado ? (
             <>
               {/* Header da Conversa */}
@@ -644,9 +644,9 @@ export default function CentralAtendimento() {
         </div>
 
         {/* Coluna 3: Detalhes do Caso */}
-        <div className="w-80 bg-white border-l flex flex-col">
+        <div className="w-80 bg-white border-l flex flex-col overflow-hidden">
           {atendimentoSelecionado ? (
-            <>
+            <ScrollArea className="flex-1">
               <div className="p-4 border-b">
                 <h3 className="font-semibold mb-3">Detalhes do Caso</h3>
 
@@ -775,7 +775,7 @@ export default function CentralAtendimento() {
                   </div>
                 </div>
               </div>
-            </>
+            </ScrollArea>
           ) : (
             <div className="flex-1 flex items-center justify-center p-4">
               <div className="text-center">
