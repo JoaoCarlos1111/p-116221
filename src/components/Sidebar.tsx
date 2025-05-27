@@ -316,6 +316,14 @@ export default function Sidebar() {
             </NavLink>
           </>
         )}
+        
+        <NavLink to="/integracoes" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+          <Settings size={20} />
+          <span className={cn(
+            "transition-all duration-300",
+            isCollapsed && "hidden"
+          )}>Integrações</span>
+        </NavLink>
 
         <div className="absolute bottom-4 left-0 right-0 px-2">
           <button

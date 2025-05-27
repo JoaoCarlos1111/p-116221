@@ -15,6 +15,7 @@ import IPTools from './pages/IPTools'
 import IPToolsCaseView from './pages/IPToolsCaseView';
 import Atendimento from './pages/Atendimento';
 import CentralAtendimento from './pages/CentralAtendimento';
+import Integracoes from './pages/Integracoes';
 import AtendimentoCaseDetails from "@/pages/AtendimentoCaseDetails";
 import Approvals from "@/pages/Approvals";
 import Financeiro from "@/pages/Financeiro";
@@ -49,7 +50,7 @@ import TelaFixa from './pages/TelaFixa';
 
 function AppContent() {
   const location = useLocation();
-  
+
   // Defina aqui as rotas que não devem ter sidebar
   const routesWithoutSidebar = ['/login', '/tela-fixa'];
   const shouldShowSidebar = !routesWithoutSidebar.includes(location.pathname);
