@@ -551,8 +551,11 @@ export default function CentralAtendimento() {
                           <div className="flex items-center gap-2">
                             <span className="text-sm font-medium">Status IP Tools:</span>
                             <Badge 
-                              variant={atendimentoSelecionado.ipToolsStatus === 'Ativa' ? 'destructive' : 'default'}
-                              className={`text-xs ${atendimentoSelecionado.ipToolsStatus === 'Desativada' ? 'bg-green-100 text-green-800 border-green-200' : ''}`}
+                              className={`text-xs ${
+                                atendimentoSelecionado.ipToolsStatus === 'Ativa' 
+                                  ? 'bg-red-100 text-red-800 border-red-200' 
+                                  : 'bg-green-100 text-green-800 border-green-200'
+                              }`}
                             >
                               {atendimentoSelecionado.ipToolsStatus || 'N/A'}
                             </Badge>
