@@ -1,5 +1,7 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { whatsappApi, emailApi } from '@/services/integrations';
+import socketService from '@/services/socket';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -45,13 +47,109 @@ export default function Integracoes() {
       messagesCount: 0
     },
     email: {
-      connected: true,
-      email: "atendente@empresa.com.br",
-      provider: "Gmail",
-      lastSync: "2024-01-15 14:30",
-      messagesCount: 23
+      connected: false,
+      messagesCount: 0
     }
   });
+
+  useEffect(() => {
+    // Connect to Socket.IO
+    const socket = socketService.connect('user_1');
+
+    // WhatsApp events
+    socket.on('whatsapp_qr', (data) => {
+      setQRCodeData(data.qrCode);
+      setShowQRCode(true);
+    });
+
+    socket.on('whatsapp_connected', (data) => {
+      setIntegrationStatus(prev => ({
+        ...prev,
+        whatsapp: {
+          connected: true,
+          phone: data.phone,
+          lastConnection: data.timestamp,
+          messagesCount: 0
+        }
+      }));
+      setShowQRCode(false);
+      toast({
+        title: "WhatsApp conectado",
+        description: "Sua conta do WhatsApp foi conectada com sucesso!",
+      });
+    });
+
+    socket.on('whatsapp_disconnected', () => {
+      setIntegrationStatus(prev => ({
+        ...prev,
+        whatsapp: {
+          connected: false,
+          messagesCount: 0
+        }
+      }));
+    });
+
+    socket.on('whatsapp_message', (data) => {
+      // Handle new WhatsApp message
+      console.log('New WhatsApp message:', data);
+    });
+
+    // Email events
+    socket.on('email_connected', (data) => {
+      setIntegrationStatus(prev => ({
+        ...prev,
+        email: {
+          connected: true,
+          email: data.email,
+          provider: data.provider,
+          lastSync: data.timestamp,
+          messagesCount: 0
+        }
+      }));
+      toast({
+        title: "E-mail conectado",
+        description: "Sua conta de e-mail foi conectada com sucesso.",
+      });
+    });
+
+    socket.on('email_disconnected', () => {
+      setIntegrationStatus(prev => ({
+        ...prev,
+        email: {
+          connected: false,
+          messagesCount: 0
+        }
+      }));
+    });
+
+    socket.on('email_received', (data) => {
+      // Handle new email
+      console.log('New email:', data);
+    });
+
+    // Load initial status
+    loadInitialStatus();
+
+    return () => {
+      socketService.disconnect();
+    };
+  }, []);
+
+  const loadInitialStatus = async () => {
+    try {
+      const [whatsappStatus, emailStatus] = await Promise.all([
+        whatsappApi.getStatus(),
+        emailApi.getStatus()
+      ]);
+
+      setIntegrationStatus({
+        whatsapp: whatsappStatus.data,
+        email: emailStatus.data
+      });
+    } catch (error) {
+      console.error('Error loading status:', error);
+    }
+  };
 
   const [showQRCode, setShowQRCode] = useState(false);
   const [qrCodeData, setQRCodeData] = useState("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAACXBIWXMAAAsTAAALEwEAmpwYAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCMFVEsDIoK2AfkIaKOg6OIisr74Xuja9a89+bN/rXXPues852zzwfACAyWSDNRNYAMqUIeEeCDx8TG4eQuQIEKJHAAEAizZCFz/SMBAPh+PDwrIsAHvgABeNMLCADATZvAMByH/w/qQplcAYCEAcB0kThLCIAUAEB6jkKmAEBGAYCdmCZTAKAEAGDLY2LjAFAtAGAnf+bTAICd+Jl7AQBblCEVAaCRACATZYhEAGg7AKzPVopFAFgwABRmS8Q5ANgtADBJV2ZIALC3AMDOEAuyAAgMADBRiIUpAAR7AGDIIyN4AISZABRG8lc88SuuEOcqAAB4mbI8uSQ5RYFbCC1xB1dXLh4ozkkXKxQ2YQJhmkAuwnmZGTKBNA/g88wAAKCRFRHgg/P9eM4Ors7ONo62Dl8t6r8G/yJiYuP+5c+rcEAAAOF0ftH+LC+zGoA7BoBt/qIl7gRoXgugdfeLZrIPQLUAoOnaV/Nw+H48PEWhkLnZ2eXk5NhKxEJbYcpXff5nwl/AV/1s+X48/Pf14L7iJIEyXYFHBPjgwsz0TKUcz5IJhGLc5o9H/LcL//wd0yLESWK5WCoU41EScY5EmozzMqUiiUKSKcUl0v9k4t8s+wM+3zUAsGo+AXuRLahdYwP2SycQWHTA4vcAAPK7b8HUKAgDgGiD4c93/+8//UegJQCAZkmScQAAXkQkLlTKsz/HCAAARKCBKrBBG/TBGCzABhzBBdzBC/xgNoRCJMTCQhBCCmSAHHJgKayCQiiGzbAdKmAv1EAdNMBRaIaTcA4uwlW4Dj1wD/phCJ7BKLyBCQRByAgTYSHaiAFiilgjjggXmYX4IcFIBBKLJCDJiBRRIkuRNUgxUopUIFVIHfI9cgI5h1xGupE7yAAygvyGvEcxlIGyUT3UDLVDuag3GoRGogvQZHQxmo8WoJvQcrQaPYw2oefQq2gP2o8+Q8cwwOgYBzPEbDAuxsNCsTgsCZNjy7EirAyrxhqwVqwDu4n1Y8+xdwQSgUXACTYEd0IgYR5BSFhMWE7YSKggHCQ0EdoJNwkDhFHCJyKTqEu0JroR+cQYYjIxh1hILCPWEo8TLxB7iEPENyQSiUMyJ7mQAkmxpFTSEtJG0m5SI+ksqZs0SBojk8naZGuyBzmULCAryIXkneTD5DPkG+Qh8lsKnWJAcaT4U+IoUspqShnlEOU05QZlmDJBVaOaUt2ooVQRNY9aQq2htlKvUYeoEzR1mjnNgxZJS6WtopXTGmgXaPdpr+h0uhHdlR5Ol9BX0svpR+iX6AP0dwwNhhWDx4hnKBmbGAcYZxl3GK+YTKYZ04sZx1QwNzHrmOeZD5lvVVgqtip8FZHKCpVKlSaVGyovVKmqpqreqgtV81XLVI+pXlN9rkZVM1PjqQnUlqtVqp1Q61MbU2epO6iHqmeob1Q/pH5Z/YkGWcNMw09DpFGgsV/jvMYgC2MZs3gsIWsNq4Z1gTXEJrHN2Xx2KruY/R27iz2qqaE5QzNKM1ezUvOUZj8H45hx+Jx0TgnnKKeX836K3hTvKeIpG6Y0TLkxZVxrqpaXllirSKtRq0frvTau7aedpr1Fu1n7gQ5Bx0onXCdHZ4/OBZ3nU9lT3acKpxZNPTr1ri6qa6UbobtEd79up+6Ynr5egJ5Mb6feeb3n+hx9L/1U/W36p/VHDFgGswwkBtsMzhg8xTVxbzwdL8fb8VFDXcNAQ6VhlWGX4SU" + Math.random());
@@ -62,26 +160,53 @@ export default function Integracoes() {
     password: ''
   });
 
-  const handleWhatsAppConnect = () => {
-    setQRCodeData("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAACXBIWXMAAAsTAAALEwEAmpwYAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCMFVEsDIoK2AfkIaKOg6OIisr74Xuja9a89+bN/rXXPues852zzwfACAyWSDNRNYAMqUIeEeCDx8TG4eQuQIEKJHAAEAizZCFz/SMBAPh+PDwrIsAHvgABeNMLCADATZvAMByH/w/qQplcAYCEAcB0kThLCIAUAEB6jkKmAEBGAYCdmCZTAKAEAGDLY2LjAFAtAGAnf+bTAICd+Jl7AQBblCEVAaCRACATZYhEAGg7AKzPVopFAFgwABRmS8Q5ANgtADBJV2ZIALC3AMDOEAuyAAgMADBRiIUpAAR7AGDIIyN4AISZABRG8lc88SuuEOcqAAB4mbI8uSQ5RYFbCC1xB1dXLh4ozkkXKxQ2YQJhmkAuwnmZGTKBNA/g88wAAKCRFRHgg/P9eM4Ors7ONo62Dl8t6r8G/yJiYuP+5c+rcEAAAOF0ftH+LC+zGoA7BoBt/qIl7gRoXgugdfeLZrIPQLUAoOnaV/Nw+H48PEWhkLnZ2eXk5NhKxEJbYcpXff5nwl/AV/1s+X48/Pf14L7iJIEyXYFHBPjgwsz0TKUcz5IJhGLc5o9H/LcL//wd0yLESWK5WCoU41EScY5EmozzMqUiiUKSKcUl0v9k4t8s+wM+3zUAsGo+AXuRLahdYwP2SycQWHTA4vcAAPK7b8HUKAgDgGiD4c93/+8//UegJQCAZkmScQAAXkQkLlTKsz/HCAAARKCBKrBBG/TBGCzABhzBBdzBC/xgNoRCJMTCQhBCCmSAHHJgKayCQiiGzbAdKmAv1EAdNMBRaIaTcA4uwlW4Dj1wD/phCJ7BKLyBCQRByAgTYSHaiAFiilgjjggXmYX4IcFIBBKLJCDJiBRRIkuRNUgxUopUIFVIHfI9cgI5h1xGupE7yAAygvyGvEcxlIGyUT3UDLVDuag3GoRGogvQZHQxmo8WoJvQcrQaPYw2oefQq2gP2o8+Q8cwwOgYBzPEbDAuxsNCsTgsCZNjy7EirAyrxhqwVqwDu4n1Y8+xdwQSgUXACTYEd0IgYR5BSFhMWE7YSKggHCQ0EdoJNwkDhFHCJyKTqEu0JroR+cQYYjIxh1hILCPWEo8TLxB7iEPENyQSiUMyJ7mQAkmxpFTSEtJG0m5SI+ksqZs0SBojk8naZGuyBzmULCAryIXkneTD5DPkG+Qh8lsKnWJAcaT4U+IoUspqShnlEOU05QZlmDJBVaOaUt2ooVQRNY9aQq2htlKvUYeoEzR1mjnNgxZJS6WtopXTGmgXaPdpr+h0uhHdlR5Ol9BX0svpR+iX6AP0dwwNhhWDx4hnKBmbGAcYZxl3GK+YTKYZ04sZx1QwNzHrmOeZD5lvVVgqtip8FZHKCpVKlSaVGyovVKmqpqreqgtV81XLVI+pXlN9rkZVM1PjqQnUlqtVqp1Q61MbU2epO6iHqmeob1Q/pH5Z/YkGWcNMw09DpFGgsV/jvMYgC2MZs3gsIWsNq4Z1gTXEJrHN2Xx2KruY/R27iz2qqaE5QzNKM1ezUvOUZj8H45hx+Jx0TgnnKKeX836K3hTvKeIpG6Y0TLkxZVxrqpaXllirSKtRq0frvTau7aedpr1Fu1n7gQ5Bx0onXCdHZ4/OBZ3nU9lT3acKpxZNPTr1ri6qa6UbobtEd79up+6Ynr5egJ5Mb6feeb3n+hx9L/1U/W36p/VHDFgGswwkBtsMzhg8xTVxbzwdL8fb8VFDXcNAQ6VhlWGX4SU" + Math.random());
-    setShowQRCode(true);
-  };
-
-  const handleWhatsAppDisconnect = () => {
-    setIntegrationStatus(prev => ({
-      ...prev,
-      whatsapp: {
-        connected: false,
-        messagesCount: 0
+  const handleWhatsAppConnect = async () => {
+    try {
+      const response = await whatsappApi.connect();
+      if (response.data.success) {
+        if (response.data.qrCode) {
+          setQRCodeData(response.data.qrCode);
+          setShowQRCode(true);
+        }
+      } else {
+        toast({
+          title: "Erro",
+          description: "Não foi possível conectar o WhatsApp.",
+          variant: "destructive"
+        });
       }
-    }));
-    toast({
-      title: "WhatsApp desconectado",
-      description: "Sua conta do WhatsApp foi desconectada com sucesso.",
-    });
+    } catch (error) {
+      console.error('Error connecting WhatsApp:', error);
+      toast({
+        title: "Erro",
+        description: "Erro ao conectar WhatsApp.",
+        variant: "destructive"
+      });
+    }
   };
 
-  const handleEmailConnect = () => {
+  const handleWhatsAppDisconnect = async () => {
+    try {
+      const response = await whatsappApi.disconnect();
+      if (response.data.success) {
+        setIntegrationStatus(prev => ({
+          ...prev,
+          whatsapp: {
+            connected: false,
+            messagesCount: 0
+          }
+        }));
+        toast({
+          title: "WhatsApp desconectado",
+          description: "Sua conta do WhatsApp foi desconectada com sucesso.",
+        });
+      }
+    } catch (error) {
+      console.error('Error disconnecting WhatsApp:', error);
+    }
+  };
+
+  const handleEmailConnect = async () => {
     if (!emailForm.provider || !emailForm.email || !emailForm.password) {
       toast({
         title: "Erro",
@@ -91,62 +216,61 @@ export default function Integracoes() {
       return;
     }
 
-    setIntegrationStatus(prev => ({
-      ...prev,
-      email: {
-        connected: true,
-        email: emailForm.email,
-        provider: emailForm.provider,
-        lastSync: new Date().toLocaleString('pt-BR'),
-        messagesCount: 0
+    try {
+      const response = await emailApi.connect(emailForm.provider, emailForm.email, emailForm.password);
+      if (response.data.success) {
+        setEmailForm({ provider: '', email: '', password: '' });
+      } else {
+        toast({
+          title: "Erro",
+          description: "Não foi possível conectar o e-mail. Verifique suas credenciais.",
+          variant: "destructive"
+        });
       }
-    }));
-
-    setEmailForm({ provider: '', email: '', password: '' });
-    
-    toast({
-      title: "E-mail conectado",
-      description: "Sua conta de e-mail foi conectada com sucesso.",
-    });
+    } catch (error) {
+      console.error('Error connecting email:', error);
+      toast({
+        title: "Erro",
+        description: "Erro ao conectar e-mail. Verifique suas credenciais.",
+        variant: "destructive"
+      });
+    }
   };
 
-  const handleEmailDisconnect = () => {
-    setIntegrationStatus(prev => ({
-      ...prev,
-      email: {
-        connected: false,
-        messagesCount: 0
+  const handleEmailDisconnect = async () => {
+    try {
+      const response = await emailApi.disconnect();
+      if (response.data.success) {
+        setIntegrationStatus(prev => ({
+          ...prev,
+          email: {
+            connected: false,
+            messagesCount: 0
+          }
+        }));
+        toast({
+          title: "E-mail desconectado",
+          description: "Sua conta de e-mail foi desconectada com sucesso.",
+        });
       }
-    }));
-    toast({
-      title: "E-mail desconectado",
-      description: "Sua conta de e-mail foi desconectada com sucesso.",
-    });
+    } catch (error) {
+      console.error('Error disconnecting email:', error);
+    }
   };
 
-  const refreshQRCode = () => {
-    setQRCodeData("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAACXBIWXMAAAsTAAALEwEAmpwYAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCMFVEsDIoK2AfkIaKOg6OIisr74Xuja9a89+bN/rXXPues852zzwfACAyWSDNRNYAMqUIeEeCDx8TG4eQuQIEKJHAAEAizZCFz/SMBAPh+PDwrIsAHvgABeNMLCADATZvAMByH/w/qQplcAYCEAcB0kThLCIAUAEB6jkKmAEBGAYCdmCZTAKAEAGDLY2LjAFAtAGAnf+bTAICd+Jl7AQBblCEVAaCRACATZYhEAGg7AKzPVopFAFgwABRmS8Q5ANgtADBJV2ZIALC3AMDOEAuyAAgMADBRiIUpAAR7AGDIIyN4AISZABRG8lc88SuuEOcqAAB4mbI8uSQ5RYFbCC1xB1dXLh4ozkkXKxQ2YQJhmkAuwnmZGTKBNA/g88wAAKCRFRHgg/P9eM4Ors7ONo62Dl8t6r8G/yJiYuP+5c+rcEAAAOF0ftH+LC+zGoA7BoBt/qIl7gRoXgugdfeLZrIPQLUAoOnaV/Nw+H48PEWhkLnZ2eXk5NhKxEJbYcpXff5nwl/AV/1s+X48/Pf14L7iJIEyXYFHBPjgwsz0TKUcz5IJhGLc5o9H/LcL//wd0yLESWK5WCoU41EScY5EmozzMqUiiUKSKcUl0v9k4t8s+wM+3zUAsGo+AXuRLahdYwP2SycQWHTA4vcAAPK7b8HUKAgDgGiD4c93/+8//UegJQCAZkmScQAAXkQkLlTKsz/HCAAARKCBKrBBG/TBGCzABhzBBdzBC/xgNoRCJMTCQhBCCmSAHHJgKayCQiiGzbAdKmAv1EAdNMBRaIaTcA4uwlW4Dj1wD/phCJ7BKLyBCQRByAgTYSHaiAFiilgjjggXmYX4IcFIBBKLJCDJiBRRIkuRNUgxUopUIFVIHfI9cgI5h1xGupE7yAAygvyGvEcxlIGyUT3UDLVDuag3GoRGogvQZHQxmo8WoJvQcrQaPYw2oefQq2gP2o8+Q8cwwOgYBzPEbDAuxsNCsTgsCZNjy7EirAyrxhqwVqwDu4n1Y8+xdwQSgUXACTYEd0IgYR5BSFhMWE7YSKggHCQ0EdoJNwkDhFHCJyKTqEu0JroR+cQYYjIxh1hILCPWEo8TLxB7iEPENyQSiUMyJ7mQAkmxpFTSEtJG0m5SI+ksqZs0SBojk8naZGuyBzmULCAryIXkneTD5DPkG+Qh8lsKnWJAcaT4U+IoUspqShnlEOU05QZlmDJBVaOaUt2ooVQRNY9aQq2htlKvUYeoEzR1mjnNgxZJS6WtopXTGmgXaPdpr+h0uhHdlR5Ol9BX0svpR+iX6AP0dwwNhhWDx4hnKBmbGAcYZxl3GK+YTKYZ04sZx1QwNzHrmOeZD5lvVVgqtip8FZHKCpVKlSaVGyovVKmqpqreqgtV81XLVI+pXlN9rkZVM1PjqQnUlqtVqp1Q61MbU2epO6iHqmeob1Q/pH5Z/YkGWcNMw09DpFGgsV/jvMYgC2MZs3gsIWsNq4Z1gTXEJrHN2Xx2KruY/R27iz2qqaE5QzNKM1ezUvOUZj8H45hx+Jx0TgnnKKeX836K3hTvKeIpG6Y0TLkxZVxrqpaXllirSKtRq0frvTau7aedpr1Fu1n7gQ5Bx0onXCdHZ4/OBZ3nU9lT3acKpxZNPTr1ri6qa6UbobtEd79up+6Ynr5egJ5Mb6feeb3n+hx9L/1U/W36p/VHDFgGswwkBtsMzhg8xTVxbzwdL8fb8VFDXcNAQ6VhlWGX4SU" + Math.random());
-    toast({
-      title: "QR Code atualizado",
-      description: "Escaneie o novo QR Code com seu WhatsApp.",
-    });
-  };
-
-  const simulateWhatsAppConnection = () => {
-    setIntegrationStatus(prev => ({
-      ...prev,
-      whatsapp: {
-        connected: true,
-        phone: "+55 (11) 99999-9999",
-        lastConnection: new Date().toLocaleString('pt-BR'),
-        messagesCount: 0
+  const refreshQRCode = async () => {
+    try {
+      const response = await whatsappApi.connect();
+      if (response.data.success && response.data.qrCode) {
+        setQRCodeData(response.data.qrCode);
+        toast({
+          title: "QR Code atualizado",
+          description: "Escaneie o novo QR Code com seu WhatsApp.",
+        });
       }
-    }));
-    setShowQRCode(false);
-    toast({
-      title: "WhatsApp conectado",
-      description: "Sua conta do WhatsApp foi conectada com sucesso!",
-    });
+    } catch (error) {
+      console.error('Error refreshing QR code:', error);
+    }
   };
 
   return (
@@ -274,10 +398,6 @@ export default function Integracoes() {
                         <Button onClick={refreshQRCode} variant="outline" className="flex-1">
                           <RefreshCw className="h-4 w-4 mr-2" />
                           Atualizar QR
-                        </Button>
-                        <Button onClick={simulateWhatsAppConnection} className="flex-1 bg-green-600 hover:bg-green-700">
-                          <CheckCircle className="h-4 w-4 mr-2" />
-                          Simular Conexão
                         </Button>
                       </div>
                     </div>
