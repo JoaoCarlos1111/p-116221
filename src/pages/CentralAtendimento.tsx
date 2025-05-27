@@ -625,11 +625,11 @@ export default function CentralAtendimento() {
         </div>
 
         {/* Coluna 2: Conversa Ativa */}
-        <div className="flex-1 flex flex-col bg-white overflow-hidden transform -translate-y-[5%] relative z-50">
+        <div className="flex-1 flex flex-col bg-white overflow-hidden relative z-50">
           {atendimentoSelecionado ? (
             <>
               {/* Header da Conversa */}
-              <div className="p-4 border-b bg-transparent relative z-[70]">
+              <div className="p-2 border-b bg-transparent relative z-[70]">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     {getIconeCanal(atendimentoSelecionado.canal)}
@@ -652,7 +652,7 @@ export default function CentralAtendimento() {
               </div>
 
               {/* Mensagens */}
-              <ScrollArea className="flex-1 p-4 max-h-[calc(100vh-280px)]">
+              <ScrollArea className="flex-1 p-2 max-h-[calc(100vh-280px)]">
                 <div className="space-y-4 bg-transparent">
                   {atendimentoSelecionado.mensagens.map((mensagem) => (
                     <div
@@ -693,7 +693,7 @@ export default function CentralAtendimento() {
               </ScrollArea>
 
               {/* Templates de Resposta */}
-              <div className="px-4 py-1 bg-gray-50 border-t">
+              <div className="px-2 py-1 bg-gray-50 border-t">
                 <div className="flex gap-2 mb-1">
                   <span className="text-xs font-medium text-muted-foreground">Templates:</span>
                   {templatesMensagem.map((template) => (
@@ -711,7 +711,7 @@ export default function CentralAtendimento() {
               </div>
 
               {/* Campo de Resposta */}
-              <div className="p-3 border-t bg-white">
+              <div className="p-1.5 border-t bg-white">
                 <div className="flex gap-2">
                   <Textarea
                     placeholder="Digite sua resposta..."
