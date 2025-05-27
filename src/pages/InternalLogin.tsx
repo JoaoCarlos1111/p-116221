@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -24,20 +23,20 @@ export default function InternalLogin() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    
+
     if (!validateEmail(email)) {
       setError('Por favor, insira um email válido');
       return;
     }
 
     setIsLoading(true);
-    
+
     try {
       const { token, user } = await AuthService.login(email, password);
-      
+
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
-      
+
       const departmentRoutes: Record<string, string> = {
         prospeccao: '/prospeccao',
         verificacao: '/kanban/verificacao',
@@ -52,7 +51,7 @@ export default function InternalLogin() {
         departmentRoutes[user.mainDepartment] || departmentRoutes.admin;
 
       navigate(route);
-      
+
       toast({
         title: "Login realizado com sucesso",
         description: `Bem-vindo(a), ${user.name}!`
@@ -76,7 +75,7 @@ export default function InternalLogin() {
           <h1 className="text-2xl font-bold">Totall Brand Protection</h1>
           <p className="text-muted-foreground">Faça login para acessar o sistema</p>
         </div>
-        
+
         <form onSubmit={handleLogin} className="space-y-4">
           {error && (
             <Alert variant="destructive">
@@ -84,7 +83,7 @@ export default function InternalLogin() {
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          
+
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -96,7 +95,7 @@ export default function InternalLogin() {
               required
             />
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="password">Senha</Label>
             <Input
