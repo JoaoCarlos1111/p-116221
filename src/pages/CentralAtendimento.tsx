@@ -315,8 +315,8 @@ export default function CentralAtendimento() {
     
     setTimeout(() => {
       setShowCelebration(false);
-      alert('🎉 Acordo assinado! Caso enviado automaticamente para o Financeiro na etapa "Emitir Pagamento".');
-    }, 2000);
+      alert('💰 Acordo assinado! Caso enviado automaticamente para o Financeiro na etapa "Emitir Pagamento".');
+    }, 3000);
   };
 
   const handleAgendarFollowUp = () => {
@@ -831,15 +831,69 @@ export default function CentralAtendimento() {
 
       {/* Animação de Celebração */}
       {showCelebration && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 pointer-events-none">
-          <div className="text-center space-y-4 animate-pulse">
-            <div className="text-6xl">🎉</div>
-            <div className="text-2xl font-bold text-green-600 bg-white px-6 py-3 rounded-lg shadow-lg">
-              Acordo Assinado!
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-green-500/20 to-blue-500/20 pointer-events-none">
+          {/* Confetes animados */}
+          <div className="absolute inset-0 overflow-hidden">
+            {[...Array(20)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-3 h-3 animate-bounce"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  backgroundColor: ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4'][Math.floor(Math.random() * 5)],
+                  animationDelay: `${Math.random() * 2}s`,
+                  animationDuration: `${1 + Math.random() * 2}s`
+                }}
+              />
+            ))}
+          </div>
+          
+          {/* Card principal com animação */}
+          <div className="text-center space-y-6 transform animate-bounce">
+            {/* Ícone principal rotacionando */}
+            <div className="relative">
+              <div className="text-8xl animate-spin-slow">💰</div>
+              <div className="absolute -top-2 -right-2 text-4xl animate-pulse">✨</div>
+              <div className="absolute -bottom-2 -left-2 text-4xl animate-bounce">🎯</div>
             </div>
-            <div className="text-lg text-gray-600 bg-white px-4 py-2 rounded-lg shadow-lg">
-              Enviando para o Financeiro...
+            
+            {/* Mensagem principal */}
+            <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-4 rounded-xl shadow-2xl transform hover:scale-105 transition-transform">
+              <div className="text-3xl font-bold mb-2">ACORDO ASSINADO!</div>
+              <div className="text-lg">Parabéns pela conquista! 🚀</div>
             </div>
+            
+            {/* Barra de progresso animada */}
+            <div className="bg-white px-6 py-4 rounded-lg shadow-xl">
+              <div className="text-sm text-gray-600 mb-2">Enviando para o Financeiro...</div>
+              <div className="w-64 bg-gray-200 rounded-full h-3 overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full animate-pulse transform translate-x-0 animate-slide-right"></div>
+              </div>
+            </div>
+            
+            {/* Medalha de conquista */}
+            <div className="bg-yellow-400 text-yellow-900 px-4 py-2 rounded-full shadow-lg animate-pulse">
+              <span className="text-sm font-bold">🏆 MISSÃO CUMPRIDA</span>
+            </div>
+          </div>
+          
+          {/* Partículas flutuantes */}
+          <div className="absolute inset-0">
+            {[...Array(10)].map((_, i) => (
+              <div
+                key={`particle-${i}`}
+                className="absolute text-2xl animate-ping"
+                style={{
+                  left: `${20 + Math.random() * 60}%`,
+                  top: `${20 + Math.random() * 60}%`,
+                  animationDelay: `${Math.random() * 3}s`,
+                  animationDuration: `${2 + Math.random() * 2}s`
+                }}
+              >
+                {['🎊', '🎈', '⭐', '💫', '🌟'][Math.floor(Math.random() * 5)]}
+              </div>
+            ))}
           </div>
         </div>
       )}
