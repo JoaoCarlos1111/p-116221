@@ -165,6 +165,12 @@ const mockCaso: CasoVinculado = {
   etapaAtual: 'Atendimento'
 };
 
+const mockProvasCaso = [
+  { id: 'prova1', nome: 'Screenshot_site_falsificacao.png', tipo: 'imagem' },
+  { id: 'prova2', nome: 'Comparativo_produtos.pdf', tipo: 'documento' },
+  { id: 'prova3', nome: 'Evidencia_WhatsApp.png', tipo: 'imagem' }
+];
+
 const templatesMensagem = [
   {
     id: 'temp1',
@@ -200,6 +206,12 @@ export default function CentralAtendimento() {
     notificacao: false
   });
   const [showCelebration, setShowCelebration] = useState(false);
+  const [showDocumentModal, setShowDocumentModal] = useState(false);
+  const [documentoSelecionado, setDocumentoSelecionado] = useState<{
+    tipo: string;
+    nome: string;
+    conteudo?: string;
+  } | null>(null);
 
   useEffect(() => {
     if (atendimentos.length > 0) {
@@ -406,6 +418,73 @@ export default function CentralAtendimento() {
 
     const etapaId = casosEtapas[atendimentoId as keyof typeof casosEtapas] || 'waiting';
     return etapasPipeline[etapaId as keyof typeof etapasPipeline] || 'Não definida';
+  };
+
+  const handleVisualizarDocumento = (tipoDocumento: string) => {
+    let documento = null;
+    
+    switch (tipoDocumento) {
+      case 'notificacao':
+        documento = {
+          tipo: 'Notificação Extrajudicial',
+          nome: 'Notificacao_Extrajudicial_Nike.pdf',
+          conteudo: 'Conteúdo da notificação extrajudicial para o caso ' + atendimentoSelecionado?.casoVinculado
+        };
+        break;
+      case 'acordo':
+        documento = {
+          tipo: 'Acordo Extrajudicial',
+          nome: 'Acordo_Extrajudicial_Nike.pdf',
+          conteudo: 'Minuta do acordo extrajudicial com termos e condições para resolução do caso'
+        };
+        break;
+      case 'provas':
+        documento = {
+          tipo: 'Provas do Caso',
+          nome: 'Evidencias_Caso_' + atendimentoSelecionado?.casoVinculado,
+          conteudo: 'Conjunto de evidências coletadas incluindo screenshots, comparativos e conversas'
+        };
+        break;
+      case 'procuracao':
+        documento = {
+          tipo: 'Procuração',
+          nome: 'Procuracao_Nike.pdf',
+          conteudo: 'Procuração outorgada pela marca Nike para representação legal'
+        };
+        break;
+    }
+    
+    setDocumentoSelecionado(documento);
+    setShowDocumentModal(true);
+  };
+
+  const handleEnviarDocumento = (tipoDocumento: string) => {
+    if (!atendimentoSelecionado) return;
+
+    const novaMensagemObj: Mensagem = {
+      id: `msg-${Date.now()}`,
+      remetente: 'analista',
+      nome: 'Sistema',
+      conteudo: `📎 Documento enviado: ${tipoDocumento === 'notificacao' ? 'Notificação Extrajudicial' : 
+                                          tipoDocumento === 'acordo' ? 'Acordo Extrajudicial' :
+                                          tipoDocumento === 'provas' ? 'Provas do Caso' : 'Procuração'}`,
+      timestamp: new Date().toISOString(),
+      anexos: [`${tipoDocumento}_${atendimentoSelecionado.casoVinculado}.pdf`],
+      lida: true
+    };
+
+    setAtendimentos(prev => prev.map(atendimento => 
+      atendimento.id === atendimentoSelecionado.id 
+        ? {
+            ...atendimento,
+            mensagens: [...atendimento.mensagens, novaMensagemObj],
+            ultimaMensagem: `Documento enviado: ${tipoDocumento}`,
+            dataUltimaInteracao: new Date().toISOString()
+          }
+        : atendimento
+    ));
+
+    alert(`📎 Documento "${tipoDocumento}" enviado para ${atendimentoSelecionado.cliente}`);
   };
 
   return (
@@ -757,6 +836,130 @@ export default function CentralAtendimento() {
                 </div>
               </div>
 
+              {/* Documentos do Caso */}
+              <div className="p-4 border-t space-y-3">
+                <h4 className="font-medium text-sm">Documentos do Caso</h4>
+                
+                <Card className="p-3 bg-gray-50">
+                  <div className="space-y-3">
+                    {/* Notificação Extrajudicial */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <FileText className="h-4 w-4 text-blue-600" />
+                        <span className="text-sm font-medium">Notificação Extrajudicial</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-6 px-2 text-xs"
+                          onClick={() => handleVisualizarDocumento('notificacao')}
+                        >
+                          Ver
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-6 px-2 text-xs text-blue-600"
+                          onClick={() => handleEnviarDocumento('notificacao')}
+                        >
+                          Enviar
+                        </Button>
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    {/* Acordo (somente se caso estiver em proposta aceita) */}
+                    {atendimentoSelecionado.status === 'resolvido' && (
+                      <>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <FileText className="h-4 w-4 text-green-600" />
+                            <span className="text-sm font-medium">Acordo Extrajudicial</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-6 px-2 text-xs"
+                              onClick={() => handleVisualizarDocumento('acordo')}
+                            >
+                              Ver
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-6 px-2 text-xs text-green-600"
+                              onClick={() => handleEnviarDocumento('acordo')}
+                            >
+                              Enviar
+                            </Button>
+                          </div>
+                        </div>
+                        <Separator />
+                      </>
+                    )}
+
+                    {/* Provas do Caso */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <FileText className="h-4 w-4 text-orange-600" />
+                        <span className="text-sm font-medium">Provas do Caso</span>
+                        <Badge variant="outline" className="text-xs h-4">
+                          {mockProvasCaso.length}
+                        </Badge>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-6 px-2 text-xs"
+                          onClick={() => handleVisualizarDocumento('provas')}
+                        >
+                          Ver
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-6 px-2 text-xs text-orange-600"
+                          onClick={() => handleEnviarDocumento('provas')}
+                        >
+                          Enviar
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Procuração */}
+                    <Separator />
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <FileText className="h-4 w-4 text-purple-600" />
+                        <span className="text-sm font-medium">Procuração</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-6 px-2 text-xs"
+                          onClick={() => handleVisualizarDocumento('procuracao')}
+                        >
+                          Ver
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-6 px-2 text-xs text-purple-600"
+                          onClick={() => handleEnviarDocumento('procuracao')}
+                        >
+                          Enviar
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+
               {/* Histórico Resumido */}
               <div className="p-4 border-t">
                 <h4 className="font-medium text-sm mb-3">Histórico Recente</h4>
@@ -857,6 +1060,85 @@ export default function CentralAtendimento() {
             </Button>
             <Button onClick={handleAgendarFollowUp}>
               Agendar Follow-up
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal de Visualização de Documentos */}
+      <Dialog open={showDocumentModal} onOpenChange={setShowDocumentModal}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              {documentoSelecionado?.tipo}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium">Nome do arquivo:</span>
+                <span className="text-sm">{documentoSelecionado?.nome}</span>
+              </div>
+              <Button variant="outline" size="sm">
+                <ExternalLink className="h-3 w-3 mr-1" />
+                Baixar
+              </Button>
+            </div>
+
+            <div className="border rounded-lg p-4 bg-white max-h-96 overflow-y-auto">
+              <div className="text-sm text-muted-foreground mb-3">Preview do documento:</div>
+              <div className="space-y-2">
+                {documentoSelecionado?.tipo === 'Provas do Caso' ? (
+                  <div className="space-y-3">
+                    {mockProvasCaso.map((prova, index) => (
+                      <div key={prova.id} className="flex items-center justify-between p-2 border rounded">
+                        <div className="flex items-center gap-2">
+                          <FileText className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-sm">{prova.nome}</span>
+                          <Badge variant="outline" className="text-xs">{prova.tipo}</Badge>
+                        </div>
+                        <Button variant="ghost" size="sm">
+                          <ExternalLink className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-gray-50 p-4 rounded text-sm">
+                    <p>{documentoSelecionado?.conteudo}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">
+              <div className="flex-1">
+                <span className="text-sm font-medium">Enviar para o cliente?</span>
+                <p className="text-xs text-muted-foreground">
+                  O documento será anexado à conversa automaticamente
+                </p>
+              </div>
+              <Button 
+                size="sm"
+                onClick={() => {
+                  if (documentoSelecionado) {
+                    const tipoDoc = documentoSelecionado.tipo.toLowerCase().includes('notificação') ? 'notificacao' :
+                                   documentoSelecionado.tipo.toLowerCase().includes('acordo') ? 'acordo' :
+                                   documentoSelecionado.tipo.toLowerCase().includes('provas') ? 'provas' : 'procuracao';
+                    handleEnviarDocumento(tipoDoc);
+                    setShowDocumentModal(false);
+                  }
+                }}
+              >
+                <Send className="h-3 w-3 mr-1" />
+                Enviar
+              </Button>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDocumentModal(false)}>
+              Fechar
             </Button>
           </DialogFooter>
         </DialogContent>
