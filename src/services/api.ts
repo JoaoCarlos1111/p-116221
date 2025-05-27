@@ -311,4 +311,28 @@ class ApiService {
   }
 }
 
+// Templates e PDFs
+export const templateAPI = {
+  generatePDF: (templateId: string, caseId: string, data: any) =>
+    api.post(`/templates/${templateId}/generate-pdf`, { caseId, data }),
+
+  generateNotification: (caseId: string) =>
+    api.post(`/templates/generate-notification/${caseId}`),
+
+  getTemplateFields: (templateId: string) =>
+    api.get(`/templates/${templateId}/fields`)
+};
+
+// E-mail
+export const emailAPI = {
+  sendNotification: (caseId: string, recipientEmail: string, pdfPath?: string) =>
+    api.post('/email/send-notification', { caseId, recipientEmail, pdfPath }),
+
+  getEmailHistory: (caseId: string) =>
+    api.get(`/email/history/${caseId}`),
+
+  retryFailedEmails: () =>
+    api.post('/email/retry-failed')
+};
+
 export default api;

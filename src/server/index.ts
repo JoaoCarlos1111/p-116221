@@ -60,7 +60,10 @@ app.use('/api/auth', authRoutes);
 
 // Protected routes (require authentication)
 app.use('/api/integrations', authMiddleware, integrationsRoutes);
+import emailRoutes from './routes/email';
+
 app.use('/api/templates', authMiddleware, templatesRoutes);
+app.use('/api/email', emailRoutes);
 app.use('/api/cases', casesRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/payments', paymentsRoutes);
