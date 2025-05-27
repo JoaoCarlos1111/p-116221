@@ -67,4 +67,248 @@ export const CasesService = {
   }
 };
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
+interface PaginationParams {
+  page?: number;
+  limit?: number;
+}
+
+interface ApiResponse<T> {
+  success: boolean;
+  data: T;
+  pagination?: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
+  stats?: any;
+  message?: string;
+}
+
+class ApiService {
+  private baseURL: string;
+
+  constructor() {
+    this.baseURL = API_BASE_URL;
+  }
+
+  private async request<T>(
+    endpoint: string,
+    options: RequestInit = {}
+  ): Promise<T> {
+    const token = localStorage.getItem('token');
+
+    const config: RequestInit = {
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token && { Authorization: `Bearer ${token}` }),
+        ...options.headers,
+      },
+      ...options,
+    };
+
+    const response = await fetch(`${this.baseURL}${endpoint}`, config);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ message: 'Network error' }));
+      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
+  }
+
+  // Health check
+  async healthCheck() {
+    return this.request<{ status: string; timestamp: string }>('/health');
+  }
+
+  // Test endpoint
+  async test() {
+    return this.request<{ message: string; timestamp: string }>('/api/test');
+  }
+
+  // Cases API
+  async getCases(params?: { 
+    status?: string; 
+    brand?: string; 
+    assignedTo?: string; 
+  } & PaginationParams) {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined) queryParams.append(key, value.toString());
+      });
+    }
+    const endpoint = `/api/cases${queryParams.toString() ? `?${queryParams}` : ''}`;
+    return this.request<ApiResponse<any[]>>(endpoint);
+  }
+
+  async getCase(id: string) {
+    return this.request<ApiResponse<any>>(`/api/cases/${id}`);
+  }
+
+  async createCase(data: {
+    code: string;
+    debtorName: string;
+    totalAmount: number;
+    currentPayment?: number;
+    status?: string;
+    userId: string;
+    brandId?: string;
+  }) {
+    return this.request<ApiResponse<any>>('/api/cases', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateCase(id: string, data: any) {
+    return this.request<ApiResponse<any>>(`/api/cases/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteCase(id: string) {
+    return this.request<ApiResponse<any>>(`/api/cases/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Users API
+  async getUsers(params?: { 
+    department?: string; 
+    isActive?: boolean; 
+  } & PaginationParams) {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined) queryParams.append(key, value.toString());
+      });
+    }
+    const endpoint = `/api/users${queryParams.toString() ? `?${queryParams}` : ''}`;
+    return this.request<ApiResponse<any[]>>(endpoint);
+  }
+
+  async getUser(id: string) {
+    return this.request<ApiResponse<any>>(`/api/users/${id}`);
+  }
+
+  async createUser(data: {
+    name: string;
+    email: string;
+    password: string;
+    mainDepartment: string;
+    departments?: string[];
+    brands?: string[];
+    isAdmin?: boolean;
+    isClient?: boolean;
+    clientProfile?: string;
+    company?: string;
+  }) {
+    return this.request<ApiResponse<any>>('/api/users', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateUser(id: string, data: any) {
+    return this.request<ApiResponse<any>>(`/api/users/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deactivateUser(id: string) {
+    return this.request<ApiResponse<any>>(`/api/users/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Payments API
+  async getPayments(params?: {
+    status?: string;
+    caseId?: string;
+    dateFrom?: string;
+    dateTo?: string;
+    minAmount?: number;
+    maxAmount?: number;
+  } & PaginationParams) {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined) queryParams.append(key, value.toString());
+      });
+    }
+    const endpoint = `/api/payments${queryParams.toString() ? `?${queryParams}` : ''}`;
+    return this.request<ApiResponse<any[]>>(endpoint);
+  }
+
+  async getPayment(id: string) {
+    return this.request<ApiResponse<any>>(`/api/payments/${id}`);
+  }
+
+  async createPayment(data: {
+    amount: number;
+    status?: string;
+    caseId: string;
+  }) {
+    return this.request<ApiResponse<any>>('/api/payments', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updatePayment(id: string, data: any) {
+    return this.request<ApiResponse<any>>(`/api/payments/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deletePayment(id: string) {
+    return this.request<ApiResponse<any>>(`/api/payments/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Brands API
+  async getBrands(params?: { search?: string } & PaginationParams) {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined) queryParams.append(key, value.toString());
+      });
+    }
+    const endpoint = `/api/brands${queryParams.toString() ? `?${queryParams}` : ''}`;
+    return this.request<ApiResponse<any[]>>(endpoint);
+  }
+
+  async getBrand(id: string) {
+    return this.request<ApiResponse<any>>(`/api/brands/${id}`);
+  }
+
+  async createBrand(data: { name: string }) {
+    return this.request<ApiResponse<any>>('/api/brands', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateBrand(id: string, data: { name: string }) {
+    return this.request<ApiResponse<any>>(`/api/brands/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteBrand(id: string) {
+    return this.request<ApiResponse<any>>(`/api/brands/${id}`, {
+      method: 'DELETE',
+    });
+  }
+}
+
 export default api;

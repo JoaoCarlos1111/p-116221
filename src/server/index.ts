@@ -5,6 +5,10 @@ import { Server as SocketIOServer } from 'socket.io';
 import integrationsRoutes from './routes/integrations';
 import templatesRoutes from './routes/templates';
 import authRoutes from './routes/auth';
+import casesRoutes from './routes/cases';
+import usersRoutes from './routes/users';
+import paymentsRoutes from './routes/payments';
+import brandsRoutes from './routes/brands';
 import { authMiddleware } from './middleware/auth';
 import WhatsAppService from './services/whatsapp';
 import prisma from './lib/prisma';
@@ -57,6 +61,10 @@ app.use('/api/auth', authRoutes);
 // Protected routes (require authentication)
 app.use('/api/integrations', authMiddleware, integrationsRoutes);
 app.use('/api/templates', authMiddleware, templatesRoutes);
+app.use('/api/cases', casesRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/payments', paymentsRoutes);
+app.use('/api/brands', brandsRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {
