@@ -30,7 +30,7 @@ export default function Sidebar() {
   const isAdmin = user?.isAdmin;
   const isClient = user?.isClient || user?.mainDepartment === 'client';
   const isAtendimento = user?.department === 'atendimento' || user?.mainDepartment === 'atendimento';
-  
+
   // Define sidebar minimizado como padrão para usuários de atendimento
   const [isCollapsed, setIsCollapsed] = useState(isAtendimento);
 
@@ -307,7 +307,7 @@ export default function Sidebar() {
               )}>Atendimento</span>
             </NavLink>
 
-            <NavLink to="/atendimento" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+            <NavLink to="/atendimento/pipeline" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
               <LayoutDashboard size={20} />
               <span className={cn(
                 "transition-all duration-300",

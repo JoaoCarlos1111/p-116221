@@ -118,7 +118,7 @@ function AppContent() {
                 <IPToolsCaseView />
               </RouteGuard>
             } />
-            <Route path="/atendimento" element={
+            <Route path="/atendimento/pipeline" element={
               <RouteGuard requiredDepartment={departments.ATENDIMENTO}>
                 <Atendimento />
               </RouteGuard>

@@ -130,12 +130,12 @@ export default function Atendimento() {
     },
     {
       id: 'firstContact',
-      title: 'Primeiro contato',
+      title: 'Em atendimento',
       color: 'bg-blue-50'
     },
     {
       id: 'proposal',
-      title: 'Proposta de acordo',
+      title: 'Proposta aceita',
       color: 'bg-purple-50'
     }
   ];
