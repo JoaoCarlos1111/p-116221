@@ -196,44 +196,12 @@ export default function Sidebar() {
               )}>Dashboard Executivo</span>
             </NavLink>
 
-            <NavLink to="/client/gestor/casos" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <FileText size={20} />
-              <span className={cn(
-                "transition-all duration-300",
-                isCollapsed && "hidden"
-              )}>Gestão de Casos</span>
-            </NavLink>
-
-            <NavLink to="/client/gestor/aprovacoes" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <CheckCircle size={20} />
-              <span className={cn(
-                "transition-all duration-300",
-                isCollapsed && "hidden"
-              )}>Aprovações</span>
-            </NavLink>
-
             <NavLink to="/client/gestor/financeiro" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
               <DollarSign size={20} />
               <span className={cn(
                 "transition-all duration-300",
                 isCollapsed && "hidden"
-              )}>Painel Financeiro</span>
-            </NavLink>
-
-            <NavLink to="/client/gestor/usuarios" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <Users size={20} />
-              <span className={cn(
-                "transition-all duration-300",
-                isCollapsed && "hidden"
-              )}>Gerenciar Usuários</span>
-            </NavLink>
-
-            <NavLink to="/client/gestor/marcas" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <Building size={20} />
-              <span className={cn(
-                "transition-all duration-300",
-                isCollapsed && "hidden"
-              )}>Consulta por Marca</span>
+              )}>Financeiro</span>
             </NavLink>
 
             <NavLink to="/client/gestor/relatorios" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
@@ -244,12 +212,44 @@ export default function Sidebar() {
               )}>Relatórios</span>
             </NavLink>
 
+            <NavLink to="/client/gestor/aprovacoes" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <CheckCircle size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Aprovações</span>
+            </NavLink>
+
+            <NavLink to="/client/gestor/casos" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <FileText size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Gestão de Casos</span>
+            </NavLink>
+
+            <NavLink to="/client/gestor/usuarios" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <Users size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Gerenciar Usuários</span>
+            </NavLink>
+
             <NavLink to="/client/casos/historico" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
               <History size={20} />
               <span className={cn(
                 "transition-all duration-300",
                 isCollapsed && "hidden"
               )}>Histórico</span>
+            </NavLink>
+
+            <NavLink to="/client/gestor/marcas" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <Building size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Consulta por Marca</span>
             </NavLink>
           </>
         )}
