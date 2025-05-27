@@ -1,0 +1,78 @@
+Tela de Conexão: WhatsApp & E-mail
+🎯 Objetivo da Tela
+Permitir que o atendente conecte sua conta de WhatsApp e e-mail pessoal (profissional) à plataforma para centralizar os atendimentos dentro do sistema.
+
+🧱 Estrutura da Tela (UX/UI)
+less
+Copiar
+Editar
+────────────────────────────────────────────
+|  🔗 Integrações de Atendimento            |
+|──────────────────────────────────────────|
+|                                          |
+|  [ 📲  Conectar WhatsApp ]               |
+|  Status: ❌ Não conectado                 |
+|                                          |
+|  Ao clicar: Exibe QR Code na tela        |
+|  + botão para Desconectar, se conectado  |
+|                                          |
+|  Exemplo de integração: WhatsApp Web     |
+|                                          |
+|──────────────────────────────────────────|
+|                                          |
+|  [ 📧  Conectar E-mail Corporativo ]     |
+|  Status: ✅ Conectado (fulano@empresa...)|
+|                                          |
+|  Campos (se não conectado):              |
+|   - Provedor (Gmail, Outlook, IMAP)      |
+|   - E-mail e senha (ou token seguro)     |
+|   - Botão: [Conectar]                    |
+|                                          |
+|  + botão para Desconectar                |
+|                                          |
+────────────────────────────────────────────
+✅ Comportamentos Esperados
+📲 WhatsApp
+Integração via WhatsApp Web (sem API oficial) usando bibliotecas como whatsapp-web.js ou Baileys.
+
+Exibe um QR code (gerado no backend) para o atendente escanear.
+
+Após escaneado, o sistema se conecta e pode:
+
+Enviar e receber mensagens diretamente no sistema
+
+Associar mensagens aos casos automaticamente (por telefone)
+
+Mostrar notificações em tempo real
+
+⚠️ Essa abordagem é funcional, mas exige que o sistema backend mantenha a sessão ativa, como o WhatsApp Web faz.
+
+📧 E-mail
+Integração com IMAP/SMTP ou OAuth para Gmail/Outlook.
+
+Autenticação segura:
+
+Token OAuth (preferido)
+
+Ou senha de app (no caso de IMAP)
+
+Sincronização de:
+
+Caixa de entrada
+
+Envio de mensagens
+
+Anexos
+
+Vinculação ao caso (por e-mail de origem ou assunto com ID do caso)
+
+🧠 Boas Práticas de UX
+Status de Conexão Visível: Mostrar claramente se está conectado ou não.
+
+QR Code Atualizável: Botão "Atualizar QR Code" se a sessão expirar.
+
+Confirmação de Desconexão: Pop-up ao clicar “Desconectar”.
+
+Logs de Integração: Pequeno histórico de erros ou conexões anteriores.
+
+Associação automática: Mostrar ao lado do botão de conexão quantos atendimentos estão sendo vinculados automaticamente por canal.
