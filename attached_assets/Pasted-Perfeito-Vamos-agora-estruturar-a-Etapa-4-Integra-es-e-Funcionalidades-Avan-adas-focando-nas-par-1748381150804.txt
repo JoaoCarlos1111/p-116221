@@ -1,0 +1,93 @@
+Perfeito! Vamos agora estruturar a Etapa 4: Integrações e Funcionalidades Avançadas, focando nas partes mais estratégicas que transformarão o sistema em uma plataforma robusta, automatizada e escalável.
+
+✅ Etapa 4 – Integrações e Funcionalidades Avançadas
+1. Geração Automática de Documentos PDF via Templates
+Objetivo: Gerar notificações, acordos e outros documentos automaticamente com base em templates .docx e dados do caso.
+
+Funcionalidades:
+
+Upload de templates .docx com campos dinâmicos.
+
+Mapeamento de campos para dados do caso.
+
+Geração de PDF automaticamente em eventos específicos:
+
+Quando o cliente aprova um caso → gerar notificação.
+
+Quando status muda para "Proposta aceita" → gerar acordo.
+
+Armazenamento e visualização do PDF no painel.
+
+Pastas envolvidas:
+
+src/server/routes/templates.ts
+
+src/server/services/pdf.ts
+
+src/server/utils/docx-parser.ts
+
+2. Integração com WhatsApp
+Objetivo: Centralizar e registrar interações de atendimento com as lojas.
+
+Funcionalidades:
+
+Webhook para receber mensagens de WhatsApp.
+
+Associação automática da mensagem a um caso.
+
+Interface para visualizar histórico e responder (via integração futura).
+
+Pastas envolvidas:
+
+src/server/routes/whatsapp.ts
+
+src/server/controllers/whatsapp.ts
+
+3. Integração com E-mail
+Objetivo: Enviar notificações extrajudiciais por e-mail automaticamente.
+
+Funcionalidades:
+
+Envio automático de e-mails com documento em anexo.
+
+Registro de cada envio no histórico do caso.
+
+Sistema de retry se falhar.
+
+Pastas envolvidas:
+
+src/server/services/email.ts
+
+src/server/routes/email.ts
+
+4. Tela de Histórico de Atendimento
+Objetivo: Centralizar todas as interações (WhatsApp, e-mail, telefone) em um único lugar.
+
+Funcionalidades:
+
+Registro manual e automático de interações.
+
+Filtros por tipo de contato, data e colaborador.
+
+Possibilidade de anexar mídia (prints, PDFs).
+
+Frontend: Nova aba dentro do detalhe do caso.
+
+5. Métricas e Dashboard em Tempo Real
+Objetivo: Visualizar o desempenho do time e dos casos em andamento.
+
+Funcionalidades:
+
+Total de casos ativos por marca e status.
+
+Casos concluídos no mês.
+
+Total recuperado por período.
+
+Dashboard geral (admin) e dashboard por cliente.
+
+Pastas envolvidas:
+
+src/server/routes/metrics.ts
+
+src/server/services/metrics.ts
