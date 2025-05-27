@@ -28,7 +28,8 @@ import {
   Calendar,
   Building,
   User,
-  Tag
+  Tag,
+  FileText
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
