@@ -16,8 +16,8 @@ import { Badge } from "@/components/ui/badge";
 
 const getPageTitle = (pathname: string) => {
   const routes: Record<string, string> = {
-    '/atendimento/central': 'Central de Atendimento',
-    '/atendimento': 'Pipeline de Atendimento',
+    '/atendimento/central': 'Atendimento',
+    '/atendimento': 'Pipeline',
     '/dashboard': 'Dashboard',
     '/prospeccao': 'Prospecção',
     '/kanban/verificacao': 'Verificação',
@@ -53,7 +53,7 @@ export default function TopBar() {
     <header className="bg-white border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          {!isPipelinePage && (
+          {!isPipelinePage ? (
             <>
               <h1 className="text-2xl font-bold text-primary">{pageTitle}</h1>
               <div className="relative">
@@ -64,6 +64,8 @@ export default function TopBar() {
                 />
               </div>
             </>
+          ) : (
+            <h1 className="text-2xl font-bold text-primary">{pageTitle}</h1>
           )}
         </div>
         <div className="flex items-center space-x-3">
