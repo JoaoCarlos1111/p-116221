@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, DialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { toast } from "@/components/ui/use-toast";
 import { 
   MessageSquare, 
@@ -215,10 +215,10 @@ export default function Integracoes() {
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>Desconectar WhatsApp</AlertDialogTitle>
-                      <DialogDescription>
+                      <AlertDialogDescription>
                         Tem certeza que deseja desconectar sua conta do WhatsApp? 
                         Você não receberá mais mensagens pelo sistema.
-                      </DialogDescription>
+                      </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancelar</AlertDialogCancel>
@@ -345,10 +345,10 @@ export default function Integracoes() {
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>Desconectar E-mail</AlertDialogTitle>
-                      <DialogDescription>
+                      <AlertDialogDescription>
                         Tem certeza que deseja desconectar sua conta de e-mail? 
                         Você não receberá mais e-mails pelo sistema.
-                      </DialogDescription>
+                      </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancelar</AlertDialogCancel>

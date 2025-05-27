@@ -139,6 +139,11 @@ function AppContent() {
                 <AtendimentoCaseDetails />
               </RouteGuard>
             } />
+            <Route path="/atendimento/integracoes" element={
+              <RouteGuard requiredDepartment={departments.ATENDIMENTO}>
+                <Integracoes />
+              </RouteGuard>
+            } />
             <Route path="/approvals" element={
               <RouteGuard requiredDepartment={departments.APROVACAO}>
                 <Approvals />
