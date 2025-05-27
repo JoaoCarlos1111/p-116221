@@ -3,6 +3,9 @@ import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { authMiddleware } from '../middleware/auth';
 import { MetricsService } from '../services/metrics';
+import { validate, ValidationSchemas } from '../middleware/validation';
+import { asyncHandler, createError } from '../middleware/errorHandler';
+import { requireDepartmentAccess, requireClientProfile } from '../middleware/security';
 
 const router = Router();
 
@@ -10,11 +13,16 @@ const router = Router();
 router.use(authMiddleware);
 
 // GET /api/metrics - Endpoint principal que identifica o perfil automaticamente
-router.get('/', async (req, res) => {
-  try {
+router.get('/', 
+  validate({ query: ValidationSchemas.getMetrics.query }),
+  asyncHandler(async (req, res) => {
     const prisma = req.prisma as PrismaClient;
-    const user = req.user;
+    const user = req.user!;
     const { dateFrom, dateTo, brand, status } = req.query;
+
+    if (!user) {
+      throw createError.unauthorized('User not authenticated');
+    }
 
     const metricsService = new MetricsService(prisma);
     const filters = {
@@ -32,10 +40,10 @@ router.get('/', async (req, res) => {
       metrics = await metricsService.getAdminMetrics(filters);
     } else if (!user.isClient) {
       // Analistas internos por setor
-      metrics = await metricsService.getAnalystMetrics(user.id, user.mainDepartment, filters);
+      metrics = await metricsService.getAnalystMetrics(user.userId, user.mainDepartment, filters);
     } else {
       // Clientes por perfil
-      metrics = await metricsService.getClientMetrics(user.id, user.clientProfile || 'comum', filters);
+      metrics = await metricsService.getClientMetrics(user.userId, user.clientProfile || 'comum', filters);
     }
 
     res.json({
@@ -48,14 +56,8 @@ router.get('/', async (req, res) => {
         clientProfile: user.clientProfile
       }
     });
-  } catch (error) {
-    console.error('Error fetching metrics:', error);
-    res.status(500).json({
-      error: 'Failed to fetch metrics',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    });
-  }
-});
+  })
+);
 
 // GET /api/metrics/dashboard/:type - Endpoint específico por tipo de dashboard
 router.get('/dashboard/:type', async (req, res) => {
