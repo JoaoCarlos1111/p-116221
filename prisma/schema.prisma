@@ -25,6 +25,7 @@ model User {
   cases           Case[]
   departments     UserDepartment[]
   brands          UserBrand[]
+  eventLogs       EventLog[]
 }
 
 model Department {
@@ -161,4 +162,25 @@ model Interaction {
   case Case? @relation(fields: [caseId], references: [id])
 
   @@map("interactions")
+}
+
+model EventLog {
+  id          String   @id @default(cuid())
+  timestamp   DateTime @default(now())
+  eventType   String   // status_changed, message_sent, document_generated, approval_requested, etc.
+  entityType  String   // case, document, message, user, payment, etc.
+  entityId    String
+  performedBy String?  // UserId or null for system events
+  payload     Json     // Event details and context
+  processed   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  user User? @relation(fields: [performedBy], references: [id])
+
+  @@index([eventType])
+  @@index([entityType])
+  @@index([entityId])
+  @@index([processed])
+  @@index([timestamp])
+  @@map("event_logs")
 }

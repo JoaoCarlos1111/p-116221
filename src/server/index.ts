@@ -17,6 +17,7 @@ import whatsappRoutes from './routes/whatsapp';
 import interactionsRoutes from './routes/interactions';
 import metricsRoutes from './routes/metrics';
 import { notFoundHandler, errorHandler } from './middleware/error';
+import eventsRoutes from './routes/events';
 
 const app = express();
 const server = createServer(app);
@@ -70,11 +71,13 @@ app.use('/api/templates', authMiddleware, templatesRoutes);
 app.use('/api/email', emailRoutes);
 app.use('/api/whatsapp', whatsappRoutes);
 app.use('/api/interactions', interactionsRoutes);
+app.use('/api/metrics', metricsRoutes);
+app.use('/api/events', eventsRoutes);
 app.use('/api/cases', casesRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/payments', paymentsRoutes);
 app.use('/api/brands', brandsRoutes);
-app.use('/api/metrics', metricsRoutes);
+
 
 // Error handling middlewares (devem ser os últimos)
 app.use(notFoundHandler);

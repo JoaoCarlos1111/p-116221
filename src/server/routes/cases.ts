@@ -1,4 +1,3 @@
-
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { authMiddleware } from '../middleware/auth';
@@ -15,7 +14,7 @@ router.get('/', async (req, res) => {
     const { status, brand, assignedTo, page = 1, limit = 10 } = req.query;
 
     const filters: any = {};
-    
+
     if (status) filters.status = status;
     if (brand) filters.brandId = brand;
     if (assignedTo) filters.userId = assignedTo;
@@ -157,6 +156,21 @@ router.post('/', async (req, res) => {
       }
     });
 
+    // Registrar evento de criação de caso
+    await registerEvent({
+      eventType: EventTypes.CASE_CREATED,
+      entityType: EntityTypes.CASE,
+      entityId: newCase.id,
+      performedBy: userId,
+      payload: {
+        caseCode: newCase.code,
+        debtorName: newCase.debtorName,
+        totalAmount: newCase.totalAmount,
+        brandId: newCase.brandId,
+        status: newCase.status
+      }
+    });
+
     res.status(201).json({
       success: true,
       data: newCase
@@ -186,7 +200,7 @@ router.put('/:id', async (req, res) => {
     } = req.body;
 
     const updateData: any = {};
-    
+
     if (debtorName !== undefined) updateData.debtorName = debtorName;
     if (totalAmount !== undefined) updateData.totalAmount = Number(totalAmount);
     if (currentPayment !== undefined) updateData.currentPayment = Number(currentPayment);
@@ -264,5 +278,49 @@ router.delete('/:id', async (req, res) => {
     });
   }
 });
+
+// Enum para tipos de eventos
+enum EventTypes {
+  CASE_CREATED = 'case_created',
+  CASE_UPDATED = 'case_updated',
+  CASE_DELETED = 'case_deleted',
+  PAYMENT_RECEIVED = 'payment_received',
+  MESSAGE_SENT = 'message_sent',
+}
+
+// Enum para tipos de entidades
+enum EntityTypes {
+  CASE = 'case',
+  PAYMENT = 'payment',
+  MESSAGE = 'message',
+}
+
+// Função para registrar eventos
+async function registerEvent(event: {
+  eventType: EventTypes;
+  entityType: EntityTypes;
+  entityId: string;
+  performedBy: string | null;
+  payload: any;
+}) {
+  const prisma = new PrismaClient(); // Instanciar Prisma dentro da função
+  try {
+    await prisma.eventLog.create({
+      data: {
+        eventType: event.eventType,
+        entityType: event.entityType,
+        entityId: event.entityId,
+        performedBy: event.performedBy,
+        payload: event.payload,
+        processed: false,
+      },
+    });
+    console.log(`Event registered: ${event.eventType} for entity ${event.entityId}`);
+  } catch (error) {
+    console.error('Error registering event:', error);
+  } finally {
+    await prisma.$disconnect(); // Desconectar após a operação
+  }
+}
 
 export default router;
