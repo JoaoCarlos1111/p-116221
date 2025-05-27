@@ -156,7 +156,7 @@ export default function Integracoes() {
           <MessageSquare className="h-6 w-6 text-blue-600" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">🔗 Integrações de Atendimento</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Integrações de Atendimento</h1>
           <p className="text-muted-foreground">Conecte seus canais de comunicação para centralizar o atendimento</p>
         </div>
       </div>
@@ -169,7 +169,7 @@ export default function Integracoes() {
               <div className="p-2 bg-green-100 rounded-lg">
                 <Smartphone className="h-6 w-6 text-green-600" />
               </div>
-              📲 WhatsApp Business
+              WhatsApp Business
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -295,7 +295,7 @@ export default function Integracoes() {
               <div className="p-2 bg-blue-100 rounded-lg">
                 <Mail className="h-6 w-6 text-blue-600" />
               </div>
-              📧 E-mail Corporativo
+              E-mail Corporativo
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
