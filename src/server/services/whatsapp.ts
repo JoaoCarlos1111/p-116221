@@ -20,7 +20,10 @@ class WhatsAppService {
   }
 
   async initializeSession(userId: string): Promise<string> {
+    console.log(`🚀 Initializing WhatsApp session for user: ${userId}`);
+    
     if (this.sessions.has(userId)) {
+      console.log(`♻️ Disconnecting existing session for user: ${userId}`);
       await this.disconnectSession(userId);
     }
 
@@ -30,7 +33,15 @@ class WhatsAppService {
       }),
       puppeteer: {
         headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        args: [
+          '--no-sandbox', 
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas',
+          '--no-first-run',
+          '--no-zygote',
+          '--disable-gpu'
+        ]
       }
     });
 
@@ -43,22 +54,44 @@ class WhatsAppService {
     // QR Code generation
     client.on('qr', async (qr) => {
       try {
-        const qrCodeDataURL = await QRCode.toDataURL(qr);
+        console.log(`📱 QR Code generated for user: ${userId}`);
+        const qrCodeDataURL = await QRCode.toDataURL(qr, {
+          width: 256,
+          margin: 2,
+          color: {
+            dark: '#000000',
+            light: '#FFFFFF'
+          }
+        });
         session.qrCode = qrCodeDataURL;
+        
+        console.log(`📡 Emitting QR Code to room: user_${userId}`);
         this.io?.to(`user_${userId}`).emit('whatsapp_qr', { qrCode: qrCodeDataURL });
       } catch (error) {
-        console.error('Error generating QR code:', error);
+        console.error('❌ Error generating QR code:', error);
       }
     });
 
     // Ready event
     client.on('ready', () => {
+      console.log(`✅ WhatsApp client ready for user: ${userId}`);
       session.isReady = true;
       session.phone = client.info?.wid?.user;
+      
       this.io?.to(`user_${userId}`).emit('whatsapp_connected', {
         phone: session.phone,
         timestamp: new Date().toISOString()
       });
+    });
+
+    // Authentication event
+    client.on('authenticated', () => {
+      console.log(`🔐 WhatsApp authenticated for user: ${userId}`);
+    });
+
+    // Loading screen event
+    client.on('loading_screen', (percent, message) => {
+      console.log(`⏳ Loading: ${percent}% - ${message}`);
     });
 
     // Message received
@@ -73,18 +106,26 @@ class WhatsAppService {
         isGroup: message.isGroup
       };
 
-      // Store message in database here
+      console.log(`📨 New message for user ${userId}:`, messageData);
       this.io?.to(`user_${userId}`).emit('whatsapp_message', messageData);
     });
 
     // Disconnected event
     client.on('disconnected', (reason) => {
+      console.log(`❌ WhatsApp disconnected for user ${userId}:`, reason);
       session.isReady = false;
       this.io?.to(`user_${userId}`).emit('whatsapp_disconnected', { reason });
     });
 
     this.sessions.set(userId, session);
-    await client.initialize();
+    
+    try {
+      await client.initialize();
+      console.log(`✅ WhatsApp client initialized for user: ${userId}`);
+    } catch (error) {
+      console.error(`❌ Error initializing WhatsApp client for user ${userId}:`, error);
+      throw error;
+    }
 
     return session.qrCode || '';
   }

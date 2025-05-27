@@ -53,16 +53,24 @@ export default function Integracoes() {
   });
 
   useEffect(() => {
+    console.log('🚀 Initializing Integracoes component...');
+    
     // Connect to Socket.IO
     const socket = socketService.connect('user_1');
 
     // WhatsApp events
     socket.on('whatsapp_qr', (data) => {
+      console.log('📱 Received QR Code:', data);
       setQRCodeData(data.qrCode);
       setShowQRCode(true);
+      toast({
+        title: "QR Code gerado",
+        description: "Escaneie o QR Code com seu WhatsApp.",
+      });
     });
 
     socket.on('whatsapp_connected', (data) => {
+      console.log('✅ WhatsApp connected:', data);
       setIntegrationStatus(prev => ({
         ...prev,
         whatsapp: {
@@ -73,13 +81,15 @@ export default function Integracoes() {
         }
       }));
       setShowQRCode(false);
+      setQRCodeData('');
       toast({
         title: "WhatsApp conectado",
         description: "Sua conta do WhatsApp foi conectada com sucesso!",
       });
     });
 
-    socket.on('whatsapp_disconnected', () => {
+    socket.on('whatsapp_disconnected', (data) => {
+      console.log('❌ WhatsApp disconnected:', data);
       setIntegrationStatus(prev => ({
         ...prev,
         whatsapp: {
@@ -87,15 +97,17 @@ export default function Integracoes() {
           messagesCount: 0
         }
       }));
+      setShowQRCode(false);
+      setQRCodeData('');
     });
 
     socket.on('whatsapp_message', (data) => {
-      // Handle new WhatsApp message
-      console.log('New WhatsApp message:', data);
+      console.log('📨 New WhatsApp message:', data);
     });
 
     // Email events
     socket.on('email_connected', (data) => {
+      console.log('✅ Email connected:', data);
       setIntegrationStatus(prev => ({
         ...prev,
         email: {
@@ -123,15 +135,23 @@ export default function Integracoes() {
     });
 
     socket.on('email_received', (data) => {
-      // Handle new email
-      console.log('New email:', data);
+      console.log('📧 New email:', data);
     });
+
+    // Connection status check
+    const checkConnection = setInterval(() => {
+      if (!socketService.isConnected()) {
+        console.warn('⚠️ Socket not connected, attempting reconnection...');
+      }
+    }, 5000);
 
     // Load initial status
     loadInitialStatus();
 
     return () => {
-      socketService.disconnect();
+      clearInterval(checkConnection);
+      // Don't disconnect on unmount to keep the connection alive
+      // socketService.disconnect();
     };
   }, []);
 
@@ -162,13 +182,33 @@ export default function Integracoes() {
 
   const handleWhatsAppConnect = async () => {
     try {
+      console.log('🔄 Connecting WhatsApp...');
+      
+      if (!socketService.isConnected()) {
+        console.warn('⚠️ Socket not connected, reconnecting...');
+        socketService.connect('user_1');
+        
+        // Wait a bit for connection
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
+
       const response = await whatsappApi.connect();
+      console.log('📡 WhatsApp API response:', response.data);
+      
       if (response.data.success) {
         if (response.data.qrCode) {
+          console.log('✅ QR Code received from API');
           setQRCodeData(response.data.qrCode);
           setShowQRCode(true);
+        } else {
+          console.log('⏳ Waiting for QR Code via Socket...');
+          toast({
+            title: "Aguarde",
+            description: "Gerando QR Code...",
+          });
         }
       } else {
+        console.error('❌ WhatsApp API error:', response.data);
         toast({
           title: "Erro",
           description: "Não foi possível conectar o WhatsApp.",
@@ -176,10 +216,10 @@ export default function Integracoes() {
         });
       }
     } catch (error) {
-      console.error('Error connecting WhatsApp:', error);
+      console.error('❌ Error connecting WhatsApp:', error);
       toast({
         title: "Erro",
-        description: "Erro ao conectar WhatsApp.",
+        description: `Erro ao conectar WhatsApp: ${error.message}`,
         variant: "destructive"
       });
     }

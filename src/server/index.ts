@@ -1,37 +1,29 @@
 import express from 'express';
-import cors from 'cors';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
-import integrationsRouter, { initializeIntegrationServices } from './routes/integrations';
-import templatesRouter from './routes/templates';
+import cors from 'cors';
+import integrationRoutes, { initializeIntegrationServices } from './routes/integrations';
+import templateRoutes from './routes/templates';
 
 const app = express();
 const server = createServer(app);
+
+// Socket.IO setup
 const io = new SocketIOServer(server, {
   cors: {
-    origin: ["http://localhost:5000", "http://0.0.0.0:5000"],
+    origin: "*",
     methods: ["GET", "POST"],
-    credentials: true
-  }
+    credentials: false
+  },
+  transports: ['websocket', 'polling']
 });
 
-app.use(cors({
-  origin: ["http://localhost:5000", "http://0.0.0.0:5000"],
-  credentials: true
-}));
+// Middleware
+app.use(cors());
 app.use(express.json());
 
-// Initialize services with Socket.IO
+// Initialize integration services with Socket.IO
 initializeIntegrationServices(io);
-
-// Routes
-app.use('/api/integrations', integrationsRouter);
-app.use('/api/templates', templatesRouter);
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
 
 // Socket.IO connection handling
 io.on('connection', (socket) => {
@@ -39,7 +31,10 @@ io.on('connection', (socket) => {
 
   socket.on('join_user', (userId) => {
     socket.join(`user_${userId}`);
-    console.log(`User ${userId} joined room`);
+    console.log(`User ${userId} joined room: user_${userId}`);
+
+    // Send connection confirmation
+    socket.emit('connected', { userId, socketId: socket.id });
   });
 
   socket.on('disconnect', () => {
@@ -47,7 +42,17 @@ io.on('connection', (socket) => {
   });
 });
 
+// Routes
+app.use('/api/integrations', integrationRoutes);
+app.use('/api/templates', templateRoutes);
+
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Backend server running on http://0.0.0.0:${PORT}`);
+  console.log(`Server running on http://0.0.0.0:${PORT}`);
+  console.log(`Socket.IO server ready`);
 });
