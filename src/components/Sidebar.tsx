@@ -287,7 +287,7 @@ export default function Sidebar() {
           )}
 
         {/* Menu Analista de Atendimento */}
-        {user?.department === 'atendimento' && (
+        {(user?.department === 'atendimento' || user?.mainDepartment === 'atendimento') && (
           <>
             <div className={cn(
               "px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider transition-all duration-300",
