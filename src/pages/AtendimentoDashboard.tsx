@@ -219,7 +219,7 @@ export default function AtendimentoDashboard() {
 
       {/* KPIs Operacionais */}
       <div>
-        <h2 className="text-xl font-semibold mb-4">📊 KPIs Operacionais</h2>
+        <h2 className="text-xl font-semibold mb-4">KPIs Operacionais</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <Card className="border-l-4 border-l-blue-500">
             <CardContent className="p-6 text-center">
@@ -270,7 +270,7 @@ export default function AtendimentoDashboard() {
 
       {/* Alertas Estratégicos - Posicionados em destaque */}
       <div>
-        <h2 className="text-xl font-semibold mb-4">🚨 Alertas Estratégicos</h2>
+        <h2 className="text-xl font-semibold mb-4">Alertas Estratégicos</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {alertas.map((alerta) => {
             const IconeAlerta = alerta.icone;
@@ -310,7 +310,7 @@ export default function AtendimentoDashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Target className="h-5 w-5" />
-              🎯 Painel de Metas
+              Painel de Metas
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -383,7 +383,7 @@ export default function AtendimentoDashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="h-5 w-5" />
-              🔮 Forecast Financeiro
+              Forecast Financeiro
             </CardTitle>
             <p className="text-sm text-muted-foreground">
               Projeção de receita baseada em casos com "Proposta aceita"
