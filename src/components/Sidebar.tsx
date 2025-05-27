@@ -184,7 +184,10 @@ export default function Sidebar() {
         {/* Menu Cliente - Gestor */}
         {user?.isClient && user?.clientProfile === 'gestor' && (
           <>
-            <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <div className={cn(
+              "px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider transition-all duration-300",
+              isCollapsed && "hidden"
+            )}>
               Gestão Executiva
             </div>
 
