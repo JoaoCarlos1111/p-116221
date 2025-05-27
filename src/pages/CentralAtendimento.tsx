@@ -213,6 +213,7 @@ export default function CentralAtendimento() {
     nome: string;
     conteudo?: string;
   } | null>(null);
+  const [provaSelecionada, setProvaSelecionada] = useState<string>('');
 
   useEffect(() => {
     if (atendimentos.length > 0) {
@@ -486,6 +487,33 @@ export default function CentralAtendimento() {
     ));
 
     alert(`📎 Documento "${tipoDocumento}" enviado para ${atendimentoSelecionado.cliente}`);
+  };
+
+  const handleEnviarProvaEspecifica = (nomeProva: string) => {
+    if (!atendimentoSelecionado) return;
+
+    const novaMensagemObj: Mensagem = {
+      id: `msg-${Date.now()}`,
+      remetente: 'analista',
+      nome: 'Sistema',
+      conteudo: `📎 Prova enviada: ${nomeProva}`,
+      timestamp: new Date().toISOString(),
+      anexos: [nomeProva],
+      lida: true
+    };
+
+    setAtendimentos(prev => prev.map(atendimento => 
+      atendimento.id === atendimentoSelecionado.id 
+        ? {
+            ...atendimento,
+            mensagens: [...atendimento.mensagens, novaMensagemObj],
+            ultimaMensagem: `Prova enviada: ${nomeProva}`,
+            dataUltimaInteracao: new Date().toISOString()
+          }
+        : atendimento
+    ));
+
+    alert(`📎 Prova "${nomeProva}" enviada para ${atendimentoSelecionado.cliente}`);
   };
 
   return (
@@ -1092,18 +1120,48 @@ export default function CentralAtendimento() {
               <div className="space-y-2">
                 {documentoSelecionado?.tipo === 'Provas do Caso' ? (
                   <div className="space-y-3">
-                    {mockProvasCaso.map((prova, index) => (
-                      <div key={prova.id} className="flex items-center justify-between p-2 border rounded">
-                        <div className="flex items-center gap-2">
-                          <FileText className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-sm">{prova.nome}</span>
-                          <Badge variant="outline" className="text-xs">{prova.tipo}</Badge>
+                    <div className="mb-4">
+                      <Label className="text-sm font-medium">Selecione a prova para enviar:</Label>
+                      <Select value={provaSelecionada} onValueChange={setProvaSelecionada}>
+                        <SelectTrigger className="mt-2">
+                          <SelectValue placeholder="Escolha uma prova específica" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {mockProvasCaso.map((prova) => (
+                            <SelectItem key={prova.id} value={prova.id}>
+                              <div className="flex items-center gap-2">
+                                <FileText className="h-4 w-4 text-muted-foreground" />
+                                <span>{prova.nome}</span>
+                                <Badge variant="outline" className="text-xs ml-2">{prova.tipo}</Badge>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Todas as provas disponíveis:</Label>
+                      {mockProvasCaso.map((prova, index) => (
+                        <div 
+                          key={prova.id} 
+                          className={cn(
+                            "flex items-center justify-between p-2 border rounded cursor-pointer transition-colors",
+                            provaSelecionada === prova.id ? "bg-blue-50 border-blue-200" : "hover:bg-gray-50"
+                          )}
+                          onClick={() => setProvaSelecionada(prova.id)}
+                        >
+                          <div className="flex items-center gap-2">
+                            <FileText className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-sm">{prova.nome}</span>
+                            <Badge variant="outline" className="text-xs">{prova.tipo}</Badge>
+                          </div>
+                          <Button variant="ghost" size="sm">
+                            <ExternalLink className="h-3 w-3" />
+                          </Button>
                         </div>
-                        <Button variant="ghost" size="sm">
-                          <ExternalLink className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 ) : (
                   <div className="bg-gray-50 p-4 rounded text-sm">
@@ -1117,18 +1175,33 @@ export default function CentralAtendimento() {
               <div className="flex-1">
                 <span className="text-sm font-medium">Enviar para o cliente?</span>
                 <p className="text-xs text-muted-foreground">
-                  O documento será anexado à conversa automaticamente
+                  {documentoSelecionado?.tipo === 'Provas do Caso' 
+                    ? (provaSelecionada 
+                        ? `A prova selecionada será anexada à conversa` 
+                        : 'Selecione uma prova específica para enviar')
+                    : 'O documento será anexado à conversa automaticamente'
+                  }
                 </p>
               </div>
               <Button 
                 size="sm"
+                disabled={documentoSelecionado?.tipo === 'Provas do Caso' && !provaSelecionada}
                 onClick={() => {
                   if (documentoSelecionado) {
                     const tipoDoc = documentoSelecionado.tipo.toLowerCase().includes('notificação') ? 'notificacao' :
                                    documentoSelecionado.tipo.toLowerCase().includes('acordo') ? 'acordo' :
                                    documentoSelecionado.tipo.toLowerCase().includes('provas') ? 'provas' : 'procuracao';
-                    handleEnviarDocumento(tipoDoc);
+                    
+                    if (documentoSelecionado.tipo === 'Provas do Caso' && provaSelecionada) {
+                      // Enviar prova específica
+                      const provaEscolhida = mockProvasCaso.find(p => p.id === provaSelecionada);
+                      handleEnviarProvaEspecifica(provaEscolhida?.nome || 'Prova selecionada');
+                    } else {
+                      handleEnviarDocumento(tipoDoc);
+                    }
+                    
                     setShowDocumentModal(false);
+                    setProvaSelecionada(''); // Reset da seleção
                   }
                 }}
               >
@@ -1138,7 +1211,10 @@ export default function CentralAtendimento() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDocumentModal(false)}>
+            <Button variant="outline" onClick={() => {
+              setShowDocumentModal(false);
+              setProvaSelecionada(''); // Reset da seleção
+            }}>
               Fechar
             </Button>
           </DialogFooter>
