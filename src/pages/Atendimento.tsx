@@ -143,7 +143,7 @@ export default function Atendimento() {
   return (
     <div className="p-6">
       <div className="flex flex-col gap-6 mb-6">
-        <h1 className="text-2xl font-bold">Atendimento - Kanban</h1>
+        <h1 className="text-2xl font-bold">Pipeline</h1>
         <div className="flex gap-4">
           <div className="relative flex-1">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />

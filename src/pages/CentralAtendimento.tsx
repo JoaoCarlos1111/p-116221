@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -197,7 +196,7 @@ export default function CentralAtendimento() {
     const matchBusca = busca === '' || 
       atendimento.cliente.toLowerCase().includes(busca.toLowerCase()) ||
       atendimento.assunto.toLowerCase().includes(busca.toLowerCase());
-    
+
     return matchStatus && matchPrioridade && matchCanal && matchBusca;
   });
 
@@ -283,7 +282,7 @@ export default function CentralAtendimento() {
       <div className="bg-white border-b p-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-primary">Central de Atendimento Integrada</h1>
+            <h1 className="text-2xl font-bold text-primary">Atendimento</h1>
             <p className="text-muted-foreground">Gerencie atendimentos de WhatsApp, e-mail e telefone</p>
           </div>
           <div className="flex items-center gap-2">
@@ -299,7 +298,7 @@ export default function CentralAtendimento() {
 
       {/* Main Content - 3 Colunas */}
       <div className="flex-1 flex overflow-hidden">
-        
+
         {/* Coluna 1: Lista de Atendimentos */}
         <div className="w-80 bg-white border-r flex flex-col">
           {/* Filtros */}
@@ -313,7 +312,7 @@ export default function CentralAtendimento() {
                 className="pl-10"
               />
             </div>
-            
+
             <div className="grid grid-cols-2 gap-2">
               <Select value={filtroStatus} onValueChange={setFiltroStatus}>
                 <SelectTrigger className="h-8">
@@ -375,15 +374,15 @@ export default function CentralAtendimento() {
                           )}
                         </div>
                       </div>
-                      
+
                       <p className="text-sm text-muted-foreground truncate">
                         {atendimento.assunto}
                       </p>
-                      
+
                       <p className="text-xs text-muted-foreground truncate">
                         {atendimento.ultimaMensagem}
                       </p>
-                      
+
                       <div className="flex items-center justify-between text-xs text-muted-foreground">
                         <span>{formatarTempo(atendimento.dataUltimaInteracao)}</span>
                         {atendimento.casoVinculado && (
@@ -533,7 +532,7 @@ export default function CentralAtendimento() {
             <>
               <div className="p-4 border-b">
                 <h3 className="font-semibold mb-3">Detalhes do Caso</h3>
-                
+
                 {atendimentoSelecionado.casoVinculado ? (
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
@@ -542,14 +541,14 @@ export default function CentralAtendimento() {
                         <ExternalLink className="h-3 w-3" />
                       </Button>
                     </div>
-                    
+
                     <Card className="p-3">
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="font-medium">{mockCaso.id}</span>
                           <Badge variant="outline">{mockCaso.status}</Badge>
                         </div>
-                        
+
                         <div className="space-y-1 text-sm">
                           <div className="flex items-center gap-2">
                             <Building className="h-3 w-3 text-muted-foreground" />
@@ -568,9 +567,9 @@ export default function CentralAtendimento() {
                             <span>R$ {mockCaso.valorPotencial.toLocaleString('pt-BR')}</span>
                           </div>
                         </div>
-                        
+
                         <Separator />
-                        
+
                         <div>
                           <span className="text-sm font-medium">Etapa atual:</span>
                           <p className="text-sm text-muted-foreground">{mockCaso.etapaAtual}</p>
@@ -594,23 +593,23 @@ export default function CentralAtendimento() {
               {/* Ações Rápidas */}
               <div className="p-4 space-y-3">
                 <h4 className="font-medium text-sm">Ações Rápidas</h4>
-                
+
                 <div className="space-y-2">
                   <Button variant="outline" size="sm" className="w-full justify-start">
                     <CheckCircle className="h-3 w-3 mr-2" />
                     Marcar como Resolvido
                   </Button>
-                  
+
                   <Button variant="outline" size="sm" className="w-full justify-start">
                     <AlertTriangle className="h-3 w-3 mr-2" />
                     Marcar como Urgente
                   </Button>
-                  
+
                   <Button variant="outline" size="sm" className="w-full justify-start">
                     <Archive className="h-3 w-3 mr-2" />
                     Encaminhar para Financeiro
                   </Button>
-                  
+
                   <Button variant="outline" size="sm" className="w-full justify-start">
                     <Clock className="h-3 w-3 mr-2" />
                     Agendar Follow-up

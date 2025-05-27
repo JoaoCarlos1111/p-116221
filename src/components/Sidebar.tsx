@@ -301,7 +301,7 @@ export default function Sidebar() {
               <span className={cn(
                 "transition-all duration-300",
                 isCollapsed && "hidden"
-              )}>Central de Atendimento</span>
+              )}>Atendimento</span>
             </NavLink>
 
             <NavLink to="/atendimento" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
@@ -309,7 +309,7 @@ export default function Sidebar() {
               <span className={cn(
                 "transition-all duration-300",
                 isCollapsed && "hidden"
-              )}>Kanban de Casos</span>
+              )}>Pipeline</span>
             </NavLink>
           </>
         )}
