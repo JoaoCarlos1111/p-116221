@@ -5,6 +5,7 @@ import { Server as SocketIOServer } from 'socket.io';
 import integrationsRoutes from './routes/integrations';
 import templatesRoutes from './routes/templates';
 import WhatsAppService from './services/whatsapp';
+import prisma from './lib/prisma';
 
 const app = express();
 const server = createServer(app);
@@ -44,6 +45,7 @@ app.use((req, res, next) => {
   req.whatsappService = whatsappService;
   req.emailService = emailService;
   req.io = io;
+  req.prisma = prisma;
   next();
 });
 
@@ -52,8 +54,22 @@ app.use('/api/integrations', integrationsRoutes);
 app.use('/api/templates', templatesRoutes);
 
 // Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+app.get('/health', async (req, res) => {
+  try {
+    await prisma.user.count();
+    res.json({ 
+      status: 'ok', 
+      timestamp: new Date().toISOString(),
+      database: 'connected'
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      status: 'error', 
+      timestamp: new Date().toISOString(),
+      database: 'disconnected',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
 });
 
 // API test endpoint
