@@ -219,7 +219,10 @@ export default function AtendimentoDashboard() {
 
       {/* KPIs Operacionais */}
       <div>
-        <h2 className="text-xl font-semibold mb-4">KPIs Operacionais</h2>
+        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+          <BarChart3 className="h-5 w-5" />
+          KPIs Operacionais
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <Card className="border-l-4 border-l-blue-500">
             <CardContent className="p-6 text-center">
@@ -270,7 +273,10 @@ export default function AtendimentoDashboard() {
 
       {/* Alertas Estratégicos - Posicionados em destaque */}
       <div>
-        <h2 className="text-xl font-semibold mb-4">Alertas Estratégicos</h2>
+        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+          <AlertTriangle className="h-5 w-5" />
+          Alertas Estratégicos
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {alertas.map((alerta) => {
             const IconeAlerta = alerta.icone;
