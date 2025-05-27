@@ -1,44 +1,43 @@
 import express from 'express';
 import cors from 'cors';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
-import templatesRouter from './routes/templates.js';
-import integrationsRouter, { initializeIntegrationServices } from './routes/integrations.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import integrationsRouter, { initializeIntegrationServices } from './routes/integrations';
+import templatesRouter from './routes/templates';
 
 const app = express();
 const server = createServer(app);
 const io = new SocketIOServer(server, {
   cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
+    origin: ["http://localhost:5000", "http://0.0.0.0:5000"],
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 
-const port = 3001;
-
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:5000", "http://0.0.0.0:5000"],
+  credentials: true
+}));
 app.use(express.json());
 
-// Serve static files from uploads directory
-app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
-
-// Initialize integration services with Socket.IO
+// Initialize services with Socket.IO
 initializeIntegrationServices(io);
 
 // Routes
-app.use('/api/templates', templatesRouter);
 app.use('/api/integrations', integrationsRouter);
+app.use('/api/templates', templatesRouter);
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
 
 // Socket.IO connection handling
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 
-  socket.on('join_user_room', (userId) => {
+  socket.on('join_user', (userId) => {
     socket.join(`user_${userId}`);
     console.log(`User ${userId} joined room`);
   });
@@ -48,6 +47,7 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(port, '0.0.0.0', () => {
-  console.log(`Server running at http://0.0.0.0:${port}`);
+const PORT = process.env.PORT || 3001;
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Backend server running on http://0.0.0.0:${PORT}`);
 });

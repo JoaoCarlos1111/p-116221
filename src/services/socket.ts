@@ -1,21 +1,26 @@
-
 import { io, Socket } from 'socket.io-client';
 
 class SocketService {
   private socket: Socket | null = null;
-  private userId: string | null = null;
 
-  connect(userId: string) {
+  connect(userId: string): Socket {
     if (this.socket?.connected) {
-      this.disconnect();
+      return this.socket;
     }
 
-    this.userId = userId;
-    this.socket = io('http://localhost:3001');
+    this.socket = io('http://0.0.0.0:3001', {
+      transports: ['websocket', 'polling'],
+      timeout: 20000,
+      forceNew: true
+    });
 
     this.socket.on('connect', () => {
       console.log('Connected to server');
-      this.socket?.emit('join_user_room', userId);
+      this.socket?.emit('join_user', userId);
+    });
+
+    this.socket.on('connect_error', (error) => {
+      console.error('Connection error:', error);
     });
 
     this.socket.on('disconnect', () => {
@@ -25,27 +30,11 @@ class SocketService {
     return this.socket;
   }
 
-  disconnect() {
+  disconnect(): void {
     if (this.socket) {
       this.socket.disconnect();
       this.socket = null;
     }
-  }
-
-  on(event: string, callback: (data: any) => void) {
-    if (this.socket) {
-      this.socket.on(event, callback);
-    }
-  }
-
-  off(event: string) {
-    if (this.socket) {
-      this.socket.off(event);
-    }
-  }
-
-  getSocket() {
-    return this.socket;
   }
 }
 

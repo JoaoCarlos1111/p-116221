@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3001/api/integrations';
+const API_BASE_URL = 'http://0.0.0.0:3001/api/integrations';
 
 // Mock user ID - replace with actual auth
 const getUserId = () => 'user_1';
@@ -10,7 +10,8 @@ const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'user-id': getUserId()
-  }
+  },
+  timeout: 10000
 });
 
 export const whatsappApi = {

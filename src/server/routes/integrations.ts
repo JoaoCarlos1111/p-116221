@@ -1,19 +1,21 @@
-
 import { Router } from 'express';
-import WhatsAppService from '../services/whatsapp.js';
-import EmailService from '../services/email.js';
+import WhatsAppService from '../services/whatsapp';
+import EmailService from '../services/email';
 
 const router = Router();
 
-// Mock user ID - replace with actual auth middleware
-const getCurrentUserId = (req: any) => req.headers['user-id'] || 'user_1';
-
+// Services will be initialized when the server starts
 let whatsappService: WhatsAppService;
 let emailService: EmailService;
 
 export const initializeIntegrationServices = (io: any) => {
   whatsappService = new WhatsAppService(io);
   emailService = new EmailService(io);
+};
+
+// Helper function to get user ID from request
+const getCurrentUserId = (req: any): string => {
+  return req.headers['user-id'] || 'user_1';
 };
 
 // WhatsApp routes
