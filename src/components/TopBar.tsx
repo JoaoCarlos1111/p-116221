@@ -47,7 +47,7 @@ export default function TopBar() {
     window.location.href = '/login';
   };
 
-  const isPipelinePage = location.pathname === '/atendimento';
+  const isPipelinePage = location.pathname === '/atendimento/pipeline' || location.pathname === '/atendimento/central';
 
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-4">
