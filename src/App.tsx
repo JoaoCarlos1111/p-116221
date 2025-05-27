@@ -45,16 +45,21 @@ import GestorUsuarios from './pages/client/GestorUsuarios';
 import FinanceiroDashboard from './pages/client/FinanceiroDashboard';
 import NewTemplate from './pages/NewTemplate';
 import CasesHistory from './pages/client/CasesHistory';
+import TelaFixa from './pages/TelaFixa';
 
 function AppContent() {
   const location = useLocation();
+  
+  // Defina aqui as rotas que não devem ter sidebar
+  const routesWithoutSidebar = ['/login', '/tela-fixa'];
+  const shouldShowSidebar = !routesWithoutSidebar.includes(location.pathname);
 
   return (
     <div className="flex h-screen bg-background">
-      {location.pathname !== '/login' && <Sidebar />}
-      <div className="flex-1 flex flex-col">
-        {location.pathname !== '/login' && <TopBar />}
-        <main className="flex-1 overflow-y-auto p-8">
+      {shouldShowSidebar && <Sidebar />}
+      <div className={`flex flex-col ${shouldShowSidebar ? 'flex-1' : 'w-full'}`}>
+        {shouldShowSidebar && <TopBar />}
+        <main className={`flex-1 overflow-y-auto ${shouldShowSidebar ? 'p-8' : 'p-0'}`}>
           <Routes>
             <Route path="/login" element={<InternalLogin />} />
             <Route path="/" element={<Navigate to="/login" replace />} />
@@ -277,6 +282,7 @@ function AppContent() {
               } />
               <Route path="/case-history/:id" element={<CaseHistoryDetails />} />
               <Route path="/client/casos/historico" element={<CasesHistory />} />
+            <Route path="/tela-fixa" element={<TelaFixa />} />
           </Routes>
         </main>
       </div>
