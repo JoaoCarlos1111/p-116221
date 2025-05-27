@@ -42,6 +42,8 @@ export class AuthService {
 
   static async login(email: string, password: string): Promise<LoginResponse> {
     try {
+      console.log('Attempting login with:', { email, apiUrl: API_URL });
+      
       const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: {
@@ -50,12 +52,16 @@ export class AuthService {
         body: JSON.stringify({ email, password }),
       });
 
+      console.log('Login response status:', response.status);
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || 'Erro ao fazer login');
+        console.error('Login failed with error:', errorData);
+        throw new Error(errorData.message || `Erro HTTP ${response.status}: ${response.statusText}`);
       }
 
       const data: LoginResponse = await response.json();
+      console.log('Login successful for user:', data.user.email);
       
       // Store in memory and localStorage
       this.token = data.token;

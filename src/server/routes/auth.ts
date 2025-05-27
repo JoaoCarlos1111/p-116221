@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import prisma from '../lib/prisma';
 import { authMiddleware } from '../middleware/auth';
+import { AuthService } from '../services/auth';
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    const authService = new AuthService(req.prisma!);
+    const authService = new AuthService(prisma);
     const result = await authService.login(email, password);
 
     res.json({
@@ -72,7 +73,7 @@ router.post('/register', authMiddleware, async (req, res) => {
       });
     }
 
-    const authService = new AuthService(req.prisma!);
+    const authService = new AuthService(prisma);
     const user = await authService.createUser({
       name,
       email,
