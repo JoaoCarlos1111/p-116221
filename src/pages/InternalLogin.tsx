@@ -32,28 +32,26 @@ export default function InternalLogin() {
     setIsLoading(true);
 
     try {
-      const { user } = await AuthService.login(email, password);
+      const { token, user } = await AuthService.login(email, password);
 
       // Redirect based on user type and departments
       if (user.isClient) {
         navigate('/client/dashboard');
-        return;
+      } else if (user.isAdmin) {
+        navigate('/dashboard');
+      } else {
+        const departmentRoutes: Record<string, string> = {
+          prospeccao: '/prospeccao',
+          verificacao: '/kanban/verificacao',
+          logistica: '/logistica',
+          ip_tools: '/iptools',
+          atendimento: '/atendimento/dashboard',
+          financeiro: '/financeiro'
+        };
+        
+        const route = departmentRoutes[user.mainDepartment] || '/dashboard';
+        navigate(route);
       }
-
-      const departmentRoutes: Record<string, string> = {
-        prospeccao: '/prospeccao',
-        verificacao: '/kanban/verificacao',
-        logistica: '/logistica',
-        ip_tools: '/iptools',
-        atendimento: '/atendimento/dashboard',
-        financeiro: '/financeiro',
-        admin: '/dashboard'
-      };
-
-      const route = user.isAdmin ? departmentRoutes.admin : 
-        departmentRoutes[user.mainDepartment] || departmentRoutes.admin;
-
-      navigate(route);
 
       toast({
         title: "Login realizado com sucesso",

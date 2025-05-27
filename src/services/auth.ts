@@ -1,111 +1,100 @@
-import { api } from './api';
 
-export const departments = {
-  ADMIN: 'admin',
-  PROSPECCAO: 'prospeccao',
-  VERIFICACAO: 'verificacao',
-  AUDITORIA: 'auditoria',
-  APROVACAO: 'aprovacao',
-  LOGISTICA: 'logistica',
-  IP_TOOLS: 'ip_tools',
-  ATENDIMENTO: 'atendimento',
-  FINANCEIRO: 'financeiro',
-  CLIENT: 'client'
-};
+const API_URL = 'http://0.0.0.0:3001/api';
 
-export interface AuthUser {
+export interface User {
   id: string;
   name: string;
   email: string;
-  departments: string[];
+  role: string;
+  department: string;
   mainDepartment: string;
+  departments: string[];
   isAdmin: boolean;
-  isClient?: boolean;
-  clientProfile?: string;
-  brands?: string[];
-  company?: string;
+  isClient: boolean;
 }
 
-export const AuthService = {
-  async login(email: string, password: string): Promise<{ token: string; user: AuthUser }> {
-    try {
-      const response = await api.post('/auth/login', {
-        email,
-        password
-      });
+export interface LoginResponse {
+  token: string;
+  user: User;
+}
 
-      const { token, user } = response.data;
+export class AuthService {
+  private static token: string | null = null;
+  private static user: User | null = null;
 
-      // Store token for future requests
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
+  static getToken(): string | null {
+    if (this.token) return this.token;
+    return localStorage.getItem('token');
+  }
 
-      // Set token in API headers
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-      return { token, user };
-    } catch (error: any) {
-      console.error('Login error:', error);
-
-      // Handle specific error cases
-      if (error.response?.status === 401) {
-        throw new Error('Credenciais inválidas');
-      } else if (error.response?.status === 400) {
-        throw new Error('Email e senha são obrigatórios');
-      } else {
-        throw new Error('Erro de conexão. Tente novamente.');
+  static getCurrentUser(): User | null {
+    if (this.user) return this.user;
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      try {
+        return JSON.parse(userStr);
+      } catch {
+        return null;
       }
     }
-  },
+    return null;
+  }
 
-  async verifyToken(): Promise<AuthUser | null> {
+  static async login(email: string, password: string): Promise<LoginResponse> {
     try {
-      const token = localStorage.getItem('token');
-      if (!token) return null;
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      // Set token in API headers
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Erro ao fazer login');
+      }
 
-      const response = await api.get('/auth/verify');
-      const { user } = response.data;
+      const data: LoginResponse = await response.json();
+      
+      // Store in memory and localStorage
+      this.token = data.token;
+      this.user = data.user;
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
 
-      return user;
+      return data;
     } catch (error) {
-      console.error('Token verification failed:', error);
-      this.logout();
-      return null;
+      console.error('Login error:', error);
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('Erro de conexão com o servidor');
     }
-  },
+  }
 
-  logout() {
+  static logout(): void {
+    this.token = null;
+    this.user = null;
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    delete api.defaults.headers.common['Authorization'];
-  },
-
-  getCurrentUser(): AuthUser | null {
-    try {
-      const userStr = localStorage.getItem('user');
-      return userStr ? JSON.parse(userStr) : null;
-    } catch (error) {
-      console.error('Error parsing user data:', error);
-      return null;
-    }
-  },
-
-  getToken(): string | null {
-    return localStorage.getItem('token');
-  },
-
-  isAuthenticated(): boolean {
-    const token = this.getToken();
-    const user = this.getCurrentUser();
-    return !!(token && user);
   }
-};
 
-// Initialize token on app start
-const token = localStorage.getItem('token');
-if (token) {
-  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  static async verifyToken(): Promise<boolean> {
+    const token = this.getToken();
+    if (!token) return false;
+
+    try {
+      const response = await fetch(`${API_URL}/auth/verify`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      return response.ok;
+    } catch {
+      return false;
+    }
+  }
 }

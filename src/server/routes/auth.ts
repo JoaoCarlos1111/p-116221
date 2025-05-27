@@ -1,6 +1,7 @@
-
 import express from 'express';
-import { AuthService } from '../services/auth';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import prisma from '../lib/prisma';
 import { authMiddleware } from '../middleware/auth';
 
 const router = express.Router();

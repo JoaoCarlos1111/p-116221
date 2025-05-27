@@ -30,7 +30,7 @@ import BrandsAndClients from './pages/BrandsAndClients';
 import BrandDetails from './pages/BrandDetails';
 import TopBar from "@/components/TopBar";
 import InternalLogin from "@/pages/InternalLogin";
-import RouteGuard from "@/components/RouteGuard";
+import RouteGuard, { AuthProvider } from "@/components/RouteGuard";
 import { departments } from './constants';
 import AdminTemplates from './pages/AdminTemplates';
 import AdminSettings from './pages/AdminSettings';
@@ -305,8 +305,10 @@ function AppContent() {
 function App() {
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <AppContent />
-      <Toaster />
+      <AuthProvider>
+        <AppContent />
+        <Toaster />
+      </AuthProvider>
     </Router>
   )
 }
