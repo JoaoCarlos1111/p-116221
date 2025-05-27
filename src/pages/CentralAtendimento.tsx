@@ -46,6 +46,7 @@ interface Atendimento {
   analista?: string;
   prioridade: 'baixa' | 'media' | 'alta' | 'urgente';
   mensagens: Mensagem[];
+  ipToolsStatus?: 'Ativa' | 'Desativada'; // Adicionado o campo ipToolsStatus
 }
 
 interface Mensagem {
@@ -90,7 +91,8 @@ const mockAtendimentos: Atendimento[] = [
         timestamp: '2024-01-26T10:30:00Z',
         lida: true
       }
-    ]
+    ],
+    ipToolsStatus: 'Ativa'
   },
   {
     id: 'ATD-002',
@@ -121,7 +123,8 @@ const mockAtendimentos: Atendimento[] = [
         timestamp: '2024-01-26T09:15:00Z',
         lida: true
       }
-    ]
+    ],
+    ipToolsStatus: 'Desativada'
   },
   {
     id: 'ATD-003',
@@ -142,7 +145,8 @@ const mockAtendimentos: Atendimento[] = [
         timestamp: '2024-01-26T11:45:00Z',
         lida: true
       }
-    ]
+    ],
+    ipToolsStatus: 'Ativa'
   }
 ];
 
