@@ -12,6 +12,10 @@ import brandsRoutes from './routes/brands';
 import { authMiddleware } from './middleware/auth';
 import WhatsAppService from './services/whatsapp';
 import prisma from './lib/prisma';
+import emailRoutes from './routes/email';
+import whatsappRoutes from './routes/whatsapp';
+import interactionsRoutes from './routes/interactions';
+import metricsRoutes from './routes/metrics';
 
 const app = express();
 const server = createServer(app);
@@ -60,9 +64,6 @@ app.use('/api/auth', authRoutes);
 
 // Protected routes (require authentication)
 app.use('/api/integrations', authMiddleware, integrationsRoutes);
-import emailRoutes from './routes/email';
-import whatsappRoutes from './routes/whatsapp';
-import interactionsRoutes from './routes/interactions';
 
 app.use('/api/templates', authMiddleware, templatesRoutes);
 app.use('/api/email', emailRoutes);
@@ -72,6 +73,7 @@ app.use('/api/cases', casesRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/payments', paymentsRoutes);
 app.use('/api/brands', brandsRoutes);
+app.use('/api/metrics', metricsRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {

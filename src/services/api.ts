@@ -335,4 +335,43 @@ export const emailAPI = {
     api.post('/email/retry-failed')
 };
 
+// Metrics API
+export const metricsAPI = {
+  getMetrics: (filters?: {
+    dateFrom?: string;
+    dateTo?: string;
+    brand?: string;
+    status?: string;
+  }) => {
+    const queryParams = new URLSearchParams();
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined) queryParams.append(key, value);
+      });
+    }
+    const endpoint = `/api/metrics${queryParams.toString() ? `?${queryParams}` : ''}`;
+    return api.get(endpoint);
+  },
+
+  getDashboardMetrics: (type: string, filters?: any) => {
+    const queryParams = new URLSearchParams();
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined) queryParams.append(key, value.toString());
+      });
+    }
+    const endpoint = `/api/metrics/dashboard/${type}${queryParams.toString() ? `?${queryParams}` : ''}`;
+    return api.get(endpoint);
+  },
+
+  getRecentCases: (limit?: number) =>
+    api.get(`/api/metrics/cases/recent${limit ? `?limit=${limit}` : ''}`),
+
+  getMonthlyPerformance: (months?: number) =>
+    api.get(`/api/metrics/performance/monthly${months ? `?months=${months}` : ''}`),
+
+  getBrandStats: () =>
+    api.get('/api/metrics/brands/stats')
+};
+
 export default api;
