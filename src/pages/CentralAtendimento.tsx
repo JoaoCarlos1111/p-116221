@@ -629,13 +629,13 @@ export default function CentralAtendimento() {
           {atendimentoSelecionado ? (
             <>
               {/* Header da Conversa */}
-              <div className="p-4 border-b bg-white relative z-[60]">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
+              <div className="p-4 border-b bg-white relative z-[70] shadow-sm">
+                <div className="flex items-center justify-between relative z-[71]">
+                  <div className="flex items-center gap-3 relative z-[72]">
                     {getIconeCanal(atendimentoSelecionado.canal)}
-                    <div>
-                      <h3 className="font-semibold">{atendimentoSelecionado.cliente}</h3>
-                      <p className="text-sm text-muted-foreground">
+                    <div className="relative z-[73]">
+                      <h3 className="font-semibold text-gray-900 relative z-[74]">{atendimentoSelecionado.cliente}</h3>
+                      <p className="text-sm text-muted-foreground relative z-[74]">
                         {atendimentoSelecionado.telefone || atendimentoSelecionado.email}
                       </p>
                     </div>
