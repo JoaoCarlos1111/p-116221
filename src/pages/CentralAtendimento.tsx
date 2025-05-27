@@ -383,6 +383,27 @@ export default function CentralAtendimento() {
     }
   };
 
+  const getEtapaAtualPipeline = (atendimentoId: string) => {
+    // Mapeamento das etapas do pipeline de atendimento
+    const etapasPipeline = {
+      'waiting': 'Aguardando entrega',
+      'delivered': 'Entregues', 
+      'firstContact': 'Em atendimento',
+      'proposal': 'Proposta aceita'
+    };
+
+    // Simular busca da etapa atual baseada no ID do atendimento
+    // Em uma implementação real, isso viria de uma API ou estado global
+    const casosEtapas = {
+      'ATD-001': 'waiting',
+      'ATD-002': 'firstContact', 
+      'ATD-003': 'delivered'
+    };
+
+    const etapaId = casosEtapas[atendimentoId as keyof typeof casosEtapas] || 'waiting';
+    return etapasPipeline[etapaId as keyof typeof etapasPipeline] || 'Não definida';
+  };
+
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       {/* Main Content - 3 Colunas */}
@@ -669,7 +690,12 @@ export default function CentralAtendimento() {
 
                         <div>
                           <span className="text-sm font-medium">Etapa atual:</span>
-                          <p className="text-sm text-muted-foreground">{mockCaso.etapaAtual}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {atendimentoSelecionado.casoVinculado ? 
+                              getEtapaAtualPipeline(atendimentoSelecionado.id) : 
+                              'Não definida'
+                            }
+                          </p>
                         </div>
                       </div>
                     </Card>
