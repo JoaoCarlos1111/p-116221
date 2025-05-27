@@ -6,6 +6,7 @@ declare global {
   namespace Express {
     interface Request {
       whatsappService?: WhatsAppService;
+      emailService?: any;
       io?: SocketIOServer;
     }
   }

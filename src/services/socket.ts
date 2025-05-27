@@ -24,8 +24,8 @@ class SocketService {
     }
 
     const serverUrl = window.location.hostname === 'localhost' 
-      ? 'http://localhost:5000' 
-      : `${window.location.protocol}//${window.location.hostname}`;
+      ? 'http://localhost:3001' 
+      : `${window.location.protocol}//${window.location.hostname}:3001`;
 
     console.log('🔌 Connecting to server:', serverUrl);
 

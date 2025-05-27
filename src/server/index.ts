@@ -11,20 +11,38 @@ const server = createServer(app);
 const io = new SocketIOServer(server, {
   cors: {
     origin: "*",
-    methods: ["GET", "POST"]
-  }
+    methods: ["GET", "POST"],
+    credentials: true
+  },
+  transports: ['websocket', 'polling']
 });
 
-// Initialize WhatsApp service with Socket.IO
+// Initialize services
 const whatsappService = new WhatsAppService(io);
+let emailService: any;
+
+// Import and initialize email service
+async function initializeServices() {
+  try {
+    const EmailService = (await import('./services/email')).default;
+    emailService = new EmailService(io);
+    console.log('✅ All services initialized');
+  } catch (error) {
+    console.error('❌ Error initializing services:', error);
+  }
+}
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  credentials: true
+}));
 app.use(express.json());
 
 // Make services available to routes
 app.use((req, res, next) => {
   req.whatsappService = whatsappService;
+  req.emailService = emailService;
   req.io = io;
   next();
 });
@@ -36,6 +54,11 @@ app.use('/api/templates', templatesRoutes);
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// API test endpoint
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'API is working', timestamp: new Date().toISOString() });
 });
 
 // Socket.IO connection handling
@@ -53,11 +76,16 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
+// Use port 3001 for backend API
+const PORT = process.env.PORT || 3001;
 
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`🔗 Server URL: http://0.0.0.0:${PORT}`);
+// Initialize services and start server
+initializeServices().then(() => {
+  server.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Backend server running on port ${PORT}`);
+    console.log(`🔗 API URL: http://0.0.0.0:${PORT}`);
+    console.log(`📡 Socket.IO ready for connections`);
+  });
 });
 
 export { io, whatsappService };

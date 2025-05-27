@@ -2,14 +2,9 @@
 import { Router } from 'express';
 import { Server as SocketIOServer } from 'socket.io';
 import WhatsAppService from '../services/whatsapp';
-
-const router = Router();
-
-import WhatsAppService from '../services/whatsapp';
 import EmailService from '../services/email';
 
-let whatsappService: WhatsAppService;
-let emailService: EmailService;
+const router = Router();
 
 // WhatsApp routes
 router.post('/whatsapp/connect', async (req, res) => {
@@ -17,6 +12,7 @@ router.post('/whatsapp/connect', async (req, res) => {
     console.log('📱 WhatsApp connect request received');
     const userId = req.body.userId || 'user_1';
     
+    const whatsappService = req.whatsappService as WhatsAppService;
     if (!whatsappService) {
       throw new Error('WhatsApp service not initialized');
     }
@@ -28,11 +24,11 @@ router.post('/whatsapp/connect', async (req, res) => {
       message: 'WhatsApp connection initiated',
       qrCode: qrCode || null
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ Error connecting WhatsApp:', error);
     res.status(500).json({ 
       success: false, 
-      error: error.message 
+      error: error?.message || 'Unknown error'
     });
   }
 });
@@ -41,15 +37,16 @@ router.post('/whatsapp/disconnect', async (req, res) => {
   try {
     const userId = req.body.userId || 'user_1';
     
+    const whatsappService = req.whatsappService as WhatsAppService;
     if (!whatsappService) {
       throw new Error('WhatsApp service not initialized');
     }
 
     await whatsappService.disconnectSession(userId);
     res.json({ success: true, message: 'WhatsApp disconnected successfully' });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error disconnecting WhatsApp:', error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: error?.message || 'Unknown error' });
   }
 });
 
@@ -57,15 +54,16 @@ router.get('/whatsapp/status', async (req, res) => {
   try {
     const userId = req.query.userId as string || 'user_1';
     
+    const whatsappService = req.whatsappService as WhatsAppService;
     if (!whatsappService) {
       return res.json({ connected: false });
     }
 
     const status = whatsappService.getSessionStatus(userId);
     res.json(status);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error getting WhatsApp status:', error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: error?.message || 'Unknown error' });
   }
 });
 
