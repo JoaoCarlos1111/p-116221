@@ -21,7 +21,8 @@ import {
   Smartphone,
   Monitor,
   Clock,
-  AlertTriangle
+  AlertTriangle,
+  Loader2
 } from "lucide-react";
 
 interface IntegrationStatus {
@@ -52,111 +53,147 @@ export default function Integracoes() {
     }
   });
 
+  const [showQRCode, setShowQRCode] = useState(false);
+  const [qrCodeData, setQRCodeData] = useState<string>("");
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [connectionError, setConnectionError] = useState<string>("");
+
+  const [emailForm, setEmailForm] = useState({
+    provider: '',
+    email: '',
+    password: ''
+  });
+
   useEffect(() => {
     console.log('🚀 Initializing Integracoes component...');
     
-    // Connect to Socket.IO
-    const socket = socketService.connect('user_1');
+    let socket: any = null;
+    
+    const initializeSocket = () => {
+      try {
+        // Connect to Socket.IO
+        socket = socketService.connect('user_1');
 
-    // WhatsApp events
-    socket.on('whatsapp_qr', (data) => {
-      console.log('📱 Received QR Code:', data);
-      setQRCodeData(data.qrCode);
-      setShowQRCode(true);
-      toast({
-        title: "QR Code gerado",
-        description: "Escaneie o QR Code com seu WhatsApp.",
-      });
-    });
+        // WhatsApp events
+        socket.on('whatsapp_qr', (data: any) => {
+          console.log('📱 Received QR Code:', data);
+          setQRCodeData(data.qrCode);
+          setShowQRCode(true);
+          setIsConnecting(false);
+          setConnectionError("");
+          toast({
+            title: "QR Code gerado",
+            description: "Escaneie o QR Code com seu WhatsApp.",
+          });
+        });
 
-    socket.on('whatsapp_connected', (data) => {
-      console.log('✅ WhatsApp connected:', data);
-      setIntegrationStatus(prev => ({
-        ...prev,
-        whatsapp: {
-          connected: true,
-          phone: data.phone,
-          lastConnection: data.timestamp,
-          messagesCount: 0
-        }
-      }));
-      setShowQRCode(false);
-      setQRCodeData('');
-      toast({
-        title: "WhatsApp conectado",
-        description: "Sua conta do WhatsApp foi conectada com sucesso!",
-      });
-    });
+        socket.on('whatsapp_connected', (data: any) => {
+          console.log('✅ WhatsApp connected:', data);
+          setIntegrationStatus(prev => ({
+            ...prev,
+            whatsapp: {
+              connected: true,
+              phone: data.phone,
+              lastConnection: data.timestamp,
+              messagesCount: 0
+            }
+          }));
+          setShowQRCode(false);
+          setQRCodeData('');
+          setIsConnecting(false);
+          setConnectionError("");
+          toast({
+            title: "WhatsApp conectado",
+            description: "Sua conta do WhatsApp foi conectada com sucesso!",
+          });
+        });
 
-    socket.on('whatsapp_disconnected', (data) => {
-      console.log('❌ WhatsApp disconnected:', data);
-      setIntegrationStatus(prev => ({
-        ...prev,
-        whatsapp: {
-          connected: false,
-          messagesCount: 0
-        }
-      }));
-      setShowQRCode(false);
-      setQRCodeData('');
-    });
+        socket.on('whatsapp_disconnected', (data: any) => {
+          console.log('❌ WhatsApp disconnected:', data);
+          setIntegrationStatus(prev => ({
+            ...prev,
+            whatsapp: {
+              connected: false,
+              messagesCount: 0
+            }
+          }));
+          setShowQRCode(false);
+          setQRCodeData('');
+          setIsConnecting(false);
+        });
 
-    socket.on('whatsapp_message', (data) => {
-      console.log('📨 New WhatsApp message:', data);
-    });
+        socket.on('whatsapp_message', (data: any) => {
+          console.log('📨 New WhatsApp message:', data);
+        });
 
-    // Email events
-    socket.on('email_connected', (data) => {
-      console.log('✅ Email connected:', data);
-      setIntegrationStatus(prev => ({
-        ...prev,
-        email: {
-          connected: true,
-          email: data.email,
-          provider: data.provider,
-          lastSync: data.timestamp,
-          messagesCount: 0
-        }
-      }));
-      toast({
-        title: "E-mail conectado",
-        description: "Sua conta de e-mail foi conectada com sucesso.",
-      });
-    });
+        // Email events
+        socket.on('email_connected', (data: any) => {
+          console.log('✅ Email connected:', data);
+          setIntegrationStatus(prev => ({
+            ...prev,
+            email: {
+              connected: true,
+              email: data.email,
+              provider: data.provider,
+              lastSync: data.timestamp,
+              messagesCount: 0
+            }
+          }));
+          toast({
+            title: "E-mail conectado",
+            description: "Sua conta de e-mail foi conectada com sucesso.",
+          });
+        });
 
-    socket.on('email_disconnected', () => {
-      setIntegrationStatus(prev => ({
-        ...prev,
-        email: {
-          connected: false,
-          messagesCount: 0
-        }
-      }));
-    });
+        socket.on('email_disconnected', () => {
+          setIntegrationStatus(prev => ({
+            ...prev,
+            email: {
+              connected: false,
+              messagesCount: 0
+            }
+          }));
+        });
 
-    socket.on('email_received', (data) => {
-      console.log('📧 New email:', data);
-    });
+        socket.on('email_received', (data: any) => {
+          console.log('📧 New email:', data);
+        });
 
-    // Connection status check
-    const checkConnection = setInterval(() => {
-      if (!socketService.isConnected()) {
-        console.warn('⚠️ Socket not connected, attempting reconnection...');
+        socket.on('connect_error', (error: any) => {
+          console.error('❌ Socket connection error:', error);
+          setConnectionError('Erro de conexão com o servidor');
+        });
+
+      } catch (error) {
+        console.error('❌ Error initializing socket:', error);
+        setConnectionError('Erro ao inicializar conexão');
       }
-    }, 5000);
+    };
+
+    // Initialize socket connection
+    initializeSocket();
 
     // Load initial status
     loadInitialStatus();
 
+    // Cleanup function
     return () => {
-      clearInterval(checkConnection);
-      // Don't disconnect on unmount to keep the connection alive
-      // socketService.disconnect();
+      if (socket) {
+        socket.off('whatsapp_qr');
+        socket.off('whatsapp_connected');
+        socket.off('whatsapp_disconnected');
+        socket.off('whatsapp_message');
+        socket.off('email_connected');
+        socket.off('email_disconnected');
+        socket.off('email_received');
+        socket.off('connect_error');
+      }
     };
   }, []);
 
   const loadInitialStatus = async () => {
     try {
+      console.log('🔄 Loading initial status...');
       const [whatsappStatus, emailStatus] = await Promise.all([
         whatsappApi.getStatus(),
         emailApi.getStatus()
@@ -167,23 +204,18 @@ export default function Integracoes() {
         email: emailStatus.data
       });
     } catch (error) {
-      console.error('Error loading status:', error);
+      console.error('❌ Error loading status:', error);
     }
   };
-
-  const [showQRCode, setShowQRCode] = useState(false);
-  const [qrCodeData, setQRCodeData] = useState<string>("");
-
-  const [emailForm, setEmailForm] = useState({
-    provider: '',
-    email: '',
-    password: ''
-  });
 
   const handleWhatsAppConnect = async () => {
     try {
       console.log('🔄 Connecting WhatsApp...');
+      setIsConnecting(true);
+      setConnectionError("");
+      setQRCodeData("");
       
+      // Check socket connection
       if (!socketService.isConnected()) {
         console.warn('⚠️ Socket not connected, reconnecting...');
         socketService.connect('user_1');
@@ -200,6 +232,7 @@ export default function Integracoes() {
           console.log('✅ QR Code received from API');
           setQRCodeData(response.data.qrCode);
           setShowQRCode(true);
+          setIsConnecting(false);
         } else {
           console.log('⏳ Waiting for QR Code via Socket...');
           toast({
@@ -209,14 +242,18 @@ export default function Integracoes() {
         }
       } else {
         console.error('❌ WhatsApp API error:', response.data);
+        setIsConnecting(false);
+        setConnectionError("Erro na API do WhatsApp");
         toast({
           title: "Erro",
           description: "Não foi possível conectar o WhatsApp.",
           variant: "destructive"
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Error connecting WhatsApp:', error);
+      setIsConnecting(false);
+      setConnectionError(error.message || "Erro desconhecido");
       toast({
         title: "Erro",
         description: `Erro ao conectar WhatsApp: ${error.message}`,
@@ -300,9 +337,11 @@ export default function Integracoes() {
 
   const refreshQRCode = async () => {
     try {
+      setIsConnecting(true);
       const response = await whatsappApi.connect();
       if (response.data.success && response.data.qrCode) {
         setQRCodeData(response.data.qrCode);
+        setIsConnecting(false);
         toast({
           title: "QR Code atualizado",
           description: "Escaneie o novo QR Code com seu WhatsApp.",
@@ -310,6 +349,7 @@ export default function Integracoes() {
       }
     } catch (error) {
       console.error('Error refreshing QR code:', error);
+      setIsConnecting(false);
     }
   };
 
@@ -324,6 +364,16 @@ export default function Integracoes() {
           <p className="text-muted-foreground">Conecte seus canais de comunicação para centralizar o atendimento</p>
         </div>
       </div>
+
+      {connectionError && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 text-red-600" />
+            <span className="text-red-800 font-medium">Erro de conexão:</span>
+            <span className="text-red-700">{connectionError}</span>
+          </div>
+        </div>
+      )}
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* WhatsApp Integration */}
@@ -404,9 +454,22 @@ export default function Integracoes() {
 
                 <Dialog open={showQRCode} onOpenChange={setShowQRCode}>
                   <DialogTrigger asChild>
-                    <Button onClick={handleWhatsAppConnect} className="w-full bg-green-600 hover:bg-green-700">
-                      <QrCode className="h-4 w-4 mr-2" />
-                      Conectar WhatsApp
+                    <Button 
+                      onClick={handleWhatsAppConnect} 
+                      className="w-full bg-green-600 hover:bg-green-700"
+                      disabled={isConnecting}
+                    >
+                      {isConnecting ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Conectando...
+                        </>
+                      ) : (
+                        <>
+                          <QrCode className="h-4 w-4 mr-2" />
+                          Conectar WhatsApp
+                        </>
+                      )}
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-md">
@@ -424,7 +487,11 @@ export default function Integracoes() {
                             />
                           ) : (
                             <div className="w-64 h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-                              <QrCode className="h-32 w-32 text-gray-400" />
+                              {isConnecting ? (
+                                <Loader2 className="h-32 w-32 text-gray-400 animate-spin" />
+                              ) : (
+                                <QrCode className="h-32 w-32 text-gray-400" />
+                              )}
                             </div>
                           )}
                         </div>
@@ -443,7 +510,12 @@ export default function Integracoes() {
                       </div>
 
                       <div className="flex gap-2">
-                        <Button onClick={refreshQRCode} variant="outline" className="flex-1">
+                        <Button 
+                          onClick={refreshQRCode} 
+                          variant="outline" 
+                          className="flex-1"
+                          disabled={isConnecting}
+                        >
                           <RefreshCw className="h-4 w-4 mr-2" />
                           Atualizar QR
                         </Button>

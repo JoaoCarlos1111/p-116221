@@ -1,32 +1,63 @@
 
 import axios from 'axios';
 
-const API_BASE_URL = 'http://0.0.0.0:3001/api/integrations';
+const API_BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3001/api' 
+  : `${window.location.protocol}//${window.location.hostname}:3001/api`;
 
-// Mock user ID - replace with actual auth
-const getUserId = () => 'user_1';
+console.log('🔗 API Base URL:', API_BASE_URL);
 
-const api = axios.create({
+const apiClient = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 30000,
   headers: {
-    'user-id': getUserId()
-  },
-  timeout: 10000
+    'Content-Type': 'application/json'
+  }
 });
 
+// Request interceptor for logging
+apiClient.interceptors.request.use((config) => {
+  console.log('📡 API Request:', config.method?.toUpperCase(), config.url);
+  return config;
+});
+
+// Response interceptor for logging
+apiClient.interceptors.response.use(
+  (response) => {
+    console.log('✅ API Response:', response.status, response.config.url);
+    return response;
+  },
+  (error) => {
+    console.error('❌ API Error:', error.response?.status, error.config?.url, error.message);
+    return Promise.reject(error);
+  }
+);
+
 export const whatsappApi = {
-  connect: () => api.post('/whatsapp/connect'),
-  disconnect: () => api.post('/whatsapp/disconnect'),
-  getStatus: () => api.get('/whatsapp/status'),
-  sendMessage: (to: string, message: string) => 
-    api.post('/whatsapp/send', { to, message })
+  connect: (userId = 'user_1') => {
+    return apiClient.post('/integrations/whatsapp/connect', { userId });
+  },
+  disconnect: (userId = 'user_1') => {
+    return apiClient.post('/integrations/whatsapp/disconnect', { userId });
+  },
+  getStatus: (userId = 'user_1') => {
+    return apiClient.get(`/integrations/whatsapp/status?userId=${userId}`);
+  }
 };
 
 export const emailApi = {
-  connect: (provider: string, email: string, password: string) =>
-    api.post('/email/connect', { provider, email, password }),
-  disconnect: () => api.post('/email/disconnect'),
-  getStatus: () => api.get('/email/status'),
-  sendEmail: (to: string, subject: string, body: string) =>
-    api.post('/email/send', { to, subject, body })
+  connect: (provider: string, email: string, password: string, userId = 'user_1') => {
+    return apiClient.post('/integrations/email/connect', { 
+      provider, 
+      email, 
+      password, 
+      userId 
+    });
+  },
+  disconnect: (userId = 'user_1') => {
+    return apiClient.post('/integrations/email/disconnect', { userId });
+  },
+  getStatus: (userId = 'user_1') => {
+    return apiClient.get(`/integrations/email/status?userId=${userId}`);
+  }
 };
