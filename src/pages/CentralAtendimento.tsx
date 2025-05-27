@@ -522,7 +522,7 @@ export default function CentralAtendimento() {
       <div className="flex-1 flex">
 
         {/* Coluna 1: Lista de Atendimentos */}
-        <div className="w-80 bg-white border-r flex flex-col overflow-hidden">
+        <div className="w-80 bg-white border-r flex flex-col overflow-hidden relative z-0"></div>
           {/* Filtros */}
           <div className="p-4 border-b space-y-3">
             <div className="relative">
@@ -625,12 +625,12 @@ export default function CentralAtendimento() {
         </div>
 
         {/* Coluna 2: Conversa Ativa */}
-        <div className="flex-1 flex flex-col bg-white overflow-hidden transform -translate-y-[5%]">
+        <div className="flex-1 flex flex-col bg-white overflow-hidden transform -translate-y-[5%] relative z-5"></div>
           {atendimentoSelecionado ? (
             <>
               {/* Header da Conversa */}
-              <div className="p-4 border-b">
-                <div className="flex items-center justify-between">
+              <div className="p-4 border-b bg-white relative z-10">
+                <div className="flex items-center justify-between"></div>
                   <div className="flex items-center gap-3">
                     {getIconeCanal(atendimentoSelecionado.canal)}
                     <div>
@@ -752,7 +752,7 @@ export default function CentralAtendimento() {
         </div>
 
         {/* Coluna 3: Detalhes do Caso */}
-        <div className="w-80 bg-white border-l flex flex-col overflow-hidden">
+        <div className="w-80 bg-white border-l flex flex-col overflow-hidden relative z-0"></div>
           {atendimentoSelecionado ? (
             <ScrollArea className="flex-1">
               <div className="p-4 border-b">
