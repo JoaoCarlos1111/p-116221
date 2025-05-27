@@ -653,7 +653,7 @@ export default function CentralAtendimento() {
 
               {/* Mensagens */}
               <ScrollArea className="flex-1 p-4 max-h-[calc(100vh-280px)]">
-                <div className="space-y-4"></div>
+                <div className="space-y-4">
                   {atendimentoSelecionado.mensagens.map((mensagem) => (
                     <div
                       key={mensagem.id}
