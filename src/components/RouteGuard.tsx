@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { AuthService, User } from '@/services/auth';
 
 interface AuthContextType {
@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const verifyAuth = async () => {
@@ -39,6 +40,31 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           if (isValid) {
             setCurrentUser(savedUser);
             setIsAuthenticated(true);
+
+            // Apenas redirecionar se estiver na página de login ou na raiz
+            if (location.pathname === '/login' || location.pathname === '/') {
+              if (savedUser.department === 'admin') {
+                navigate('/dashboard');
+              } else if (savedUser.department === 'prospeccao') {
+                navigate('/prospeccao');
+              } else if (savedUser.department === 'verificacao') {
+                navigate('/kanban/verificacao');
+              } else if (savedUser.department === 'auditoria') {
+                navigate('/auditoria');
+              } else if (savedUser.department === 'iptools') {
+                navigate('/iptools');
+              } else if (savedUser.department === 'logistica') {
+                navigate('/logistica');
+              } else if (savedUser.department === 'atendimento') {
+                navigate('/atendimento/dashboard');
+              } else if (savedUser.department === 'financeiro') {
+                navigate('/financeiro');
+              } else if (savedUser.department === 'client') {
+                navigate('/client/dashboard');
+              } else {
+                navigate('/dashboard');
+              }
+            }
           } else {
             AuthService.logout();
             setIsAuthenticated(false);
@@ -55,7 +81,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     };
 
     verifyAuth();
-  }, []);
+  }, [navigate, location.pathname]);
 
   const login = async (token: string, user: User) => {
     setCurrentUser(user);
@@ -119,35 +145,13 @@ export function RouteGuard({ children, requiredDepartment }: RouteGuardProps) {
     const departments = Array.isArray(requiredDepartment) ? requiredDepartment : [requiredDepartment];
     const hasAccess = currentUser?.isAdmin ||
       currentUser?.departments?.some(dept => departments.includes(dept)) ||
-      (currentUser?.isClient && departments.includes('client'));
+      (currentUser?.isClient && departments.includes('client')) ||
+      (currentUser?.department && departments.includes(currentUser.department));
 
     if (!currentUser || !hasAccess) {
       return <Navigate to="/dashboard" replace />;
     }
   }
-
-  // Redirecionar baseado no departamento do usuário
-    if (currentUser?.department === 'admin') {
-      navigate('/dashboard');
-    } else if (currentUser?.department === 'prospeccao') {
-      navigate('/prospeccao');
-    } else if (currentUser?.department === 'verificacao') {
-      navigate('/kanban/verificacao');
-    } else if (currentUser?.department === 'auditoria') {
-      navigate('/auditoria');
-    } else if (currentUser?.department === 'iptools') {
-      navigate('/iptools');
-    } else if (currentUser?.department === 'logistica') {
-      navigate('/logistica');
-    } else if (currentUser?.department === 'atendimento') {
-      navigate('/atendimento/dashboard');
-    } else if (currentUser?.department === 'financeiro') {
-      navigate('/financeiro');
-    } else if (currentUser?.department === 'client') {
-      navigate('/client/dashboard');
-    } else {
-      navigate('/dashboard');
-    }
 
   return <>{children}</>;
 }
