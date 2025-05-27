@@ -278,21 +278,15 @@ export default function CentralAtendimento() {
 
   return (
     <div className="h-screen flex flex-col bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b p-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-primary">Atendimento</h1>
-            <p className="text-muted-foreground">Gerencie atendimentos de WhatsApp, e-mail e telefone</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-green-600">
-              {atendimentosFiltrados.filter(a => a.status === 'pendente').length} Pendentes
-            </Badge>
-            <Badge variant="outline" className="text-red-600">
-              {atendimentosFiltrados.filter(a => a.prioridade === 'urgente').length} Urgentes
-            </Badge>
-          </div>
+      {/* Status Header */}
+      <div className="bg-white border-b p-3">
+        <div className="flex items-center justify-end gap-2">
+          <Badge variant="outline" className="text-green-600">
+            {atendimentosFiltrados.filter(a => a.status === 'pendente').length} Pendentes
+          </Badge>
+          <Badge variant="outline" className="text-red-600">
+            {atendimentosFiltrados.filter(a => a.prioridade === 'urgente').length} Urgentes
+          </Badge>
         </div>
       </div>
 
