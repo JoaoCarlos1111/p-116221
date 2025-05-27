@@ -4,6 +4,8 @@ import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import integrationsRoutes from './routes/integrations';
 import templatesRoutes from './routes/templates';
+import authRoutes from './routes/auth';
+import { authMiddleware } from './middleware/auth';
 import WhatsAppService from './services/whatsapp';
 import prisma from './lib/prisma';
 
@@ -49,9 +51,12 @@ app.use((req, res, next) => {
   next();
 });
 
-// Routes
-app.use('/api/integrations', integrationsRoutes);
-app.use('/api/templates', templatesRoutes);
+// Authentication routes (public)
+app.use('/api/auth', authRoutes);
+
+// Protected routes (require authentication)
+app.use('/api/integrations', authMiddleware, integrationsRoutes);
+app.use('/api/templates', authMiddleware, templatesRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {

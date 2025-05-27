@@ -1,3 +1,5 @@
+import { api } from './api';
+
 export const departments = {
   ADMIN: 'admin',
   PROSPECCAO: 'prospeccao',
@@ -11,188 +13,99 @@ export const departments = {
   CLIENT: 'client'
 };
 
+export interface AuthUser {
+  id: string;
+  name: string;
+  email: string;
+  departments: string[];
+  mainDepartment: string;
+  isAdmin: boolean;
+  isClient?: boolean;
+  clientProfile?: string;
+  brands?: string[];
+  company?: string;
+}
+
 export const AuthService = {
-  async login(email: string, password: string) {
-    // Credenciais de teste para cada setor
-    const testCredentials = {
-      admin: {
-        email: 'admin@tbp.com',
-        password: 'admin123',
-        user: {
-          id: '1',
-          name: 'Administrador',
-          email: 'admin@tbp.com',
-          departments: Object.values(departments),
-          mainDepartment: departments.ADMIN,
-          isAdmin: true
-        }
-      },
-      prospeccao: {
-        email: 'prospeccao@tbp.com',
-        password: 'tbp123',
-        user: {
-          id: '2',
-          name: 'Equipe Prospecção',
-          email: 'prospeccao@tbp.com',
-          departments: [departments.PROSPECCAO],
-          mainDepartment: departments.PROSPECCAO,
-          isAdmin: false
-        }
-      },
-      verificacao: {
-        email: 'verificacao@tbp.com',
-        password: 'tbp123',
-        user: {
-          id: '3',
-          name: 'Equipe Verificação',
-          email: 'verificacao@tbp.com',
-          departments: [departments.VERIFICACAO],
-          mainDepartment: departments.VERIFICACAO,
-          isAdmin: false
-        }
-      },
-      auditoria: {
-        email: 'auditoria@tbp.com',
-        password: 'tbp123',
-        user: {
-          id: '9',
-          name: 'Equipe Auditoria',
-          email: 'auditoria@tbp.com',
-          departments: [departments.AUDITORIA],
-          mainDepartment: departments.AUDITORIA,
-          isAdmin: false
-        }
-      },
-      iptools: {
-        email: 'iptools@tbp.com',
-        password: 'tbp123',
-        user: {
-          id: '4',
-          name: 'Equipe IP Tools',
-          email: 'iptools@tbp.com',
-          departments: [departments.IP_TOOLS],
-          mainDepartment: departments.IP_TOOLS,
-          isAdmin: false
-        }
-      },
-      logistica: {
-        email: 'logistica@tbp.com',
-        password: 'tbp123',
-        user: {
-          id: '5',
-          name: 'Equipe Logística',
-          email: 'logistica@tbp.com',
-          departments: [departments.LOGISTICA],
-          mainDepartment: departments.LOGISTICA,
-          isAdmin: false
-        }
-      },
-      atendimento: {
-        email: 'atendimento@tbp.com',
-        password: 'tbp123',
-        user: {
-          id: '6',
-          name: 'Equipe Atendimento',
-          email: 'atendimento@tbp.com',
-          departments: [departments.ATENDIMENTO],
-          mainDepartment: departments.ATENDIMENTO,
-          isAdmin: false
-        }
-      },
-      financeiro: {
-        email: 'financeiro@tbp.com',
-        password: 'tbp123',
-        user: {
-          id: '7',
-          name: 'Equipe Financeiro',
-          email: 'financeiro@tbp.com',
-          departments: [departments.FINANCEIRO],
-          mainDepartment: departments.FINANCEIRO,
-          isAdmin: false
-        }
-      },
-      cliente: {
-        email: 'cliente@teste.com',
-        password: 'cliente123',
-        user: {
-          id: '8',
-          name: 'Cliente Teste',
-          email: 'cliente@teste.com',
-          departments: [],
-          mainDepartment: 'client',
-          isAdmin: false,
-          isClient: true,
-          brands: ['Nike', 'Adidas'],
-          company: 'Empresa Cliente Teste'
-        }
-      },
-      analistaCliente: {
-        email: 'analista.cliente@teste.com',
-        password: 'analista123',
-        user: {
-          id: '10',
-          name: 'João Analista',
-          email: 'analista.cliente@teste.com',
-          departments: [],
-          mainDepartment: 'client',
-          isAdmin: false,
-          isClient: true,
-          clientProfile: 'analista_contrafacao',
-          brands: ['Nike', 'Adidas'],
-          company: 'Empresa Cliente Teste'
-        }
-      },
-      financeiroCliente: {
-        email: 'financeiro.cliente@teste.com',
-        password: 'financeiro123',
-        user: {
-          id: '11',
-          name: 'Maria Financeiro',
-          email: 'financeiro.cliente@teste.com',
-          departments: [],
-          mainDepartment: 'client',
-          isAdmin: false,
-          isClient: true,
-          clientProfile: 'financeiro',
-          brands: ['Nike', 'Adidas'],
-          company: 'Empresa Cliente Teste'
-        }
-      },
-      gestorCliente: {
-        email: 'gestor.cliente@teste.com',
-        password: 'gestor123',
-        user: {
-          id: '12',
-          name: 'Carlos Gestor',
-          email: 'gestor.cliente@teste.com',
-          departments: [],
-          mainDepartment: 'client',
-          isAdmin: false,
-          isClient: true,
-          clientProfile: 'gestor',
-          brands: ['Nike', 'Adidas', 'Puma', 'Louis Vuitton'],
-          company: 'Empresa Cliente Teste'
-        }
+  async login(email: string, password: string): Promise<{ token: string; user: AuthUser }> {
+    try {
+      const response = await api.post('/auth/login', {
+        email,
+        password
+      });
+
+      const { token, user } = response.data;
+
+      // Store token for future requests
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+
+      // Set token in API headers
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+      return { token, user };
+    } catch (error: any) {
+      console.error('Login error:', error);
+
+      // Handle specific error cases
+      if (error.response?.status === 401) {
+        throw new Error('Credenciais inválidas');
+      } else if (error.response?.status === 400) {
+        throw new Error('Email e senha são obrigatórios');
+      } else {
+        throw new Error('Erro de conexão. Tente novamente.');
       }
-    };
-
-    // Simula delay da rede
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    // Verifica credenciais (case insensitive para email)
-    const match = Object.values(testCredentials).find(
-      cred => cred.email.toLowerCase() === email.toLowerCase() && cred.password === password
-    );
-
-    if (match) {
-      console.log('Login successful for:', match.user.name);
-      return {
-        token: 'test-jwt-token-' + match.user.id,
-        user: match.user
-      };
     }
+  },
 
-    console.log('Login failed for email:', email);
-    throw new Error('Credenciais inválidas');
+  async verifyToken(): Promise<AuthUser | null> {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return null;
+
+      // Set token in API headers
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+      const response = await api.get('/auth/verify');
+      const { user } = response.data;
+
+      return user;
+    } catch (error) {
+      console.error('Token verification failed:', error);
+      this.logout();
+      return null;
+    }
+  },
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    delete api.defaults.headers.common['Authorization'];
+  },
+
+  getCurrentUser(): AuthUser | null {
+    try {
+      const userStr = localStorage.getItem('user');
+      return userStr ? JSON.parse(userStr) : null;
+    } catch (error) {
+      console.error('Error parsing user data:', error);
+      return null;
+    }
+  },
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  },
+
+  isAuthenticated(): boolean {
+    const token = this.getToken();
+    const user = this.getCurrentUser();
+    return !!(token && user);
   }
 };
+
+// Initialize token on app start
+const token = localStorage.getItem('token');
+if (token) {
+  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
