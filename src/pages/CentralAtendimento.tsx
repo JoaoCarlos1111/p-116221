@@ -519,7 +519,7 @@ export default function CentralAtendimento() {
   return (
     <div className="h-screen flex bg-gray-50 overflow-hidden">
       {/* Main Content - 3 Colunas */}
-      <div className="flex-1 flex">
+      <div className="flex-1 flex pt-2">
 
         {/* Coluna 1: Lista de Atendimentos */}
         <div className="w-80 bg-white border-r flex flex-col overflow-hidden">
