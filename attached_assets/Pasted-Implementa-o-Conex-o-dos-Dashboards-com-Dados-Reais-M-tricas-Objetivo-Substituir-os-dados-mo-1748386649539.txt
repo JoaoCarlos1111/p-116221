@@ -1,0 +1,115 @@
+Implementação: Conexão dos Dashboards com Dados Reais (Métricas)
+🎯 Objetivo:
+Substituir os dados mockados dos dashboards já existentes no sistema por métricas reais, fornecidas via endpoints no back-end, respeitando o perfil e setor do usuário logado.
+
+✅ Etapas Técnicas
+1. Criar Endpoints no Backend
+Arquivos:
+
+src/server/routes/metrics.ts
+
+src/server/services/metrics.ts
+
+Endpoint base:
+
+ts
+Copiar
+Editar
+GET /api/metrics
+Esse endpoint deve identificar automaticamente o tipo e setor do usuário logado e retornar os KPIs apropriados.
+
+2. Lógica de Resposta por Perfil
+👨‍💼 Usuários Internos (Administradores da empresa)
+Casos ativos
+
+Notificações pendentes
+
+Acordos realizados
+
+KPIs por setor (opcional)
+
+🧑‍💻 Analistas Internos da Operação
+O sistema deve identificar o setor do analista: prospecção, verificação, auditoria, logística, IP Tools, atendimento ou financeiro
+
+Para cada setor, retornar apenas os KPIs relevantes
+
+Exemplo:
+
+Atendimento: atendimentos realizados, follow-ups agendados, casos em negociação
+
+IP Tools: número de URLs encontradas, tempo médio para verificação
+
+Logística: envios pendentes, documentos impressos
+
+Financeiro: pagamentos processados, indenizações confirmadas
+
+👥 Clientes
+Perfil: Gestor
+Casos totais
+
+Casos ativos
+
+Total de indenizações
+
+Taxa de sucesso
+
+Tempo médio de resolução
+
+Mapa por estado
+
+Ranking de analistas
+
+Casos por marca
+
+Perfil: Analista (cliente)
+Casos aprovados
+
+Taxa de aprovação
+
+Notificações enviadas
+
+Casos urgentes
+
+Tempo médio de aprovação
+
+Perfil: Financeiro (cliente)
+Receita total
+
+Pagamentos pendentes
+
+Pagamentos em atraso
+
+Ticket médio
+
+Taxa de recebimento
+
+Perfil: Cliente comum
+Casos totais, ativos, resolvidos
+
+Casos aguardando aprovação
+
+Performance mensal
+
+Casos recentes
+
+Marcas gerenciadas
+
+3. Requisitos Técnicos
+Middleware de autenticação e identificação de perfil + setor
+
+Respeitar o escopo de dados permitido por perfil
+
+Otimizar para performance: consultas agregadas eficientes
+
+Os dashboards no frontend já estão criados → não precisa gerar componentes de UI, apenas fornecer os dados reais no formato apropriado
+
+Filtros por período, status e marca devem ser considerados nos dados retornados, se existirem nos dashboards
+
+4. Observações Finais
+A estrutura já tem redirecionamento automático para o dashboard correto com base no perfil
+
+Os dados atualmente estão mockados, aguardando esses endpoints reais
+
+Essa implementação deve preservar a estrutura de dashboards existente e simplesmente injetar os dados reais no frontend
+
+A estrutura deve estar preparada para expansão futura (novos KPIs e setores)
