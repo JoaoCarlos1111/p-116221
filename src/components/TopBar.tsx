@@ -47,18 +47,24 @@ export default function TopBar() {
     window.location.href = '/login';
   };
 
+  const isPipelinePage = location.pathname === '/atendimento';
+
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <h1 className="text-2xl font-bold text-primary">{pageTitle}</h1>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <Input
-              placeholder="Pesquisar..."
-              className="pl-10 w-80"
-            />
-          </div>
+          {!isPipelinePage && (
+            <>
+              <h1 className="text-2xl font-bold text-primary">{pageTitle}</h1>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Input
+                  placeholder="Pesquisar..."
+                  className="pl-10 w-80"
+                />
+              </div>
+            </>
+          )}
         </div>
         <div className="flex items-center space-x-3">
           <Badge variant="secondary">{notifications}</Badge>
