@@ -307,7 +307,7 @@ export default function CentralAtendimento() {
 
     // Simular envio para pipeline de atendimento (etapa "Proposta aceita")
     console.log(`Caso ${atendimentoId} enviado para etapa "Proposta aceita" no pipeline`);
-    
+
     // Mostrar notificação de sucesso
     alert('✅ Proposta aceita! Caso enviado para a etapa "Proposta aceita" no pipeline.');
   };
@@ -315,7 +315,7 @@ export default function CentralAtendimento() {
   const handleAcordoAssinado = (atendimentoId: string) => {
     // Mostrar animação de celebração
     setShowCelebration(true);
-    
+
     // Atualizar status do atendimento
     setAtendimentos(prev => prev.map(atendimento => 
       atendimento.id === atendimentoId 
@@ -330,7 +330,7 @@ export default function CentralAtendimento() {
 
     // Simular envio para setor Financeiro
     console.log(`Caso ${atendimentoId} enviado para Financeiro - etapa "Emitir Pagamento"`);
-    
+
     setTimeout(() => {
       setShowCelebration(false);
       alert('💰 Acordo assinado! Caso enviado automaticamente para o Financeiro na etapa "Emitir Pagamento".');
@@ -381,7 +381,7 @@ export default function CentralAtendimento() {
       notificacao: false
     });
     setShowFollowUpModal(false);
-    
+
     alert('📅 Follow-up agendado com sucesso!');
   };
 
@@ -424,7 +424,7 @@ export default function CentralAtendimento() {
 
   const handleVisualizarDocumento = (tipoDocumento: string) => {
     let documento = null;
-    
+
     switch (tipoDocumento) {
       case 'notificacao':
         documento = {
@@ -455,7 +455,7 @@ export default function CentralAtendimento() {
         };
         break;
     }
-    
+
     setDocumentoSelecionado(documento);
     setShowDocumentModal(true);
   };
@@ -653,12 +653,12 @@ export default function CentralAtendimento() {
 
               {/* Mensagens */}
               <ScrollArea className="flex-1 p-4 max-h-[calc(100vh-280px)]">
-                <div className="space-y-4">
+                <div className="space-y-4 bg-transparent">
                   {atendimentoSelecionado.mensagens.map((mensagem) => (
                     <div
                       key={mensagem.id}
                       className={cn(
-                        "flex",
+                        "flex bg-transparent",
                         mensagem.remetente === 'analista' ? 'justify-end' : 'justify-start'
                       )}
                     >
@@ -667,7 +667,7 @@ export default function CentralAtendimento() {
                           "max-w-[80%] rounded-lg p-3 space-y-1",
                           mensagem.remetente === 'analista'
                             ? 'bg-blue-600 text-white'
-                            : 'bg-gray-100 text-gray-900'
+                            : 'bg-transparent border border-gray-200 text-gray-900'
                         )}
                       >
                         <div className="flex items-center gap-2">
@@ -812,6 +812,8 @@ export default function CentralAtendimento() {
                             }
                           </p>
                         </div>
+```python
+
                       </div>
                     </Card>
                   </div>
@@ -868,7 +870,7 @@ export default function CentralAtendimento() {
               {/* Documentos do Caso */}
               <div className="p-4 border-t space-y-3">
                 <h4 className="font-medium text-sm">Documentos do Caso</h4>
-                
+
                 <Card className="p-3 bg-gray-50">
                   <div className="space-y-3">
                     {/* Notificação Extrajudicial */}
@@ -1048,7 +1050,7 @@ export default function CentralAtendimento() {
                 />
               </div>
             </div>
-            
+
             <div>
               <Label htmlFor="tipo">Tipo de Contato *</Label>
               <Select value={followUpData.tipo} onValueChange={(value) => setFollowUpData(prev => ({ ...prev, tipo: value }))}>
@@ -1139,7 +1141,7 @@ export default function CentralAtendimento() {
                         </SelectContent>
                       </Select>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Todas as provas disponíveis:</Label>
                       {mockProvasCaso.map((prova, index) => (
@@ -1191,7 +1193,7 @@ export default function CentralAtendimento() {
                     const tipoDoc = documentoSelecionado.tipo.toLowerCase().includes('notificação') ? 'notificacao' :
                                    documentoSelecionado.tipo.toLowerCase().includes('acordo') ? 'acordo' :
                                    documentoSelecionado.tipo.toLowerCase().includes('provas') ? 'provas' : 'procuracao';
-                    
+
                     if (documentoSelecionado.tipo === 'Provas do Caso' && provaSelecionada) {
                       // Enviar prova específica
                       const provaEscolhida = mockProvasCaso.find(p => p.id === provaSelecionada);
@@ -1199,7 +1201,7 @@ export default function CentralAtendimento() {
                     } else {
                       handleEnviarDocumento(tipoDoc);
                     }
-                    
+
                     setShowDocumentModal(false);
                     setProvaSelecionada(''); // Reset da seleção
                   }
@@ -1240,7 +1242,7 @@ export default function CentralAtendimento() {
               />
             ))}
           </div>
-          
+
           {/* Card principal com animação */}
           <div className="text-center space-y-6 transform animate-bounce">
             {/* Ícone principal rotacionando */}
@@ -1249,13 +1251,13 @@ export default function CentralAtendimento() {
               <div className="absolute -top-2 -right-2 text-4xl animate-pulse">✨</div>
               <div className="absolute -bottom-2 -left-2 text-4xl animate-bounce">🎯</div>
             </div>
-            
+
             {/* Mensagem principal */}
             <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-4 rounded-xl shadow-2xl transform hover:scale-105 transition-transform">
               <div className="text-3xl font-bold mb-2">ACORDO ASSINADO!</div>
               <div className="text-lg">Parabéns pela conquista! 🚀</div>
             </div>
-            
+
             {/* Barra de progresso animada */}
             <div className="bg-white px-6 py-4 rounded-lg shadow-xl">
               <div className="text-sm text-gray-600 mb-2">Enviando para o Financeiro...</div>
@@ -1263,13 +1265,13 @@ export default function CentralAtendimento() {
                 <div className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full animate-pulse transform translate-x-0 animate-slide-right"></div>
               </div>
             </div>
-            
+
             {/* Medalha de conquista */}
             <div className="bg-yellow-400 text-yellow-900 px-4 py-2 rounded-full shadow-lg animate-pulse">
               <span className="text-sm font-bold">🏆 MISSÃO CUMPRIDA</span>
             </div>
           </div>
-          
+
           {/* Partículas flutuantes */}
           <div className="absolute inset-0">
             {[...Array(10)].map((_, i) => (
