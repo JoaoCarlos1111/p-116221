@@ -315,6 +315,14 @@ export default function Sidebar() {
               )}>Pipeline</span>
             </NavLink>
 
+            <NavLink to="/atendimento/dashboard" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <BarChart3 size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Dashboard</span>
+            </NavLink>
+
             <NavLink to="/atendimento/integracoes" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
               <Settings size={20} />
               <span className={cn(
