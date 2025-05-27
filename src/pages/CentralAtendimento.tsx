@@ -625,7 +625,7 @@ export default function CentralAtendimento() {
         </div>
 
         {/* Coluna 2: Conversa Ativa */}
-        <div className="flex-1 flex flex-col bg-white overflow-hidden">
+        <div className="flex-1 flex flex-col bg-white overflow-hidden transform -translate-y-[5%]">
           {atendimentoSelecionado ? (
             <>
               {/* Header da Conversa */}
