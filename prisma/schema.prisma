@@ -86,8 +86,9 @@ model Case {
   payments       Payment[]
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
-  documents    Document[]
-  emailLogs    EmailLog[]
+  documents      Document[]
+  emailLogs      EmailLog[]
+  interactions   Interaction[]
 }
 
 model Payment {
@@ -144,4 +145,20 @@ model EmailLog {
   case Case @relation(fields: [caseId], references: [id])
 
   @@map("email_logs")
+}
+
+model Interaction {
+  id        String   @id @default(cuid())
+  caseId    String?
+  type      String   // WHATSAPP, EMAIL, PHONE, MANUAL
+  direction String   // INBOUND, OUTBOUND
+  content   String   @db.Text
+  metadata  Json?    // Dados específicos do canal (números, IDs, etc.)
+  attachments String[] // URLs ou paths de arquivos anexados
+  createdBy String?
+  createdAt DateTime @default(now())
+
+  case Case? @relation(fields: [caseId], references: [id])
+
+  @@map("interactions")
 }

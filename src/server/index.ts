@@ -61,9 +61,13 @@ app.use('/api/auth', authRoutes);
 // Protected routes (require authentication)
 app.use('/api/integrations', authMiddleware, integrationsRoutes);
 import emailRoutes from './routes/email';
+import whatsappRoutes from './routes/whatsapp';
+import interactionsRoutes from './routes/interactions';
 
 app.use('/api/templates', authMiddleware, templatesRoutes);
 app.use('/api/email', emailRoutes);
+app.use('/api/whatsapp', whatsappRoutes);
+app.use('/api/interactions', interactionsRoutes);
 app.use('/api/cases', casesRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/payments', paymentsRoutes);
