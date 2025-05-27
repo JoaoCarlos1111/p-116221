@@ -788,7 +788,6 @@ export default function CentralAtendimento() {
           )}
         </div>
       </div>
-    </div>
 
       {/* Modal de Follow-up */}
       <Dialog open={showFollowUpModal} onOpenChange={setShowFollowUpModal}>
