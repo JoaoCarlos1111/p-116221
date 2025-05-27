@@ -545,12 +545,17 @@ export default function CentralAtendimento() {
                             <span>{mockCaso.responsavel}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <Calendar className="h-3 w-3 text-muted-foreground" />
-                            <span>{new Date(mockCaso.dataAbertura).toLocaleDateString('pt-BR')}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
                             <Tag className="h-3 w-3 text-muted-foreground" />
                             <span>R$ {mockCaso.valorPotencial.toLocaleString('pt-BR')}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-medium">Status IP Tools:</span>
+                            <Badge 
+                              variant={atendimentoSelecionado.ipToolsStatus === 'Ativa' ? 'default' : 'destructive'}
+                              className="text-xs"
+                            >
+                              {atendimentoSelecionado.ipToolsStatus || 'N/A'}
+                            </Badge>
                           </div>
                         </div>
 
