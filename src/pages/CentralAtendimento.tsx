@@ -47,7 +47,8 @@ interface Atendimento {
   analista?: string;
   prioridade: 'baixa' | 'media' | 'alta' | 'urgente';
   mensagens: Mensagem[];
-  ipToolsStatus?: 'Ativa' | 'Desativada'; // Adicionado o campo ipToolsStatus
+  ipToolsStatus?: 'Ativa' | 'Desativada';
+  mensagensNaoLidas?: number; // Adicionado contador de mensagens não lidas
 }
 
 interface Mensagem {
@@ -93,7 +94,8 @@ const mockAtendimentos: Atendimento[] = [
         lida: true
       }
     ],
-    ipToolsStatus: 'Ativa'
+    ipToolsStatus: 'Ativa',
+    mensagensNaoLidas: 2
   },
   {
     id: 'ATD-002',
@@ -125,7 +127,8 @@ const mockAtendimentos: Atendimento[] = [
         lida: true
       }
     ],
-    ipToolsStatus: 'Desativada'
+    ipToolsStatus: 'Desativada',
+    mensagensNaoLidas: 0
   },
   {
     id: 'ATD-003',
@@ -147,7 +150,8 @@ const mockAtendimentos: Atendimento[] = [
         lida: true
       }
     ],
-    ipToolsStatus: 'Ativa'
+    ipToolsStatus: 'Ativa',
+    mensagensNaoLidas: 1
   }
 ];
 
@@ -468,16 +472,23 @@ export default function CentralAtendimento() {
                   )}
                   onClick={() => setAtendimentoSelecionado(atendimento)}
                 >
-                  <CardContent className="p-3">
-                    <div className="space-y-2">
+                  <CardContent className="p-2">
+                    <div className="space-y-1.5">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           {getIconeCanal(atendimento.canal)}
-                          <span className="font-medium text-sm">{atendimento.cliente}</span>
+                          <span className="font-medium text-sm truncate max-w-[120px]">{atendimento.cliente}</span>
+                          {atendimento.mensagensNaoLidas && atendimento.mensagensNaoLidas > 0 && (
+                            <Badge variant="destructive" className="text-xs h-4 w-4 p-0 flex items-center justify-center rounded-full">
+                              {atendimento.mensagensNaoLidas}
+                            </Badge>
+                          )}
                         </div>
                         <div className="flex items-center gap-1">
-                          <Badge className={cn("text-xs", getCorStatus(atendimento.status))}>
-                            {atendimento.status}
+                          <Badge className={cn("text-xs h-4 px-1", getCorStatus(atendimento.status))}>
+                            {atendimento.status === 'pendente' ? 'Pend' : 
+                             atendimento.status === 'respondido' ? 'Resp' :
+                             atendimento.status === 'resolvido' ? 'Resol' : 'Urg'}
                           </Badge>
                           {atendimento.prioridade === 'urgente' && (
                             <AlertTriangle className="h-3 w-3 text-red-500" />
@@ -489,14 +500,10 @@ export default function CentralAtendimento() {
                         {atendimento.assunto}
                       </p>
 
-                      <p className="text-xs text-muted-foreground truncate">
-                        {atendimento.ultimaMensagem}
-                      </p>
-
                       <div className="flex items-center justify-between text-xs text-muted-foreground">
                         <span>{formatarTempo(atendimento.dataUltimaInteracao)}</span>
                         {atendimento.casoVinculado && (
-                          <Badge variant="outline" className="text-xs">
+                          <Badge variant="outline" className="text-xs h-4 px-1">
                             {atendimento.casoVinculado}
                           </Badge>
                         )}
