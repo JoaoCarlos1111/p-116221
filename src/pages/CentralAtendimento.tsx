@@ -625,11 +625,11 @@ export default function CentralAtendimento() {
         </div>
 
         {/* Coluna 2: Conversa Ativa */}
-        <div className="flex-1 flex flex-col bg-white overflow-hidden transform -translate-y-[5%] relative z-5">
+        <div className="flex-1 flex flex-col bg-white overflow-hidden transform -translate-y-[5%] relative z-50">
           {atendimentoSelecionado ? (
             <>
               {/* Header da Conversa */}
-              <div className="p-4 border-b bg-white relative z-10">
+              <div className="p-4 border-b bg-white relative z-[60]">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     {getIconeCanal(atendimentoSelecionado.canal)}
