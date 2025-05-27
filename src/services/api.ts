@@ -1,11 +1,10 @@
-
 import axios from 'axios';
 
-const api = axios.create({
-  baseURL: process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:3001/api',
+export const api = axios.create({
+  baseURL: 'http://localhost:3001/api',
   timeout: 10000,
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json'
   }
 });
 
@@ -45,7 +44,7 @@ export const CasesService = {
       throw error;
     }
   },
-  
+
   create: async (prospectionData: {
     storeUrl: string;
     adUrl: string;

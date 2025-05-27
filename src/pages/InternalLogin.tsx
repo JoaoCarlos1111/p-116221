@@ -32,17 +32,20 @@ export default function InternalLogin() {
     setIsLoading(true);
 
     try {
-      const { token, user } = await AuthService.login(email, password);
+      const { user } = await AuthService.login(email, password);
 
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
+      // Redirect based on user type and departments
+      if (user.isClient) {
+        navigate('/client/dashboard');
+        return;
+      }
 
       const departmentRoutes: Record<string, string> = {
         prospeccao: '/prospeccao',
         verificacao: '/kanban/verificacao',
         logistica: '/logistica',
         ip_tools: '/iptools',
-        atendimento: '/atendimento',
+        atendimento: '/atendimento/dashboard',
         financeiro: '/financeiro',
         admin: '/dashboard'
       };
@@ -56,12 +59,14 @@ export default function InternalLogin() {
         title: "Login realizado com sucesso",
         description: `Bem-vindo(a), ${user.name}!`
       });
-    } catch (error) {
-      setError('Email ou senha incorretos');
+    } catch (error: any) {
+      console.error('Login error:', error);
+      const errorMessage = error.message || 'Erro de conexão com o servidor';
+      setError(errorMessage);
       toast({
         variant: "destructive",
         title: "Erro ao fazer login",
-        description: "Credenciais inválidas"
+        description: errorMessage
       });
     } finally {
       setIsLoading(false);
