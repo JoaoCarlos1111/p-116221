@@ -25,11 +25,14 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 export default function Sidebar() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const userStr = localStorage.getItem('user');
   const user = userStr ? JSON.parse(userStr) : null;
   const isAdmin = user?.isAdmin;
   const isClient = user?.isClient || user?.mainDepartment === 'client';
+  const isAtendimento = user?.department === 'atendimento' || user?.mainDepartment === 'atendimento';
+  
+  // Define sidebar minimizado como padrão para usuários de atendimento
+  const [isCollapsed, setIsCollapsed] = useState(isAtendimento);
 
   return (
     <div className={cn(
