@@ -416,7 +416,7 @@ export default function CentralAtendimento() {
         {/* Coluna 1: Lista de Atendimentos */}
         <div className="w-80 bg-white border-r flex flex-col overflow-hidden">
           {/* Filtros */}
-          <div className="p-2 border-b space-y-2">
+          <div className="p-4 border-b space-y-3">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -462,7 +462,7 @@ export default function CentralAtendimento() {
 
           {/* Lista de Atendimentos */}
           <ScrollArea className="flex-1">
-            <div className="space-y-1 p-1">
+            <div className="space-y-1 p-2">
               {atendimentosFiltrados.map((atendimento) => (
                 <Card
                   key={atendimento.id}
@@ -472,7 +472,7 @@ export default function CentralAtendimento() {
                   )}
                   onClick={() => setAtendimentoSelecionado(atendimento)}
                 >
-                  <CardContent className="p-1.5">
+                  <CardContent className="p-2">
                     <div className="space-y-1.5">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
@@ -521,7 +521,7 @@ export default function CentralAtendimento() {
           {atendimentoSelecionado ? (
             <>
               {/* Header da Conversa */}
-              <div className="p-2 border-b">
+              <div className="p-4 border-b">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     {getIconeCanal(atendimentoSelecionado.canal)}
@@ -544,8 +544,8 @@ export default function CentralAtendimento() {
               </div>
 
               {/* Mensagens */}
-              <ScrollArea className="flex-1 p-2">
-                <div className="space-y-2">
+              <ScrollArea className="flex-1 p-4">
+                <div className="space-y-4">
                   {atendimentoSelecionado.mensagens.map((mensagem) => (
                     <div
                       key={mensagem.id}
@@ -585,16 +585,16 @@ export default function CentralAtendimento() {
               </ScrollArea>
 
               {/* Templates de Resposta */}
-              <div className="px-2 py-1 bg-gray-50 border-t">
-                <div className="flex gap-1 mb-1">
-                  <span className="text-xs font-medium text-muted-foreground">Templates:</span>
+              <div className="px-4 py-2 bg-gray-50 border-t">
+                <div className="flex gap-2 mb-2">
+                  <span className="text-sm font-medium text-muted-foreground">Templates:</span>
                   {templatesMensagem.map((template) => (
                     <Button
                       key={template.id}
                       variant="outline"
                       size="sm"
                       onClick={() => aplicarTemplate(template.conteudo)}
-                      className="text-xs h-5 px-2"
+                      className="text-xs h-6"
                     >
                       {template.titulo}
                     </Button>
@@ -603,13 +603,13 @@ export default function CentralAtendimento() {
               </div>
 
               {/* Campo de Resposta */}
-              <div className="p-2 border-t bg-white">
+              <div className="p-4 border-t bg-white">
                 <div className="flex gap-2">
                   <Textarea
                     placeholder="Digite sua resposta..."
                     value={novaMensagem}
                     onChange={(e) => setNovaMensagem(e.target.value)}
-                    className="flex-1 min-h-[40px] resize-none"
+                    className="flex-1 min-h-[60px] resize-none"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
@@ -647,8 +647,8 @@ export default function CentralAtendimento() {
         <div className="w-80 bg-white border-l flex flex-col overflow-hidden">
           {atendimentoSelecionado ? (
             <ScrollArea className="flex-1">
-              <div className="p-2 border-b">
-                <h3 className="font-semibold mb-2 text-sm">Detalhes do Caso</h3>
+              <div className="p-4 border-b">
+                <h3 className="font-semibold mb-3">Detalhes do Caso</h3>
 
                 {atendimentoSelecionado.casoVinculado ? (
                   <div className="space-y-3">
@@ -721,46 +721,46 @@ export default function CentralAtendimento() {
               </div>
 
               {/* Ações Rápidas */}
-              <div className="p-2 space-y-2">
-                <h4 className="font-medium text-xs">Ações Rápidas</h4>
+              <div className="p-4 space-y-3">
+                <h4 className="font-medium text-sm">Ações Rápidas</h4>
 
-                <div className="space-y-1">
+                <div className="space-y-2">
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="w-full justify-start text-green-600 hover:text-green-700 hover:bg-green-50 h-7 text-xs"
+                    className="w-full justify-start text-green-600 hover:text-green-700 hover:bg-green-50"
                     onClick={() => handlePropostaAceita(atendimentoSelecionado.id)}
                   >
-                    <CheckCircle className="h-3 w-3 mr-1" />
+                    <CheckCircle className="h-3 w-3 mr-2" />
                     Proposta Aceita
                   </Button>
 
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="w-full justify-start text-blue-600 hover:text-blue-700 hover:bg-blue-50 h-7 text-xs"
+                    className="w-full justify-start text-blue-600 hover:text-blue-700 hover:bg-blue-50"
                     onClick={() => handleAcordoAssinado(atendimentoSelecionado.id)}
                   >
-                    <Star className="h-3 w-3 mr-1" />
+                    <Star className="h-3 w-3 mr-2" />
                     Acordo Assinado
                   </Button>
 
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="w-full justify-start h-7 text-xs"
+                    className="w-full justify-start"
                     onClick={() => setShowFollowUpModal(true)}
                   >
-                    <Calendar className="h-3 w-3 mr-1" />
+                    <Calendar className="h-3 w-3 mr-2" />
                     Agendar Follow-up
                   </Button>
                 </div>
               </div>
 
               {/* Histórico Resumido */}
-              <div className="p-2 border-t">
-                <h4 className="font-medium text-xs mb-2">Histórico Recente</h4>
-                <div className="space-y-1 text-xs">
+              <div className="p-4 border-t">
+                <h4 className="font-medium text-sm mb-3">Histórico Recente</h4>
+                <div className="space-y-2 text-xs">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                     <span className="text-muted-foreground">Atendimento iniciado</span>
