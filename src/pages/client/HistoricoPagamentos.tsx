@@ -286,7 +286,6 @@ const HistoricoPagamentos = () => {
                   <th className="text-center p-3">Data Pagamento</th>
                   <th className="text-center p-3">Forma Pagamento</th>
                   <th className="text-center p-3">Status</th>
-                  <th className="text-left p-3">Observações</th>
                 </tr>
               </thead>
               <tbody>
@@ -318,9 +317,6 @@ const HistoricoPagamentos = () => {
                       <Badge className={getStatusColor(pagamento.status)}>
                         {pagamento.status}
                       </Badge>
-                    </td>
-                    <td className="p-3 text-xs text-muted-foreground max-w-[200px] truncate">
-                      {pagamento.observacoes}
                     </td>
                   </tr>
                 ))}
