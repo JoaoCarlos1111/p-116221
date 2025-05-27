@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,59 +9,111 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(cuid())
-  email       String   @unique
-  password    String
-  name        String
-  departments String[]
-  mainDepartment String
-  isAdmin     Boolean  @default(false)
-  isActive    Boolean  @default(true)
-  cases       Case[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String           @id @default(cuid())
+  email           String           @unique
+  password        String
+  name            String
+  mainDepartment  String
+  isAdmin         Boolean          @default(false)
+  isActive        Boolean          @default(true)
+  isClient        Boolean          @default(false)
+  clientProfile   String?
+  company         String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  
+  // Relations
+  cases           Case[]
+  departments     UserDepartment[]
+  brands          UserBrand[]
+}
+
+model Department {
+  id              String           @id @default(cuid())
+  name            String           @unique
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  
+  // Relations
+  users           UserDepartment[]
+}
+
+model UserDepartment {
+  id           String     @id @default(cuid())
+  userId       String
+  departmentId String
+  createdAt    DateTime   @default(now())
+  
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, departmentId])
+}
+
+model Brand {
+  id        String      @id @default(cuid())
+  name      String      @unique
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  
+  // Relations
+  users     UserBrand[]
+  cases     Case[]
+}
+
+model UserBrand {
+  id      String @id @default(cuid())
+  userId  String
+  brandId String
+  
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  brand   Brand  @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, brandId])
 }
 
 model Case {
-  id            String   @id @default(cuid())
-  code          String   @unique
-  debtorName    String
-  totalAmount   Float
+  id             String    @id @default(cuid())
+  code           String    @unique
+  debtorName     String
+  totalAmount    Float
   currentPayment Float
-  status        String
-  daysInColumn  Int      @default(0)
-  assignedTo    User     @relation(fields: [userId], references: [id])
-  userId        String
-  payments      Payment[]
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  status         String
+  daysInColumn   Int       @default(0)
+  assignedTo     User      @relation(fields: [userId], references: [id])
+  userId         String
+  brandId        String?
+  brand          Brand?    @relation(fields: [brandId], references: [id])
+  payments       Payment[]
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 }
 
 model Payment {
-  id          String   @id @default(cuid())
-  amount      Float
-  status      String
-  case        Case     @relation(fields: [caseId], references: [id])
-  caseId      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  amount    Float
+  status    String
+  case      Case     @relation(fields: [caseId], references: [id])
+  caseId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Template {
-  id              String   @id @default(cuid())
-  name            String
-  type            String
-  brand           String
+  id               String   @id @default(cuid())
+  name             String
+  type             String
+  brand            String
   recognizedFields String[]
-  docxUrl         String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  docxUrl          String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 model GeneratedDocument {
-  id          String   @id @default(cuid())
-  templateId  String
-  caseId      String
-  pdfUrl      String
-  createdAt   DateTime @default(now())
+  id         String   @id @default(cuid())
+  templateId String
+  caseId     String
+  pdfUrl     String
+  createdAt  DateTime @default(now())
 }
