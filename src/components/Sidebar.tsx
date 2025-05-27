@@ -299,28 +299,28 @@ export default function Sidebar() {
               Atendimento
             </div>
 
-            <NavLink to="/atendimento/central" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <MessageSquare size={20} />
-              <span className={cn(
-                "transition-all duration-300",
-                isCollapsed && "hidden"
-              )}>Atendimento</span>
-            </NavLink>
-
-            <NavLink to="/atendimento/pipeline" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-              <LayoutDashboard size={20} />
-              <span className={cn(
-                "transition-all duration-300",
-                isCollapsed && "hidden"
-              )}>Pipeline</span>
-            </NavLink>
-
             <NavLink to="/atendimento/dashboard" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
               <BarChart3 size={20} />
               <span className={cn(
                 "transition-all duration-300",
                 isCollapsed && "hidden"
               )}>Dashboard</span>
+            </NavLink>
+
+            <NavLink to="/atendimento/central" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <MessageSquare size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Central de Atendimento</span>
+            </NavLink>
+
+            <NavLink to="/atendimento/pipeline" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+              <Target size={20} />
+              <span className={cn(
+                "transition-all duration-300",
+                isCollapsed && "hidden"
+              )}>Pipeline</span>
             </NavLink>
 
             <NavLink to="/atendimento/integracoes" className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
