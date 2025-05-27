@@ -812,7 +812,6 @@ export default function CentralAtendimento() {
                             }
                           </p>
                         </div>
-```python
 
                       </div>
                     </Card>
