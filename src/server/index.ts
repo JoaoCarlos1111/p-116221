@@ -18,6 +18,7 @@ import interactionsRoutes from './routes/interactions';
 import metricsRoutes from './routes/metrics';
 import { notFoundHandler, errorHandler } from './middleware/error';
 import eventsRoutes from './routes/events';
+import path from 'path';
 
 const app = express();
 const server = createServer(app);
@@ -52,6 +53,11 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Serve static files in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(process.cwd(), 'dist')));
+}
+
 // Make services available to routes
 app.use((req, res, next) => {
   req.whatsappService = whatsappService;
@@ -78,6 +84,12 @@ app.use('/api/users', usersRoutes);
 app.use('/api/payments', paymentsRoutes);
 app.use('/api/brands', brandsRoutes);
 
+// Serve React app for all non-API routes in production
+if (process.env.NODE_ENV === 'production') {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
+  });
+}
 
 // Error handling middlewares (devem ser os últimos)
 app.use(notFoundHandler);
