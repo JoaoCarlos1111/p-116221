@@ -5,7 +5,7 @@ run = "npm run dev"
 channel = "stable-24_05"
 
 [deployment]
-run = ["sh", "-c", "npm run dev & npx tsx src/server/index.ts"]
+run = ["sh", "-c", "npx tsx src/server/index.ts"]
 build = ["sh", "-c", "npm run build"]
 
 [[ports]]
