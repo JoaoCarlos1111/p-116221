@@ -1,60 +1,91 @@
+
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import dotenv from 'dotenv';
+import { Server } from 'socket.io';
+import { createServer } from 'http';
 
-console.log('🔧 Server starting...');
+// Import routes
+import authRoutes from './routes/auth.js';
+import casesRoutes from './routes/cases.js';
+import brandsRoutes from './routes/brands.js';
+import usersRoutes from './routes/users.js';
+import templatesRoutes from './routes/templates.js';
+import metricsRoutes from './routes/metrics.js';
+import paymentsRoutes from './routes/payments.js';
+import emailRoutes from './routes/email.js';
+import whatsappRoutes from './routes/whatsapp.js';
+import integrationsRoutes from './routes/integrations.js';
+import eventsRoutes from './routes/events.js';
+import interactionsRoutes from './routes/interactions.js';
+
+// Load environment variables
+dotenv.config();
 
 const app = express();
-const PORT = 3001;
+const server = createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 
 // Basic middleware
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false
+}));
+
 app.use(cors({
   origin: "*",
   credentials: true
 }));
-app.use(express.json());
 
-// Test endpoint
-app.get('/api/test', (req, res) => {
-  console.log('✅ Test endpoint accessed');
-  res.json({ 
-    message: 'Server is working!', 
-    timestamp: new Date().toISOString() 
-  });
-});
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Auth endpoint for login
-app.post('/api/auth/login', (req, res) => {
-  console.log('🔑 Login endpoint accessed');
-  console.log('Request body:', req.body);
-
-  // Temporary response for testing
-  res.status(200).json({
-    success: true,
-    token: 'test-token',
-    user: {
-      id: '1',
-      name: 'Test User',
-      email: 'test@example.com',
-      role: 'admin',
-      department: 'test',
-      mainDepartment: 'test',
-      departments: ['test'],
-      isAdmin: true,
-      isClient: false
-    }
-  });
-});
-
-// Health check
+// Simple health check
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// Start server
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`✅ Backend server running on port ${PORT}`);
+// API routes
+app.use('/api/auth', authRoutes);
+app.use('/api/cases', casesRoutes);
+app.use('/api/brands', brandsRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/templates', templatesRoutes);
+app.use('/api/metrics', metricsRoutes);
+app.use('/api/payments', paymentsRoutes);
+app.use('/api/email', emailRoutes);
+app.use('/api/whatsapp', whatsappRoutes);
+app.use('/api/integrations', integrationsRoutes);
+app.use('/api/events', eventsRoutes);
+app.use('/api/interactions', interactionsRoutes);
+
+// Error handling
+app.use((err: any, req: any, res: any, next: any) => {
+  console.error('Error:', err);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
+// Use port 3001 for development
+const PORT = 3001;
+
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ Server running on port ${PORT}`);
   console.log(`🔗 Health check: http://0.0.0.0:${PORT}/health`);
-  console.log(`🔗 Test API: http://0.0.0.0:${PORT}/api/test`);
 });
 
-console.log('📍 Server file loaded');
+// Handle Socket.IO connections
+io.on('connection', (socket) => {
+  console.log('User connected:', socket.id);
+  
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
+});
+
+export { io };

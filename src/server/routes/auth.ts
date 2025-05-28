@@ -9,6 +9,12 @@ const router = express.Router();
 
 console.log('🔐 Auth routes initialized');
 
+// Add prisma to request
+router.use((req, res, next) => {
+  req.prisma = prisma;
+  next();
+});
+
 // Login route
 router.post('/login', async (req, res) => {
   console.log('🔑 Login attempt received:', { 
