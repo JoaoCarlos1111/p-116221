@@ -165,21 +165,21 @@ io.on('connection', (socket) => {
 // Use port 3001 for development, environment port for production
 const PORT = process.env.NODE_ENV === 'production' ? (process.env.PORT || 3000) : 3001;
 
-console.log('🔧 Starting server initialization...');
-console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
-console.log(`📍 Target port: ${PORT}`);
+console.log('🔧 Starting server...');
+console.log(`📍 Port: ${PORT}`);
 
-// Start server immediately
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Backend server running on port ${PORT}`);
-  console.log(`🔗 API URL: http://0.0.0.0:${PORT}/api`);
-  console.log(`📡 Socket.IO ready for connections`);
-  console.log(`✅ Server ready to accept requests`);
+// Start server
+server.listen(PORT, '0.0.0.0', (err) => {
+  if (err) {
+    console.error('❌ Server failed to start:', err);
+    process.exit(1);
+  }
   
-  // Initialize services after server is running
-  initializeServices().catch((error) => {
-    console.warn('⚠️ Service initialization failed:', error);
-  });
+  console.log(`✅ Backend server running on port ${PORT}`);
+  console.log(`🔗 API: http://0.0.0.0:${PORT}/api`);
+  
+  // Initialize services
+  initializeServices().catch(console.warn);
 });
 
 // Handle unhandled errors

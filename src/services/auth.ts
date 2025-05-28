@@ -70,11 +70,20 @@ export class AuthService {
 
       return data;
     } catch (error) {
-      console.error('Login error:', error);
-      if (error instanceof Error) {
-        throw error;
+      console.error('Login error details:', {
+        message: error.message,
+        //status: error.response?.status, // Removed as fetch API does not directly expose HTTP status on the error object
+        //data: error.response?.data     // Removed as fetch API does not directly expose response data on the error object
+      });
+
+      // Handle different types of errors
+      // As Fetch API does not directly expose HTTP status or error codes in the same way as Axios
+      // the error handling is simplified.  Checking for specific error messages related to network issues
+      if (error.message.includes('Failed to fetch')) {
+        throw new Error('Servidor indisponível. Verifique se o backend está rodando.');
+      } else {
+        throw new Error(error.message || 'Erro desconhecido');
       }
-      throw new Error('Erro de conexão com o servidor');
     }
   }
 
