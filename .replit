@@ -6,7 +6,7 @@ channel = "stable-24_05"
 
 [deployment]
 run = ["sh", "-c", "NODE_ENV=production PORT=8080 npx tsx src/server/index.ts"]
-build = ["sh", "-c", "npm run build"]
+build = ["sh", "-c", "npm run build && npx prisma generate"]
 
 [[ports]]
 localPort = 443
