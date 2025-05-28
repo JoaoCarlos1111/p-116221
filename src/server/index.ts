@@ -108,7 +108,11 @@ app.use('/api/brands', brandsRoutes);
 
 // Serve React app for all non-API routes in production
 if (process.env.NODE_ENV === 'production') {
-  app.get('/*', (req, res) => {
+  app.get('*', (req, res) => {
+    // Skip API routes
+    if (req.path.startsWith('/api/')) {
+      return res.status(404).json({ error: 'API endpoint not found' });
+    }
     res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
   });
 }
