@@ -7,7 +7,7 @@ import {
   markEventAsProcessed,
   EventLogEntry 
 } from '../services/eventLogger';
-import { validateRequest } from '../middleware/validation';
+import { validate } from '../middleware/validation';
 import { z } from 'zod';
 
 const router = Router();
@@ -33,7 +33,7 @@ const markProcessedSchema = z.object({
 // GET /api/events - Buscar eventos
 router.get('/', 
   authMiddleware,
-  validateRequest(getEventsSchema),
+  validate(getEventsSchema),
   async (req, res) => {
     try {
       const { eventType, entityType, entityId, processed, limit = 50, page = 1 } = req.query;
@@ -80,7 +80,7 @@ router.get('/',
 // POST /api/events/mark-processed - Marcar eventos como processados
 router.post('/mark-processed',
   authMiddleware,
-  validateRequest(markProcessedSchema),
+  validate(markProcessedSchema),
   async (req, res) => {
     try {
       const { eventIds } = req.body;
