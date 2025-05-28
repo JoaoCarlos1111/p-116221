@@ -108,7 +108,7 @@ app.use('/api/brands', brandsRoutes);
 
 // Serve React app for all non-API routes in production
 if (process.env.NODE_ENV === 'production') {
-  app.get('*', (req, res) => {
+  app.get('/*', (req, res) => {
     res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
   });
 }
