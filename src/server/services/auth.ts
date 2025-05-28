@@ -1,3 +1,4 @@
+
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
@@ -22,7 +23,6 @@ export class AuthService {
   private prisma: PrismaClient;
 
   constructor(prisma: PrismaClient) {
-    console.log('✅ AuthService inicializado');
     this.prisma = prisma;
   }
 

@@ -127,30 +127,14 @@ app.get('/health', async (req, res) => {
 
 // Serve React app for all non-API routes in production
 if (process.env.NODE_ENV === 'production') {
-  // Handle specific common routes first
-  const commonRoutes = [
-    '/dashboard', '/pipeline', '/cases', '/analytics', '/settings',
-    '/integrations', '/admin', '/client', '/atendimento', '/financeiro',
-    '/logistics', '/audit', '/ip-tools', '/notifications', '/profile'
-  ];
-  
-  commonRoutes.forEach(route => {
-    app.get(route, (req, res) => {
-      res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
-    });
+  // Fallback handler for React Router - must be after all API routes
+  app.use((req, res, next) => {
+    // Skip API routes
+    if (req.url.startsWith('/api/') || req.url.startsWith('/health')) {
+      return next();
+    }
     
-    // Handle sub-routes with parameters
-    app.get(`${route}/:id`, (req, res) => {
-      res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
-    });
-    
-    app.get(`${route}/:id/:action`, (req, res) => {
-      res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
-    });
-  });
-  
-  // Handle root route
-  app.get('/', (req, res) => {
+    // Serve React app for all other routes
     res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
   });
 }
@@ -181,26 +165,16 @@ io.on('connection', (socket) => {
   });
 });
 
-// Use port from environment or 3001 for development
-const PORT = process.env.NODE_ENV === 'production' ? (process.env.PORT || 8080) : 3001;
+// Use port from environment or 8080 for production deployment
+const PORT = process.env.PORT || 8080;
 
 // Initialize services and start server
 initializeServices().then(() => {
   server.listen(PORT, '0.0.0.0', () => {
-    console.log('');
-    console.log('🎉 =================================');
-    console.log('🎉 BACKEND ROBUSTO FUNCIONANDO!');
-    console.log('🎉 =================================');
-    console.log(`🚀 Servidor rodando na porta: ${PORT}`);
+    console.log(`🚀 Backend server running on port ${PORT}`);
     console.log(`🔗 API URL: http://0.0.0.0:${PORT}`);
     console.log(`📡 Socket.IO ready for connections`);
-    console.log(`🗄️ Database: ${process.env.DATABASE_URL ? 'Conectado' : 'Local SQLite'}`);
-    console.log('🎉 =================================');
-    console.log('');
   });
-}).catch((error) => {
-  console.error('❌ Erro ao inicializar serviços:', error);
-  process.exit(1);
 });
 
 export { io, whatsappService };
