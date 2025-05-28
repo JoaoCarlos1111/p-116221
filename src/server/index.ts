@@ -48,6 +48,7 @@ async function initializeServices() {
     console.log('✅ All services initialized');
   } catch (error) {
     console.error('❌ Error initializing services:', error);
+    // Don't throw - services are optional for basic functionality
   }
 }
 
@@ -66,10 +67,10 @@ if (process.env.NODE_ENV === 'production') {
   app.use('/api', generalRateLimit);
 }
 
-// Make services available to routes
+// Make services available to routes with lazy loading
 app.use((req, res, next) => {
   req.whatsappService = whatsappService;
-  req.emailService = emailService;
+  req.emailService = emailService; // Will be undefined until initialized
   req.io = io;
   req.prisma = prisma;
   next();
@@ -93,11 +94,12 @@ app.use('/api/payments', paymentsRoutes);
 app.use('/api/brands', brandsRoutes);
 
 
-// Debug middleware for unmatched routes
-app.use('*', (req, res, next) => {
-  console.log(`❌ Route not found: ${req.method} ${req.originalUrl}`);
-  next();
-});
+// Serve static files for production SPA routing
+if (process.env.NODE_ENV === 'production') {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../dist/index.html'));
+  });
+}
 
 // Error handling middlewares (devem ser os últimos)
 app.use(notFoundHandler);
@@ -180,18 +182,18 @@ io.on('connection', (socket) => {
 // Use port 8080 for deployment (matches port forwarding to external port 80)
 const PORT = process.env.PORT || 8080;
 
-// Initialize services and start server
-initializeServices().then(() => {
-  server.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Backend server running on port ${PORT}`);
-    console.log(`🔗 API URL: http://0.0.0.0:${PORT}`);
-    console.log(`📡 Socket.IO ready for connections`);
-    console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
-    console.log(`🔒 CORS Origin: ${process.env.CORS_ORIGIN || '*'}`);
+// Start server immediately for faster deployment
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Backend server running on port ${PORT}`);
+  console.log(`🔗 API URL: http://0.0.0.0:${PORT}`);
+  console.log(`📡 Socket.IO ready for connections`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+  console.log(`🔒 CORS Origin: ${process.env.CORS_ORIGIN || '*'}`);
+  
+  // Initialize services after server is listening
+  initializeServices().catch(error => {
+    console.error('❌ Failed to initialize services:', error);
   });
-}).catch(error => {
-  console.error('❌ Failed to initialize services:', error);
-  process.exit(1);
 });
 
 export { io, whatsappService };
