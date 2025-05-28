@@ -181,6 +181,7 @@ router.post('/', async (req, res) => {
       error: 'Failed to create case',
       message: error instanceof Error ? error.message : 'Unknown error'
     });
+  };
   }
 });
 

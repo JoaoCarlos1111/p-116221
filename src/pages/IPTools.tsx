@@ -264,7 +264,7 @@ export default function IPTools() {
                         const matchesBrand = selectedBrand === 'all' || !selectedBrand || case_.brand === selectedBrand;
                         const matchesStatus = selectedStatus === 'all' || !selectedStatus || case_.programStatus === selectedStatus;
                         const matchesPlatform = selectedPlatform === 'all' || !selectedPlatform || case_.platform === selectedPlatform;
-                        const matchesResponsible = selectedResponsible === 'all' || !selectedResponsible || case_.responsible === selectedResponsible;
+                        const matchesResponsible = selectedResponsible === 'all' || !selectedResponsible || case_.responsible === selectedResponsible;tedResponsible;
 
                         const matchesDateRange = !dateRange.from || !dateRange.to || 
                           (new Date(case_.entryDate) >= dateRange.from && 

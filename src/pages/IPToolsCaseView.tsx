@@ -61,7 +61,7 @@ let sampleCases = [
     deliveryStatus: "Em andamento",
     observations: "Múltiplos canais de venda",
     history: [
-      { date: "2024-03-23 09:00", action: "Caso recebido da Logística", user: "Sistema" },
+      { date: "2024-03-23 09:00", action: "Caso recebido da Logística", user: "Sistema" }ema" },
       { date: "2024-03-23 10:15", action: "Link adicionado", user: "Carolina Lima" }
     ]
   },
