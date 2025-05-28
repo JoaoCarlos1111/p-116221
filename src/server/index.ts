@@ -201,6 +201,15 @@ io.on('connection', (socket) => {
 // Use port 8080 for deployment (matches port forwarding to external port 80)
 const PORT = process.env.PORT || 8080;
 
+// Add error handling for invalid route patterns
+app.use((err: any, req: any, res: any, next: any) => {
+  if (err.message && err.message.includes('Missing parameter name')) {
+    console.error('Route pattern error:', err);
+    return res.status(400).json({ error: 'Invalid route pattern' });
+  }
+  next(err);
+});
+
 // Start server immediately for faster deployment
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Backend server running on port ${PORT}`);

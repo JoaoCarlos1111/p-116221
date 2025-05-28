@@ -35,6 +35,7 @@ externalPort = 9000
 [[ports]]
 localPort = 8080
 externalPort = 80
+primary = true
 
 [[ports]]
 localPort = 8081
