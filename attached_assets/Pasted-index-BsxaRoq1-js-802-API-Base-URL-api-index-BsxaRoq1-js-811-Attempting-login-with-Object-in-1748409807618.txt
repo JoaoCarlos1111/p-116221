@@ -1,0 +1,62 @@
+index-BsxaRoq1.js:802 🔗 API Base URL: /api
+index-BsxaRoq1.js:811 Attempting login with: Object
+index-BsxaRoq1.js:811 Login response status: 200
+index-BsxaRoq1.js:811 Login successful for user: atendimento@tbp.com
+index-BsxaRoq1.js:808 🚀 Initializing Integracoes component...
+index-BsxaRoq1.js:802 🔌 Connecting to server: https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev
+index-BsxaRoq1.js:808 🔄 Loading initial status...
+index-BsxaRoq1.js:802 📡 API Request: GET /integrations/whatsapp/status?userId=user_1
+index-BsxaRoq1.js:802 📡 API Request: GET /integrations/email/status?userId=user_1
+/api/integrations/whatsapp/status?userId=user_1:1 
+            
+            
+           Failed to load resource: the server responded with a status of 401 (Unauthorized)
+index-BsxaRoq1.js:802 ❌ API Error: 401 /integrations/whatsapp/status?userId=user_1 Request failed with status code 401
+(anonymous) @ index-BsxaRoq1.js:802
+index-BsxaRoq1.js:808 ❌ Error loading status: it
+p @ index-BsxaRoq1.js:808
+/api/integrations/email/status?userId=user_1:1 
+            
+            
+           Failed to load resource: the server responded with a status of 401 (Unauthorized)
+index-BsxaRoq1.js:802 ❌ API Error: 401 /integrations/email/status?userId=user_1 Request failed with status code 401
+(anonymous) @ index-BsxaRoq1.js:802
+index-BsxaRoq1.js:802 ✅ Connected to server: SebYtzAMolRQ514LAAAB
+index-BsxaRoq1.js:802 ✅ User joined room: Object
+index-BsxaRoq1.js:808 🚀 Initializing Integracoes component...
+index-BsxaRoq1.js:802 ✅ Socket already connected
+index-BsxaRoq1.js:808 🔄 Loading initial status...
+index-BsxaRoq1.js:802 📡 API Request: GET /integrations/whatsapp/status?userId=user_1
+index-BsxaRoq1.js:802 📡 API Request: GET /integrations/email/status?userId=user_1
+/api/integrations/whatsapp/status?userId=user_1:1 
+            
+            
+           Failed to load resource: the server responded with a status of 401 (Unauthorized)
+index-BsxaRoq1.js:802 ❌ API Error: 401 /integrations/whatsapp/status?userId=user_1 Request failed with status code 401
+(anonymous) @ index-BsxaRoq1.js:802
+index-BsxaRoq1.js:808 ❌ Error loading status: it
+p @ index-BsxaRoq1.js:808
+/api/integrations/email/status?userId=user_1:1 
+            
+            
+           Failed to load resource: the server responded with a status of 401 (Unauthorized)
+index-BsxaRoq1.js:802 ❌ API Error: 401 /integrations/email/status?userId=user_1 Request failed with status code 401
+(anonymous) @ index-BsxaRoq1.js:802
+index-BsxaRoq1.js:808 🔄 Connecting WhatsApp...
+index-BsxaRoq1.js:639 Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+(anonymous) @ index-BsxaRoq1.js:639
+index-BsxaRoq1.js:802 📡 API Request: POST /integrations/whatsapp/connect
+/api/integrations/whatsapp/connect:1 
+            
+            
+           Failed to load resource: the server responded with a status of 401 (Unauthorized)
+index-BsxaRoq1.js:802 ❌ API Error: 401 /integrations/whatsapp/connect Request failed with status code 401
+(anonymous) @ index-BsxaRoq1.js:802
+index-BsxaRoq1.js:808 ❌ Error connecting WhatsApp: it
+h @ index-BsxaRoq1.js:808
+
+                
+          
+          
+          
+         Chrome is moving towards a new experience that allows users to choose to browse without third-party cookies.
