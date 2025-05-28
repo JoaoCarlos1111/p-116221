@@ -6,13 +6,16 @@ import EmailService from '../services/email';
 
 const router = Router();
 
+// Initialize services
+const whatsappService = new WhatsAppService();
+const emailService = new EmailService();
+
 // WhatsApp routes
 router.post('/whatsapp/connect', async (req, res) => {
   try {
     console.log('📱 WhatsApp connect request received');
     const userId = req.body.userId || 'user_1';
     
-    const whatsappService = req.whatsappService as WhatsAppService;
     if (!whatsappService) {
       throw new Error('WhatsApp service not initialized');
     }
@@ -37,7 +40,6 @@ router.post('/whatsapp/disconnect', async (req, res) => {
   try {
     const userId = req.body.userId || 'user_1';
     
-    const whatsappService = req.whatsappService as WhatsAppService;
     if (!whatsappService) {
       throw new Error('WhatsApp service not initialized');
     }
@@ -54,7 +56,6 @@ router.get('/whatsapp/status', async (req, res) => {
   try {
     const userId = req.query.userId as string || 'user_1';
     
-    const whatsappService = req.whatsappService as WhatsAppService;
     if (!whatsappService) {
       return res.json({ connected: false });
     }
@@ -78,9 +79,9 @@ router.post('/email/connect', async (req, res) => {
 
     const result = await emailService.connectEmail(userId, provider, email, password);
     res.json({ success: result });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error connecting email:', error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: error?.message || 'Unknown error' });
   }
 });
 
@@ -94,9 +95,9 @@ router.post('/email/disconnect', async (req, res) => {
 
     await emailService.disconnectEmail(userId);
     res.json({ success: true });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error disconnecting email:', error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: error?.message || 'Unknown error' });
   }
 });
 
@@ -110,9 +111,9 @@ router.get('/email/status', async (req, res) => {
 
     const status = emailService.getStatus(userId);
     res.json(status);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error getting email status:', error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: error?.message || 'Unknown error' });
   }
 });
 
