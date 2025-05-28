@@ -19,8 +19,13 @@ import metricsRoutes from './routes/metrics';
 import { notFoundHandler, errorHandler } from './middleware/error';
 import eventsRoutes from './routes/events';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
+
+// Fix __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
@@ -189,6 +194,9 @@ const PORT = process.env.PORT || 8080;
 // Start server with proper error handling
 async function startServer() {
   try {
+    // Initialize services first
+    await initializeServices();
+    
     await new Promise<void>((resolve, reject) => {
       const serverInstance = server.listen(PORT, '0.0.0.0', () => {
         console.log(`🚀 Backend server running on port ${PORT}`);
@@ -196,22 +204,24 @@ async function startServer() {
         console.log(`📡 Socket.IO ready for connections`);
         console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
         console.log(`🔒 CORS Origin: ${process.env.CORS_ORIGIN || '*'}`);
+        console.log(`✅ Server listening and ready for requests`);
         resolve();
       });
 
       serverInstance.on('error', (error: any) => {
+        console.error('❌ Server error:', error);
         if (error.code === 'EADDRINUSE') {
           console.error(`❌ Port ${PORT} is already in use`);
-          reject(error);
-        } else {
-          console.error('❌ Server error:', error);
-          reject(error);
         }
+        reject(error);
       });
+
+      // Set timeout for server startup
+      setTimeout(() => {
+        reject(new Error('Server startup timeout'));
+      }, 30000);
     });
 
-    // Initialize services after server is listening
-    await initializeServices();
     console.log('✅ Server and services fully initialized');
   } catch (error) {
     console.error('❌ Failed to start server:', error);
