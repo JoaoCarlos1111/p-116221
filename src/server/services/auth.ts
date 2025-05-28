@@ -1,4 +1,3 @@
-
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
@@ -70,12 +69,16 @@ export class AuthService {
       const user = await this.prisma.user.findUnique({
         where: { email: email.toLowerCase() },
         include: {
-          userDepartments: {
+          departments: {
             include: {
               department: true
             }
           },
-          brands: true
+          brands: {
+            include: {
+              brand: true
+            }
+          }
         }
       });
 
@@ -95,8 +98,8 @@ export class AuthService {
       }
 
       // Format user data
-      const departments = user.userDepartments.map(ud => ud.department.name);
-      const brands = user.brands.map(b => b.name);
+      const departments = user.departments.map(ud => ud.department.name);
+      const brands = user.brands.map(b => b.brand.name);
 
       const authUser: AuthUser = {
         id: user.id,
