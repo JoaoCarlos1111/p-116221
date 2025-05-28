@@ -5,7 +5,7 @@ run = "npm run dev"
 channel = "stable-24_05"
 
 [deployment]
-run = ["sh", "-c", "npm run preview -- --port 8080 --host 0.0.0.0"]
+run = ["sh", "-c", "npm run dev & npx tsx src/server/index.ts"]
 build = ["sh", "-c", "npm run build"]
 
 [[ports]]
@@ -113,3 +113,16 @@ args = "npm run dev"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "npx tsx watch src/server/index.ts"
+
+[[workflows.workflow]]
+name = "Production"
+author = 43007199
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run build"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npx tsx src/server/index.ts"
