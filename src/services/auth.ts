@@ -1,5 +1,4 @@
-
-const API_URL = 'http://0.0.0.0:3001/api';
+const API_URL = import.meta.env.PROD ? '/api' : 'http://0.0.0.0:3001/api';
 
 export interface User {
   id: string;
@@ -43,7 +42,7 @@ export class AuthService {
   static async login(email: string, password: string): Promise<LoginResponse> {
     try {
       console.log('Attempting login with:', { email, apiUrl: API_URL });
-      
+
       const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: {
@@ -62,7 +61,7 @@ export class AuthService {
 
       const data: LoginResponse = await response.json();
       console.log('Login successful for user:', data.user.email);
-      
+
       // Store in memory and localStorage
       this.token = data.token;
       this.user = data.user;
