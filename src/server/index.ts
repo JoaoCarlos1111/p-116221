@@ -163,7 +163,7 @@ io.on('connection', (socket) => {
 });
 
 // Use port from environment or 8080 for production deployment
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.NODE_ENV === 'production' ? process.env.PORT || 3000 : 3001;
 
 // Initialize services and start server
 initializeServices().then(() => {
