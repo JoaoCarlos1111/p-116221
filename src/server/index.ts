@@ -183,6 +183,9 @@ initializeServices().then(() => {
     console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
     console.log(`🔒 CORS Origin: ${process.env.CORS_ORIGIN || '*'}`);
   });
+}).catch(error => {
+  console.error('❌ Failed to initialize services:', error);
+  process.exit(1);
 });
 
 export { io, whatsappService };

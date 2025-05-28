@@ -1,5 +1,5 @@
 
-import { Client, LocalAuth, MessageMedia } from 'whatsapp-web.js';
+import { Client, MessageMedia, NoAuth } from 'whatsapp-web.js';
 import QRCode from 'qrcode';
 import { Server as SocketIOServer } from 'socket.io';
 
@@ -28,9 +28,7 @@ class WhatsAppService {
     }
 
     const client = new Client({
-      authStrategy: new LocalAuth({
-        clientId: `user_${userId}`
-      }),
+      authStrategy: new NoAuth(),
       puppeteer: {
         headless: true,
         args: [
