@@ -93,6 +93,12 @@ app.use('/api/payments', paymentsRoutes);
 app.use('/api/brands', brandsRoutes);
 
 
+// Debug middleware for unmatched routes
+app.use('*', (req, res, next) => {
+  console.log(`❌ Route not found: ${req.method} ${req.originalUrl}`);
+  next();
+});
+
 // Error handling middlewares (devem ser os últimos)
 app.use(notFoundHandler);
 app.use(errorHandler);
