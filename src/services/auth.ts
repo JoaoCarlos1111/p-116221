@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.PROD ? '/api' : 'http://0.0.0.0:3001/api';
+const API_URL = import.meta.env.PROD ? '/api' : 'http://localhost:3001/api';
 
 export interface User {
   id: string;

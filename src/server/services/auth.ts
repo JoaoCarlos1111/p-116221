@@ -2,6 +2,22 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+
+interface AuthUser {
+  id: string;
+  name: string;
+  email: string;
+  departments: string[];
+  mainDepartment: string;
+  isAdmin: boolean;
+  isClient: boolean;
+  clientProfile?: string;
+  brands: string[];
+  company?: string;
+}
+
 const JWT_SECRET = process.env.JWT_SECRET || 'secure-jwt-token-for-tbp-application';
 const JWT_EXPIRES_IN = '24h';
 
@@ -18,7 +34,7 @@ export interface AuthUser {
   company?: string;
 }
 
-export class AuthService {
+export export class AuthService {
   private prisma: PrismaClient;
 
   constructor(prisma: PrismaClient) {
