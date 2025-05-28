@@ -2,23 +2,23 @@ import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
-import integrationsRoutes from './routes/integrations';
-import templatesRoutes from './routes/templates';
 import authRoutes from './routes/auth';
 import casesRoutes from './routes/cases';
-import usersRoutes from './routes/users';
-import paymentsRoutes from './routes/payments';
 import brandsRoutes from './routes/brands';
+import usersRoutes from './routes/users';
+import templatesRoutes from './routes/templates';
+import paymentsRoutes from './routes/payments';
+import metricsRoutes from './routes/metrics';
+import interactionsRoutes from './routes/interactions';
+import eventsRoutes from './routes/events';
+import whatsappRoutes from './routes/whatsapp';
+import emailRoutes from './routes/email';
+import integrationsRoutes from './routes/integrations';
 import { authMiddleware } from './middleware/auth';
 import WhatsAppService from './services/whatsapp';
 import prisma from './lib/prisma';
-import emailRoutes from './routes/email';
-import whatsappRoutes from './routes/whatsapp';
-import interactionsRoutes from './routes/interactions';
-import metricsRoutes from './routes/metrics';
-import { notFoundHandler, errorHandler } from './middleware/errorHandler';
-import eventsRoutes from './routes/events';
 import path from 'path';
+import { notFoundHandler, errorHandler } from './middleware/errorHandler';
 
 const app = express();
 const server = createServer(app);
@@ -89,22 +89,19 @@ app.use((req, res, next) => {
   next();
 });
 
-// Authentication routes (public)
+// API Routes
 app.use('/api/auth', authRoutes);
-
-// Protected routes (require authentication)
-app.use('/api/integrations', authMiddleware, integrationsRoutes);
-
-app.use('/api/templates', authMiddleware, templatesRoutes);
-app.use('/api/email', emailRoutes);
-app.use('/api/whatsapp', whatsappRoutes);
-app.use('/api/interactions', interactionsRoutes);
-app.use('/api/metrics', metricsRoutes);
-app.use('/api/events', eventsRoutes);
+app.use('/api/integrations', integrationsRoutes); // No auth middleware for integrations
 app.use('/api/cases', casesRoutes);
-app.use('/api/users', usersRoutes);
-app.use('/api/payments', paymentsRoutes);
 app.use('/api/brands', brandsRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/templates', templatesRoutes);
+app.use('/api/payments', paymentsRoutes);
+app.use('/api/metrics', metricsRoutes);
+app.use('/api/interactions', interactionsRoutes);
+app.use('/api/events', eventsRoutes);
+app.use('/api/whatsapp', whatsappRoutes);
+app.use('/api/email', emailRoutes);
 
 // Health check endpoint
 app.get('/health', async (req, res) => {
