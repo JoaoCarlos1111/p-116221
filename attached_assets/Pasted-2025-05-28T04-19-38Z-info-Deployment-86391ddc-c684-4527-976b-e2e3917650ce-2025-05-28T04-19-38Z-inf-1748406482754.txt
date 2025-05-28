@@ -1,0 +1,133 @@
+2025-05-28T04:19:38Z info: Deployment: 86391ddc-c684-4527-976b-e2e3917650ce
+2025-05-28T04:19:38Z info: Build: acb74b9c-6c82-4015-98c8-37f6e4ac8186
+2025-05-28T04:19:38Z info: Connecting to builder
+2025-05-28T04:19:41Z info: Builder connected
+2025-05-28T04:19:42Z info: Installing packages
+--> npm install
+
+
+added 46 packages, removed 15 packages, changed 8 packages, and audited 827 packages in 19s
+
+  run `npm fund` for details
+
+
+20 vulnerabilities (1 low, 4 moderate, 15 high)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.4.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.4.1
+npm notice To update run: npm install -g npm@11.4.1
+npm notice
+
+2025-05-28T04:20:01Z info: Starting Build
+
+> vite_react_shadcn_ts@0.0.0 build
+> vite build
+
+
+NODE_ENV=production is not supported in the .env file. Only NODE_ENV=development is supported to create a development build of your project. If you need to set process.env.NODE_ENV, you can set it in the Vite config instead.
+
+vite v5.4.10 building for production...
+
+transforming...
+
+Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+node_modules/bluebird/js/release/util.js (165:2): Use of eval in "node_modules/bluebird/js/release/util.js" is strongly discouraged as it poses security risks and may cause issues with minification.
+
+✓ 4267 modules transformed.
+
+rendering chunks...
+
+computing gzip size...
+
+dist/index.html                     0.67 kB │ gzip:   0.39 kB
+
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+✓ built in 17.06s
+
+Environment variables loaded from .env
+
+Prisma schema loaded from prisma/schema.prisma
+
+
+✔ Generated Prisma Client (v6.8.2) to ./node_modules/@prisma/client in 197ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+
+
+Environment variables loaded from .env
+
+Prisma schema loaded from prisma/schema.prisma
+
+Datasource "db": PostgreSQL database "neondb", schema "public" at "ep-weathered-band-a64zfol1.us-west-2.aws.neon.tech"
+
+Running generate... (Use --skip-generate to skip the generators)
+Running generate... - Prisma Client
+✔ Generated Prisma Client (v6.8.2) to ./node_modules/@prisma/client in 206ms
+
+
+2025-05-28T04:20:32Z info: Pushing pid1 binary layer...
+2025-05-28T04:20:33Z info: Pushing hosting layer...
+2025-05-28T04:20:33Z info: Pushing Repl layer...
+2025-05-28T04:20:33Z info: Retrieved cached nix layer
+2025-05-28T04:20:33Z info: Created hosting layer
+2025-05-28T04:20:34Z info: Created pid1 binary layer
+2025-05-28T04:21:13Z info: Created Repl layer
+2025-05-28T04:21:14Z info: Pushed image manifest
+2025-05-28T04:21:14Z info: Pushed soci index manifest
+2025-05-28T04:21:18Z info: Creating Autoscale service
+starting up user application
+npm warn exec The following package was not found and will be installed: tsx@4.19.4
+
+/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:153
+    at lexer.next (<anonymous>)
+npm notice
+    at <anonymous> (/home/runner/workspace/src/server/index.ts:111:7)
+/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:153
+    at lexer (/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:171:21)
+    at lexer.next (<anonymous>)
+            ^
+    at pathToRegexp (/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:502:23)
+    at matcher (/home/runner/workspace/node_modules/router/lib/layer.js:86:23)
+Node.js v20.18.1
+/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:153
+    at name (/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:153:13)
+    at new Layer (/home/runner/workspace/node_modules/router/lib/layer.js:93:62)
+    at lexer (/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:171:21)
+/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:153
+    at parse (/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:320:18)
+    at lexer (/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:171:21)
+Node.js v20.18.1
+/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:153
+    at <anonymous> (/home/runner/workspace/src/server/index.ts:111:7)
+
+            ^
+✅ WhatsApp service initialized
+
+    at Iter.peek (/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:188:32)
+Node.js v20.18.1
+    at app.<computed> [as get] (/home/runner/workspace/node_modules/express/lib/application.js:478:22)
+
+    at matcher (/home/runner/workspace/node_modules/router/lib/layer.js:86:23)
+    at <anonymous> (/home/runner/workspace/src/server/index.ts:111:7)
+    at Function.route (/home/runner/workspace/node_modules/router/index.js:428:17)
+a port configuration was specified but the required port was never opened
+2025-05-28T04:23:38Z error: The deployment failed because the application failed to open a port in time. This can happen because the application takes to long to open a server, or doesn't open one at all on the expected port. Note that this doesn't mean that the application is crashing, only that it's not opening a port in time. The application must serve traffic on the first port specified as 'localPort' in the port configuration specified in the .replit file. Make sure that the application opens a port quickly and that there are no operations taking too long on startup. Check the logs for more information.
