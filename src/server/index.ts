@@ -32,7 +32,29 @@ const io = new SocketIOServer(server, {
 });
 
 // Initialize services
-const whatsappService = new WhatsAppService(io);
+let whatsappService: WhatsAppService;
+
+try {
+  whatsappService = new WhatsAppService(io);
+  console.log('✅ WhatsApp service initialized');
+} catch (error) {
+  console.warn('⚠️ WhatsApp service failed to initialize:', error);
+  // Create a dummy service that logs warnings instead of crashing
+  whatsappService = {
+    initializeSession: async () => { 
+      console.warn('WhatsApp service not available'); 
+      return ''; 
+    },
+    disconnectSession: async () => { 
+      console.warn('WhatsApp service not available'); 
+    },
+    sendMessage: async () => { 
+      console.warn('WhatsApp service not available'); 
+      return false; 
+    },
+    getSessionStatus: () => ({ connected: false })
+  } as any;
+}
 let emailService: any;
 
 // Import and initialize email service
