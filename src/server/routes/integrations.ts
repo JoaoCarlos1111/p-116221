@@ -7,8 +7,8 @@ import EmailService from '../services/email';
 const router = Router();
 
 // Initialize services
-const whatsappService = new WhatsAppService();
-const emailService = new EmailService();
+const whatsappService = new WhatsAppService(null as any);
+const emailService = new EmailService(null as any);
 
 // WhatsApp routes
 router.post('/whatsapp/connect', async (req, res) => {
@@ -109,7 +109,7 @@ router.get('/email/status', async (req, res) => {
       return res.json({ connected: false });
     }
 
-    const status = emailService.getStatus(userId);
+    const status = emailService.getStatus ? emailService.getStatus(userId) : { connected: false };
     res.json(status);
   } catch (error: any) {
     console.error('Error getting email status:', error);

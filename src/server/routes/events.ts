@@ -58,7 +58,7 @@ router.get('/',
       const endIndex = startIndex + limit;
       const paginatedEvents = events.slice(startIndex, endIndex);
 
-      res.json({
+      return res.json({
         events: paginatedEvents,
         pagination: {
           page,
@@ -69,7 +69,7 @@ router.get('/',
       });
     } catch (error) {
       console.error('Error fetching events:', error);
-      res.status(500).json({ 
+      return res.status(500).json({ 
         error: 'Erro ao buscar eventos',
         details: error instanceof Error ? error.message : 'Erro desconhecido'
       });
@@ -89,7 +89,7 @@ router.post('/mark-processed',
         eventIds.map(eventId => markEventAsProcessed(eventId))
       );
 
-      res.json({ 
+      return res.json({ 
         success: true, 
         message: `${eventIds.length} eventos marcados como processados` 
       });
@@ -122,7 +122,7 @@ router.get('/stats',
         }, {} as Record<string, number>)
       };
 
-      res.json(stats);
+      return res.json(stats);
     } catch (error) {
       console.error('Error fetching event stats:', error);
       res.status(500).json({ 

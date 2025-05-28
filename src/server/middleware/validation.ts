@@ -8,6 +8,18 @@ export interface ValidationSchemas {
   query?: z.ZodSchema;
 }
 
+// Export validation schemas object
+export const ValidationSchemas = {
+  getMetrics: {
+    query: z.object({
+      dateFrom: z.string().optional(),
+      dateTo: z.string().optional(),
+      brand: z.string().optional(),
+      status: z.string().optional()
+    })
+  }
+};
+
 // Middleware de validação principal
 export const validate = (schemas: ValidationSchemas) => {
   return (req: Request, res: Response, next: NextFunction) => {

@@ -20,6 +20,7 @@ import { notFoundHandler, errorHandler } from './middleware/error';
 import eventsRoutes from './routes/events';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { servicesMiddleware, setSocketIO } from './middleware/services';
 
 const app = express();
 
@@ -40,6 +41,8 @@ const io = new SocketIOServer(server, {
   },
   transports: ['websocket', 'polling']
 });
+
+setSocketIO(io);
 
 // Initialize services
 const whatsappService = new WhatsAppService(io);
@@ -73,13 +76,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Make services available to routes with lazy loading
-app.use((req, res, next) => {
-  req.whatsappService = whatsappService;
-  req.emailService = emailService; // Will be undefined until initialized
-  req.io = io;
-  req.prisma = prisma;
-  next();
-});
+app.use(servicesMiddleware);
 
 // Authentication routes (public)
 app.use('/api/auth', authRoutes);
@@ -104,7 +101,7 @@ app.get('/health', async (req, res) => {
   try {
     const dbCheck = await prisma.user.count();
     const memoryUsage = process.memoryUsage();
-    
+
     res.json({ 
       status: 'ok', 
       timestamp: new Date().toISOString(),
@@ -113,7 +110,7 @@ app.get('/health', async (req, res) => {
       uptime: process.uptime(),
       memory: {
         used: Math.round(memoryUsage.heapUsed / 1024 / 1024) + ' MB',
-        total: Math.round(memoryUsage.heapTotal / 1024 / 1024) + ' MB'
+        total: Math.round(memoryUsage.heapTotal / 1024 / 1024) + ' MB
       },
       services: {
         whatsapp: whatsappService ? 'initialized' : 'not initialized',
@@ -141,9 +138,9 @@ app.get('/api/production-test', async (req, res) => {
   try {
     const { runProductionTests } = await import('./utils/healthTest');
     const results = await runProductionTests();
-    
+
     const hasFailures = results.some(test => test.status === 'FAIL');
-    
+
     res.status(hasFailures ? 500 : 200).json({
       success: !hasFailures,
       timestamp: new Date().toISOString(),
@@ -196,7 +193,7 @@ async function startServer() {
   try {
     // Initialize services first
     await initializeServices();
-    
+
     await new Promise<void>((resolve, reject) => {
       const serverInstance = server.listen(PORT, '0.0.0.0', () => {
         console.log(`🚀 Backend server running on port ${PORT}`);

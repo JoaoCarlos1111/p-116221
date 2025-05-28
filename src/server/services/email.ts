@@ -227,6 +227,10 @@ class EmailService {
     };
   }
 
+  getStatus(userId: string) {
+    return { connected: false, userId };
+  }
+
   private static transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST || 'smtp.gmail.com',
     port: parseInt(process.env.SMTP_PORT || '587'),
