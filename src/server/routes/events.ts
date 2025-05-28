@@ -122,6 +122,23 @@ router.get('/stats',
         }, {} as Record<string, number>)
       };
 
+      return res.json({
+        success: true,
+        data: stats
+      });
+    } catch (error) {
+      console.error('Error fetching event stats:', error);
+      res.status(500).json({
+        error: 'Erro ao buscar estatísticas de eventos',
+        details: error instanceof Error ? error.message : 'Erro desconhecido'
+      });
+    }
+  }
+);
+
+export default router;
+      };
+
       return res.json(stats);
     } catch (error) {
       console.error('Error fetching event stats:', error);

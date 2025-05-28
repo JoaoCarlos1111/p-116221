@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && tsc src/server/index.ts --outDir dist/server --target ES2020 --module ESNext --moduleResolution bundler --esModuleInterop --allowSyntheticDefaultImports --skipLibCheck --resolveJsonModule",
+    "build": "vite build && npx tsc --project tsconfig.json --noEmit",
     "build:dev": "vite build --mode development",
     "build:server": "tsc src/server/index.ts --outDir dist/server --target ES2020 --module ESNext --moduleResolution bundler --esModuleInterop --allowSyntheticDefaultImports --skipLibCheck --resolveJsonModule",
     "lint": "eslint .",
