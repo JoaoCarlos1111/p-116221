@@ -110,7 +110,7 @@ app.get('/health', async (req, res) => {
       uptime: process.uptime(),
       memory: {
         used: Math.round(memoryUsage.heapUsed / 1024 / 1024) + ' MB',
-        total: Math.round(memoryUsage.heapTotal / 1024 / 1024) + ' MB
+        total: Math.round(memoryUsage.heapTotal / 1024 / 1024) + ' MB'
       },
       services: {
         whatsapp: whatsappService ? 'initialized' : 'not initialized',
