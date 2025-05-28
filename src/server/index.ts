@@ -1,196 +1,60 @@
 import express from 'express';
 import cors from 'cors';
-import { createServer } from 'http';
-import { Server as SocketIOServer } from 'socket.io';
-import authRoutes from './routes/auth';
-import casesRoutes from './routes/cases';
-import brandsRoutes from './routes/brands';
-import usersRoutes from './routes/users';
-import templatesRoutes from './routes/templates';
-import paymentsRoutes from './routes/payments';
-import metricsRoutes from './routes/metrics';
-import interactionsRoutes from './routes/interactions';
-import eventsRoutes from './routes/events';
-import whatsappRoutes from './routes/whatsapp';
-import emailRoutes from './routes/email';
-import integrationsRoutes from './routes/integrations';
-import { authMiddleware } from './middleware/auth';
-import WhatsAppService from './services/whatsapp';
-import prisma from './lib/prisma';
-import path from 'path';
-import { notFoundHandler, errorHandler } from './middleware/errorHandler';
+
+console.log('🔧 Server starting...');
 
 const app = express();
-const server = createServer(app);
-const io = new SocketIOServer(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-    credentials: true
-  },
-  transports: ['websocket', 'polling']
-});
+const PORT = 3001;
 
-// Initialize services
-let whatsappService: WhatsAppService;
-
-try {
-  whatsappService = new WhatsAppService(io);
-  console.log('✅ WhatsApp service initialized');
-} catch (error) {
-  console.warn('⚠️ WhatsApp service failed to initialize:', error);
-  // Create a dummy service that logs warnings instead of crashing
-  whatsappService = {
-    initializeSession: async () => { 
-      console.warn('WhatsApp service not available'); 
-      return ''; 
-    },
-    disconnectSession: async () => { 
-      console.warn('WhatsApp service not available'); 
-    },
-    sendMessage: async () => { 
-      console.warn('WhatsApp service not available'); 
-      return false; 
-    },
-    getSessionStatus: () => ({ connected: false })
-  } as any;
-}
-let emailService: any;
-
-// Import and initialize email service
-async function initializeServices() {
-  try {
-    const EmailService = (await import('./services/email')).default;
-    emailService = new EmailService(io);
-    console.log('✅ All services initialized');
-  } catch (error) {
-    console.error('❌ Error initializing services:', error);
-  }
-}
-
-// Middleware
+// Basic middleware
 app.use(cors({
   origin: "*",
   credentials: true
 }));
 app.use(express.json());
 
-// Serve static files in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(process.cwd(), 'dist')));
-}
-
-// Make services available to routes
-app.use((req, res, next) => {
-  req.whatsappService = whatsappService;
-  req.emailService = emailService;
-  req.io = io;
-  req.prisma = prisma;
-  next();
-});
-
-// API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/integrations', integrationsRoutes); // No auth middleware for integrations
-app.use('/api/cases', casesRoutes);
-app.use('/api/brands', brandsRoutes);
-app.use('/api/users', usersRoutes);
-app.use('/api/templates', templatesRoutes);
-app.use('/api/payments', paymentsRoutes);
-app.use('/api/metrics', metricsRoutes);
-app.use('/api/interactions', interactionsRoutes);
-app.use('/api/events', eventsRoutes);
-app.use('/api/whatsapp', whatsappRoutes);
-app.use('/api/email', emailRoutes);
-
-// Health check endpoint
-app.get('/health', async (req, res) => {
-  try {
-    await prisma.user.count();
-    res.json({ 
-      status: 'ok', 
-      timestamp: new Date().toISOString(),
-      database: 'connected'
-    });
-  } catch (error) {
-    res.status(500).json({ 
-      status: 'error', 
-      timestamp: new Date().toISOString(),
-      database: 'disconnected',
-      error: error instanceof Error ? error.message : 'Unknown error'
-    });
-  }
-});
-
-// Serve React app for all non-API routes in production
-if (process.env.NODE_ENV === 'production') {
-  // Fallback handler for React Router - must be after all API routes
-  app.use((req, res, next) => {
-    // Skip API routes
-    if (req.url.startsWith('/api/') || req.url.startsWith('/health')) {
-      return next();
-    }
-
-    // Serve React app for all other routes
-    res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
-  });
-}
-
-// Error handling middlewares (devem ser os últimos)
-app.use(notFoundHandler);
-app.use(errorHandler);
-
-
-
-// API test endpoint
+// Test endpoint
 app.get('/api/test', (req, res) => {
-  res.json({ message: 'API is working', timestamp: new Date().toISOString() });
-});
-
-// Socket.IO connection handling
-io.on('connection', (socket) => {
-  console.log('👤 User connected:', socket.id);
-
-  socket.on('join_user', (userId) => {
-    console.log(`🏠 User ${userId} joined room: user_${userId}`);
-    socket.join(`user_${userId}`);
-    socket.emit('connected', { userId, room: `user_${userId}` });
-  });
-
-  socket.on('disconnect', () => {
-    console.log('👤 User disconnected:', socket.id);
+  console.log('✅ Test endpoint accessed');
+  res.json({ 
+    message: 'Server is working!', 
+    timestamp: new Date().toISOString() 
   });
 });
 
-// Use port 3001 for development, environment port for production
-const PORT = process.env.NODE_ENV === 'production' ? (process.env.PORT || 3000) : 3001;
+// Auth endpoint for login
+app.post('/api/auth/login', (req, res) => {
+  console.log('🔑 Login endpoint accessed');
+  console.log('Request body:', req.body);
 
-console.log('🔧 Starting server...');
-console.log(`📍 Port: ${PORT}`);
+  // Temporary response for testing
+  res.status(200).json({
+    success: true,
+    token: 'test-token',
+    user: {
+      id: '1',
+      name: 'Test User',
+      email: 'test@example.com',
+      role: 'admin',
+      department: 'test',
+      mainDepartment: 'test',
+      departments: ['test'],
+      isAdmin: true,
+      isClient: false
+    }
+  });
+});
+
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
 
 // Start server
-server.listen(PORT, '0.0.0.0', (err) => {
-  if (err) {
-    console.error('❌ Server failed to start:', err);
-    process.exit(1);
-  }
-  
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ Backend server running on port ${PORT}`);
-  console.log(`🔗 API: http://0.0.0.0:${PORT}/api`);
-  
-  // Initialize services
-  initializeServices().catch(console.warn);
+  console.log(`🔗 Health check: http://0.0.0.0:${PORT}/health`);
+  console.log(`🔗 Test API: http://0.0.0.0:${PORT}/api/test`);
 });
 
-// Handle unhandled errors
-process.on('uncaughtException', (error) => {
-  console.error('🚨 Uncaught Exception:', error);
-  process.exit(1);
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('🚨 Unhandled Rejection at:', promise, 'reason:', reason);
-  process.exit(1);
-});
-
-export { io, whatsappService };
+console.log('📍 Server file loaded');

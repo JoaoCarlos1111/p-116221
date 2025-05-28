@@ -74,7 +74,7 @@ localPort = 8089
 externalPort = 6000
 
 [workflows]
-runButton = "Simple Dev"
+runButton = "Dev Final"
 
 [[workflows.workflow]]
 name = "Dev Server"
@@ -192,3 +192,29 @@ args = "npm run dev"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "npx tsx --watch src/server/index.ts"
+
+[[workflows.workflow]]
+name = "Dev Final"
+author = 43007199
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node --loader tsx src/server/index.ts"
+
+[[workflows.workflow]]
+name = "Test Backend"
+author = 43007199
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npx tsx src/server/simple-test.ts"
