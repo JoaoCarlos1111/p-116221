@@ -162,16 +162,26 @@ io.on('connection', (socket) => {
   });
 });
 
-// Use port from environment or 8080 for production deployment
+// Use port from environment or default ports
 const PORT = process.env.NODE_ENV === 'production' ? process.env.PORT || 3000 : 3001;
 
+console.log('🔧 Initializing server...');
+console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
+console.log(`📍 Target port: ${PORT}`);
+
 // Initialize services and start server
-initializeServices().then(() => {
-  server.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Backend server running on port ${PORT}`);
-    console.log(`🔗 API URL: http://0.0.0.0:${PORT}`);
-    console.log(`📡 Socket.IO ready for connections`);
+initializeServices()
+  .then(() => {
+    server.listen(PORT, '0.0.0.0', () => {
+      console.log(`🚀 Backend server running on port ${PORT}`);
+      console.log(`🔗 API URL: http://0.0.0.0:${PORT}`);
+      console.log(`📡 Socket.IO ready for connections`);
+      console.log(`✅ Server ready to accept requests`);
+    });
+  })
+  .catch((error) => {
+    console.error('❌ Failed to initialize server:', error);
+    process.exit(1);
   });
-});
 
 export { io, whatsappService };
