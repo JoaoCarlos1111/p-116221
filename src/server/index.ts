@@ -94,36 +94,6 @@ app.use('/api/payments', paymentsRoutes);
 app.use('/api/brands', brandsRoutes);
 
 
-// Serve static files for production SPA routing
-if (process.env.NODE_ENV === 'production') {
-  app.get('*', (req, res, next) => {
-    // Skip API routes
-    if (req.path.startsWith('/api/')) {
-      return next();
-    }
-    res.sendFile(path.join(__dirname, '../../dist/index.html'));
-  });
-}
-
-// SPA routing fallback for development
-if (process.env.NODE_ENV !== 'production') {
-  app.get('*', (req, res, next) => {
-    // Skip API routes and health check
-    if (req.path.startsWith('/api/') || req.path === '/health') {
-      return next();
-    }
-    // For development, let the frontend handle routing
-    res.status(200).json({ 
-      message: 'Frontend route - please access via the frontend development server',
-      route: req.path 
-    });
-  });
-}
-
-// Error handling middlewares (devem ser os últimos)
-app.use(notFoundHandler);
-app.use(errorHandler);
-
 // Health check
 app.get('/health', async (req, res) => {
   try {
@@ -183,6 +153,21 @@ app.get('/api/production-test', async (req, res) => {
   }
 });
 
+// Serve static files for production SPA routing
+if (process.env.NODE_ENV === 'production') {
+  app.get('/*', (req, res, next) => {
+    // Skip API routes and health check
+    if (req.path.startsWith('/api/') || req.path === '/health') {
+      return next();
+    }
+    res.sendFile(path.join(__dirname, '../../dist/index.html'));
+  });
+}
+
+// Error handling middlewares (devem ser os últimos)
+app.use(notFoundHandler);
+app.use(errorHandler);
+
 // Socket.IO connection handling
 io.on('connection', (socket) => {
   console.log('👤 User connected:', socket.id);
@@ -201,27 +186,39 @@ io.on('connection', (socket) => {
 // Use port 8080 for deployment (matches port forwarding to external port 80)
 const PORT = process.env.PORT || 8080;
 
-// Add error handling for invalid route patterns
-app.use((err: any, req: any, res: any, next: any) => {
-  if (err.message && err.message.includes('Missing parameter name')) {
-    console.error('Route pattern error:', err);
-    return res.status(400).json({ error: 'Invalid route pattern' });
-  }
-  next(err);
-});
+// Start server with proper error handling
+async function startServer() {
+  try {
+    await new Promise<void>((resolve, reject) => {
+      const serverInstance = server.listen(PORT, '0.0.0.0', () => {
+        console.log(`🚀 Backend server running on port ${PORT}`);
+        console.log(`🔗 API URL: http://0.0.0.0:${PORT}`);
+        console.log(`📡 Socket.IO ready for connections`);
+        console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+        console.log(`🔒 CORS Origin: ${process.env.CORS_ORIGIN || '*'}`);
+        resolve();
+      });
 
-// Start server immediately for faster deployment
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Backend server running on port ${PORT}`);
-  console.log(`🔗 API URL: http://0.0.0.0:${PORT}`);
-  console.log(`📡 Socket.IO ready for connections`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
-  console.log(`🔒 CORS Origin: ${process.env.CORS_ORIGIN || '*'}`);
-  
-  // Initialize services after server is listening
-  initializeServices().catch(error => {
-    console.error('❌ Failed to initialize services:', error);
-  });
-});
+      serverInstance.on('error', (error: any) => {
+        if (error.code === 'EADDRINUSE') {
+          console.error(`❌ Port ${PORT} is already in use`);
+          reject(error);
+        } else {
+          console.error('❌ Server error:', error);
+          reject(error);
+        }
+      });
+    });
+
+    // Initialize services after server is listening
+    await initializeServices();
+    console.log('✅ Server and services fully initialized');
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+startServer();
 
 export { io, whatsappService };
