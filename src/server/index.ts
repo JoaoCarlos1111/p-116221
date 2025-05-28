@@ -16,7 +16,7 @@ import emailRoutes from './routes/email';
 import whatsappRoutes from './routes/whatsapp';
 import interactionsRoutes from './routes/interactions';
 import metricsRoutes from './routes/metrics';
-import { notFoundHandler, errorHandler } from './middleware/error';
+import { notFoundHandler, errorHandler } from './middleware/errorHandler';
 import eventsRoutes from './routes/events';
 import path from 'path';
 
