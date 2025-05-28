@@ -127,12 +127,30 @@ app.get('/health', async (req, res) => {
 
 // Serve React app for all non-API routes in production
 if (process.env.NODE_ENV === 'production') {
-  // Fallback route for React Router - must be last
-  app.get('/*', (req, res) => {
-    // Skip API routes
-    if (req.url.startsWith('/api/')) {
-      return res.status(404).json({ error: 'API endpoint not found' });
-    }
+  // Handle specific common routes first
+  const commonRoutes = [
+    '/dashboard', '/pipeline', '/cases', '/analytics', '/settings',
+    '/integrations', '/admin', '/client', '/atendimento', '/financeiro',
+    '/logistics', '/audit', '/ip-tools', '/notifications', '/profile'
+  ];
+  
+  commonRoutes.forEach(route => {
+    app.get(route, (req, res) => {
+      res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
+    });
+    
+    // Handle sub-routes with parameters
+    app.get(`${route}/:id`, (req, res) => {
+      res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
+    });
+    
+    app.get(`${route}/:id/:action`, (req, res) => {
+      res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
+    });
+  });
+  
+  // Handle root route
+  app.get('/', (req, res) => {
     res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
   });
 }
