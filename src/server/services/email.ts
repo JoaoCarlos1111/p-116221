@@ -478,4 +478,5 @@ class EmailService {
   }
 }
 
+export { EmailService };
 export default EmailService;
