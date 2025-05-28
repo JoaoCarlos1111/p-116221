@@ -122,8 +122,8 @@ io.on('connection', (socket) => {
   });
 });
 
-// Use port 3001 for backend API
-const PORT = process.env.PORT || 3001;
+// Use port from environment or 8080 for production deployment
+const PORT = process.env.PORT || 8080;
 
 // Initialize services and start server
 initializeServices().then(() => {

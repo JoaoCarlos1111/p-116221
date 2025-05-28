@@ -7,8 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "build:dev": "vite build --mode development",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "build:server": "tsc src/server/index.ts --outDir dist/server --target ES2020 --module ESNext --moduleResolution bundler --esModuleInterop --allowSyntheticDefaultImports --skipLibCheck --resolveJsonModule",
+    "start": "npx tsx src/server/index.ts",
+    "preview": "vite preview",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
