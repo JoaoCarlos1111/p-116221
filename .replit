@@ -153,3 +153,16 @@ args = "npm run dev"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "npx tsx watch src/server/index.ts"
+
+[[workflows.workflow]]
+name = "Backend Test"
+author = 43007199
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npx tsx src/server/test-server.ts"

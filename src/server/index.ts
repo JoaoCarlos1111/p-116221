@@ -170,7 +170,12 @@ console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
 console.log(`📍 Target port: ${PORT}`);
 
 // Start server immediately, then initialize services
-server.listen(PORT, '0.0.0.0', () => {
+server.listen(PORT, '0.0.0.0', (err) => {
+  if (err) {
+    console.error('❌ Failed to start server:', err);
+    process.exit(1);
+  }
+  
   console.log(`🚀 Backend server running on port ${PORT}`);
   console.log(`🔗 API URL: http://0.0.0.0:${PORT}/api`);
   console.log(`📡 Socket.IO ready for connections`);
@@ -180,6 +185,17 @@ server.listen(PORT, '0.0.0.0', () => {
   initializeServices().catch((error) => {
     console.warn('⚠️ Service initialization failed:', error);
   });
+});
+
+// Handle unhandled errors
+process.on('uncaughtException', (error) => {
+  console.error('🚨 Uncaught Exception:', error);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('🚨 Unhandled Rejection at:', promise, 'reason:', reason);
+  process.exit(1);
 });
 
 export { io, whatsappService };
