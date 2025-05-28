@@ -1,0 +1,111 @@
+2025-05-28T04:48:37Z info: Deployment: 86391ddc-c684-4527-976b-e2e3917650ce
+2025-05-28T04:48:37Z info: Build: e390d956-d56c-4777-b41c-5c6ebdcbfa4b
+2025-05-28T04:48:37Z info: Connecting to builder
+2025-05-28T04:48:44Z info: Builder connected
+2025-05-28T04:48:44Z info: Installing packages
+--> npm install
+
+
+added 46 packages, removed 15 packages, changed 8 packages, and audited 827 packages in 19s
+
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.4.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.4.1
+npm notice To update run: npm install -g npm@11.4.1
+npm notice
+
+2025-05-28T04:49:03Z info: Starting Build
+
+> vite_react_shadcn_ts@0.0.0 build
+> vite build
+
+
+NODE_ENV=production is not supported in the .env file. Only NODE_ENV=development is supported to create a development build of your project. If you need to set process.env.NODE_ENV, you can set it in the Vite config instead.
+
+vite v5.4.10 building for production...
+
+transforming...
+
+Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+node_modules/bluebird/js/release/util.js (165:2): Use of eval in "node_modules/bluebird/js/release/util.js" is strongly discouraged as it poses security risks and may cause issues with minification.
+
+✓ 4267 modules transformed.
+
+rendering chunks...
+
+computing gzip size...
+
+✓ built in 19.83s
+
+Environment variables loaded from .env
+
+Prisma schema loaded from prisma/schema.prisma
+
+
+✔ Generated Prisma Client (v6.8.2) to ./node_modules/@prisma/client in 208ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Interested in query caching in just a few lines of code? Try Accelerate today! https://pris.ly/tip-3-accelerate
+
+
+Prisma schema loaded from prisma/schema.prisma
+
+Datasource "db": PostgreSQL database "neondb", schema "public" at "ep-weathered-band-a64zfol1.us-west-2.aws.neon.tech"
+
+
+The database is already in sync with the Prisma schema.
+
+Running generate... (Use --skip-generate to skip the generators)
+Running generate... - Prisma Client
+✔ Generated Prisma Client (v6.8.2) to ./node_modules/@prisma/client in 205ms
+
+2025-05-28T04:49:38Z info: Pushing pid1 binary layer...
+2025-05-28T04:49:39Z info: Pushing hosting layer...
+2025-05-28T04:49:39Z info: Pushing Repl layer...
+2025-05-28T04:49:39Z info: Retrieved cached nix layer
+2025-05-28T04:49:40Z info: Created hosting layer
+2025-05-28T04:49:40Z info: Created pid1 binary layer
+2025-05-28T04:50:18Z info: Created Repl layer
+2025-05-28T04:50:19Z info: Pushed image manifest
+2025-05-28T04:50:20Z info: Pushed soci index manifest
+2025-05-28T04:50:23Z info: Creating Autoscale service
+forwarding local port 8080 to external port 80 (mapped as 1104)
+npm warn exec The following package was not found and will be installed: tsx@4.19.4
+    at Iter.text (/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:213:26)
+    at <anonymous> (/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:503:40)
+    at matcher (/home/runner/workspace/node_modules/router/lib/layer.js:86:23)
+    at pathToRegexp (/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:502:23)
+    at Array.map (<anonymous>)
+    at new Layer (/home/runner/workspace/node_modules/router/lib/layer.js:93:62)
+    at consume (/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:285:23)
+command finished with error [sh -c NODE_ENV=production PORT=8080 npx tsx src/server/index.ts]: exit status 1
+TypeError: Missing parameter name at 1: https://git.new/pathToRegexpError
+    at Function.route (/home/runner/workspace/node_modules/express/lib/application.js:257:22)
+    at <anonymous> (/home/runner/workspace/src/server/index.ts:131:7)
+Node.js v20.18.1
+/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:153
+    at lexer.next (<anonymous>)
+    at Function.route (/home/runner/workspace/node_modules/router/index.js:428:17)
+    at <anonymous> (/home/runner/workspace/src/server/index.ts:131:7)
+    at lexer (/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:171:21)
+    at lexer.next (<anonymous>)
+    at consume (/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:285:23)
+      throw new TypeError(`Missing parameter name at ${i}: ${DEBUG_URL}`);
+    at pathToRegexp (/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:502:23)
+    at parse (/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:320:18)
+✅ WhatsApp service initialized
+
+    at Object.match (/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:461:28)
+/home/runner/workspace/node_modules/path-to-regexp/src/index.ts:153
+    at Function.route (/home/runner/workspace/node_modules/router/index.js:428:17)
+    at <anonymous> (/home/runner/workspace/src/server/index.ts:131:7)
+            ^
+command finished with error [sh -c NODE_ENV=production PORT=8080 npx tsx src/server/index.ts]: exit status 1
+Node.js v20.18.1
+    at app.<computed> [as get] (/home/runner/workspace/node_modules/express/lib/application.js:478:22)
+a port configuration was specified but the required port was never opened
+2025-05-28T04:53:24Z error: The deployment failed because the application failed to open a port in time. This can happen because the application takes to long to open a server, or doesn't open one at all on the expected port. Note that this doesn't mean that the application is crashing, only that it's not opening a port in time. The application must serve traffic on the first port specified as 'localPort' in the port configuration specified in the .replit file. Make sure that the application opens a port quickly and that there are no operations taking too long on startup. Check the logs for more information.
