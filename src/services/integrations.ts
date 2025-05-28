@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_BASE_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:3001/api'
-  : `${window.location.protocol}//${window.location.hostname}:3001/api`;
+  : '/api';
 
 console.log('🔗 API Base URL:', API_BASE_URL);
 
