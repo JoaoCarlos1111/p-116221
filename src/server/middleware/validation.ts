@@ -1,3 +1,4 @@
+
 import { Request, Response, NextFunction } from 'express';
 import { z, ZodError } from 'zod';
 
@@ -7,8 +8,6 @@ export interface ValidationSchemas {
   params?: z.ZodSchema;
   query?: z.ZodSchema;
 }
-
-
 
 // Middleware de validação principal
 export const validate = (schemas: ValidationSchemas) => {

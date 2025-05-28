@@ -19,14 +19,8 @@ import metricsRoutes from './routes/metrics';
 import { notFoundHandler, errorHandler } from './middleware/error';
 import eventsRoutes from './routes/events';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import { servicesMiddleware, setSocketIO } from './middleware/services';
 
 const app = express();
-
-// Fix __dirname for ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
@@ -42,8 +36,6 @@ const io = new SocketIOServer(server, {
   transports: ['websocket', 'polling']
 });
 
-setSocketIO(io);
-
 // Initialize services
 const whatsappService = new WhatsAppService(io);
 let emailService: any;
@@ -56,7 +48,6 @@ async function initializeServices() {
     console.log('✅ All services initialized');
   } catch (error) {
     console.error('❌ Error initializing services:', error);
-    // Don't throw - services are optional for basic functionality
   }
 }
 
@@ -75,8 +66,14 @@ if (process.env.NODE_ENV === 'production') {
   app.use('/api', generalRateLimit);
 }
 
-// Make services available to routes with lazy loading
-app.use(servicesMiddleware);
+// Make services available to routes
+app.use((req, res, next) => {
+  req.whatsappService = whatsappService;
+  req.emailService = emailService;
+  req.io = io;
+  req.prisma = prisma;
+  next();
+});
 
 // Authentication routes (public)
 app.use('/api/auth', authRoutes);
@@ -96,12 +93,16 @@ app.use('/api/payments', paymentsRoutes);
 app.use('/api/brands', brandsRoutes);
 
 
+// Error handling middlewares (devem ser os últimos)
+app.use(notFoundHandler);
+app.use(errorHandler);
+
 // Health check
 app.get('/health', async (req, res) => {
   try {
     const dbCheck = await prisma.user.count();
     const memoryUsage = process.memoryUsage();
-
+    
     res.json({ 
       status: 'ok', 
       timestamp: new Date().toISOString(),
@@ -138,9 +139,9 @@ app.get('/api/production-test', async (req, res) => {
   try {
     const { runProductionTests } = await import('./utils/healthTest');
     const results = await runProductionTests();
-
+    
     const hasFailures = results.some(test => test.status === 'FAIL');
-
+    
     res.status(hasFailures ? 500 : 200).json({
       success: !hasFailures,
       timestamp: new Date().toISOString(),
@@ -154,21 +155,6 @@ app.get('/api/production-test', async (req, res) => {
     });
   }
 });
-
-// Serve static files for production SPA routing
-if (process.env.NODE_ENV === 'production') {
-  app.get('/*', (req, res, next) => {
-    // Skip API routes and health check
-    if (req.path.startsWith('/api/') || req.path === '/health') {
-      return next();
-    }
-    res.sendFile(path.join(__dirname, '../../dist/index.html'));
-  });
-}
-
-// Error handling middlewares (devem ser os últimos)
-app.use(notFoundHandler);
-app.use(errorHandler);
 
 // Socket.IO connection handling
 io.on('connection', (socket) => {
@@ -185,47 +171,18 @@ io.on('connection', (socket) => {
   });
 });
 
-// Use port 8080 for deployment (matches port forwarding to external port 80)
-const PORT = process.env.PORT || 8080;
+// Use port 5000 for production (Replit standard)
+const PORT = process.env.PORT || 5000;
 
-// Start server with proper error handling
-async function startServer() {
-  try {
-    // Initialize services first
-    await initializeServices();
-
-    await new Promise<void>((resolve, reject) => {
-      const serverInstance = server.listen(PORT, '0.0.0.0', () => {
-        console.log(`🚀 Backend server running on port ${PORT}`);
-        console.log(`🔗 API URL: http://0.0.0.0:${PORT}`);
-        console.log(`📡 Socket.IO ready for connections`);
-        console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
-        console.log(`🔒 CORS Origin: ${process.env.CORS_ORIGIN || '*'}`);
-        console.log(`✅ Server listening and ready for requests`);
-        resolve();
-      });
-
-      serverInstance.on('error', (error: any) => {
-        console.error('❌ Server error:', error);
-        if (error.code === 'EADDRINUSE') {
-          console.error(`❌ Port ${PORT} is already in use`);
-        }
-        reject(error);
-      });
-
-      // Set timeout for server startup
-      setTimeout(() => {
-        reject(new Error('Server startup timeout'));
-      }, 30000);
-    });
-
-    console.log('✅ Server and services fully initialized');
-  } catch (error) {
-    console.error('❌ Failed to start server:', error);
-    process.exit(1);
-  }
-}
-
-startServer();
+// Initialize services and start server
+initializeServices().then(() => {
+  server.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Backend server running on port ${PORT}`);
+    console.log(`🔗 API URL: http://0.0.0.0:${PORT}`);
+    console.log(`📡 Socket.IO ready for connections`);
+    console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+    console.log(`🔒 CORS Origin: ${process.env.CORS_ORIGIN || '*'}`);
+  });
+});
 
 export { io, whatsappService };

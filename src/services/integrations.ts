@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? '/api'
-  : 'http://0.0.0.0:8080/api';
+const API_BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3001/api'
+  : `${window.location.protocol}//${window.location.hostname}:3001/api`;
 
 console.log('🔗 API Base URL:', API_BASE_URL);
 

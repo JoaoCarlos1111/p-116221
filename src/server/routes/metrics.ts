@@ -1,3 +1,4 @@
+
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { authMiddleware } from '../middleware/auth';
@@ -81,16 +82,16 @@ router.get('/dashboard/:type', async (req, res) => {
         metrics = await metricsService.getAdminMetrics(filters);
         break;
       case 'gestor':
-        metrics = await metricsService.getClientMetrics(user.userId, 'gestor', filters);
+        metrics = await metricsService.getClientMetrics(user.id, 'gestor', filters);
         break;
       case 'analista-contrafacao':
-        metrics = await metricsService.getClientMetrics(user.userId, 'analista_contrafacao', filters);
+        metrics = await metricsService.getClientMetrics(user.id, 'analista_contrafacao', filters);
         break;
       case 'financeiro-cliente':
-        metrics = await metricsService.getClientMetrics(user.userId, 'financeiro', filters);
+        metrics = await metricsService.getClientMetrics(user.id, 'financeiro', filters);
         break;
       case 'atendimento':
-        metrics = await metricsService.getAnalystMetrics(user.userId, 'atendimento', filters);
+        metrics = await metricsService.getAnalystMetrics(user.id, 'atendimento', filters);
         break;
       default:
         return res.status(400).json({
@@ -120,7 +121,7 @@ router.get('/cases/recent', async (req, res) => {
     const user = req.user;
     const { limit = 10 } = req.query;
 
-    const whereClause = user.isClient ? { userId: user.userId } : {};
+    const whereClause = user.isClient ? { userId: user.id } : {};
 
     const recentCases = await prisma.case.findMany({
       where: whereClause,
@@ -165,7 +166,7 @@ router.get('/performance/monthly', async (req, res) => {
     const startDate = new Date();
     startDate.setMonth(startDate.getMonth() - monthsBack);
 
-    const whereClause = user.isClient ? { userId: user.userId } : {};
+    const whereClause = user.isClient ? { userId: user.id } : {};
 
     const monthlyData = await prisma.case.groupBy({
       by: ['createdAt'],
@@ -208,7 +209,7 @@ router.get('/brands/stats', async (req, res) => {
     const prisma = req.prisma as PrismaClient;
     const user = req.user;
 
-    const whereClause = user.isClient ? { userId: user.userId } : {};
+    const whereClause = user.isClient ? { userId: user.id } : {};
 
     const brandStats = await prisma.case.groupBy({
       by: ['brandId'],

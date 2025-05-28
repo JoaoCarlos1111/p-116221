@@ -1,13 +1,7 @@
-
 import axios from 'axios';
 
-// Use production URL logic
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? '/api' 
-  : 'http://0.0.0.0:8080/api';
-
 export const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: 'http://localhost:3001/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json'
@@ -73,6 +67,10 @@ export const CasesService = {
   }
 };
 
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? '/api' 
+  : 'http://localhost:3001/api';
+
 interface PaginationParams {
   page?: number;
   limit?: number;
@@ -130,7 +128,7 @@ class ApiService {
 
   // Test endpoint
   async test() {
-    return this.request<{ message: string; timestamp: string }>('/test');
+    return this.request<{ message: string; timestamp: string }>('/api/test');
   }
 
   // Cases API
@@ -145,12 +143,12 @@ class ApiService {
         if (value !== undefined) queryParams.append(key, value.toString());
       });
     }
-    const endpoint = `/cases${queryParams.toString() ? `?${queryParams}` : ''}`;
+    const endpoint = `/api/cases${queryParams.toString() ? `?${queryParams}` : ''}`;
     return this.request<ApiResponse<any[]>>(endpoint);
   }
 
   async getCase(id: string) {
-    return this.request<ApiResponse<any>>(`/cases/${id}`);
+    return this.request<ApiResponse<any>>(`/api/cases/${id}`);
   }
 
   async createCase(data: {
@@ -162,21 +160,21 @@ class ApiService {
     userId: string;
     brandId?: string;
   }) {
-    return this.request<ApiResponse<any>>('/cases', {
+    return this.request<ApiResponse<any>>('/api/cases', {
       method: 'POST',
       body: JSON.stringify(data),
     });
   }
 
   async updateCase(id: string, data: any) {
-    return this.request<ApiResponse<any>>(`/cases/${id}`, {
+    return this.request<ApiResponse<any>>(`/api/cases/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
   }
 
   async deleteCase(id: string) {
-    return this.request<ApiResponse<any>>(`/cases/${id}`, {
+    return this.request<ApiResponse<any>>(`/api/cases/${id}`, {
       method: 'DELETE',
     });
   }
@@ -192,12 +190,12 @@ class ApiService {
         if (value !== undefined) queryParams.append(key, value.toString());
       });
     }
-    const endpoint = `/users${queryParams.toString() ? `?${queryParams}` : ''}`;
+    const endpoint = `/api/users${queryParams.toString() ? `?${queryParams}` : ''}`;
     return this.request<ApiResponse<any[]>>(endpoint);
   }
 
   async getUser(id: string) {
-    return this.request<ApiResponse<any>>(`/users/${id}`);
+    return this.request<ApiResponse<any>>(`/api/users/${id}`);
   }
 
   async createUser(data: {
@@ -212,21 +210,21 @@ class ApiService {
     clientProfile?: string;
     company?: string;
   }) {
-    return this.request<ApiResponse<any>>('/users', {
+    return this.request<ApiResponse<any>>('/api/users', {
       method: 'POST',
       body: JSON.stringify(data),
     });
   }
 
   async updateUser(id: string, data: any) {
-    return this.request<ApiResponse<any>>(`/users/${id}`, {
+    return this.request<ApiResponse<any>>(`/api/users/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
   }
 
   async deactivateUser(id: string) {
-    return this.request<ApiResponse<any>>(`/users/${id}`, {
+    return this.request<ApiResponse<any>>(`/api/users/${id}`, {
       method: 'DELETE',
     });
   }
@@ -246,12 +244,12 @@ class ApiService {
         if (value !== undefined) queryParams.append(key, value.toString());
       });
     }
-    const endpoint = `/payments${queryParams.toString() ? `?${queryParams}` : ''}`;
+    const endpoint = `/api/payments${queryParams.toString() ? `?${queryParams}` : ''}`;
     return this.request<ApiResponse<any[]>>(endpoint);
   }
 
   async getPayment(id: string) {
-    return this.request<ApiResponse<any>>(`/payments/${id}`);
+    return this.request<ApiResponse<any>>(`/api/payments/${id}`);
   }
 
   async createPayment(data: {
@@ -259,21 +257,21 @@ class ApiService {
     status?: string;
     caseId: string;
   }) {
-    return this.request<ApiResponse<any>>('/payments', {
+    return this.request<ApiResponse<any>>('/api/payments', {
       method: 'POST',
       body: JSON.stringify(data),
     });
   }
 
   async updatePayment(id: string, data: any) {
-    return this.request<ApiResponse<any>>(`/payments/${id}`, {
+    return this.request<ApiResponse<any>>(`/api/payments/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
   }
 
   async deletePayment(id: string) {
-    return this.request<ApiResponse<any>>(`/payments/${id}`, {
+    return this.request<ApiResponse<any>>(`/api/payments/${id}`, {
       method: 'DELETE',
     });
   }
@@ -286,30 +284,30 @@ class ApiService {
         if (value !== undefined) queryParams.append(key, value.toString());
       });
     }
-    const endpoint = `/brands${queryParams.toString() ? `?${queryParams}` : ''}`;
+    const endpoint = `/api/brands${queryParams.toString() ? `?${queryParams}` : ''}`;
     return this.request<ApiResponse<any[]>>(endpoint);
   }
 
   async getBrand(id: string) {
-    return this.request<ApiResponse<any>>(`/brands/${id}`);
+    return this.request<ApiResponse<any>>(`/api/brands/${id}`);
   }
 
   async createBrand(data: { name: string }) {
-    return this.request<ApiResponse<any>>('/brands', {
+    return this.request<ApiResponse<any>>('/api/brands', {
       method: 'POST',
       body: JSON.stringify(data),
     });
   }
 
   async updateBrand(id: string, data: { name: string }) {
-    return this.request<ApiResponse<any>>(`/brands/${id}`, {
+    return this.request<ApiResponse<any>>(`/api/brands/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
   }
 
   async deleteBrand(id: string) {
-    return this.request<ApiResponse<any>>(`/brands/${id}`, {
+    return this.request<ApiResponse<any>>(`/api/brands/${id}`, {
       method: 'DELETE',
     });
   }
@@ -353,7 +351,7 @@ export const metricsAPI = {
         if (value !== undefined) queryParams.append(key, value);
       });
     }
-    const endpoint = `/metrics${queryParams.toString() ? `?${queryParams}` : ''}`;
+    const endpoint = `/api/metrics${queryParams.toString() ? `?${queryParams}` : ''}`;
     return api.get(endpoint);
   },
 
@@ -364,21 +362,18 @@ export const metricsAPI = {
         if (value !== undefined) queryParams.append(key, value.toString());
       });
     }
-    const endpoint = `/metrics/dashboard/${type}${queryParams.toString() ? `?${queryParams}` : ''}`;
+    const endpoint = `/api/metrics/dashboard/${type}${queryParams.toString() ? `?${queryParams}` : ''}`;
     return api.get(endpoint);
   },
 
   getRecentCases: (limit?: number) =>
-    api.get(`/metrics/cases/recent${limit ? `?limit=${limit}` : ''}`),
+    api.get(`/api/metrics/cases/recent${limit ? `?limit=${limit}` : ''}`),
 
   getMonthlyPerformance: (months?: number) =>
-    api.get(`/metrics/performance/monthly${months ? `?months=${months}` : ''}`),
+    api.get(`/api/metrics/performance/monthly${months ? `?months=${months}` : ''}`),
 
   getBrandStats: () =>
-    api.get('/metrics/brands/stats')
+    api.get('/api/metrics/brands/stats')
 };
-
-// Export ApiService instance
-export const apiService = new ApiService();
 
 export default api;

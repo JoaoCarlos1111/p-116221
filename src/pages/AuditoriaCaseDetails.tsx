@@ -36,6 +36,10 @@ export default function AuditoriaCaseDetails() {
       { field: 'neighborhood', status: null, reason: null },
       { field: 'city', status: null, reason: null },
       { field: 'cep', status: null, reason: null }
+    ],
+    documents: [
+      { field: 'anuncio', status: null, reason: null },
+      { field: 'venda', status: null, reason: null }
     ]
   });
 
