@@ -7,20 +7,8 @@ import { AuthService } from '../services/auth';
 
 const router = express.Router();
 
-console.log('🔐 Auth routes initialized');
-
-// Add prisma to request
-router.use((req, res, next) => {
-  req.prisma = prisma;
-  next();
-});
-
 // Login route
 router.post('/login', async (req, res) => {
-  console.log('🔑 Login attempt received:', { 
-    email: req.body?.email, 
-    hasPassword: !!req.body?.password 
-  });
   try {
     const { email, password } = req.body;
 

@@ -40,34 +40,17 @@ export default function InternalLogin() {
       } else if (user.isAdmin) {
         navigate('/dashboard');
       } else {
-        // Redirect based on main department
-        switch (user.mainDepartment) {
-          case 'prospeccao':
-            navigate('/prospeccao');
-            break;
-          case 'verificacao':
-            navigate('/kanban/verificacao');
-            break;
-          case 'logistica':
-            navigate('/logistica');
-            break;
-          case 'ip_tools':
-          case 'iptools':
-            navigate('/iptools');
-            break;
-          case 'atendimento':
-            navigate('/atendimento/dashboard');
-            break;
-          case 'financeiro':
-            navigate('/financeiro');
-            break;
-          case 'auditoria':
-            navigate('/auditoria');
-            break;
-          default:
-            navigate('/dashboard');
-            break;
-        }
+        const departmentRoutes: Record<string, string> = {
+          prospeccao: '/prospeccao',
+          verificacao: '/kanban/verificacao',
+          logistica: '/logistica',
+          ip_tools: '/iptools',
+          atendimento: '/atendimento/dashboard',
+          financeiro: '/financeiro'
+        };
+        
+        const route = departmentRoutes[user.mainDepartment] || '/dashboard';
+        navigate(route);
       }
 
       toast({

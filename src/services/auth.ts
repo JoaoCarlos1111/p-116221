@@ -1,4 +1,5 @@
-const API_URL = '/api';
+
+const API_URL = 'http://0.0.0.0:3001/api';
 
 export interface User {
   id: string;
@@ -42,7 +43,7 @@ export class AuthService {
   static async login(email: string, password: string): Promise<LoginResponse> {
     try {
       console.log('Attempting login with:', { email, apiUrl: API_URL });
-
+      
       const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: {
@@ -61,7 +62,7 @@ export class AuthService {
 
       const data: LoginResponse = await response.json();
       console.log('Login successful for user:', data.user.email);
-
+      
       // Store in memory and localStorage
       this.token = data.token;
       this.user = data.user;
@@ -70,20 +71,11 @@ export class AuthService {
 
       return data;
     } catch (error) {
-      console.error('Login error details:', {
-        message: error.message,
-        //status: error.response?.status, // Removed as fetch API does not directly expose HTTP status on the error object
-        //data: error.response?.data     // Removed as fetch API does not directly expose response data on the error object
-      });
-
-      // Handle different types of errors
-      // As Fetch API does not directly expose HTTP status or error codes in the same way as Axios
-      // the error handling is simplified.  Checking for specific error messages related to network issues
-      if (error.message.includes('Failed to fetch')) {
-        throw new Error('Servidor indisponível. Verifique se o backend está rodando.');
-      } else {
-        throw new Error(error.message || 'Erro desconhecido');
+      console.error('Login error:', error);
+      if (error instanceof Error) {
+        throw error;
       }
+      throw new Error('Erro de conexão com o servidor');
     }
   }
 

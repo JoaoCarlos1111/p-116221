@@ -126,7 +126,28 @@ export function RouteGuard({ children, requiredDepartment }: RouteGuardProps) {
     }
   }
 
-  
+  // Redirecionar baseado no departamento do usuário
+    if (currentUser?.department === 'admin') {
+      navigate('/dashboard');
+    } else if (currentUser?.department === 'prospeccao') {
+      navigate('/prospeccao');
+    } else if (currentUser?.department === 'verificacao') {
+      navigate('/kanban/verificacao');
+    } else if (currentUser?.department === 'auditoria') {
+      navigate('/auditoria');
+    } else if (currentUser?.department === 'iptools') {
+      navigate('/iptools');
+    } else if (currentUser?.department === 'logistica') {
+      navigate('/logistica');
+    } else if (currentUser?.department === 'atendimento') {
+      navigate('/atendimento/dashboard');
+    } else if (currentUser?.department === 'financeiro') {
+      navigate('/financeiro');
+    } else if (currentUser?.department === 'client') {
+      navigate('/client/dashboard');
+    } else {
+      navigate('/dashboard');
+    }
 
   return <>{children}</>;
 }

@@ -6,16 +6,16 @@ import { PrismaClient } from '@prisma/client';
 const JWT_SECRET = process.env.JWT_SECRET || 'secure-jwt-token-for-tbp-application';
 const JWT_EXPIRES_IN = '24h';
 
-interface AuthUser {
+export interface AuthUser {
   id: string;
   name: string;
   email: string;
   departments: string[];
   mainDepartment: string;
   isAdmin: boolean;
-  isClient: boolean;
+  isClient?: boolean;
   clientProfile?: string;
-  brands: string[];
+  brands?: string[];
   company?: string;
 }
 
@@ -70,16 +70,12 @@ export class AuthService {
       const user = await this.prisma.user.findUnique({
         where: { email: email.toLowerCase() },
         include: {
-          departments: {
+          userDepartments: {
             include: {
               department: true
             }
           },
-          brands: {
-            include: {
-              brand: true
-            }
-          }
+          brands: true
         }
       });
 
@@ -99,8 +95,8 @@ export class AuthService {
       }
 
       // Format user data
-      const departments = user.departments.map(ud => ud.department.name);
-      const brands = user.brands.map(b => b.brand.name);
+      const departments = user.userDepartments.map(ud => ud.department.name);
+      const brands = user.brands.map(b => b.name);
 
       const authUser: AuthUser = {
         id: user.id,

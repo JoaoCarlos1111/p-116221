@@ -1,3 +1,4 @@
+
 import { io, Socket } from 'socket.io-client';
 
 class SocketService {
@@ -22,14 +23,14 @@ class SocketService {
       this.socket.disconnect();
     }
 
-    const socketUrl = window.location.hostname === 'localhost' 
+    const serverUrl = window.location.hostname === 'localhost' 
       ? 'http://localhost:3001' 
-      : window.location.origin;
+      : `${window.location.protocol}//${window.location.hostname}:3001`;
 
-    console.log('🔌 Connecting to server:', socketUrl);
+    console.log('🔌 Connecting to server:', serverUrl);
 
     this.connectionPromise = new Promise((resolve, reject) => {
-      this.socket = io(socketUrl, {
+      this.socket = io(serverUrl, {
         transports: ['websocket', 'polling'],
         timeout: 20000,
         forceNew: true,
@@ -44,7 +45,7 @@ class SocketService {
         console.log('✅ Connected to server:', this.socket?.id);
         this.reconnectAttempts = 0;
         this.connectionPromise = null;
-
+        
         // Join user room
         this.socket?.emit('join_user', userId);
         resolve(this.socket!);
@@ -57,7 +58,7 @@ class SocketService {
       this.socket.on('connect_error', (error) => {
         console.error('❌ Connection error:', error);
         this.reconnectAttempts++;
-
+        
         if (this.reconnectAttempts >= this.maxReconnectAttempts) {
           console.error('❌ Max reconnection attempts reached');
           this.connectionPromise = null;

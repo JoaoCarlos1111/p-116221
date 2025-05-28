@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_BASE_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:3001/api'
-  : '/api';
+  : `${window.location.protocol}//${window.location.hostname}:3001/api`;
 
 console.log('🔗 API Base URL:', API_BASE_URL);
 
@@ -32,21 +32,31 @@ apiClient.interceptors.response.use(
   }
 );
 
-// WhatsApp API
 export const whatsappApi = {
-  connect: (userId = 'user_1') => apiClient.post('/integrations/whatsapp/connect', { userId }),
-  disconnect: (userId = 'user_1') => apiClient.post('/integrations/whatsapp/disconnect', { userId }),
-  getStatus: (userId = 'user_1') => apiClient.get(`/integrations/whatsapp/status?userId=${userId}`),
-  sendMessage: (data: { to: string; message: string; caseId?: string }) => 
-    apiClient.post('/whatsapp/send', data)
+  connect: (userId = 'user_1') => {
+    return apiClient.post('/integrations/whatsapp/connect', { userId });
+  },
+  disconnect: (userId = 'user_1') => {
+    return apiClient.post('/integrations/whatsapp/disconnect', { userId });
+  },
+  getStatus: (userId = 'user_1') => {
+    return apiClient.get(`/integrations/whatsapp/status?userId=${userId}`);
+  }
 };
 
-// Email API
 export const emailApi = {
-  connect: (provider: string, email: string, password: string) => 
-    apiClient.post('/integrations/email/connect', { provider, email, password }),
-  disconnect: () => apiClient.post('/integrations/email/disconnect'),
-  getStatus: (userId = 'user_1') => apiClient.get(`/integrations/email/status?userId=${userId}`),
-  sendMessage: (data: { to: string; subject: string; content: string; caseId?: string }) => 
-    apiClient.post('/email/send', data)
+  connect: (provider: string, email: string, password: string, userId = 'user_1') => {
+    return apiClient.post('/integrations/email/connect', { 
+      provider, 
+      email, 
+      password, 
+      userId 
+    });
+  },
+  disconnect: (userId = 'user_1') => {
+    return apiClient.post('/integrations/email/disconnect', { userId });
+  },
+  getStatus: (userId = 'user_1') => {
+    return apiClient.get(`/integrations/email/status?userId=${userId}`);
+  }
 };

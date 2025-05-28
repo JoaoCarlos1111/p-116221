@@ -25,27 +25,9 @@ class WhatsAppService {
     console.log(`🚀 Initializing WhatsApp session for user: ${userId}`);
     
     // Check if WhatsApp dependencies are available
-    try {
-      if (!Client || !LocalAuth) {
-        console.warn('⚠️ WhatsApp dependencies not fully available, using fallback');
-        // Return a sample QR code for testing
-        const sampleQRCode = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==`;
-        
-        setTimeout(() => {
-          this.io?.to(`user_${userId}`).emit('whatsapp_qr', { qrCode: sampleQRCode });
-        }, 1000);
-        
-        return sampleQRCode;
-      }
-    } catch (error) {
-      console.warn('⚠️ WhatsApp initialization error, using fallback mode:', error);
-      const sampleQRCode = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==`;
-      
-      setTimeout(() => {
-        this.io?.to(`user_${userId}`).emit('whatsapp_qr', { qrCode: sampleQRCode });
-      }, 1000);
-      
-      return sampleQRCode;
+    if (!Client || !LocalAuth) {
+      console.error('❌ WhatsApp dependencies not available');
+      throw new Error('WhatsApp service not available in this environment');
     }
     
     if (this.sessions.has(userId)) {
