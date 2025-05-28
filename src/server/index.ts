@@ -108,9 +108,29 @@ app.use('/api/brands', brandsRoutes);
 
 // Serve React app for all non-API routes in production
 if (process.env.NODE_ENV === 'production') {
-  app.get('*', (req, res) => {
+  // Handle specific routes that might conflict
+  app.get('/health', async (req, res) => {
+    try {
+      await prisma.user.count();
+      res.json({ 
+        status: 'ok', 
+        timestamp: new Date().toISOString(),
+        database: 'connected'
+      });
+    } catch (error) {
+      res.status(500).json({ 
+        status: 'error', 
+        timestamp: new Date().toISOString(),
+        database: 'disconnected',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
+  // Serve static files for any non-API route
+  app.use('*', (req, res) => {
     // Skip API routes
-    if (req.path.startsWith('/api/')) {
+    if (req.originalUrl.startsWith('/api/')) {
       return res.status(404).json({ error: 'API endpoint not found' });
     }
     res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
@@ -121,24 +141,7 @@ if (process.env.NODE_ENV === 'production') {
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-// Health check
-app.get('/health', async (req, res) => {
-  try {
-    await prisma.user.count();
-    res.json({ 
-      status: 'ok', 
-      timestamp: new Date().toISOString(),
-      database: 'connected'
-    });
-  } catch (error) {
-    res.status(500).json({ 
-      status: 'error', 
-      timestamp: new Date().toISOString(),
-      database: 'disconnected',
-      error: error instanceof Error ? error.message : 'Unknown error'
-    });
-  }
-});
+
 
 // API test endpoint
 app.get('/api/test', (req, res) => {
