@@ -133,7 +133,7 @@ if (process.env.NODE_ENV === 'production') {
     if (req.url.startsWith('/api/') || req.url.startsWith('/health')) {
       return next();
     }
-    
+
     // Serve React app for all other routes
     res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
   });
