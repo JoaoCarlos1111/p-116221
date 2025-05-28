@@ -1,0 +1,25 @@
+Login error: 
+TypeError {}
+message: "Failed to fetch"
+stack: "TypeError: Failed to fetch↵ at window.fetch (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:218642)↵ at window.fetch (https://cdn.gpteng.co/gptengineer.js:1:1945)↵ at Md.login (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:1120:225897)↵ at f (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:1120:227182)↵ at HTMLUnknownElement.Lr (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:78:33119)↵ at Object.NI (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:78:33467)↵ at NS (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:78:34442)↵ at wge (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:78:34501)↵ at OF (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:90:10931)↵ at vNe (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:90:11285)↵ at RF (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:90:11396)↵ at gNe (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:90:11471)↵ at https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:90:12885↵ at OV (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:174:19996)↵ at bI (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:78:31061)↵ at y3 (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:90:12864)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object
+
+Failed to fetch
+at window.fetch (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:218642)
+at window.fetch (https://cdn.gpteng.co/gptengineer.js:1:1945)
+at Md.login (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:1120:225897)
+at f (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:1120:227182)
+at HTMLUnknownElement.Lr (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:78:33119)
+at Object.NI (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:78:33467)
+at NS (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:78:34442)
+at wge (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:78:34501)
+at OF (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:90:10931)
+at vNe (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:90:11285)
+at RF (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:90:11396)
+at gNe (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:90:11471)
+at https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:90:12885
+at OV (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:174:19996)
+at bI (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:78:31061)
+at y3 (https://b047fd0f-d941-4727-b012-02caa3ab5f1b-00-5r9rvork20zz.janeway.replit.dev/assets/index-C0Y3wPj-.js:90:12864
