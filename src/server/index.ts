@@ -181,16 +181,26 @@ io.on('connection', (socket) => {
   });
 });
 
-// Use port from environment or 8080 for production deployment
-const PORT = process.env.PORT || 8080;
+// Use port from environment or 3001 for development
+const PORT = process.env.NODE_ENV === 'production' ? (process.env.PORT || 8080) : 3001;
 
 // Initialize services and start server
 initializeServices().then(() => {
   server.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Backend server running on port ${PORT}`);
+    console.log('');
+    console.log('🎉 =================================');
+    console.log('🎉 BACKEND ROBUSTO FUNCIONANDO!');
+    console.log('🎉 =================================');
+    console.log(`🚀 Servidor rodando na porta: ${PORT}`);
     console.log(`🔗 API URL: http://0.0.0.0:${PORT}`);
     console.log(`📡 Socket.IO ready for connections`);
+    console.log(`🗄️ Database: ${process.env.DATABASE_URL ? 'Conectado' : 'Local SQLite'}`);
+    console.log('🎉 =================================');
+    console.log('');
   });
+}).catch((error) => {
+  console.error('❌ Erro ao inicializar serviços:', error);
+  process.exit(1);
 });
 
 export { io, whatsappService };

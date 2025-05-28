@@ -74,7 +74,7 @@ localPort = 8089
 externalPort = 6000
 
 [workflows]
-runButton = "FUNCIONANDO AGORA"
+runButton = "Sistema Completo"
 
 [[workflows.workflow]]
 name = "Dev Server"
@@ -127,3 +127,16 @@ args = "npm run dev"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "node src/server/simple.js"
+
+[[workflows.workflow]]
+name = "Sistema Completo"
+author = 43007199
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npx tsx watch src/server/index.ts"
