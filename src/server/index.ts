@@ -162,20 +162,15 @@ io.on('connection', (socket) => {
   });
 });
 
-// Use port from environment or default ports
-const PORT = process.env.NODE_ENV === 'production' ? process.env.PORT || 3000 : 3001;
+// Use port 3001 for development, environment port for production
+const PORT = process.env.NODE_ENV === 'production' ? (process.env.PORT || 3000) : 3001;
 
 console.log('🔧 Starting server initialization...');
 console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
 console.log(`📍 Target port: ${PORT}`);
 
-// Start server immediately, then initialize services
-server.listen(PORT, '0.0.0.0', (err) => {
-  if (err) {
-    console.error('❌ Failed to start server:', err);
-    process.exit(1);
-  }
-  
+// Start server immediately
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Backend server running on port ${PORT}`);
   console.log(`🔗 API URL: http://0.0.0.0:${PORT}/api`);
   console.log(`📡 Socket.IO ready for connections`);
