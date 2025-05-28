@@ -171,8 +171,8 @@ io.on('connection', (socket) => {
   });
 });
 
-// Use port 5000 for production (Replit standard)
-const PORT = process.env.PORT || 5000;
+// Use port 8080 for deployment (matches port forwarding to external port 80)
+const PORT = process.env.PORT || 8080;
 
 // Initialize services and start server
 initializeServices().then(() => {
