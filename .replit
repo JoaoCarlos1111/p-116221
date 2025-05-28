@@ -74,7 +74,7 @@ localPort = 8089
 externalPort = 6000
 
 [workflows]
-runButton = "Backend Funcionando"
+runButton = "Backend Funcionando REAL"
 
 [[workflows.workflow]]
 name = "Dev Server"
@@ -257,3 +257,16 @@ args = "npm run dev"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "node src/server/index.js"
+
+[[workflows.workflow]]
+name = "Backend Funcionando REAL"
+author = 43007199
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node src/server/backend.js"
