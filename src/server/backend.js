@@ -105,5 +105,4 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log('');
 });
 
-// Log de processo
 console.log('📍 Servidor backend carregado com sucesso');
