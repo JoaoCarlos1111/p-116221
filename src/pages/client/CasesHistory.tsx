@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -113,10 +114,10 @@ const CasesHistory: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-
+        
         // Simular carregamento
         await new Promise(resolve => setTimeout(resolve, 500));
-
+        
         setFilteredCases(historyCases);
       } catch (err) {
         console.error('Erro ao carregar dados:', err);

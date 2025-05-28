@@ -5,9 +5,8 @@ run = "npm run dev"
 channel = "stable-24_05"
 
 [deployment]
-run = ["sh", "-c", "NODE_ENV=production PORT=8080 npx tsx src/server/index.ts"]
-build = ["sh", "-c", "npm run build && npx prisma generate && npx prisma db push"]
-deploymentTarget = "cloudrun"
+run = ["sh", "-c", "npm run preview -- --port 8080 --host 0.0.0.0"]
+build = ["sh", "-c", "npm run build"]
 
 [[ports]]
 localPort = 443

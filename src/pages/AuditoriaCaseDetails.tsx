@@ -37,7 +37,7 @@ export default function AuditoriaCaseDetails() {
       { field: 'city', status: null, reason: null },
       { field: 'cep', status: null, reason: null }
     ],
-    evidences: [
+    documents: [
       { field: 'anuncio', status: null, reason: null },
       { field: 'venda', status: null, reason: null }
     ]

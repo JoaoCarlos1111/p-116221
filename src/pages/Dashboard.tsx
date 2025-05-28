@@ -5,17 +5,9 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
-import { metricsAPI } from '@/services/api';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [metrics, setMetrics] = useState({
-    totalCases: 0,
-    activeCases: 0,
-    pendingNotifications: 0,
-    resolvedCases: 0
-  });
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Check if user is a client and redirect to appropriate dashboard
@@ -33,24 +25,7 @@ const Dashboard = () => {
       }
       return;
     }
-
-    // Load metrics for admin users
-    loadMetrics();
   }, [navigate]);
-
-  const loadMetrics = async () => {
-    try {
-      setLoading(true);
-      const response = await metricsAPI.getMetrics();
-      if (response.data.success) {
-        setMetrics(response.data.data);
-      }
-    } catch (error) {
-      console.error('Error loading metrics:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="space-y-8">
@@ -62,23 +37,17 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card className="p-6">
           <h3 className="font-semibold mb-2">Casos Ativos</h3>
-          <p className="text-3xl font-bold">
-            {loading ? '...' : metrics.activeCases.toLocaleString()}
-          </p>
+          <p className="text-3xl font-bold">0</p>
         </Card>
 
         <Card className="p-6">
           <h3 className="font-semibold mb-2">Notificações Pendentes</h3>
-          <p className="text-3xl font-bold">
-            {loading ? '...' : metrics.pendingNotifications.toLocaleString()}
-          </p>
+          <p className="text-3xl font-bold">0</p>
         </Card>
 
         <Card className="p-6">
           <h3 className="font-semibold mb-2">Acordos Realizados</h3>
-          <p className="text-3xl font-bold">
-            {loading ? '...' : metrics.resolvedCases.toLocaleString()}
-          </p>
+          <p className="text-3xl font-bold">0</p>
         </Card>
       </div>
     </div>

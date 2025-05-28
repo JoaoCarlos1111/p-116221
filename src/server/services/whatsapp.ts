@@ -1,9 +1,7 @@
 
-import whatsappWebJs from 'whatsapp-web.js';
+import { Client, LocalAuth, MessageMedia } from 'whatsapp-web.js';
 import QRCode from 'qrcode';
 import { Server as SocketIOServer } from 'socket.io';
-
-const { Client, LocalAuth, MessageMedia } = whatsappWebJs;
 
 interface WhatsAppSession {
   userId: string;
@@ -23,12 +21,6 @@ class WhatsAppService {
 
   async initializeSession(userId: string): Promise<string> {
     console.log(`🚀 Initializing WhatsApp session for user: ${userId}`);
-    
-    // Check if WhatsApp dependencies are available
-    if (!Client || !LocalAuth) {
-      console.error('❌ WhatsApp dependencies not available');
-      throw new Error('WhatsApp service not available in this environment');
-    }
     
     if (this.sessions.has(userId)) {
       console.log(`♻️ Disconnecting existing session for user: ${userId}`);

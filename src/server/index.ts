@@ -12,13 +12,6 @@ import brandsRoutes from './routes/brands';
 import { authMiddleware } from './middleware/auth';
 import WhatsAppService from './services/whatsapp';
 import prisma from './lib/prisma';
-import emailRoutes from './routes/email';
-import whatsappRoutes from './routes/whatsapp';
-import interactionsRoutes from './routes/interactions';
-import metricsRoutes from './routes/metrics';
-import { notFoundHandler, errorHandler } from './middleware/errorHandler';
-import eventsRoutes from './routes/events';
-import path from 'path';
 
 const app = express();
 const server = createServer(app);
@@ -32,29 +25,7 @@ const io = new SocketIOServer(server, {
 });
 
 // Initialize services
-let whatsappService: WhatsAppService;
-
-try {
-  whatsappService = new WhatsAppService(io);
-  console.log('✅ WhatsApp service initialized');
-} catch (error) {
-  console.warn('⚠️ WhatsApp service failed to initialize:', error);
-  // Create a dummy service that logs warnings instead of crashing
-  whatsappService = {
-    initializeSession: async () => { 
-      console.warn('WhatsApp service not available'); 
-      return ''; 
-    },
-    disconnectSession: async () => { 
-      console.warn('WhatsApp service not available'); 
-    },
-    sendMessage: async () => { 
-      console.warn('WhatsApp service not available'); 
-      return false; 
-    },
-    getSessionStatus: () => ({ connected: false })
-  } as any;
-}
+const whatsappService = new WhatsAppService(io);
 let emailService: any;
 
 // Import and initialize email service
@@ -75,11 +46,6 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Serve static files in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(process.cwd(), 'dist')));
-}
-
 // Make services available to routes
 app.use((req, res, next) => {
   req.whatsappService = whatsappService;
@@ -94,19 +60,20 @@ app.use('/api/auth', authRoutes);
 
 // Protected routes (require authentication)
 app.use('/api/integrations', authMiddleware, integrationsRoutes);
+import emailRoutes from './routes/email';
+import whatsappRoutes from './routes/whatsapp';
+import interactionsRoutes from './routes/interactions';
 
 app.use('/api/templates', authMiddleware, templatesRoutes);
 app.use('/api/email', emailRoutes);
 app.use('/api/whatsapp', whatsappRoutes);
 app.use('/api/interactions', interactionsRoutes);
-app.use('/api/metrics', metricsRoutes);
-app.use('/api/events', eventsRoutes);
 app.use('/api/cases', casesRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/payments', paymentsRoutes);
 app.use('/api/brands', brandsRoutes);
 
-// Health check endpoint
+// Health check
 app.get('/health', async (req, res) => {
   try {
     await prisma.user.count();
@@ -124,26 +91,6 @@ app.get('/health', async (req, res) => {
     });
   }
 });
-
-// Serve React app for all non-API routes in production
-if (process.env.NODE_ENV === 'production') {
-  // Fallback handler for React Router - must be after all API routes
-  app.use((req, res, next) => {
-    // Skip API routes
-    if (req.url.startsWith('/api/') || req.url.startsWith('/health')) {
-      return next();
-    }
-    
-    // Serve React app for all other routes
-    res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
-  });
-}
-
-// Error handling middlewares (devem ser os últimos)
-app.use(notFoundHandler);
-app.use(errorHandler);
-
-
 
 // API test endpoint
 app.get('/api/test', (req, res) => {
@@ -165,8 +112,8 @@ io.on('connection', (socket) => {
   });
 });
 
-// Use port from environment or 8080 for production deployment
-const PORT = process.env.PORT || 8080;
+// Use port 3001 for backend API
+const PORT = process.env.PORT || 3001;
 
 // Initialize services and start server
 initializeServices().then(() => {
