@@ -4,7 +4,7 @@ const API_BASE_URL = process.env.NODE_ENV === 'production'
   ? '/api'
   : 'http://0.0.0.0:8080/api';
 
-console.log('🔗 API Base URL:', API_BASE_URLL);
+console.log('🔗 API Base URL:', API_BASE_URL);
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
