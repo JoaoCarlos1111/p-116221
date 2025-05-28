@@ -198,15 +198,17 @@ export const securityLogger = (req: Request, res: Response, next: NextFunction) 
   const logData = {
     method: req.method,
     url: req.url,
-    ip: req.ip,
+    ip: req.ip || req.connection.remoteAddress,
     userAgent: req.get('User-Agent'),
     user: req.user ? {
       id: req.user.userId,
       email: req.user.email,
       isAdmin: req.user.isAdmin,
-      isClient: req.user.isClient
+      isClient: req.user.isClient,
+      department: req.user.mainDepartment
     } : null,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV
   };
 
   // Log de requisições sensíveis
