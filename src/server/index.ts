@@ -96,8 +96,27 @@ app.use('/api/brands', brandsRoutes);
 
 // Serve static files for production SPA routing
 if (process.env.NODE_ENV === 'production') {
-  app.get('*', (req, res) => {
+  app.get('*', (req, res, next) => {
+    // Skip API routes
+    if (req.path.startsWith('/api/')) {
+      return next();
+    }
     res.sendFile(path.join(__dirname, '../../dist/index.html'));
+  });
+}
+
+// SPA routing fallback for development
+if (process.env.NODE_ENV !== 'production') {
+  app.get('*', (req, res, next) => {
+    // Skip API routes and health check
+    if (req.path.startsWith('/api/') || req.path === '/health') {
+      return next();
+    }
+    // For development, let the frontend handle routing
+    res.status(200).json({ 
+      message: 'Frontend route - please access via the frontend development server',
+      route: req.path 
+    });
   });
 }
 
